@@ -1,0 +1,520 @@
+{
+  "categories": [
+    {
+      "id": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "qisas-al-anbiya",
+      "name": { "en": "Qisas al-Anbiya", "ar": "قصص الأنبياء" },
+      "description": {
+        "en": "Stories of the Prophets drawn from the Quran and reliable tafsir.",
+        "ar": "قصص الأنبياء مستمدة من القرآن والتفاسير الموثوقة."
+      },
+      "sortOrder": 1,
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
+      "slug": "seerah-shamail",
+      "name": { "en": "Seerah & Shama'il", "ar": "السيرة والشمائل" },
+      "description": {
+        "en": "The life and noble character of Prophet Muhammad ﷺ.",
+        "ar": "حياة النبي محمد ﷺ وشمائله الكريمة."
+      },
+      "sortOrder": 2,
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "sahabah",
+      "name": { "en": "Sahabah", "ar": "الصحابة" },
+      "description": {
+        "en": "Companions of the Prophet ﷺ, including twelve key figures.",
+        "ar": "صحابة النبي ﷺ، ومنهم اثنا عشر علماً من أعلامهم."
+      },
+      "sortOrder": 3,
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
+      "slug": "gleanings",
+      "name": { "en": "Gleanings", "ar": "قبسات" },
+      "description": {
+        "en": "Short authentic accounts of the Tabi'un, successors, and other righteous predecessors.",
+        "ar": "قبسات قصيرة موثقة من أخبار التابعين ومن بعدهم من السلف."
+      },
+      "sortOrder": 4,
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    }
+  ],
+  "figures": [
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111001",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ibrahim",
+      "name": { "en": "Ibrahim", "ar": "إبراهيم" },
+      "honorific": { "en": "peace be upon him", "ar": "عليه السلام" },
+      "isKeyFigure": false,
+      "sortOrder": 1,
+      "bio": {
+        "en": "The Friend of Allah, father of the prophets, who called his people to tawhid.",
+        "ar": "خليل الله وأبو الأنبياء، الذي دعا قومه إلى التوحيد."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111002",
+      "categoryId": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
+      "slug": "muhammad",
+      "name": { "en": "Muhammad", "ar": "محمد" },
+      "honorific": {
+        "en": "peace and blessings of Allah be upon him",
+        "ar": "صلى الله عليه وسلم"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 1,
+      "bio": {
+        "en": "The Messenger of Allah, seal of the prophets.",
+        "ar": "رسول الله وخاتم النبيين."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111101",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "abu-bakr-as-siddiq",
+      "name": { "en": "Abu Bakr as-Siddiq", "ar": "أبو بكر الصديق" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 1,
+      "bio": {
+        "en": "The first caliph and the closest companion of the Prophet ﷺ.",
+        "ar": "أول الخلفاء الراشدين وأقرب أصحاب النبي ﷺ."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111102",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "umar-ibn-al-khattab",
+      "name": { "en": "Umar ibn al-Khattab", "ar": "عمر بن الخطاب" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 2,
+      "bio": {
+        "en": "The second caliph, known as Al-Faruq.",
+        "ar": "ثاني الخلفاء الراشدين، الملقّب بالفاروق."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111103",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "uthman-ibn-affan",
+      "name": { "en": "Uthman ibn Affan", "ar": "عثمان بن عفان" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 3,
+      "bio": {
+        "en": "The third caliph, known as Dhun-Nurayn.",
+        "ar": "ثالث الخلفاء الراشدين، الملقّب بذي النورين."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111104",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "ali-ibn-abi-talib",
+      "name": { "en": "Ali ibn Abi Talib", "ar": "علي بن أبي طالب" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 4,
+      "bio": {
+        "en": "The fourth caliph, cousin and son-in-law of the Prophet ﷺ.",
+        "ar": "رابع الخلفاء الراشدين، ابن عم النبي ﷺ وصهره."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111105",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "talhah-ibn-ubaydullah",
+      "name": { "en": "Talhah ibn Ubaydullah", "ar": "طلحة بن عبيد الله" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 5,
+      "bio": {
+        "en": "Among the ten promised Paradise; known as Talhah the Generous.",
+        "ar": "من العشرة المبشرين بالجنة، يُعرف بطلحة الفيّاض."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111106",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "az-zubayr-ibn-al-awwam",
+      "name": { "en": "Az-Zubayr ibn al-Awwam", "ar": "الزبير بن العوام" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 6,
+      "bio": {
+        "en": "Among the ten promised Paradise; hawari of the Messenger of Allah ﷺ.",
+        "ar": "من العشرة المبشرين بالجنة، حواري رسول الله ﷺ."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111107",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "abd-al-rahman-ibn-awf",
+      "name": { "en": "Abd al-Rahman ibn Awf", "ar": "عبد الرحمن بن عوف" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 7,
+      "bio": {
+        "en": "Among the ten promised Paradise; a trusted merchant and early emigrant.",
+        "ar": "من العشرة المبشرين بالجنة، تاجر أمين من السابقين المهاجرين."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111108",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "sad-ibn-abi-waqqas",
+      "name": { "en": "Sa'd ibn Abi Waqqas", "ar": "سعد بن أبي وقاص" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 8,
+      "bio": {
+        "en": "Among the ten promised Paradise; the first to shoot an arrow in the path of Allah.",
+        "ar": "من العشرة المبشرين بالجنة، أول من رمى بسهم في سبيل الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111109",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "said-ibn-zayd",
+      "name": { "en": "Sa'id ibn Zayd", "ar": "سعيد بن زيد" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 9,
+      "bio": {
+        "en": "Among the ten promised Paradise; an early convert from the Quraysh.",
+        "ar": "من العشرة المبشرين بالجنة، من السابقين إلى الإسلام من قريش."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111110",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "abu-ubaydah-ibn-al-jarrah",
+      "name": { "en": "Abu Ubaydah ibn al-Jarrah", "ar": "أبو عبيدة بن الجراح" },
+      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "isKeyFigure": true,
+      "sortOrder": 10,
+      "bio": {
+        "en": "Among the ten promised Paradise; Amin of this Ummah.",
+        "ar": "من العشرة المبشرين بالجنة، أمين هذه الأمة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111111",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "khadijah-bint-khuwaylid",
+      "name": { "en": "Khadijah bint Khuwaylid", "ar": "خديجة بنت خويلد" },
+      "honorific": { "en": "may Allah be pleased with her", "ar": "رضي الله عنها" },
+      "isKeyFigure": true,
+      "sortOrder": 11,
+      "bio": {
+        "en": "First wife of the Prophet ﷺ and the first to believe in his message.",
+        "ar": "زوج النبي ﷺ الأولى وأول من آمن برسالته."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111112",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "slug": "aishah-bint-abi-bakr",
+      "name": { "en": "Aishah bint Abi Bakr", "ar": "عائشة بنت أبي بكر" },
+      "honorific": { "en": "may Allah be pleased with her", "ar": "رضي الله عنها" },
+      "isKeyFigure": true,
+      "sortOrder": 12,
+      "bio": {
+        "en": "Mother of the Believers and a foremost narrator of the Sunnah.",
+        "ar": "أم المؤمنين ومن أعلم رواة السنة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111201",
+      "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
+      "slug": "uways-al-qarni",
+      "name": { "en": "Uways al-Qarni", "ar": "أويس القرني" },
+      "honorific": { "en": "may Allah have mercy on him", "ar": "رحمه الله" },
+      "isKeyFigure": false,
+      "sortOrder": 1,
+      "bio": {
+        "en": "A Tabi'i from Yemen, praised by the Prophet ﷺ for his devotion to his mother.",
+        "ar": "تابعي من اليمن، أثنى عليه النبي ﷺ لبرّه بوالدته."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    }
+  ],
+  "stories": [
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222001",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111111001",
+      "slug": "ibrahim-and-the-fire",
+      "title": { "en": "Ibrahim and the Fire", "ar": "إبراهيم والنار" },
+      "content": {
+        "en": "When Ibrahim, peace be upon him, broke the idols of his people, they kindled a great fire and cast him into it. Allah commanded: \"O fire, be coolness and safety upon Ibrahim.\" The fire did not harm him, and his call to tawhid remained.",
+        "ar": "لما كسّر إبراهيم عليه السلام أصنام قومه أوقدوا له ناراً عظيمة وألقوه فيها. فقال الله تعالى: «يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَىٰ إِبْرَاهِيمَ». فلم تمسّه النار بسوء، وبقي نداؤه بالتوحيد."
+      },
+      "sourceCitation": "Ibn Kathir, Qisas al-Anbiya; Al-Bidayah wan-Nihayah; Quran 21:69",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-and-the-fire.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-and-the-fire.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 92,
+        "fileSizeBytes": 1474560,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ibrahim-and-the-fire.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-and-the-fire.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Ibrahim and the Fire",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ibrahim.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 32000,
+          "textEn": "When Ibrahim, peace be upon him, broke the idols of his people, they kindled a great fire and cast him into it.",
+          "textAr": "لما كسّر إبراهيم عليه السلام أصنام قومه أوقدوا له ناراً عظيمة وألقوه فيها."
+        },
+        {
+          "startMs": 32000,
+          "endMs": 64000,
+          "textEn": "Allah commanded: \"O fire, be coolness and safety upon Ibrahim.\"",
+          "textAr": "فقال الله تعالى: «يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَىٰ إِبْرَاهِيمَ»."
+        },
+        {
+          "startMs": 64000,
+          "endMs": 92000,
+          "textEn": "The fire did not harm him, and his call to tawhid remained.",
+          "textAr": "فلم تمسّه النار بسوء، وبقي نداؤه بالتوحيد."
+        }
+      ],
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222002",
+      "categoryId": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111111002",
+      "slug": "the-first-revelation",
+      "title": { "en": "The First Revelation", "ar": "بدء الوحي" },
+      "content": {
+        "en": "The Messenger of Allah ﷺ would seclude himself in the cave of Hira. Jibril came to him and said, \"Read.\" He replied, \"I am not one who reads.\" The angel pressed him, then said: \"Read in the name of your Lord who created.\" Thus the first verses of Surah Al-Alaq were revealed.",
+        "ar": "كان رسول الله ﷺ يتحنّث في غار حراء. فجاءه جبريل فقال: اقرأ. قال: ما أنا بقارئ. فغطّه ثم قال: «اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ». فنزلت أوائل سورة العلق."
+      },
+      "sourceCitation": "Sahih al-Bukhari, Kitab Bad' al-Wahy, Hadith 3",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/seerah/the-first-revelation.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/seerah/the-first-revelation.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 88,
+        "fileSizeBytes": 1409024,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "seerah/the-first-revelation.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/seerah/the-first-revelation.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "The First Revelation",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/seerah/hira.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 28000,
+          "textEn": "The Messenger of Allah ﷺ would seclude himself in the cave of Hira.",
+          "textAr": "كان رسول الله ﷺ يتحنّث في غار حراء."
+        },
+        {
+          "startMs": 28000,
+          "endMs": 60000,
+          "textEn": "Jibril came to him and said, \"Read.\" He replied, \"I am not one who reads.\"",
+          "textAr": "فجاءه جبريل فقال: اقرأ. قال: ما أنا بقارئ."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 88000,
+          "textEn": "Then he said: \"Read in the name of your Lord who created.\" Thus the first verses of Surah Al-Alaq were revealed.",
+          "textAr": "ثم قال: «اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ». فنزلت أوائل سورة العلق."
+        }
+      ],
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222003",
+      "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111111101",
+      "slug": "abu-bakr-in-the-cave",
+      "title": { "en": "Abu Bakr in the Cave", "ar": "أبو بكر في الغار" },
+      "content": {
+        "en": "During the Hijrah, the Prophet ﷺ and Abu Bakr hid in the cave of Thawr. Abu Bakr said, \"If one of them looks at his feet he will see us.\" The Prophet ﷺ replied, \"What do you think of two, the third of whom is Allah?\"",
+        "ar": "في الهجرة اختبأ النبي ﷺ وأبو بكر في غار ثور. فقال أبو بكر: لو أن أحدهم نظر إلى قدميه لأبصرنا. فقال النبي ﷺ: «ما ظنك باثنين الله ثالثهما؟»"
+      },
+      "sourceCitation": "Sahih al-Bukhari, Kitab Fada'il al-Sahabah, Hadith 3653; Quran 9:40",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/sahabah/abu-bakr-in-the-cave.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/sahabah/abu-bakr-in-the-cave.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 74,
+        "fileSizeBytes": 1183744,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "sahabah/abu-bakr-in-the-cave.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/sahabah/abu-bakr-in-the-cave.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Abu Bakr in the Cave",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/sahabah/abu-bakr.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 26000,
+          "textEn": "During the Hijrah, the Prophet ﷺ and Abu Bakr hid in the cave of Thawr.",
+          "textAr": "في الهجرة اختبأ النبي ﷺ وأبو بكر في غار ثور."
+        },
+        {
+          "startMs": 26000,
+          "endMs": 50000,
+          "textEn": "Abu Bakr said, \"If one of them looks at his feet he will see us.\"",
+          "textAr": "فقال أبو بكر: لو أن أحدهم نظر إلى قدميه لأبصرنا."
+        },
+        {
+          "startMs": 50000,
+          "endMs": 74000,
+          "textEn": "The Prophet ﷺ replied, \"What do you think of two, the third of whom is Allah?\"",
+          "textAr": "فقال النبي ﷺ: «ما ظنك باثنين الله ثالثهما؟»"
+        }
+      ],
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222004",
+      "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111111201",
+      "slug": "uways-al-qarni-of-yemen",
+      "title": { "en": "Uways al-Qarni of Yemen", "ar": "أويس القرني من أهل اليمن" },
+      "content": {
+        "en": "The Prophet ﷺ told Umar and Ali of a man from Yemen named Uways. He would have a white mark from illness, and he was deeply devoted to his mother. The Prophet ﷺ instructed them: if they met him, to ask him to seek forgiveness for them.",
+        "ar": "أخبر النبي ﷺ عمر وعلياً برجل من اليمن اسمه أويس، به بياض من مرض، وكان بارّاً بوالدته. وأمرهما إن لقياه أن يستغفرا به."
+      },
+      "sourceCitation": "Sahih Muslim, Kitab Fada'il al-Sahabah, Hadith 2542",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 80,
+        "fileSizeBytes": 1280000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "gleanings/uways-al-qarni-of-yemen.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Uways al-Qarni of Yemen",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/gleanings/uways.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 28000,
+          "textEn": "The Prophet ﷺ told Umar and Ali of a man from Yemen named Uways.",
+          "textAr": "أخبر النبي ﷺ عمر وعلياً برجل من اليمن اسمه أويس."
+        },
+        {
+          "startMs": 28000,
+          "endMs": 54000,
+          "textEn": "He would have a white mark from illness, and he was deeply devoted to his mother.",
+          "textAr": "به بياض من مرض، وكان بارّاً بوالدته."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 80000,
+          "textEn": "The Prophet ﷺ instructed them: if they met him, to ask him to seek forgiveness for them.",
+          "textAr": "وأمرهما إن لقياه أن يستغفرا به."
+        }
+      ],
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    }
+  ]
+}
