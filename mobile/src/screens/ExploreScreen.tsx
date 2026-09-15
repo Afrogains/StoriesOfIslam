@@ -28,13 +28,13 @@ import {
   useTheme,
 } from '../components/ui';
 import {
-  allStandardStories,
   sectionsMeta,
   type AuthenticityGrade,
   type MediaFilter,
   type SectionSlug,
   type StoryItem,
 } from '../data/mockHome';
+import { useCatalog } from '../data/CatalogProvider';
 import { toReaderStory } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 
@@ -62,6 +62,7 @@ const sorts: { id: SortKey; label: string }[] = [
 
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
+  const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
   const [query, setQuery] = useState('');
@@ -80,7 +81,7 @@ export default function ExploreScreen() {
   const filteredStories = useMemo(() => {
     const needle = query.trim().toLowerCase();
 
-    const list = allStandardStories.filter((story) => {
+    const list = stories.filter((story) => {
       if (selectedSection !== 'all' && story.sectionSlug !== selectedSection) return false;
       if (mediaFilter === 'audio' && !story.hasAudio) return false;
       if (mediaFilter === 'text' && story.hasAudio) return false;
@@ -99,7 +100,7 @@ export default function ExploreScreen() {
     if (sortBy === 'duration') return [...list].sort((a, b) => b.durationMs - a.durationMs);
     if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title));
     return list;
-  }, [selectedSection, mediaFilter, gradeFilter, query, sortBy]);
+  }, [stories, selectedSection, mediaFilter, gradeFilter, query, sortBy]);
 
   const audioCount = filteredStories.filter((story) => story.hasAudio).length;
   const totalMinutes = Math.round(

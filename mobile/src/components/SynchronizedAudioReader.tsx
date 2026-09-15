@@ -1,10 +1,13 @@
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
+  AlertCircle,
   BookOpen,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Gauge,
+  Download,
   Pause,
   Play,
   RotateCcw,
@@ -19,6 +22,7 @@ import {
   NativeSyntheticEvent,
   NativeTouchEvent,
   Pressable,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -30,6 +34,8 @@ import {
   type MockStory,
   type StoryCue,
 } from '../data/mockStory';
+import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
+import { audioDownloads } from '../services/audioDownloads';
 import {
   alpha,
   brandGradients,
@@ -78,6 +84,9 @@ export default function SynchronizedAudioReader({
   const scrollRef = useRef<ScrollView>(null);
   const cueY = useRef<number[]>([]);
   const barWidth = useRef(1);
+  const positionRef = useRef(0);
+  const lastSavedRef = useRef(0);
+  const { load: loadProgress, save: saveProgress } = usePlaybackProgress(story.id);
 
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [playing, setPlaying] = useState(false);
@@ -86,6 +95,9 @@ export default function SynchronizedAudioReader({
   const [rate, setRate] = useState<PlaybackRate>(1);
   const [citationOpen, setCitationOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+  const [downloaded, setDownloaded] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const accent = sectionAccent(sectionSlug, isDark);
 
@@ -94,12 +106,28 @@ export default function SynchronizedAudioReader({
   const onStatus = useCallback((status: AVPlaybackStatus) => {
     if (!status.isLoaded) return;
     setPositionMs(status.positionMillis);
+    positionRef.current = status.positionMillis;
     if (status.durationMillis) setDurationMs(status.durationMillis);
     setPlaying(status.isPlaying);
-  }, []);
+    if (status.didJustFinish) {
+      void saveProgress(0, true).catch(() => undefined);
+    } else if (Math.abs(status.positionMillis - lastSavedRef.current) >= 5_000) {
+      lastSavedRef.current = status.positionMillis;
+      void saveProgress(status.positionMillis).catch(() => undefined);
+    }
+  }, [saveProgress]);
 
   useEffect(() => {
     let alive = true;
+    setAudioError(null);
+
+    if (!story.audioUrl) {
+      setReady(false);
+      setAudioError('Audio is not available for this story yet. You can still read the complete text.');
+      return () => {
+        alive = false;
+      };
+    }
 
     (async () => {
       try {
@@ -111,9 +139,18 @@ export default function SynchronizedAudioReader({
           playThroughEarpieceAndroid: false,
         });
 
+        const resumeAt = await loadProgress();
+        const localUri = await audioDownloads.localUri(story.id, story.audioUrl);
+        if (alive) setDownloaded(Boolean(localUri));
         const { sound } = await Audio.Sound.createAsync(
-          { uri: story.audioUrl },
-          { shouldPlay: false, progressUpdateIntervalMillis: 100, rate, shouldCorrectPitch: true },
+          { uri: localUri ?? story.audioUrl },
+          {
+            shouldPlay: false,
+            positionMillis: Math.min(resumeAt, story.durationMs),
+            progressUpdateIntervalMillis: 250,
+            rate,
+            shouldCorrectPitch: true,
+          },
           onStatus,
         );
 
@@ -125,17 +162,21 @@ export default function SynchronizedAudioReader({
         soundRef.current = sound;
         setReady(true);
       } catch {
-        if (alive) setReady(false);
+        if (alive) {
+          setReady(false);
+          setAudioError('Audio could not be loaded. Check your connection and try again.');
+        }
       }
     })();
 
     return () => {
       alive = false;
       setReady(false);
+      void saveProgress(positionRef.current).catch(() => undefined);
       soundRef.current?.unloadAsync();
       soundRef.current = null;
     };
-  }, [story.audioUrl, onStatus]);
+  }, [story.audioUrl, story.durationMs, loadProgress, saveProgress, onStatus]);
 
   useEffect(() => {
     if (!ready) return;
@@ -172,6 +213,19 @@ export default function SynchronizedAudioReader({
   const onScrub = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
     const ratio = Math.max(0, Math.min(1, event.nativeEvent.locationX / barWidth.current));
     void seekTo(ratio * durationMs);
+  };
+
+  const downloadAudio = async () => {
+    if (!story.audioUrl || downloading) return;
+    setDownloading(true);
+    try {
+      await audioDownloads.download(story.id, story.audioUrl);
+      setDownloaded(true);
+    } catch (error) {
+      setAudioError(error instanceof Error ? error.message : 'Audio download failed');
+    } finally {
+      setDownloading(false);
+    }
   };
 
   const progress = durationMs ? positionMs / durationMs : 0;
@@ -254,6 +308,14 @@ export default function SynchronizedAudioReader({
                   onPress={() => setCitationOpen(true)}
                   accessibilityLabel="Open source citation"
                 />
+                {Platform.OS !== 'web' ? (
+                  <ControlChip
+                    label={downloaded ? 'Saved' : downloading ? 'Saving' : 'Offline'}
+                    icon={downloaded ? CheckCircle2 : Download}
+                    onPress={() => void downloadAudio()}
+                    accessibilityLabel="Save audio for offline listening"
+                  />
+                ) : null}
               </Row>
             </Row>
           </LinearGradient>
@@ -267,6 +329,14 @@ export default function SynchronizedAudioReader({
             accessibilityLabel="Story text"
           >
             <Overline style={styles.transcriptLabel}>Follow along</Overline>
+            {audioError ? (
+              <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
+                <AlertCircle size={15} color={accent.primary} />
+                <Caption color={colors.inkMuted} style={styles.audioErrorText}>
+                  {audioError}
+                </Caption>
+              </View>
+            ) : null}
 
             {story.cues.map((cue, index) => (
               <CueBlock
@@ -515,6 +585,16 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 28 },
   transcriptLabel: { marginBottom: 12 },
+  audioError: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    padding: 12,
+    marginBottom: 12,
+  },
+  audioErrorText: { flex: 1 },
   cue: {
     paddingVertical: 13,
     paddingHorizontal: 14,

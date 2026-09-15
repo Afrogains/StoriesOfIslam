@@ -20,6 +20,7 @@ export interface FeaturedStory {
   theme: string;
   durationLabel: string;
   durationMs: number;
+  audioUrl?: string | null;
   authenticityGrade: AuthenticityGrade | 'athar';
   sourceCitation: string;
   summary: string;

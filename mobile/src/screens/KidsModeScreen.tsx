@@ -41,6 +41,7 @@ import {
   type KidsStoryCard,
   type SectionSlug,
 } from '../data/mockHome';
+import { useCatalog } from '../data/CatalogProvider';
 import { kidsStoryToReaderStory } from '../data/storyAdapters';
 import { alpha, brandGradients, kidsGradients, radius, shadow } from '../theme/tokens';
 
@@ -66,6 +67,7 @@ const NEXT_BADGE_AT = 30;
 
 export default function KidsModeScreen() {
   const { colors, isDark } = useTheme();
+  const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -73,15 +75,35 @@ export default function KidsModeScreen() {
   const [stars, setStars] = useState(12);
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
 
+  const availableStories = useMemo(
+    () =>
+      stories.length
+        ? stories.map((story) => ({
+            id: story.id,
+            sectionSlug: story.sectionSlug,
+            title: story.title,
+            titleAr: story.titleAr,
+            figureName: story.figureName,
+            ageRange: '7–12',
+            durationLabel: story.durationLabel,
+            lesson: story.summary,
+            xp: 10,
+            locked: false,
+            completed: false,
+            isFavorite: false,
+          }))
+        : __DEV__ ? kidsStories : [],
+    [stories],
+  );
   const visibleStories = useMemo(
     () =>
       selectedSection === 'all'
-        ? kidsStories
-        : kidsStories.filter((story) => story.sectionSlug === selectedSection),
-    [selectedSection],
+        ? availableStories
+        : availableStories.filter((story) => story.sectionSlug === selectedSection),
+    [availableStories, selectedSection],
   );
 
-  const nowPlaying = kidsStories.find((story) => story.id === playingId) ?? kidsStories[0];
+  const nowPlaying = availableStories.find((story) => story.id === playingId) ?? availableStories[0];
   const isPlaying = playingId !== null;
 
   const togglePlay = (storyId: string) => {
@@ -306,7 +328,7 @@ export default function KidsModeScreen() {
       </ScrollView>
 
       {/* Mini player */}
-      <LinearGradient
+      {nowPlaying ? <LinearGradient
         colors={isDark ? ['#210E04', '#1A0C02'] : ['#0D9488', '#0F766E']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -340,7 +362,7 @@ export default function KidsModeScreen() {
 
           <BookOpen size={19} color="#FEF08A" />
         </Row>
-      </LinearGradient>
+      </LinearGradient> : null}
 
       <Modal
         visible={readerStory !== null}

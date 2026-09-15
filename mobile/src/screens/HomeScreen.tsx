@@ -42,7 +42,6 @@ import {
   useTheme,
 } from '../components/ui';
 import {
-  allStandardStories,
   continueListening,
   dailyVerse,
   homeMetrics,
@@ -51,6 +50,7 @@ import {
   type SectionSlug,
   type StoryItem,
 } from '../data/mockHome';
+import { useCatalog } from '../data/CatalogProvider';
 import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
 import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
@@ -71,6 +71,7 @@ const mediaFilters: { id: MediaFilter; label: string }[] = [
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
   const { savedCount } = useLibrary();
+  const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
   const [query, setQuery] = useState('');
@@ -85,7 +86,7 @@ export default function HomeScreen() {
   const filteredStories = useMemo(() => {
     const needle = query.trim().toLowerCase();
 
-    return allStandardStories.filter((story) => {
+    return stories.filter((story) => {
       if (selectedSection !== 'all' && story.sectionSlug !== selectedSection) return false;
       if (mediaFilter === 'audio' && !story.hasAudio) return false;
       if (mediaFilter === 'text' && story.hasAudio) return false;
@@ -98,7 +99,7 @@ export default function HomeScreen() {
         story.summary.toLowerCase().includes(needle)
       );
     });
-  }, [selectedSection, mediaFilter, query]);
+  }, [stories, selectedSection, mediaFilter, query]);
 
   const showDashboard = selectedSection === 'all' && !query;
 
@@ -383,7 +384,7 @@ export default function HomeScreen() {
 
               <Pressable
                 onPress={() => {
-                  const story = allStandardStories.find((item) => item.id === continueListening.storyId);
+                  const story = stories.find((item) => item.id === continueListening.storyId);
                   if (story) setActiveStory(story);
                 }}
                 style={({ pressed }) => [styles.playerAction, pressed && styles.pressed]}

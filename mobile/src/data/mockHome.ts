@@ -1,6 +1,6 @@
 export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah' | 'gleanings';
 export type MediaFilter = 'all' | 'audio' | 'text';
-export type AuthenticityGrade = 'sahih' | 'hasan' | 'historical';
+export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
 
 export type HomeMetric = {
   id: 'listened' | 'streak' | 'favorites' | 'hours';
@@ -35,11 +35,16 @@ export type StoryItem = {
   honorific: string;
   honorificAr?: string;
   summary: string;
+  content?: string;
+  contentAr?: string;
   durationLabel: string;
   durationMs: number;
   authenticityGrade: AuthenticityGrade;
   sourceCitation: string;
   hasAudio: boolean;
+  audioUrl?: string | null;
+  artworkUrl?: string | null;
+  timedCues?: Array<{ startMs: number; endMs: number; textEn: string; textAr: string }>;
   isFavorite?: boolean;
   keyTakeaway?: string;
 };

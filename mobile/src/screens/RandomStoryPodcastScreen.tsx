@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { Audio, type AVPlaybackStatus } from 'expo-av';
 import {
   CheckCircle2,
   Dices,
@@ -53,12 +54,63 @@ import {
   type FeaturedStory,
   type PodcastSegment,
 } from '../data/featuredNarrations';
+import { useCatalog } from '../data/CatalogProvider';
+import type { StoryItem } from '../data/mockHome';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 
 export type AudioSourceType = 'original' | 'notebooklm';
 export type PlaybackRate = 1 | 1.25 | 1.5;
 
 const RATES: PlaybackRate[] = [1, 1.25, 1.5];
+
+const EMPTY_STORY: FeaturedStory = {
+  id: '',
+  sectionSlug: 'gleanings',
+  title: 'No published podcast is available',
+  titleAr: 'لا توجد حلقة منشورة',
+  scholarSpeaker: 'Editorially reviewed generic voices',
+  originalNarrationUrl: '',
+  category: 'Gleanings',
+  theme: 'Reviewed learning',
+  durationLabel: '0:00',
+  durationMs: 0,
+  authenticityGrade: 'historical',
+  sourceCitation: '',
+  summary: 'Published, reviewed episodes will appear here.',
+  fullText: '',
+  keyTakeaways: [],
+  podcastOverview: [],
+  audioUrl: null,
+};
+
+function catalogStoryToPodcast(story: StoryItem): FeaturedStory {
+  return {
+    id: story.id,
+    sectionSlug: story.sectionSlug,
+    title: story.title,
+    titleAr: story.titleAr,
+    scholarSpeaker: 'Editorially reviewed generic voices',
+    originalNarrationUrl: '',
+    category: story.sectionSlug,
+    theme: 'Reflection and learning',
+    durationLabel: story.durationLabel,
+    durationMs: story.durationMs,
+    authenticityGrade: story.authenticityGrade,
+    sourceCitation: story.sourceCitation,
+    summary: story.summary,
+    fullText: story.content ?? story.summary,
+    keyTakeaways: [story.summary],
+    podcastOverview: (story.timedCues ?? []).map((cue, index) => ({
+      id: `${story.id}-${index}`,
+      speaker: index % 2 === 0 ? 'Host A (Scholar)' : 'Host B (Learner)',
+      text: cue.textEn,
+      textAr: cue.textAr,
+      startMs: cue.startMs,
+      endMs: cue.endMs,
+    })),
+    audioUrl: story.audioUrl,
+  };
+}
 
 /** Host A anchors the scholarship; Host B asks the learner's questions. */
 const HOST_STYLES = {
@@ -68,8 +120,15 @@ const HOST_STYLES = {
 
 export default function RandomStoryPodcastScreen() {
   const { colors, isDark } = useTheme();
+  const { stories } = useCatalog();
+  const availableStories = useMemo(
+    () => stories.map(catalogStoryToPodcast).filter((item) => item.audioUrl),
+    [stories],
+  );
 
-  const [story, setStory] = useState<FeaturedStory>(baqiyyIbnMakhladStory);
+  const [story, setStory] = useState<FeaturedStory>(
+    __DEV__ ? baqiyyIbnMakhladStory : EMPTY_STORY,
+  );
   const [sourceType, setSourceType] = useState<AudioSourceType>('notebooklm');
   const [isPlaying, setIsPlaying] = useState(false);
   const [positionMs, setPositionMs] = useState(0);
@@ -82,16 +141,16 @@ export default function RandomStoryPodcastScreen() {
   const [aiThinking, setAiThinking] = useState(false);
   const [aiHistory, setAiHistory] = useState<
     Array<{ question: string; answer: string; timestamp: string }>
-  >([
+  >(__DEV__ ? [
     {
       question: 'Why was Imam Ahmad under house arrest?',
       answer:
         'Imam Ahmad was confined during the Mihna — the inquisition over whether the Quran was created. He refused to concede the point and was barred from teaching publicly.',
       timestamp: '0:42',
     },
-  ]);
+  ] : []);
 
-  const progressTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
   const barWidth = useRef(1);
 
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
@@ -102,83 +161,63 @@ export default function RandomStoryPodcastScreen() {
       ? HOST_STYLES.a[isDark ? 'dark' : 'light']
       : HOST_STYLES.b[isDark ? 'dark' : 'light'];
 
-  const speak = useCallback(
-    (segment: PodcastSegment) => {
-      if (Platform.OS !== 'web' || typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(segment.text);
-      utterance.rate = rate;
-      // Distinct pitches keep the two hosts distinguishable by ear.
-      utterance.pitch = segment.speaker.includes('Host A') ? 0.9 : 1.12;
-      window.speechSynthesis.speak(utterance);
-    },
-    [rate],
-  );
-
-  const stopSpeech = () => {
-    if (Platform.OS === 'web' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  };
+  useEffect(() => {
+    if (!story.id && availableStories[0]) setStory(availableStories[0]);
+  }, [availableStories, story.id]);
 
   useEffect(() => {
     setDurationMs(story.durationMs);
     setPositionMs(0);
     setIsPlaying(false);
-    stopSpeech();
-  }, [story]);
+    let active = true;
+    void soundRef.current?.unloadAsync();
+    soundRef.current = null;
+    if (!story.audioUrl || sourceType !== 'notebooklm') return;
+    void Audio.Sound.createAsync(
+      { uri: story.audioUrl },
+      { shouldPlay: false, progressUpdateIntervalMillis: 250, rate },
+      (status: AVPlaybackStatus) => {
+        if (!active || !status.isLoaded) return;
+        setPositionMs(status.positionMillis);
+        setDurationMs(status.durationMillis ?? story.durationMs);
+        setIsPlaying(status.isPlaying);
+      },
+    ).then(({ sound }) => {
+      if (active) soundRef.current = sound;
+      else void sound.unloadAsync();
+    });
+    return () => {
+      active = false;
+      void soundRef.current?.unloadAsync();
+      soundRef.current = null;
+    };
+  }, [story, sourceType]);
 
   useEffect(() => {
-    if (isPlaying) {
-      if (sourceType === 'notebooklm') {
-        const index = story.podcastOverview.findIndex(
-          (segment) => positionMs >= segment.startMs && positionMs < segment.endMs,
-        );
-        const segment = story.podcastOverview[index >= 0 ? index : 0];
-        if (segment) speak(segment);
-      }
-
-      progressTimer.current = setInterval(() => {
-        setPositionMs((previous) => {
-          if (previous >= durationMs) {
-            setIsPlaying(false);
-            stopSpeech();
-            return 0;
-          }
-          return previous + 1000 * rate;
-        });
-      }, 1000);
-    } else {
-      stopSpeech();
-      if (progressTimer.current) clearInterval(progressTimer.current);
-    }
-
-    return () => {
-      stopSpeech();
-      if (progressTimer.current) clearInterval(progressTimer.current);
-    };
-  }, [isPlaying, durationMs, rate, sourceType, story.podcastOverview, speak]);
+    void soundRef.current?.setRateAsync(rate, true);
+  }, [rate]);
 
   const seekTo = (ms: number) => {
     const clamped = Math.max(0, Math.min(ms, durationMs));
     setPositionMs(clamped);
-    if (isPlaying && sourceType === 'notebooklm') {
-      const index = story.podcastOverview.findIndex(
-        (segment) => clamped >= segment.startMs && clamped < segment.endMs,
-      );
-      const segment = story.podcastOverview[index >= 0 ? index : 0];
-      if (segment) speak(segment);
-    }
+    void soundRef.current?.setPositionAsync(clamped);
   };
+
+  const togglePlayback = useCallback(async () => {
+    const sound = soundRef.current;
+    if (!sound) return;
+    if (isPlaying) await sound.pauseAsync();
+    else await sound.playAsync();
+  }, [isPlaying]);
 
   const shuffle = () => {
     setIsShuffling(true);
-    stopSpeech();
     setTimeout(() => {
-      const index = featuredStoriesList.findIndex((item) => item.id === story.id);
-      setStory(featuredStoriesList[(index + 1) % featuredStoriesList.length] ?? baqiyyIbnMakhladStory);
+      const list = availableStories.length
+        ? availableStories
+        : __DEV__ ? featuredStoriesList : [EMPTY_STORY];
+      const index = list.findIndex((item) => item.id === story.id);
+      setStory(list[(index + 1) % list.length] ?? EMPTY_STORY);
       setIsShuffling(false);
     }, 380);
   };
@@ -191,28 +230,13 @@ export default function RandomStoryPodcastScreen() {
     setAiThinking(true);
 
     setTimeout(() => {
-      const lowered = question.toLowerCase();
-      let answer = `Scholars reading ${story.title} highlight patience, discretion, and sincerity in the pursuit of authentic knowledge.`;
-
-      if (lowered.includes('beggar') || lowered.includes('disguise')) {
-        answer =
-          'Baqiyy ibn Makhlad dressed as a street beggar and carried a begging bowl so the guards watching Imam Ahmad’s house would not recognise him as a student of hadith.';
-      } else if (lowered.includes('sick') || lowered.includes('visit')) {
-        answer =
-          'When Baqiyy fell ill in his Baghdad lodging, Imam Ahmad arrived with a procession of students to visit him — an act that raised his standing across the whole city.';
-      }
-
+      const answer =
+        'This question has been saved for the editorial team. Automated answers remain unavailable until a qualified reviewer approves them.';
       setAiHistory((current) => [
         { question, answer, timestamp: formatTime(positionMs) },
         ...current,
       ]);
       setAiThinking(false);
-
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(answer);
-        utterance.rate = 1.08;
-        window.speechSynthesis.speak(utterance);
-      }
     }, 750);
   };
 
@@ -247,10 +271,7 @@ export default function RandomStoryPodcastScreen() {
                 label="AI discussion"
                 icon={Sparkles}
                 selected={sourceType === 'notebooklm'}
-                onPress={() => {
-                  setSourceType('notebooklm');
-                  stopSpeech();
-                }}
+                onPress={() => setSourceType('notebooklm')}
                 gradient={goldGradient}
               />
             </View>
@@ -259,10 +280,7 @@ export default function RandomStoryPodcastScreen() {
                 label="Original narration"
                 icon={Volume2}
                 selected={sourceType === 'original'}
-                onPress={() => {
-                  setSourceType('original');
-                  stopSpeech();
-                }}
+                onPress={() => story.originalNarrationUrl && setSourceType('original')}
                 gradient={emeraldGradient}
               />
             </View>
@@ -412,7 +430,7 @@ export default function RandomStoryPodcastScreen() {
                     key={segment.id}
                     onPress={() => {
                       seekTo(segment.startMs);
-                      if (!isPlaying) setIsPlaying(true);
+                      if (!isPlaying) void soundRef.current?.playAsync();
                     }}
                     accessibilityRole="button"
                     accessibilityLabel={`Play from ${formatTime(segment.startMs)}`}
@@ -487,11 +505,7 @@ export default function RandomStoryPodcastScreen() {
         <Row gap={11} style={styles.playerRow}>
           <PlayButton
             playing={isPlaying}
-            onPress={() => {
-              const next = !isPlaying;
-              setIsPlaying(next);
-              if (!next) stopSpeech();
-            }}
+            onPress={() => void togglePlayback()}
             gradient={goldGradient}
             size={44}
             icons={{ play: Play, pause: Pause }}
@@ -520,8 +534,7 @@ export default function RandomStoryPodcastScreen() {
           <Pressable
             onPress={() => {
               setAiDrawerOpen(true);
-              setIsPlaying(false);
-              stopSpeech();
+              void soundRef.current?.pauseAsync();
             }}
             style={styles.askButton}
             accessibilityRole="button"

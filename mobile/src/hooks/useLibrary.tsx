@@ -1,5 +1,9 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-import { allStandardStories, type StoryItem } from '../data/mockHome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useAuth } from '../auth/AuthProvider';
+import { useCatalog } from '../data/CatalogProvider';
+import type { StoryItem } from '../data/mockHome';
+import { apiRequest } from '../services/api';
 
 type LibraryContextValue = {
   savedIds: string[];
@@ -11,17 +15,51 @@ type LibraryContextValue = {
 
 const LibraryContext = createContext<LibraryContextValue | null>(null);
 
-/** Seeded from the mock data so the library isn't empty on first launch. */
-const initialSaved = allStandardStories.filter((story) => story.isFavorite).map((story) => story.id);
+const STORAGE_KEY = 'stories.library.ids.v1';
 
 export function LibraryProvider({ children }: { children: ReactNode }) {
-  const [savedIds, setSavedIds] = useState<string[]>(initialSaved);
+  const { stories } = useCatalog();
+  const { authenticated, getAccessToken } = useAuth();
+  const [savedIds, setSavedIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    void AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
+      if (raw) setSavedIds(JSON.parse(raw) as string[]);
+    });
+  }, []);
+
+  useEffect(() => {
+    void AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(savedIds));
+  }, [savedIds]);
+
+  useEffect(() => {
+    if (!authenticated) return;
+    void getAccessToken().then(async (token) => {
+      if (!token) return;
+      const response = await apiRequest<{ data: string[] }>('/v1/me/favorites', {
+        accessToken: token,
+      });
+      setSavedIds(response.data);
+    }).catch(() => undefined);
+  }, [authenticated, getAccessToken]);
 
   const toggleSaved = useCallback((id: string) => {
-    setSavedIds((current) =>
-      current.includes(id) ? current.filter((saved) => saved !== id) : [id, ...current],
-    );
-  }, []);
+    setSavedIds((current) => {
+      const removing = current.includes(id);
+      const next = removing ? current.filter((saved) => saved !== id) : [id, ...current];
+      if (authenticated) {
+        void getAccessToken().then((token) =>
+          token
+            ? apiRequest<void>(`/v1/me/favorites/${id}`, {
+                method: removing ? 'DELETE' : 'PUT',
+                accessToken: token,
+              })
+            : undefined,
+        ).catch(() => setSavedIds(current));
+      }
+      return next;
+    });
+  }, [authenticated, getAccessToken]);
 
   const value = useMemo<LibraryContextValue>(() => {
     const savedSet = new Set(savedIds);
@@ -31,11 +69,11 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
       toggleSaved,
       // Ordered by when each story was saved, most recent first.
       savedStories: savedIds
-        .map((id) => allStandardStories.find((story) => story.id === id))
+        .map((id) => stories.find((story) => story.id === id))
         .filter((story): story is StoryItem => Boolean(story)),
       savedCount: savedIds.length,
     };
-  }, [savedIds, toggleSaved]);
+  }, [savedIds, stories, toggleSaved]);
 
   return <LibraryContext.Provider value={value}>{children}</LibraryContext.Provider>;
 }

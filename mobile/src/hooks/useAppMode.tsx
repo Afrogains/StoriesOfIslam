@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { AppMode, ColorScheme } from '../theme/tokens';
 
 type AppModeContextValue = {
@@ -17,6 +18,23 @@ const AppModeContext = createContext<AppModeContextValue | null>(null);
 export function AppModeProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<AppMode>('standard');
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
+
+  useEffect(() => {
+    void AsyncStorage.multiGet(['stories.mode', 'stories.colorScheme']).then(
+      ([[, storedMode], [, storedScheme]]) => {
+        if (storedMode === 'standard' || storedMode === 'kids') setMode(storedMode);
+        if (storedScheme === 'light' || storedScheme === 'dark') setColorScheme(storedScheme);
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    void AsyncStorage.setItem('stories.mode', mode);
+  }, [mode]);
+
+  useEffect(() => {
+    void AsyncStorage.setItem('stories.colorScheme', colorScheme);
+  }, [colorScheme]);
 
   const value = useMemo<AppModeContextValue>(
     () => ({

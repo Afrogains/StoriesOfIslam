@@ -1,16 +1,17 @@
 import { Platform } from 'react-native';
 
-export const ARABIC_FONT_FAMILY = 'KFGQPC_uthmanic_script_hafs_r_regular';
+export const ARABIC_FONT_FAMILY =
+  Platform.OS === 'web' ? 'KFGQPC_uthmanic_script_hafs_r_regular' : 'UthmanicHafs';
 
 /**
  * Web loads Plus Jakarta Sans / Inter via global.css. Native falls back to the
  * platform UI face so the app never renders in a mismatched system serif.
  */
 export const DISPLAY_FONT_FAMILY =
-  Platform.OS === 'web' ? 'Plus Jakarta Sans, Inter, system-ui, sans-serif' : undefined;
+  Platform.OS === 'web' ? 'Plus Jakarta Sans, Inter, system-ui, sans-serif' : 'PlusJakartaSans';
 
 export const BODY_FONT_FAMILY =
-  Platform.OS === 'web' ? 'Inter, system-ui, sans-serif' : undefined;
+  Platform.OS === 'web' ? 'Inter, system-ui, sans-serif' : 'Inter';
 
 export type AppMode = 'standard' | 'kids';
 export type ColorScheme = 'light' | 'dark';

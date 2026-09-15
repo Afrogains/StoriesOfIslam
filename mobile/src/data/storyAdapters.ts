@@ -1,11 +1,20 @@
 import { mockStory, type MockStory } from './mockStory';
 import type { KidsStoryCard, StoryItem } from './mockHome';
 
-/**
- * The reader expects a fully-cued `MockStory`. Catalog entries only carry
- * metadata, so we borrow the demo cue track until real audio lands.
- */
 export function toReaderStory(story: StoryItem): MockStory {
+  const cues = story.timedCues?.length
+    ? story.timedCues.map((cue) => ({
+        text: cue.textEn,
+        textAr: cue.textAr,
+        startMs: cue.startMs,
+        endMs: cue.endMs,
+      }))
+    : [{
+        text: story.content ?? story.summary,
+        textAr: story.contentAr ?? story.titleAr,
+        startMs: 0,
+        endMs: Math.max(story.durationMs, 30_000),
+      }];
   return {
     id: story.id,
     slug: story.id,
@@ -17,10 +26,10 @@ export function toReaderStory(story: StoryItem): MockStory {
     honorificAr: story.honorificAr ?? 'عليه السلام',
     sourceCitation: story.sourceCitation,
     authenticityGrade: story.authenticityGrade,
-    audioUrl: mockStory.audioUrl,
-    artworkUrl: mockStory.artworkUrl,
+    audioUrl: story.audioUrl ?? '',
+    artworkUrl: story.artworkUrl ?? '',
     durationMs: story.durationMs,
-    cues: mockStory.cues,
+    cues,
   };
 }
 

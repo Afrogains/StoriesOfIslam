@@ -1,7 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { BookmarkX, Clock, Headphones, Sparkles } from 'lucide-react-native';
+import { BookmarkX, Clock, Headphones, LogIn, LogOut, Sparkles, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { useAuth } from '../auth/AuthProvider';
 import ScreenHeader from '../components/ScreenHeader';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
@@ -12,6 +13,7 @@ import {
   Caption,
   Card,
   EmptyState,
+  GradientButton,
   Heading,
   Overline,
   Pill,
@@ -25,10 +27,12 @@ import { sectionsMeta, type SectionSlug, type StoryItem } from '../data/mockHome
 import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
 import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
+import { apiRequest } from '../services/api';
 
 export default function LibraryScreen() {
   const { colors, isDark } = useTheme();
   const { savedStories, savedCount } = useLibrary();
+  const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
 
@@ -55,6 +59,27 @@ export default function LibraryScreen() {
       .filter((entry) => entry.count > 0);
   }, [savedStories]);
 
+  const deleteAccount = () => {
+    Alert.alert(
+      'Delete account and synced data?',
+      'This permanently removes your account, bookmarks, and listening progress. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete account',
+          style: 'destructive',
+          onPress: () => {
+            void getAccessToken().then(async (token) => {
+              if (!token) return;
+              await apiRequest<void>('/v1/me', { method: 'DELETE', accessToken: token });
+              await signOut();
+            });
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
@@ -68,6 +93,40 @@ export default function LibraryScreen() {
           arabic="مكتبتي"
           subtitle="Stories you saved for later reflection"
         />
+
+        <Card tone="cardAlt" padding={14} style={styles.accountCard}>
+          <Body weight="semibold">
+            {authenticated ? 'Your library is syncing across devices.' : 'Sign in to sync bookmarks and progress.'}
+          </Body>
+          <Row gap={8} style={styles.accountActions}>
+            {authenticated ? (
+              <>
+                <GradientButton
+                  label="Sign out"
+                  icon={LogOut}
+                  size="sm"
+                  gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+                  onPress={() => void signOut()}
+                />
+                <GradientButton
+                  label="Delete account"
+                  icon={Trash2}
+                  size="sm"
+                  gradient={['#DC2626', '#7F1D1D']}
+                  onPress={deleteAccount}
+                />
+              </>
+            ) : (
+              <GradientButton
+                label="Sign in"
+                icon={LogIn}
+                size="sm"
+                gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+                onPress={() => void signIn()}
+              />
+            )}
+          </Row>
+        </Card>
 
         {/* Collection summary */}
         <LinearGradient
@@ -207,6 +266,8 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 130 },
   summary: { borderRadius: radius['3xl'], padding: 20, marginBottom: 18 },
+  accountCard: { marginBottom: 14 },
+  accountActions: { marginTop: 10, flexWrap: 'wrap' },
   summaryText: { flex: 1, paddingRight: 10 },
   summaryHeading: { marginTop: 6 },
   summaryStats: { marginTop: 10 },
