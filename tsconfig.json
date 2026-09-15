@@ -14,5 +14,9 @@
     "declaration": true,
     "sourceMap": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/components/**/*",
+    "src/data/gleaningsData.ts"
+  ]
 }

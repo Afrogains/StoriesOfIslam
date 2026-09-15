@@ -1,3 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Uthmanic Hafs script — the official KFGQPC mushaf typeface, used for all Quranic
+   and Arabic narration text. Naskh is the fallback while the woff2 streams in. */
+@font-face {
+  font-family: 'KFGQPC_uthmanic_script_hafs_r_regular';
+  src: url('https://cdn.jsdelivr.net/gh/quran/quran.com-frontend-next@master/public/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2')
+      format('woff2'),
+    local('KFGQPC Uthmanic Script HAFS'), local('KFGQPC Uthmanic Script Hafs Regular');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-arabic: 'KFGQPC_uthmanic_script_hafs_r_regular', 'Noto Naskh Arabic', 'Amiri',
+    'Scheherazade New', 'Traditional Arabic', serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+}
+
+/* Arabic text keeps its own metrics: taller line box, no synthetic bolding. */
+.font-arabic,
+[data-font-arabic='true'],
+[style*='KFGQPC'] {
+  font-family: var(--font-arabic) !important;
+  font-synthesis: none;
+  font-variant-ligatures: common-ligatures contextual;
+}
+
+/* Numerals stay tabular so timestamps and durations don't jitter while playing. */
+[data-tabular='true'] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+::selection {
+  background-color: rgba(20, 184, 166, 0.28);
+}
+
+/* Slim, theme-neutral scrollbars inside the phone frame. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 113, 108, 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 113, 108, 0.35);
+  border-radius: 99px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(120, 113, 108, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
