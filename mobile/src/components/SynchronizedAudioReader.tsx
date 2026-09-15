@@ -1,4 +1,8 @@
-import { Audio, AVPlaybackStatus } from 'expo-av';
+import {
+  setAudioModeAsync,
+  useAudioPlayer,
+  useAudioPlayerStatus,
+} from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   AlertCircle,
@@ -16,7 +20,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Modal,
   NativeSyntheticEvent,
@@ -80,7 +84,6 @@ export default function SynchronizedAudioReader({
 }: SynchronizedAudioReaderProps) {
   const { colors, isDark } = useTheme();
 
-  const soundRef = useRef<Audio.Sound | null>(null);
   const scrollRef = useRef<ScrollView>(null);
   const cueY = useRef<number[]>([]);
   const barWidth = useRef(1);
@@ -94,35 +97,40 @@ export default function SynchronizedAudioReader({
   const [durationMs, setDurationMs] = useState(story.durationMs);
   const [rate, setRate] = useState<PlaybackRate>(1);
   const [citationOpen, setCitationOpen] = useState(false);
-  const [ready, setReady] = useState(false);
   const [audioError, setAudioError] = useState<string | null>(null);
   const [downloaded, setDownloaded] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const player = useAudioPlayer(
+    story.audioUrl ? { uri: story.audioUrl } : null,
+    { updateInterval: 250, keepAudioSessionActive: true },
+  );
+  const status = useAudioPlayerStatus(player);
+  const ready = status.isLoaded;
 
   const accent = sectionAccent(sectionSlug, isDark);
 
   const activeIndex = useMemo(() => cueIndexAt(positionMs, story.cues), [positionMs, story.cues]);
 
-  const onStatus = useCallback((status: AVPlaybackStatus) => {
+  useEffect(() => {
     if (!status.isLoaded) return;
-    setPositionMs(status.positionMillis);
-    positionRef.current = status.positionMillis;
-    if (status.durationMillis) setDurationMs(status.durationMillis);
-    setPlaying(status.isPlaying);
+    const currentMs = Math.round(status.currentTime * 1000);
+    setPositionMs(currentMs);
+    positionRef.current = currentMs;
+    if (status.duration) setDurationMs(Math.round(status.duration * 1000));
+    setPlaying(status.playing);
     if (status.didJustFinish) {
       void saveProgress(0, true).catch(() => undefined);
-    } else if (Math.abs(status.positionMillis - lastSavedRef.current) >= 5_000) {
-      lastSavedRef.current = status.positionMillis;
-      void saveProgress(status.positionMillis).catch(() => undefined);
+    } else if (Math.abs(currentMs - lastSavedRef.current) >= 5_000) {
+      lastSavedRef.current = currentMs;
+      void saveProgress(currentMs).catch(() => undefined);
     }
-  }, [saveProgress]);
+  }, [status, saveProgress]);
 
   useEffect(() => {
     let alive = true;
     setAudioError(null);
 
     if (!story.audioUrl) {
-      setReady(false);
       setAudioError('Audio is not available for this story yet. You can still read the complete text.');
       return () => {
         alive = false;
@@ -131,39 +139,27 @@ export default function SynchronizedAudioReader({
 
     (async () => {
       try {
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          playsInSilentModeIOS: true,
-          staysActiveInBackground: true,
-          shouldDuckAndroid: true,
-          playThroughEarpieceAndroid: false,
+        await setAudioModeAsync({
+          allowsRecording: false,
+          playsInSilentMode: true,
+          shouldPlayInBackground: true,
+          interruptionMode: 'doNotMix',
+          shouldRouteThroughEarpiece: false,
         });
 
         const resumeAt = await loadProgress();
         const localUri = await audioDownloads.localUri(story.id, story.audioUrl);
         if (alive) setDownloaded(Boolean(localUri));
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: localUri ?? story.audioUrl },
-          {
-            shouldPlay: false,
-            positionMillis: Math.min(resumeAt, story.durationMs),
-            progressUpdateIntervalMillis: 250,
-            rate: 1,
-            shouldCorrectPitch: true,
-          },
-          onStatus,
-        );
-
-        if (!alive) {
-          await sound.unloadAsync();
-          return;
-        }
-
-        soundRef.current = sound;
-        setReady(true);
+        if (!alive) return;
+        if (localUri) player.replace({ uri: localUri });
+        await player.seekTo(Math.min(resumeAt, story.durationMs) / 1000);
+        player.setActiveForLockScreen(true, {
+          title: story.title,
+          artist: story.figureName || 'Stories of Islam',
+          artworkUrl: story.artworkUrl || undefined,
+        });
       } catch {
         if (alive) {
-          setReady(false);
           setAudioError('Audio could not be loaded. Check your connection and try again.');
         }
       }
@@ -171,17 +167,26 @@ export default function SynchronizedAudioReader({
 
     return () => {
       alive = false;
-      setReady(false);
       void saveProgress(positionRef.current).catch(() => undefined);
-      soundRef.current?.unloadAsync();
-      soundRef.current = null;
+      player.pause();
+      player.clearLockScreenControls();
     };
-  }, [story.id, story.audioUrl, story.durationMs, loadProgress, saveProgress, onStatus]);
+  }, [
+    story.id,
+    story.audioUrl,
+    story.durationMs,
+    story.title,
+    story.figureName,
+    story.artworkUrl,
+    loadProgress,
+    saveProgress,
+    player,
+  ]);
 
   useEffect(() => {
     if (!ready) return;
-    soundRef.current?.setRateAsync(rate, true);
-  }, [rate, ready]);
+    player.setPlaybackRate(rate, 'medium');
+  }, [rate, ready, player]);
 
   useEffect(() => {
     if (!expanded) return;
@@ -196,17 +201,14 @@ export default function SynchronizedAudioReader({
   };
 
   const togglePlay = async () => {
-    const sound = soundRef.current;
-    if (!sound || !ready) return;
-    const status = await sound.getStatusAsync();
-    if (!status.isLoaded) return;
-    if (status.isPlaying) await sound.pauseAsync();
-    else await sound.playAsync();
+    if (!ready) return;
+    if (playing) player.pause();
+    else player.play();
   };
 
   const seekTo = async (ms: number) => {
     const clamped = Math.max(0, Math.min(ms, durationMs));
-    await soundRef.current?.setPositionAsync(clamped);
+    await player.seekTo(clamped / 1000);
     setPositionMs(clamped);
   };
 

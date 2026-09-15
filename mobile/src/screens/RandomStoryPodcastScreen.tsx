@@ -1,5 +1,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Audio, type AVPlaybackStatus } from 'expo-av';
+import {
+  setAudioModeAsync,
+  useAudioPlayer,
+  useAudioPlayerStatus,
+} from 'expo-audio';
 import {
   CheckCircle2,
   Dices,
@@ -149,8 +153,12 @@ export default function RandomStoryPodcastScreen() {
     },
   ] : []);
 
-  const soundRef = useRef<Audio.Sound | null>(null);
   const barWidth = useRef(1);
+  const player = useAudioPlayer(
+    sourceType === 'notebooklm' && story.audioUrl ? { uri: story.audioUrl } : null,
+    { updateInterval: 250, keepAudioSessionActive: true },
+  );
+  const playerStatus = useAudioPlayerStatus(player);
 
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
@@ -168,46 +176,50 @@ export default function RandomStoryPodcastScreen() {
     setDurationMs(story.durationMs);
     setPositionMs(0);
     setIsPlaying(false);
-    let active = true;
-    void soundRef.current?.unloadAsync();
-    soundRef.current = null;
     if (!story.audioUrl || sourceType !== 'notebooklm') return;
-    void Audio.Sound.createAsync(
-      { uri: story.audioUrl },
-      { shouldPlay: false, progressUpdateIntervalMillis: 250, rate: 1 },
-      (status: AVPlaybackStatus) => {
-        if (!active || !status.isLoaded) return;
-        setPositionMs(status.positionMillis);
-        setDurationMs(status.durationMillis ?? story.durationMs);
-        setIsPlaying(status.isPlaying);
-      },
-    ).then(({ sound }) => {
-      if (active) soundRef.current = sound;
-      else void sound.unloadAsync();
+    void setAudioModeAsync({
+      allowsRecording: false,
+      playsInSilentMode: true,
+      shouldPlayInBackground: true,
+      interruptionMode: 'doNotMix',
+      shouldRouteThroughEarpiece: false,
+    });
+    player.setActiveForLockScreen(true, {
+      title: story.title,
+      artist: 'Stories of Islam · Two-host overview',
     });
     return () => {
-      active = false;
-      void soundRef.current?.unloadAsync();
-      soundRef.current = null;
+      player.pause();
+      player.clearLockScreenControls();
     };
-  }, [story, sourceType]);
+  }, [story, sourceType, player]);
 
   useEffect(() => {
-    void soundRef.current?.setRateAsync(rate, true);
-  }, [rate]);
+    player.setPlaybackRate(rate, 'medium');
+  }, [rate, player]);
+
+  useEffect(() => {
+    if (!playerStatus.isLoaded) return;
+    setPositionMs(Math.round(playerStatus.currentTime * 1000));
+    setDurationMs(
+      playerStatus.duration
+        ? Math.round(playerStatus.duration * 1000)
+        : story.durationMs,
+    );
+    setIsPlaying(playerStatus.playing);
+  }, [playerStatus, story.durationMs]);
 
   const seekTo = (ms: number) => {
     const clamped = Math.max(0, Math.min(ms, durationMs));
     setPositionMs(clamped);
-    void soundRef.current?.setPositionAsync(clamped);
+    void player.seekTo(clamped / 1000);
   };
 
-  const togglePlayback = useCallback(async () => {
-    const sound = soundRef.current;
-    if (!sound) return;
-    if (isPlaying) await sound.pauseAsync();
-    else await sound.playAsync();
-  }, [isPlaying]);
+  const togglePlayback = useCallback(() => {
+    if (!playerStatus.isLoaded) return;
+    if (isPlaying) player.pause();
+    else player.play();
+  }, [isPlaying, player, playerStatus.isLoaded]);
 
   const shuffle = () => {
     setIsShuffling(true);
@@ -429,7 +441,7 @@ export default function RandomStoryPodcastScreen() {
                     key={segment.id}
                     onPress={() => {
                       seekTo(segment.startMs);
-                      if (!isPlaying) void soundRef.current?.playAsync();
+                      if (!isPlaying) player.play();
                     }}
                     accessibilityRole="button"
                     accessibilityLabel={`Play from ${formatTime(segment.startMs)}`}
@@ -533,7 +545,7 @@ export default function RandomStoryPodcastScreen() {
           <Pressable
             onPress={() => {
               setAiDrawerOpen(true);
-              void soundRef.current?.pauseAsync();
+              player.pause();
             }}
             style={styles.askButton}
             accessibilityRole="button"

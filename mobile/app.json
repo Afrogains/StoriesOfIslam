@@ -7,21 +7,26 @@
     "scheme": "storiesofislam",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
-    "newArchEnabled": true,
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.storiesofislam.app",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "ITSAppUsesNonExemptEncryption": false
       },
       "privacyManifests": {
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ]
       }
@@ -51,7 +56,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/UthmanicHafs1Ver18.ttf"]
+          "fonts": [
+            "./assets/fonts/UthmanicHafs1Ver18.ttf"
+          ]
         }
       ],
       [
@@ -71,6 +78,13 @@
           "dark": {
             "backgroundColor": "#071C1A"
           }
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": true
         }
       ]
     ]
