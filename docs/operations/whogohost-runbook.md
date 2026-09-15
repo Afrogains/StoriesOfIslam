@@ -83,8 +83,25 @@ Alert on:
 - container restarts and OOM kills;
 - missed backups and failed restore drills.
 
+Install Prometheus rule files from `infra/whogohost/monitoring/alerts.yml` and
+`infra/monitoring/api-alerts.yml`. Run `scripts/health-check.sh` through the
+systemd timer installed by `scripts/install-systemd.sh`.
+
 The Node `/health/ready` endpoint verifies PostgreSQL and MinIO. Independently
 monitor Keycloak discovery and the public media hostname.
+
+## Local validation drill
+
+Cloud agents and operators can prove the Compose stack without a public VPS:
+
+```bash
+npm run platform:local
+```
+
+This generates local TLS material, starts PostgreSQL/Keycloak/MinIO/Nginx, and
+runs `scripts/validate-stack.sh` (OIDC discovery, bucket anonymity, draft
+isolation). Production still requires a separate WhoGoHost VPS, ACME
+certificates, off-site encrypted backups, and a recorded restore drill.
 
 ## Upgrade procedure
 

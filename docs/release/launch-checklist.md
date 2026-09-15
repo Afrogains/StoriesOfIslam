@@ -7,6 +7,14 @@ require authorized humans.
 
 ## Staging acceptance
 
+Automation helpers:
+
+- `npm run platform:local` — local WhoGoHost Compose drill
+- `npm run platform:validate` — OIDC, Postgres, MinIO policy probes
+- `npm run acceptance:staging` — deployed staging HTTP probes
+- `bash scripts/beta-matrix.sh` — legal/page probes + manual device matrix
+- `infra/whogohost/scripts/backup-postgres-age.sh` + `restore-drill.sh`
+
 - [ ] Fresh staging migration and deterministic seed complete.
 - [ ] Keycloak sign-up, verification, PKCE login, refresh rotation, logout, and
       account deletion pass on web, iOS, and Android.

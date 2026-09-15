@@ -3,6 +3,8 @@ dist/
 .env
 .env.*
 !.env.example
+!infra/whogohost/.env.example
+!infra/whogohost/.env.local.example
 *.log
 .DS_Store
 .expo/
@@ -17,6 +19,8 @@ mobile/web-build/
 mobile/.expo/
 mobile/.env*
 !mobile/.env.example
+infra/whogohost/tls/
+infra/whogohost/.secrets/
 *.mp3
 *.m4a
 *.wav

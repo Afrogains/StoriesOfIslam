@@ -18,7 +18,7 @@ server {
 
   location / {
     limit_req zone=auth_limit burst=40 nodelay;
-    proxy_pass http://keycloak:8080;
+    proxy_pass http://${KEYCLOAK_UPSTREAM};
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;
@@ -38,7 +38,7 @@ server {
   add_header X-Content-Type-Options nosniff always;
 
   location / {
-    proxy_pass http://minio:9000;
+    proxy_pass http://${MINIO_UPSTREAM};
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;
@@ -57,7 +57,7 @@ server {
   # Restrict this hostname at the WhoGoHost firewall and/or replace with an
   # operator IP allowlist. It must not be generally public.
   location / {
-    proxy_pass http://minio:9001;
+    proxy_pass http://${MINIO_CONSOLE_UPSTREAM};
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;

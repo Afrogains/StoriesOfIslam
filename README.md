@@ -90,12 +90,21 @@ must never be published.
 
 ## Deployment
 
-1. Provision staging using `infra/whogohost/`.
-2. Deploy the API and worker container to the separate Node host.
-3. Run migrations as a one-off release job.
-4. Deploy Expo Web from `mobile/dist`.
-5. Build signed preview binaries with EAS.
-6. Complete the release checklist in `docs/release/launch-checklist.md`.
+1. Provision staging using `infra/whogohost/` (`scripts/harden-host.sh`,
+   `scripts/provision.sh`, `scripts/install-systemd.sh`).
+2. Validate with `scripts/validate-stack.sh` and record a restore drill.
+3. Deploy the API and worker with `infra/api-host/docker-compose.yml`.
+4. Run migrations as a one-off release job.
+5. Deploy Expo Web from `mobile/dist`.
+6. Build signed preview binaries with EAS (`scripts/eas-beta.sh` or the Release
+   workflow).
+7. Complete the release checklist in `docs/release/launch-checklist.md`.
+
+Local cloud-agent drill (host networking when Docker bridge is unavailable):
+
+```bash
+npm run platform:local
+```
 
 Production promotion is a manual, reviewed CI action. Database and object
 storage restore tests are mandatory before launch.

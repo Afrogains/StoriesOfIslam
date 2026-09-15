@@ -32,7 +32,6 @@ services:
     command:
       [
         "start",
-        "--optimized",
         "--import-realm",
         "--proxy-headers=xforwarded",
         "--http-enabled=true",
@@ -43,7 +42,7 @@ services:
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD}
-      KC_HOSTNAME: ${AUTH_HOSTNAME:?set AUTH_HOSTNAME}
+      KC_HOSTNAME: https://${AUTH_HOSTNAME:?set AUTH_HOSTNAME}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:?set KEYCLOAK_ADMIN_USER}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD}
       KC_HEALTH_ENABLED: "true"
@@ -68,7 +67,7 @@ services:
       - no-new-privileges:true
 
   minio:
-    image: minio/minio:RELEASE.2025-07-23T15-54-02Z
+    image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
@@ -89,7 +88,7 @@ services:
       - no-new-privileges:true
 
   minio-init:
-    image: minio/mc:RELEASE.2025-07-21T05-28-08Z
+    image: quay.io/minio/mc:RELEASE.2025-07-21T05-28-08Z
     restart: "no"
     entrypoint: ["/bin/sh", "/config/bootstrap-minio.sh"]
     environment:
@@ -116,6 +115,9 @@ services:
       AUTH_HOSTNAME: ${AUTH_HOSTNAME:?set AUTH_HOSTNAME}
       MEDIA_HOSTNAME: ${MEDIA_HOSTNAME:?set MEDIA_HOSTNAME}
       MINIO_CONSOLE_HOSTNAME: ${MINIO_CONSOLE_HOSTNAME:?set MINIO_CONSOLE_HOSTNAME}
+      KEYCLOAK_UPSTREAM: ${KEYCLOAK_UPSTREAM:-keycloak:8080}
+      MINIO_UPSTREAM: ${MINIO_UPSTREAM:-minio:9000}
+      MINIO_CONSOLE_UPSTREAM: ${MINIO_CONSOLE_UPSTREAM:-minio:9001}
     volumes:
       - ./nginx/templates:/etc/nginx/templates:ro
       - ${TLS_CERT_PATH:?set TLS_CERT_PATH}:/etc/nginx/tls/fullchain.pem:ro
