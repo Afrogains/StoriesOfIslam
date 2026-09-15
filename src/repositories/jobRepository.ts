@@ -1,7 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import type { PoolClient } from 'pg';
 import type { AuthenticatedUser } from '../auth/keycloak';
+import { getEnv } from '../config/env';
 import { query, transaction } from '../db/pool';
+import { HttpError } from '../http/errors';
 import { ensureProfile } from './userRepository';
 
 export type JobType = 'podcast_script' | 'voice_synthesis' | 'full_episode';
@@ -70,6 +72,18 @@ export const jobRepository = {
     idempotencyKey: string,
   ): Promise<GenerationJob> {
     const profileId = await ensureProfile(user);
+    const recent = await query<{ count: string }>(
+      `SELECT count(*) FROM generation_jobs
+       WHERE requested_by=$1 AND created_at >= now() - interval '24 hours'`,
+      [profileId],
+    );
+    if (Number(recent.rows[0]?.count ?? 0) >= getEnv().MAX_GENERATION_JOBS_PER_USER_PER_DAY) {
+      throw new HttpError(
+        429,
+        'generation_budget_exceeded',
+        'The daily generation allowance has been reached',
+      );
+    }
     const result = await query<JobRow>(
       `INSERT INTO generation_jobs(
         id,job_type,requested_by,story_id,input,idempotency_key

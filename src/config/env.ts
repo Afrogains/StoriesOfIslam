@@ -45,6 +45,7 @@ const EnvSchema = z.object({
   WORKER_POLL_INTERVAL_MS: z.coerce.number().int().min(250).default(2000),
   WORKER_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(10).default(3),
   WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(10).default(1),
+  MAX_GENERATION_JOBS_PER_USER_PER_DAY: z.coerce.number().int().min(1).max(100).default(10),
 
   SENTRY_DSN: optionalUrl,
   RELEASE_SHA: z.string().default('local'),

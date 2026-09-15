@@ -15,7 +15,10 @@ export const PodcastDialogueTurnSchema = z.object({
 export type PodcastDialogueTurn = z.infer<typeof PodcastDialogueTurnSchema>;
 
 export const GeneratePodcastInputSchema = z.object({
-  sourceText: z.string().min(10, 'Source text must contain classical narration content'),
+  sourceText: z
+    .string()
+    .min(10, 'Source text must contain classical narration content')
+    .max(50_000, 'Source text exceeds the generation safety limit'),
   referenceUrl: z.string().url().or(z.string()),
   category: z.enum(['gleanings', 'prophets', 'seerah', 'sahabah']),
   title: z.string().optional(),

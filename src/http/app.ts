@@ -8,9 +8,8 @@ import pinoHttp from 'pino-http';
 import { optionalAuth } from '../auth/keycloak';
 import { getEnv } from '../config/env';
 import { logger } from '../config/logger';
-import { checkDatabase } from '../db/pool';
-import { objectStorageService } from '../services/ObjectStorageService';
-import { errorHandler, notFound } from './errors';
+import { readinessChecks } from '../services/ReadinessService';
+import { HttpError, errorHandler, notFound } from './errors';
 import { metricsEndpoint, recordMetrics } from './metrics';
 import { catalogRouter } from '../routes/catalog';
 import { editorialRouter } from '../routes/editorial';
@@ -18,8 +17,7 @@ import { jobsRouter } from '../routes/jobs';
 import { meRouter } from '../routes/me';
 
 export interface AppDependencies {
-  checkDatabase?: () => Promise<void>;
-  checkStorage?: () => Promise<void>;
+  checks?: Record<string, () => Promise<void>>;
 }
 
 export function createApp(dependencies: AppDependencies = {}): Express {
@@ -59,7 +57,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
       maxAge: 86_400,
       origin(origin, callback) {
         if (!origin || allowedOrigins.has(origin)) callback(null, true);
-        else callback(new Error('Origin is not allowed'));
+        else callback(new HttpError(403, 'origin_forbidden', 'Origin is not allowed'));
       },
     }),
   );
@@ -79,10 +77,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
     response.json({ status: 'ok', release: env.RELEASE_SHA });
   });
   app.get('/health/ready', async (_request, response) => {
-    const checks = {
-      database: dependencies.checkDatabase ?? checkDatabase,
-      storage: dependencies.checkStorage ?? (() => objectStorageService.check()),
-    };
+    const checks = dependencies.checks ?? readinessChecks();
     const entries = await Promise.all(
       Object.entries(checks).map(async ([name, check]) => {
         try {

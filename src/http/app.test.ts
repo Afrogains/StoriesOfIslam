@@ -12,9 +12,11 @@ describe('HTTP application', () => {
 
   it('reports dependency failures through readiness', async () => {
     const app = createApp({
-      checkDatabase: async () => undefined,
-      checkStorage: async () => {
-        throw new Error('unavailable');
+      checks: {
+        database: async () => undefined,
+        storage: async () => {
+          throw new Error('unavailable');
+        },
       },
     });
     const response = await request(app).get('/health/ready');
