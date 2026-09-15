@@ -35,7 +35,17 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const discovery = AuthSession.useAutoDiscovery(appConfig.keycloakIssuer);
+  const discovery = useMemo<AuthSession.DiscoveryDocument>(() => {
+    const issuer = appConfig.keycloakIssuer;
+    const protocol = `${issuer}/protocol/openid-connect`;
+    return {
+      authorizationEndpoint: `${protocol}/auth`,
+      tokenEndpoint: `${protocol}/token`,
+      revocationEndpoint: `${protocol}/revoke`,
+      endSessionEndpoint: `${protocol}/logout`,
+      userInfoEndpoint: `${protocol}/userinfo`,
+    };
+  }, []);
   const redirectUri = AuthSession.makeRedirectUri({
     scheme: 'storiesofislam',
     path: 'oauth/callback',

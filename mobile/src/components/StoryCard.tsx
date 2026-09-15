@@ -53,7 +53,7 @@ export default function StoryCard({
   const saved = isSaved(story.id);
 
   return (
-    <Card onPress={onPress} accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
+    <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
       <Row justify="space-between" style={styles.metaRow}>
         <Row gap={6}>
           <Badge label={meta.title} color={accent.badgeText} background={accent.badgeBg} />
