@@ -1,8 +1,10 @@
 import {
-  GeneratePodcastInput,
   GeneratePodcastInputSchema,
-  GeneratedPodcastScript,
   GeneratedPodcastScriptSchema,
+} from '../types/podcast';
+import type {
+  GeneratePodcastInput,
+  GeneratedPodcastScript,
   PodcastDialogueTurn,
 } from '../types/podcast';
 

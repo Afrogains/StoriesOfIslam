@@ -18,6 +18,7 @@ export const notFound: RequestHandler = (_request, _response, next) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (error, request, response, _next) => {
+  void _next;
   if (error instanceof ZodError) {
     response.status(400).json({
       error: {

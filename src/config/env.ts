@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
-const booleanFromString = z
-  .enum(['true', 'false'])
-  .default('false')
-  .transform((value) => value === 'true');
+const booleanFromString = (defaultValue: 'true' | 'false' = 'false') =>
+  z
+    .enum(['true', 'false'])
+    .default(defaultValue)
+    .transform((value) => value === 'true');
 
 const optionalUrl = z.string().url().optional().or(z.literal(''));
 
@@ -13,10 +14,10 @@ const EnvSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   APP_ORIGIN: z.string().url().default('http://localhost:8081'),
   CORS_ORIGINS: z.string().default('http://localhost:8081'),
-  TRUST_PROXY: booleanFromString,
+  TRUST_PROXY: booleanFromString(),
 
   DATABASE_URL: z.string().min(1).default('postgresql://stories_app:change-me@localhost:5432/stories_of_islam'),
-  DATABASE_SSL: booleanFromString,
+  DATABASE_SSL: booleanFromString(),
   DB_POOL_MAX: z.coerce.number().int().min(1).max(50).default(10),
 
   KEYCLOAK_ISSUER: z.string().url().default('http://localhost:8080/realms/stories-of-islam'),
@@ -31,7 +32,7 @@ const EnvSchema = z.object({
   S3_PUBLIC_BUCKET: z.string().min(3).default('stories-public'),
   S3_PRIVATE_BUCKET: z.string().min(3).default('stories-private'),
   S3_PUBLIC_BASE_URL: z.string().url().default('http://localhost:9000/stories-public'),
-  S3_FORCE_PATH_STYLE: booleanFromString.default('true'),
+  S3_FORCE_PATH_STYLE: booleanFromString('true'),
 
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().default('gpt-4.1-mini'),
