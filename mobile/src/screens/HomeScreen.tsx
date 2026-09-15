@@ -37,7 +37,6 @@ import {
   ProgressBar,
   Row,
   SectionHeading,
-  Small,
   Title,
   useTheme,
 } from '../components/ui';
@@ -53,7 +52,7 @@ import {
 import { useCatalog } from '../data/CatalogProvider';
 import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
-import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
+import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 
 const metricIcons: Record<string, LucideIcon> = {
   listened: Headphones,

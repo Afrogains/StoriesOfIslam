@@ -44,7 +44,7 @@ export type StoryItem = {
   hasAudio: boolean;
   audioUrl?: string | null;
   artworkUrl?: string | null;
-  timedCues?: Array<{ startMs: number; endMs: number; textEn: string; textAr: string }>;
+  timedCues?: { startMs: number; endMs: number; textEn: string; textAr: string }[];
   isFavorite?: boolean;
   keyTakeaway?: string;
 };

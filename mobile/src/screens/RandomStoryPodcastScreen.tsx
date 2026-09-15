@@ -36,7 +36,6 @@ import {
   Caption,
   Card,
   Display,
-  Heading,
   IconBubble,
   Mono,
   Overline,
@@ -140,7 +139,7 @@ export default function RandomStoryPodcastScreen() {
   const [aiQuery, setAiQuery] = useState('');
   const [aiThinking, setAiThinking] = useState(false);
   const [aiHistory, setAiHistory] = useState<
-    Array<{ question: string; answer: string; timestamp: string }>
+    { question: string; answer: string; timestamp: string }[]
   >(__DEV__ ? [
     {
       question: 'Why was Imam Ahmad under house arrest?',
@@ -175,7 +174,7 @@ export default function RandomStoryPodcastScreen() {
     if (!story.audioUrl || sourceType !== 'notebooklm') return;
     void Audio.Sound.createAsync(
       { uri: story.audioUrl },
-      { shouldPlay: false, progressUpdateIntervalMillis: 250, rate },
+      { shouldPlay: false, progressUpdateIntervalMillis: 250, rate: 1 },
       (status: AVPlaybackStatus) => {
         if (!active || !status.isLoaded) return;
         setPositionMs(status.positionMillis);

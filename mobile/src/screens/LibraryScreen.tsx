@@ -9,7 +9,7 @@ import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
 import {
   ArabicInline,
   Badge,
-  Body,
+  BodyStrong,
   Caption,
   Card,
   EmptyState,
@@ -20,7 +20,6 @@ import {
   Row,
   SectionHeading,
   Small,
-  Title,
   useTheme,
 } from '../components/ui';
 import { sectionsMeta, type SectionSlug, type StoryItem } from '../data/mockHome';
@@ -95,9 +94,9 @@ export default function LibraryScreen() {
         />
 
         <Card tone="cardAlt" padding={14} style={styles.accountCard}>
-          <Body weight="semibold">
+          <BodyStrong>
             {authenticated ? 'Your library is syncing across devices.' : 'Sign in to sync bookmarks and progress.'}
-          </Body>
+          </BodyStrong>
           <Row gap={8} style={styles.accountActions}>
             {authenticated ? (
               <>

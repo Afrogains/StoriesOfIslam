@@ -148,7 +148,7 @@ export default function SynchronizedAudioReader({
             shouldPlay: false,
             positionMillis: Math.min(resumeAt, story.durationMs),
             progressUpdateIntervalMillis: 250,
-            rate,
+            rate: 1,
             shouldCorrectPitch: true,
           },
           onStatus,
@@ -176,7 +176,7 @@ export default function SynchronizedAudioReader({
       soundRef.current?.unloadAsync();
       soundRef.current = null;
     };
-  }, [story.audioUrl, story.durationMs, loadProgress, saveProgress, onStatus]);
+  }, [story.id, story.audioUrl, story.durationMs, loadProgress, saveProgress, onStatus]);
 
   useEffect(() => {
     if (!ready) return;

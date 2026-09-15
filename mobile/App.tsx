@@ -1,6 +1,4 @@
 import './global.css';
-import { Inter_400Regular } from '@expo-google-fonts/inter';
-import { PlusJakartaSans_400Regular } from '@expo-google-fonts/plus-jakarta-sans';
 import {
   createBottomTabNavigator,
   type BottomTabBarProps,
@@ -180,8 +178,10 @@ function AppNavigator() {
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
-    Inter: Inter_400Regular,
-    PlusJakartaSans: PlusJakartaSans_400Regular,
+    Inter: require('@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf'),
+    PlusJakartaSans: require(
+      '@expo-google-fonts/plus-jakarta-sans/400Regular/PlusJakartaSans_400Regular.ttf',
+    ),
     UthmanicHafs: require('./assets/fonts/UthmanicHafs1Ver18.ttf'),
   });
 

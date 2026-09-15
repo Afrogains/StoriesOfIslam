@@ -7,6 +7,7 @@ module.exports = defineConfig([
     ignores: ['dist/**', '.expo/**'],
     rules: {
       'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ]);

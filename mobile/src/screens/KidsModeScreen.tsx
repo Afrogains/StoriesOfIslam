@@ -21,7 +21,6 @@ import {
   Badge,
   Body,
   Caption,
-  Card,
   Display,
   Heading,
   Overline,
@@ -76,7 +75,7 @@ export default function KidsModeScreen() {
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
 
   const availableStories = useMemo(
-    () =>
+    (): KidsStoryCard[] =>
       stories.length
         ? stories.map((story) => ({
             id: story.id,
@@ -84,13 +83,19 @@ export default function KidsModeScreen() {
             title: story.title,
             titleAr: story.titleAr,
             figureName: story.figureName,
-            ageRange: '7–12',
+            summary: story.summary,
             durationLabel: story.durationLabel,
             lesson: story.summary,
-            xp: 10,
-            locked: false,
-            completed: false,
-            isFavorite: false,
+            badgeLabel: '✨ Read & reflect',
+            tint:
+              story.sectionSlug === 'qisas-al-anbiya'
+                ? 'sunset'
+                : story.sectionSlug === 'seerah-shamail'
+                  ? 'yellow'
+                  : story.sectionSlug === 'sahabah'
+                    ? 'sky'
+                    : 'teal',
+            rewardStarCount: 3,
           }))
         : __DEV__ ? kidsStories : [],
     [stories],
