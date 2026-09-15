@@ -58,10 +58,7 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
       "protocol": "openid-connect",
-      "redirectUris": [
-        "storiesofislam://oauth/callback",
-        "exp://*"
-      ],
+      "redirectUris": ["storiesofislam://oauth/callback", "exp://*"],
       "webOrigins": ["+"],
       "defaultClientScopes": [
         "profile",
@@ -85,10 +82,7 @@
         "https://app.example.com/oauth/callback",
         "http://localhost:8081/oauth/callback"
       ],
-      "webOrigins": [
-        "https://app.example.com",
-        "http://localhost:8081"
-      ],
+      "webOrigins": ["https://app.example.com", "http://localhost:8081"],
       "defaultClientScopes": [
         "profile",
         "email",

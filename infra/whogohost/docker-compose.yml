@@ -15,7 +15,11 @@ services:
     networks:
       - internal
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-stories_app} -d ${POSTGRES_DB:-stories_of_islam}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-stories_app} -d ${POSTGRES_DB:-stories_of_islam}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -25,7 +29,15 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.4
     restart: unless-stopped
-    command: ["start", "--optimized", "--import-realm", "--proxy-headers=xforwarded", "--http-enabled=true", "--hostname-strict=true"]
+    command:
+      [
+        "start",
+        "--optimized",
+        "--import-realm",
+        "--proxy-headers=xforwarded",
+        "--http-enabled=true",
+        "--hostname-strict=true",
+      ]
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
@@ -44,7 +56,11 @@ services:
     networks:
       - internal
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000; echo -e 'GET /health/ready HTTP/1.1\\r\\nhost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep 'HTTP/1.1 200' <&3"]
+      test:
+        [
+          "CMD-SHELL",
+          "exec 3<>/dev/tcp/127.0.0.1/9000; echo -e 'GET /health/ready HTTP/1.1\\r\\nhost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep 'HTTP/1.1 200' <&3",
+        ]
       interval: 15s
       timeout: 5s
       retries: 20
