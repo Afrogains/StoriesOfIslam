@@ -16,6 +16,7 @@
   },
   "include": ["src"],
   "exclude": [
+    "src/**/*.test.ts",
     "src/components/**/*",
     "src/data/gleaningsData.ts"
   ]
