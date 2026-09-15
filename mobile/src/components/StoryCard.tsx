@@ -11,7 +11,8 @@ import {
   type LucideIcon,
 } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { sectionsMeta, type SectionSlug, type StoryItem } from '../data/mockHome';
+import { sectionsMeta } from '../data/catalogMeta';
+import type { SectionSlug, StoryItem } from '../types/catalog';
 import { useLibrary } from '../hooks/useLibrary';
 import { alpha, radius, sectionAccent } from '../theme/tokens';
 import {

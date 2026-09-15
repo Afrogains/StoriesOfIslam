@@ -1,4 +1,4 @@
-import type { AuthenticityGrade, SectionSlug } from './mockHome';
+import type { AuthenticityGrade, SectionSlug } from '../types/catalog';
 
 export interface PodcastSegment {
   id: string;

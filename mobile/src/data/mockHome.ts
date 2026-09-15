@@ -61,6 +61,10 @@ export type KidsStoryCard = {
   badgeLabel: string;
   tint: 'sunset' | 'teal' | 'sky' | 'coral' | 'yellow';
   rewardStarCount: number;
+  durationMs?: number;
+  audioUrl?: string | null;
+  artworkUrl?: string | null;
+  timedCues?: { startMs: number; endMs: number; textEn: string; textAr: string }[];
 };
 
 export const sectionsMeta: Record<SectionSlug, SectionMeta> = {

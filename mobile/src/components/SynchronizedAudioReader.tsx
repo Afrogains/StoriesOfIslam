@@ -34,10 +34,9 @@ import {
 import {
   cueIndexAt,
   formatClock,
-  mockStory,
-  type MockStory,
+  type ReaderStory as MockStory,
   type StoryCue,
-} from '../data/mockStory';
+} from '../types/reader';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { audioDownloads } from '../services/audioDownloads';
 import {
@@ -66,7 +65,7 @@ import {
 type PlaybackRate = 1 | 1.25 | 1.5;
 
 type SynchronizedAudioReaderProps = {
-  story?: MockStory;
+  story: MockStory;
   sectionSlug?: SectionSlug;
   initiallyExpanded?: boolean;
   onExpandChange?: (expanded: boolean) => void;
@@ -76,7 +75,7 @@ type SynchronizedAudioReaderProps = {
 const RATES: PlaybackRate[] = [1, 1.25, 1.5];
 
 export default function SynchronizedAudioReader({
-  story = mockStory,
+  story,
   sectionSlug = 'qisas-al-anbiya',
   initiallyExpanded = true,
   onExpandChange,
@@ -379,6 +378,7 @@ export default function SynchronizedAudioReader({
           gradient={accent.accentGradient}
           size={44}
           icons={{ play: Play, pause: Pause }}
+          disabled={!story.audioUrl || !ready}
         />
 
         <View style={styles.miniBody}>

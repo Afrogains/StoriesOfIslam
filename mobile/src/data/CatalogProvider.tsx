@@ -10,9 +10,12 @@ import {
   type ReactNode,
 } from 'react';
 import { apiRequest } from '../services/api';
-import { allStandardStories, type StoryItem } from './mockHome';
+import type { StoryItem } from '../types/catalog';
 
 const CACHE_KEY = 'stories.catalog.v1';
+const previewStories: StoryItem[] = __DEV__
+  ? (require('./mockHome').allStandardStories as StoryItem[])
+  : [];
 
 interface CatalogContextValue {
   stories: StoryItem[];
@@ -58,7 +61,7 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     void AsyncStorage.getItem(CACHE_KEY)
       .then((cached) => {
         if (cached) setStories(JSON.parse(cached) as StoryItem[]);
-        else if (__DEV__) setStories(allStandardStories);
+        else if (previewStories.length) setStories(previewStories);
       })
       .finally(() => void refresh());
     return unsubscribe;

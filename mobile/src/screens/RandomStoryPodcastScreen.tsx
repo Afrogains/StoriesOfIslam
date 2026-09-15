@@ -51,15 +51,10 @@ import {
   Title,
   useTheme,
 } from '../components/ui';
-import {
-  baqiyyIbnMakhladStory,
-  featuredStoriesList,
-  type FeaturedStory,
-  type PodcastSegment,
-} from '../data/featuredNarrations';
+import type { FeaturedStory, PodcastSegment } from '../data/featuredNarrations';
 import { useCatalog } from '../data/CatalogProvider';
-import type { StoryItem } from '../data/mockHome';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
+import type { StoryItem } from '../types/catalog';
 
 export type AudioSourceType = 'original' | 'notebooklm';
 export type PlaybackRate = 1 | 1.25 | 1.5;
@@ -85,6 +80,10 @@ const EMPTY_STORY: FeaturedStory = {
   podcastOverview: [],
   audioUrl: null,
 };
+
+const previewFeaturedStories: FeaturedStory[] = __DEV__
+  ? (require('../data/featuredNarrations').featuredStoriesList as FeaturedStory[])
+  : [];
 
 function catalogStoryToPodcast(story: StoryItem): FeaturedStory {
   return {
@@ -130,7 +129,7 @@ export default function RandomStoryPodcastScreen() {
   );
 
   const [story, setStory] = useState<FeaturedStory>(
-    __DEV__ ? baqiyyIbnMakhladStory : EMPTY_STORY,
+    previewFeaturedStories[0] ?? EMPTY_STORY,
   );
   const [sourceType, setSourceType] = useState<AudioSourceType>('notebooklm');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -226,7 +225,7 @@ export default function RandomStoryPodcastScreen() {
     setTimeout(() => {
       const list = availableStories.length
         ? availableStories
-        : __DEV__ ? featuredStoriesList : [EMPTY_STORY];
+        : previewFeaturedStories.length ? previewFeaturedStories : [EMPTY_STORY];
       const index = list.findIndex((item) => item.id === story.id);
       setStory(list[(index + 1) % list.length] ?? EMPTY_STORY);
       setIsShuffling(false);
@@ -520,6 +519,7 @@ export default function RandomStoryPodcastScreen() {
             gradient={goldGradient}
             size={44}
             icons={{ play: Play, pause: Pause }}
+            disabled={sourceType !== 'notebooklm' || !story.audioUrl || !playerStatus.isLoaded}
           />
 
           <View style={styles.playerText}>

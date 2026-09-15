@@ -115,6 +115,7 @@ export function Card({
   elevation = 'sm',
   onPress,
   accessibilityLabel,
+  disabled = false,
 }: {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
@@ -125,6 +126,7 @@ export function Card({
   elevation?: 'none' | 'sm' | 'md' | 'lg';
   onPress?: () => void;
   accessibilityLabel?: string;
+  disabled?: boolean;
 }) {
   const { colors, isDark } = useTheme();
 
@@ -142,6 +144,7 @@ export function Card({
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       style={({ pressed }) => [surface, pressed && styles.pressed, style]}
@@ -346,6 +349,7 @@ export function PlayButton({
   size = 46,
   icons,
   accessibilityLabel,
+  disabled = false,
 }: {
   playing: boolean;
   onPress: () => void;
@@ -353,6 +357,7 @@ export function PlayButton({
   size?: number;
   icons: { play: IconType; pause: IconType };
   accessibilityLabel?: string;
+  disabled?: boolean;
 }) {
   const { isDark } = useTheme();
   const Icon = playing ? icons.pause : icons.play;
@@ -360,9 +365,11 @@ export function PlayButton({
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? (playing ? 'Pause' : 'Play')}
-      style={({ pressed }) => [pressed && styles.pressed]}
+      accessibilityState={{ disabled }}
+      style={({ pressed }) => [pressed && styles.pressed, disabled && styles.disabled]}
     >
       <LinearGradient
         colors={gradient}

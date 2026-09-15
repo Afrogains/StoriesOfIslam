@@ -27,13 +27,13 @@ import {
   Small,
   useTheme,
 } from '../components/ui';
-import {
-  sectionsMeta,
-  type AuthenticityGrade,
-  type MediaFilter,
-  type SectionSlug,
-  type StoryItem,
-} from '../data/mockHome';
+import { sectionsMeta } from '../data/catalogMeta';
+import type {
+  AuthenticityGrade,
+  MediaFilter,
+  SectionSlug,
+  StoryItem,
+} from '../types/catalog';
 import { useCatalog } from '../data/CatalogProvider';
 import { toReaderStory } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';

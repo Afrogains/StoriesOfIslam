@@ -40,19 +40,12 @@ import {
   Title,
   useTheme,
 } from '../components/ui';
-import {
-  continueListening,
-  dailyVerse,
-  homeMetrics,
-  sectionsMeta,
-  type MediaFilter,
-  type SectionSlug,
-  type StoryItem,
-} from '../data/mockHome';
 import { useCatalog } from '../data/CatalogProvider';
+import { sectionsMeta } from '../data/catalogMeta';
 import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
+import type { MediaFilter, SectionSlug, StoryItem } from '../types/catalog';
 
 const metricIcons: Record<string, LucideIcon> = {
   listened: Headphones,
@@ -77,9 +70,19 @@ export default function HomeScreen() {
   const [mediaFilter, setMediaFilter] = useState<MediaFilter>('all');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
-  const [nowPlaying, setNowPlaying] = useState(false);
 
   const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
+  const featuredStory = stories[0];
+  const continueStory = stories.find((story) => story.hasAudio) ?? featuredStory;
+  const homeMetrics = useMemo(
+    () => [
+      { id: 'listened', label: 'Published Stories', value: String(stories.length) },
+      { id: 'streak', label: 'Collections', value: String(new Set(stories.map((story) => story.sectionSlug)).size) },
+      { id: 'favorites', label: 'Saved Stories', value: String(savedCount) },
+      { id: 'hours', label: 'Audio Stories', value: String(stories.filter((story) => story.hasAudio).length) },
+    ],
+    [stories, savedCount],
+  );
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
 
   const filteredStories = useMemo(() => {
@@ -148,7 +151,7 @@ export default function HomeScreen() {
         </ScrollView>
 
         {/* Hero: daily verse, or the concept banner for the chosen section */}
-        {selectedSection === 'all' ? (
+        {selectedSection === 'all' && featuredStory ? (
           <LinearGradient
             colors={brandGradients.verse[isDark ? 'dark' : 'light']}
             start={{ x: 0, y: 0 }}
@@ -158,25 +161,24 @@ export default function HomeScreen() {
             <Row justify="space-between">
               <Row gap={7}>
                 <Quote size={13} color="#5EEAD4" />
-                <Overline color="#5EEAD4">Verse of the day</Overline>
+                <Overline color="#5EEAD4">Featured reflection</Overline>
               </Row>
-              <Badge label="Quran" color="#CCFBF1" background="rgba(204, 251, 241, 0.16)" />
+              <Badge label={featuredStory.authenticityGrade} color="#CCFBF1" background="rgba(204, 251, 241, 0.16)" />
             </Row>
 
-            {/* Arabic leads — it is the source text, the translation supports it. */}
             <ArabicBody color="#FDE68A" style={styles.heroArabic}>
-              {dailyVerse.textAr}
+              {featuredStory.titleAr}
             </ArabicBody>
 
             <Body color="#E7E5E4" style={styles.heroTranslation}>
-              “{dailyVerse.textEn}”
+              {featuredStory.summary}
             </Body>
 
             <View style={[styles.heroFooter, { borderTopColor: 'rgba(255,255,255,0.16)' }]}>
-              <Caption color="#5EEAD4">{dailyVerse.source}</Caption>
+              <Caption color="#5EEAD4">{featuredStory.sourceCitation}</Caption>
             </View>
           </LinearGradient>
-        ) : (
+        ) : selectedSection !== 'all' ? (
           <LinearGradient
             colors={sectionAccent(selectedSection, isDark).gradient}
             start={{ x: 0, y: 0 }}
@@ -210,7 +212,7 @@ export default function HomeScreen() {
               </Row>
             </View>
           </LinearGradient>
-        )}
+        ) : null}
 
         {/* Search */}
         <View
@@ -324,7 +326,9 @@ export default function HomeScreen() {
                     </Caption>
 
                     <Row justify="space-between" style={styles.sectionFooter}>
-                      <Caption color={accent.primary}>{meta.countLabel}</Caption>
+                      <Caption color={accent.primary}>
+                        {stories.filter((story) => story.sectionSlug === slug).length} {meta.countLabel}
+                      </Caption>
                       <ArrowRight size={13} color={accent.primary} />
                     </Row>
                   </Card>
@@ -333,7 +337,8 @@ export default function HomeScreen() {
             </View>
 
             {/* Continue listening */}
-            <SectionHeading label="Continue listening" trailing="View history" />
+            {continueStory ? <>
+            <SectionHeading label={continueStory.hasAudio ? 'Ready to listen' : 'Continue reading'} trailing="Open reader" />
             <LinearGradient
               colors={brandGradients.night[isDark ? 'dark' : 'light']}
               start={{ x: 0, y: 0 }}
@@ -344,47 +349,46 @@ export default function HomeScreen() {
                 <View style={styles.playerText}>
                   <Row gap={6}>
                     <Sparkles size={12} color="#FDE68A" />
-                    <Overline color="#FDE68A">{nowPlaying ? 'Now playing' : 'Paused'}</Overline>
+                    <Overline color="#FDE68A">{continueStory.hasAudio ? 'Audio available' : 'Text edition'}</Overline>
                   </Row>
                   <Heading color="#FFFFFF" style={styles.playerTitle} numberOfLines={2}>
-                    {continueListening.title}
+                    {continueStory.title}
                   </Heading>
                   <ArabicInline color="#FDE68A" style={styles.playerArabic}>
-                    {continueListening.titleAr}
+                    {continueStory.titleAr}
                   </ArabicInline>
                   <Caption color="#CBD5E1" style={styles.playerFigure}>
-                    {continueListening.figureName}
+                    {continueStory.figureName}
                   </Caption>
                 </View>
 
                 <PlayButton
-                  playing={nowPlaying}
-                  onPress={() => setNowPlaying((playing) => !playing)}
+                  playing={false}
+                  onPress={() => setActiveStory(continueStory)}
                   gradient={emeraldGradient}
                   icons={{ play: Play, pause: Pause }}
-                  accessibilityLabel={`${nowPlaying ? 'Pause' : 'Play'} ${continueListening.title}`}
+                  accessibilityLabel={`Open ${continueStory.title}`}
                 />
               </Row>
 
               <View style={styles.playerProgress}>
                 <ProgressBar
-                  value={continueListening.progress}
+                  value={0}
                   gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
                   trackColor="rgba(255,255,255,0.14)"
                   height={5}
                 />
                 <Row justify="space-between" style={styles.playerMeta}>
                   <Caption color="#94A3B8">
-                    {Math.round(continueListening.progress * 100)}% complete
+                    Ready to begin
                   </Caption>
-                  <Caption color="#FDE68A">{continueListening.remainingLabel}</Caption>
+                  <Caption color="#FDE68A">{continueStory.durationLabel}</Caption>
                 </Row>
               </View>
 
               <Pressable
                 onPress={() => {
-                  const story = stories.find((item) => item.id === continueListening.storyId);
-                  if (story) setActiveStory(story);
+                  setActiveStory(continueStory);
                 }}
                 style={({ pressed }) => [styles.playerAction, pressed && styles.pressed]}
                 accessibilityRole="button"
@@ -394,6 +398,7 @@ export default function HomeScreen() {
                 <ArrowRight size={12} color="#FFFFFF" />
               </Pressable>
             </LinearGradient>
+            </> : null}
           </>
         ) : null}
 

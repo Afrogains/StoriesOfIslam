@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useAuth } from '../auth/AuthProvider';
 import { useCatalog } from '../data/CatalogProvider';
-import type { StoryItem } from '../data/mockHome';
+import type { StoryItem } from '../types/catalog';
 import { apiRequest } from '../services/api';
 
 type LibraryContextValue = {

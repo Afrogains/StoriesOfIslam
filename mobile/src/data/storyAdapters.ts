@@ -1,7 +1,7 @@
-import { mockStory, type MockStory } from './mockStory';
-import type { KidsStoryCard, StoryItem } from './mockHome';
+import type { KidsStoryCard, StoryItem } from '../types/catalog';
+import type { ReaderStory } from '../types/reader';
 
-export function toReaderStory(story: StoryItem): MockStory {
+export function toReaderStory(story: StoryItem): ReaderStory {
   const cues = story.timedCues?.length
     ? story.timedCues.map((cue) => ({
         text: cue.textEn,
@@ -33,7 +33,21 @@ export function toReaderStory(story: StoryItem): MockStory {
   };
 }
 
-export function kidsStoryToReaderStory(story: KidsStoryCard): MockStory {
+export function kidsStoryToReaderStory(story: KidsStoryCard): ReaderStory {
+  const durationMs = story.durationMs ?? 30_000;
+  const cues = story.timedCues?.length
+    ? story.timedCues.map((cue) => ({
+        text: cue.textEn,
+        textAr: cue.textAr,
+        startMs: cue.startMs,
+        endMs: cue.endMs,
+      }))
+    : [{
+        text: story.summary,
+        textAr: story.titleAr,
+        startMs: 0,
+        endMs: durationMs,
+      }];
   return {
     id: story.id,
     slug: story.id,
@@ -45,9 +59,9 @@ export function kidsStoryToReaderStory(story: KidsStoryCard): MockStory {
     honorificAr: 'قصة للأطفال',
     sourceCitation: 'Authentic Islamic Children’s Story Collection',
     authenticityGrade: 'sahih',
-    audioUrl: mockStory.audioUrl,
-    artworkUrl: mockStory.artworkUrl,
-    durationMs: mockStory.durationMs,
-    cues: mockStory.cues,
+    audioUrl: story.audioUrl ?? '',
+    artworkUrl: story.artworkUrl ?? '',
+    durationMs,
+    cues,
   };
 }

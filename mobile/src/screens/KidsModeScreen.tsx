@@ -1,7 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Award,
-  BookOpen,
   Heart,
   Pause,
   Play,
@@ -9,11 +8,10 @@ import {
   Sparkles,
   Star,
   Sun,
-  Volume2,
   type LucideIcon,
 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
 import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
 import {
@@ -33,16 +31,15 @@ import {
   Title,
   useTheme,
 } from '../components/ui';
-import {
-  kidsStories,
-  lessonOfTheDay,
-  sectionsMeta,
-  type KidsStoryCard,
-  type SectionSlug,
-} from '../data/mockHome';
 import { useCatalog } from '../data/CatalogProvider';
+import { sectionsMeta } from '../data/catalogMeta';
 import { kidsStoryToReaderStory } from '../data/storyAdapters';
 import { alpha, brandGradients, kidsGradients, radius, shadow } from '../theme/tokens';
+import type { KidsStoryCard, SectionSlug } from '../types/catalog';
+
+const previewKidsStories: KidsStoryCard[] = __DEV__
+  ? (require('../data/mockHome').kidsStories as KidsStoryCard[])
+  : [];
 
 type Tint = KidsStoryCard['tint'];
 
@@ -69,10 +66,9 @@ export default function KidsModeScreen() {
   const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
-  const [playingId, setPlayingId] = useState<string | null>(null);
   const [readerStory, setReaderStory] = useState<KidsStoryCard | null>(null);
-  const [stars, setStars] = useState(12);
-  const [completed, setCompleted] = useState<Record<string, boolean>>({});
+  const stars = 0;
+  const completed: Record<string, boolean> = {};
 
   const availableStories = useMemo(
     (): KidsStoryCard[] =>
@@ -85,6 +81,10 @@ export default function KidsModeScreen() {
             figureName: story.figureName,
             summary: story.summary,
             durationLabel: story.durationLabel,
+            durationMs: story.durationMs,
+            audioUrl: story.audioUrl,
+            artworkUrl: story.artworkUrl,
+            timedCues: story.timedCues,
             lesson: story.summary,
             badgeLabel: '✨ Read & reflect',
             tint:
@@ -97,7 +97,7 @@ export default function KidsModeScreen() {
                     : 'teal',
             rewardStarCount: 3,
           }))
-        : __DEV__ ? kidsStories : [],
+        : previewKidsStories,
     [stories],
   );
   const visibleStories = useMemo(
@@ -108,20 +108,9 @@ export default function KidsModeScreen() {
     [availableStories, selectedSection],
   );
 
-  const nowPlaying = availableStories.find((story) => story.id === playingId) ?? availableStories[0];
-  const isPlaying = playingId !== null;
-
-  const togglePlay = (storyId: string) => {
-    if (playingId === storyId) {
-      setPlayingId(null);
-      return;
-    }
-    setPlayingId(storyId);
-    if (!completed[storyId]) {
-      setCompleted((current) => ({ ...current, [storyId]: true }));
-      setStars((current) => current + 3);
-    }
-  };
+  const lessonStory =
+    availableStories.find((story) => story.id === 'the-first-revelation') ??
+    availableStories[0];
 
   const finishedCount = Object.keys(completed).length;
 
@@ -232,16 +221,16 @@ export default function KidsModeScreen() {
               color={isDark ? '#FFEDD5' : '#3B1808'}
               style={styles.lessonText}
             >
-              “{lessonOfTheDay.lesson}”
+              “{lessonStory?.lesson ?? 'Reviewed family-friendly lessons will appear here.'}”
             </Display>
 
             <Row justify="space-between" style={[styles.lessonFooter, { borderTopColor: isDark ? '#431D0A' : '#EAB308' }]}>
               <Caption color={isDark ? '#FDBA74' : '#78350F'} style={styles.lessonSource}>
-                From {lessonOfTheDay.title}
+                {lessonStory ? `From ${lessonStory.title}` : 'Awaiting reviewed content'}
               </Caption>
               <PlayButton
-                playing={playingId === 'the-first-revelation'}
-                onPress={() => togglePlay('the-first-revelation')}
+                playing={false}
+                onPress={() => lessonStory && setReaderStory(lessonStory)}
                 gradient={['#EA580C', '#C2410C']}
                 size={40}
                 icons={{ play: Play, pause: Pause }}
@@ -259,25 +248,22 @@ export default function KidsModeScreen() {
 
         <View style={styles.list}>
           {visibleStories.map((story) => {
-            const active = playingId === story.id;
+            const active = false;
             const tint = tints[story.tint];
             const done = !!completed[story.id];
             const badge = sectionBadges[story.sectionSlug];
 
             return (
-              <Pressable
+              <View
                 key={story.id}
-                onPress={() => setReaderStory(story)}
-                accessibilityRole="button"
                 accessibilityLabel={`${story.title}. ${story.summary}`}
-                style={({ pressed }) => [
+                style={[
                   styles.storyCard,
                   {
                     backgroundColor: active ? (isDark ? colors.cardAlt : tint.soft) : colors.card,
                     borderColor: active ? tint.primary : colors.border,
                   },
                   shadow(active ? 'md' : 'sm', isDark),
-                  pressed && styles.pressed,
                 ]}
               >
                 <Row justify="space-between" align="flex-start">
@@ -287,8 +273,8 @@ export default function KidsModeScreen() {
                   </Row>
 
                   <PlayButton
-                    playing={active}
-                    onPress={() => togglePlay(story.id)}
+                    playing={false}
+                    onPress={() => setReaderStory(story)}
                     gradient={tint.gradient}
                     size={50}
                     icons={{ play: Play, pause: Pause }}
@@ -326,48 +312,11 @@ export default function KidsModeScreen() {
                   <Caption color={colors.inkMuted}>Tap the card to read along</Caption>
                   <Caption color={tint.primary}>Read &amp; listen →</Caption>
                 </Row>
-              </Pressable>
+              </View>
             );
           })}
         </View>
       </ScrollView>
-
-      {/* Mini player */}
-      {nowPlaying ? <LinearGradient
-        colors={isDark ? ['#210E04', '#1A0C02'] : ['#0D9488', '#0F766E']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={[styles.miniPlayer, { borderTopColor: isDark ? colors.border : '#0F766E' }]}
-      >
-        <Row gap={12}>
-          <PlayButton
-            playing={isPlaying}
-            onPress={() => setPlayingId(isPlaying ? null : nowPlaying.id)}
-            gradient={isPlaying ? ['#FBBF24', '#EA580C'] : ['#FFFFFF', '#E7E5E4']}
-            size={46}
-            icons={{ play: Play, pause: Pause }}
-            accessibilityLabel={isPlaying ? 'Pause story' : 'Play story'}
-          />
-
-          <View style={styles.miniText}>
-            <Row gap={6}>
-              <Volume2 size={11} color="#FEF08A" />
-              <Overline color="#FEF08A">{isPlaying ? 'Listening now' : 'Ready to play'}</Overline>
-            </Row>
-            <BodyStrongWhite>{nowPlaying.title}</BodyStrongWhite>
-            <View style={styles.miniProgress}>
-              <ProgressBar
-                value={isPlaying ? 0.65 : 0}
-                gradient={['#FDE68A', '#FBBF24']}
-                trackColor="rgba(255,255,255,0.22)"
-                height={6}
-              />
-            </View>
-          </View>
-
-          <BookOpen size={19} color="#FEF08A" />
-        </Row>
-      </LinearGradient> : null}
 
       <Modal
         visible={readerStory !== null}
@@ -385,15 +334,6 @@ export default function KidsModeScreen() {
         ) : null}
       </Modal>
     </View>
-  );
-}
-
-/** Mini-player title always sits on a saturated background, so it stays white. */
-function BodyStrongWhite({ children }: { children: React.ReactNode }) {
-  return (
-    <Heading color="#FFFFFF" numberOfLines={1} style={styles.miniTitle}>
-      {children}
-    </Heading>
   );
 }
 
@@ -427,18 +367,4 @@ const styles = StyleSheet.create({
   moral: { marginTop: 14, borderRadius: radius.xl, borderWidth: 2, paddingHorizontal: 14, paddingVertical: 12 },
   moralText: { marginTop: 4, fontWeight: '700' },
   storyFooter: { marginTop: 14 },
-
-  miniPlayer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 18,
-    borderTopWidth: 2,
-  },
-  miniText: { flex: 1 },
-  miniTitle: { marginTop: 2 },
-  miniProgress: { marginTop: 8 },
 });
