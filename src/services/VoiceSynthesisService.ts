@@ -106,6 +106,8 @@ export interface VoiceSynthesisOptions {
   /** Breath-length gap inserted between host turns. */
   interTurnGapMs?: number;
   ffmpegPath?: string;
+  /** Development-only escape hatch. Production must never publish placeholders. */
+  allowEstimatedOutput?: boolean;
   voiceOverrides?: Partial<Record<SpeakerRole, Partial<VoiceProfile>>>;
 }
 
@@ -126,14 +128,15 @@ export type SynthesisPayload = EpisodeLikePayload | GeneratedPodcastScript;
 /* --------------------------------------------------------- voice profiles */
 
 /**
- * Voice IDs are env-overridable because ElevenLabs library IDs differ per
- * account, and production uses cloned voices rather than library presets.
+ * Voice IDs are environment-overridable because provider libraries differ per
+ * account. Production must use licensed generic voices or a voice whose owner
+ * supplied explicit, recorded consent; scholar impersonation is prohibited.
  */
 export const VOICE_PROFILES: Record<SpeakerRole, VoiceProfile> = {
   host_a: {
     role: 'host_a',
     displayName: 'Host A — Scholar & Anchor',
-    personaReference: 'Sheikh Ali Hammuda',
+    personaReference: 'Generic licensed British male educational voice',
     characterBrief:
       'Deep, soothing, authoritative. Steady unhurried pacing, long settled pauses, minimal pitch variance. Carries citations and Arabic terminology.',
     elevenLabsVoiceId: process.env.ELEVENLABS_VOICE_HOST_A ?? 'onwK4e9ZLuTAKqWW03F9',
@@ -146,7 +149,7 @@ export const VOICE_PROFILES: Record<SpeakerRole, VoiceProfile> = {
   host_b: {
     role: 'host_b',
     displayName: 'Host B — Inquirer & Co-Host',
-    personaReference: 'Sheikh Omar Suleiman',
+    personaReference: 'Generic licensed American male conversational voice',
     characterBrief:
       'Warm, articulate, reflective. Conversational lift on questions, slightly brighter timbre, shorter pauses. Carries the listener’s perspective.',
     elevenLabsVoiceId: process.env.ELEVENLABS_VOICE_HOST_B ?? 'nPczCjzI2devNBz1zQrb',
@@ -215,6 +218,7 @@ export class VoiceSynthesisService {
   private readonly sampleRate: number;
   private readonly interTurnGapMs: number;
   private readonly ffmpegPath: string;
+  private readonly allowEstimatedOutput: boolean;
   private readonly profiles: Record<SpeakerRole, VoiceProfile>;
 
   constructor(options: VoiceSynthesisOptions = {}) {
@@ -228,6 +232,8 @@ export class VoiceSynthesisService {
     this.sampleRate = options.sampleRate ?? 44100;
     this.interTurnGapMs = options.interTurnGapMs ?? 380;
     this.ffmpegPath = options.ffmpegPath ?? process.env.FFMPEG_PATH ?? 'ffmpeg';
+    this.allowEstimatedOutput =
+      options.allowEstimatedOutput ?? process.env.NODE_ENV !== 'production';
 
     this.profiles = {
       host_a: { ...VOICE_PROFILES.host_a, ...options.voiceOverrides?.host_a },
@@ -398,6 +404,9 @@ export class VoiceSynthesisService {
     const profile = this.profiles[turn.speaker];
 
     if (!this.apiKey && this.provider !== 'edge-tts') {
+      if (!this.allowEstimatedOutput) {
+        throw new Error(`${this.provider} credentials are required for production synthesis`);
+      }
       return this.renderSilentPlaceholder(turn, profile);
     }
 
@@ -416,6 +425,7 @@ export class VoiceSynthesisService {
       // A single failed turn must not lose the whole episode: fall back to an
       // estimated-duration placeholder so the timeline still lines up.
       console.warn(`Voice synthesis failed for ${turn.id} (${this.provider}):`, error);
+      if (!this.allowEstimatedOutput) throw error;
       return this.renderSilentPlaceholder(turn, profile);
     }
   }
@@ -582,6 +592,7 @@ export class VoiceSynthesisService {
       return { audio: await this.stitchWithFfmpeg(withAudio), usedFfmpeg: true };
     } catch (error) {
       console.warn('ffmpeg stitching unavailable, concatenating raw MP3 frames:', error);
+      if (!this.allowEstimatedOutput) throw error;
       return { audio: Buffer.concat(withAudio.map((turn) => turn.audio)), usedFfmpeg: false };
     }
   }

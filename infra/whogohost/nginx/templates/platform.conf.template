@@ -1,0 +1,67 @@
+limit_req_zone $binary_remote_addr zone=auth_limit:10m rate=20r/s;
+
+server {
+  listen 80 default_server;
+  server_name _;
+  location = /healthz { return 200 "ok\n"; }
+  location / { return 301 https://$host$request_uri; }
+}
+
+server {
+  listen 443 ssl http2;
+  server_name ${AUTH_HOSTNAME};
+
+  ssl_certificate /etc/nginx/tls/fullchain.pem;
+  ssl_certificate_key /etc/nginx/tls/privkey.pem;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+  location / {
+    limit_req zone=auth_limit burst=40 nodelay;
+    proxy_pass http://keycloak:8080;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-Host $host;
+  }
+}
+
+server {
+  listen 443 ssl http2;
+  server_name ${MEDIA_HOSTNAME};
+
+  ssl_certificate /etc/nginx/tls/fullchain.pem;
+  ssl_certificate_key /etc/nginx/tls/privkey.pem;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  client_max_body_size 1m;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  add_header X-Content-Type-Options nosniff always;
+
+  location / {
+    proxy_pass http://minio:9000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_buffering off;
+  }
+}
+
+server {
+  listen 443 ssl http2;
+  server_name ${MINIO_CONSOLE_HOSTNAME};
+
+  ssl_certificate /etc/nginx/tls/fullchain.pem;
+  ssl_certificate_key /etc/nginx/tls/privkey.pem;
+  ssl_protocols TLSv1.2 TLSv1.3;
+
+  # Restrict this hostname at the WhoGoHost firewall and/or replace with an
+  # operator IP allowlist. It must not be generally public.
+  location / {
+    proxy_pass http://minio:9001;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}

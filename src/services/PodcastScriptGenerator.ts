@@ -29,10 +29,12 @@ Ensure alternating, natural dialogue turns between Host A and Host B with estima
 export class PodcastScriptGenerator {
   private apiKey: string | undefined;
   private modelName: string;
+  private allowFallback: boolean;
 
-  constructor(options?: { apiKey?: string; modelName?: string }) {
+  constructor(options?: { apiKey?: string; modelName?: string; allowFallback?: boolean }) {
     this.apiKey = options?.apiKey || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY;
-    this.modelName = options?.modelName || 'gpt-4o-mini';
+    this.modelName = options?.modelName || process.env.OPENAI_MODEL || 'gpt-4.1-mini';
+    this.allowFallback = options?.allowFallback ?? process.env.NODE_ENV !== 'production';
   }
 
   /**
@@ -49,6 +51,9 @@ export class PodcastScriptGenerator {
       }
     }
 
+    if (!this.allowFallback) {
+      throw new Error('Podcast generation failed and deterministic fallback is disabled in production');
+    }
     return this.synthesizeFallbackScript(validatedInput);
   }
 
@@ -105,6 +110,7 @@ export class PodcastScriptGenerator {
         ],
         temperature: 0.3,
       }),
+      signal: AbortSignal.timeout(45_000),
     });
 
     if (!response.ok) {

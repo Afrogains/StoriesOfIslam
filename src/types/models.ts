@@ -1,4 +1,5 @@
-export type AuthenticityGrade = 'sahih' | 'hasan' | 'historical';
+export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
+export type PublicationStatus = 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
 
 export type CategorySlug =
   | 'qisas-al-anbiya'
@@ -78,8 +79,12 @@ export interface Story {
   content: LocalizedText;
   sourceCitation: string;
   authenticityGrade: AuthenticityGrade;
-  audioUrl: string;
-  audio: AudioPlayback;
+  publicationStatus: PublicationStatus;
+  reviewerId: string | null;
+  reviewedAt: string | null;
+  publishedAt: string | null;
+  audioUrl: string | null;
+  audio: AudioPlayback | null;
   timedCues: TimedCue[];
   createdAt: string;
   updatedAt: string;
@@ -88,5 +93,18 @@ export interface Story {
 export interface SeedData {
   categories: Category[];
   figures: Figure[];
-  stories: Story[];
+  stories: Array<
+    Omit<
+      Story,
+      | 'publicationStatus'
+      | 'reviewerId'
+      | 'reviewedAt'
+      | 'publishedAt'
+      | 'audioUrl'
+      | 'audio'
+    > & {
+      audioUrl: string;
+      audio: AudioPlayback;
+    }
+  >;
 }
