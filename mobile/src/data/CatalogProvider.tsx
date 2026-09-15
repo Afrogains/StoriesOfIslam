@@ -14,6 +14,7 @@ import type { StoryItem } from '../types/catalog';
 
 const CACHE_KEY = 'stories.catalog.v1';
 const previewStories: StoryItem[] = __DEV__
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
   ? (require('./mockHome').allStandardStories as StoryItem[])
   : [];
 

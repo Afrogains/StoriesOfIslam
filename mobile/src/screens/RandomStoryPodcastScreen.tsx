@@ -82,6 +82,7 @@ const EMPTY_STORY: FeaturedStory = {
 };
 
 const previewFeaturedStories: FeaturedStory[] = __DEV__
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
   ? (require('../data/featuredNarrations').featuredStoriesList as FeaturedStory[])
   : [];
 

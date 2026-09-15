@@ -38,6 +38,7 @@ import { alpha, brandGradients, kidsGradients, radius, shadow } from '../theme/t
 import type { KidsStoryCard, SectionSlug } from '../types/catalog';
 
 const previewKidsStories: KidsStoryCard[] = __DEV__
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
   ? (require('../data/mockHome').kidsStories as KidsStoryCard[])
   : [];
 
