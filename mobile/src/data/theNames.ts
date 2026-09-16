@@ -85,7 +85,7 @@ export const divineNames: DivineName[] = [
   { number: 62, arabic: 'الْحَيُّ', transliteration: 'Al-Hayy', meaning: 'The Ever-Living', reflection: 'Eternal life without death or sleep.' },
   { number: 63, arabic: 'الْقَيُّومُ', transliteration: 'Al-Qayyum', meaning: 'The Self-Sustaining', reflection: 'He sustains all while needing none.' },
   { number: 64, arabic: 'الْوَاجِدُ', transliteration: 'Al-Wajid', meaning: 'The Finder', reflection: 'Nothing escapes His finding.' },
-  { number: 65, arabic: 'الْمَاجِدُ', transliteration: 'Al-Majid', meaning: 'The Noble', reflection: 'Noble in essence and generosity.' },
+  { number: 65, arabic: 'الْمَاجِدُ', transliteration: 'Al-Maajid', meaning: 'The Noble', reflection: 'Noble in essence and generosity.' },
   { number: 66, arabic: 'الْوَاحِدُ', transliteration: 'Al-Wahid', meaning: 'The One', reflection: 'One without partner or equal.' },
   { number: 67, arabic: 'الْأَحَدُ', transliteration: 'Al-Ahad', meaning: 'The Unique', reflection: 'Absolutely unique and indivisible.' },
   { number: 68, arabic: 'الصَّمَدُ', transliteration: 'As-Samad', meaning: 'The Eternal Refuge', reflection: 'All turn to Him; He needs none.' },
