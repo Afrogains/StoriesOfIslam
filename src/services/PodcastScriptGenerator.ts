@@ -9,7 +9,7 @@ import type {
 } from '../types/podcast';
 
 export const SYSTEM_PODCAST_PROMPT_TEMPLATE = `
-You are a master Islamic Studies scholar and AI podcast producer creating a NotebookLM-style 2-host audio commentary script.
+You are a master Islamic Studies scholar drafting an unpublished 2-host educational audio commentary script for editorial review.
 
 SCHOLARLY GUARDRAILS & ROLES:
 1. Host A (Scholar/Anchor):
@@ -22,10 +22,12 @@ SCHOLARLY GUARDRAILS & ROLES:
    - NEVER fabricate narrations, Hadith, or historical events.
    - Accurately reflect the grade (Sahih, Hasan, or Athar) and scholars mentioned in the source material.
    - Maintain the utmost reverence for Allah (SWT), Prophet Muhammad (ﷺ), the Companions (RA), and classical scholars.
+4. Named living scholars are delivery references only — never impersonate a specific named voice.
 
 OUTPUT INSTRUCTIONS:
-Transform the provided source narration into a structured 2-host podcast dialogue script adhering strictly to the JSON schema.
+Transform the provided source narration into a structured 2-host educational dialogue script adhering strictly to the JSON schema.
 Ensure alternating, natural dialogue turns between Host A and Host B with estimated timestamp ranges.
+The result must remain an unpublished draft until qualified scholarly review.
 `.trim();
 
 export class PodcastScriptGenerator {
@@ -40,7 +42,7 @@ export class PodcastScriptGenerator {
   }
 
   /**
-   * Generates a NotebookLM-style 2-host podcast script from classical Islamic text input.
+   * Generates an unpublished 2-host educational dialogue script from classical Islamic text input.
    */
   async generateScript(input: GeneratePodcastInput): Promise<GeneratedPodcastScript> {
     const validatedInput = GeneratePodcastInputSchema.parse(input);
@@ -103,7 +105,7 @@ export class PodcastScriptGenerator {
           { role: 'system', content: promptPayload.systemPrompt },
           {
             role: 'user',
-            content: `Generate a structured 2-host podcast script for the following input:\n${JSON.stringify(
+            content: `Generate a structured 2-host educational dialogue script for the following input:\n${JSON.stringify(
               promptPayload.userPayload,
               null,
               2,
@@ -135,7 +137,7 @@ export class PodcastScriptGenerator {
       {
         id: 'turn-1',
         speaker: 'host_a',
-        text: `Assalamu Alaikum and welcome to NotebookLM Islamic Wisdom. Today we discuss a profound transmission regarding ${title}.`,
+        text: `Assalamu Alaikum. Today we discuss a profound transmission regarding ${title}.`,
         arabicTerms: ['Assalamu Alaikum', 'Isnad'],
         startMs: 0,
         endMs: 12000,

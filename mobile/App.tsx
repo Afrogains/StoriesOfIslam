@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { Baby, Bookmark, Compass, Home, Radio } from 'lucide-react-native';
+import { Baby, Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -22,7 +22,7 @@ import ExploreScreen from './src/screens/ExploreScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import KidsModeScreen from './src/screens/KidsModeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
-import RandomStoryPodcastScreen from './src/screens/RandomStoryPodcastScreen';
+import TheNamesScreen from './src/screens/TheNamesScreen';
 import {
   BODY_FONT_FAMILY,
   alpha,
@@ -37,7 +37,7 @@ void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 export type RootTabParamList = {
   Home: undefined;
   Explore: undefined;
-  Podcast: undefined;
+  Names: undefined;
   Library: undefined;
   Kids: undefined;
 };
@@ -52,7 +52,7 @@ const queryClient = new QueryClient({
 const tabs = {
   Home: { label: 'Home', icon: Home, accent: 'emerald' },
   Explore: { label: 'Explore', icon: Compass, accent: 'emerald' },
-  Podcast: { label: 'Podcast', icon: Radio, accent: 'gold' },
+  Names: { label: 'The Names', icon: Sparkles, accent: 'gold' },
   Library: { label: 'Library', icon: Bookmark, accent: 'emerald' },
   Kids: { label: 'Kids', icon: Baby, accent: 'sunset' },
 } as const;
@@ -143,7 +143,7 @@ function AppNavigator() {
       screens: {
         Home: '',
         Explore: 'explore',
-        Podcast: 'podcast',
+        Names: 'names',
         Library: 'library',
         Kids: 'kids',
       },
@@ -166,7 +166,7 @@ function AppNavigator() {
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Explore" component={ExploreScreen} />
-            <Tab.Screen name="Podcast" component={RandomStoryPodcastScreen} />
+            <Tab.Screen name="Names" component={TheNamesScreen} options={{ title: 'The Names' }} />
             <Tab.Screen name="Library" component={LibraryScreen} />
             <Tab.Screen name="Kids" component={KidsModeScreen} />
           </Tab.Navigator>

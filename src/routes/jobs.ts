@@ -26,7 +26,7 @@ jobsRouter.post(
     const job = await jobRepository.create(request.user!, value, idempotencyKey);
     response
       .status(job.status === 'queued' ? 202 : 200)
-      .setHeader('Location', `/v1/podcast-jobs/${job.id}`)
+      .setHeader('Location', `/v1/generation-jobs/${job.id}`)
       .json({ data: job });
   }),
 );

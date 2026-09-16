@@ -111,7 +111,7 @@ export interface VoiceSynthesisOptions {
   voiceOverrides?: Partial<Record<SpeakerRole, Partial<VoiceProfile>>>;
 }
 
-/** Minimal shape of the `PodcastEpisode` records in `src/data/gleaningsData.ts`. */
+/** Minimal shape of a dialogue episode payload for voice synthesis. */
 export interface EpisodeLikePayload {
   storyId: string;
   title?: string;
@@ -227,7 +227,7 @@ export class VoiceSynthesisService {
       options.apiKey ??
       (this.provider === 'google' ? process.env.GOOGLE_TTS_API_KEY : process.env.ELEVENLABS_API_KEY);
     this.modelId = options.modelId ?? 'eleven_multilingual_v2';
-    this.outputDir = options.outputDir ?? join(process.cwd(), 'public', 'audio', 'podcasts');
+    this.outputDir = options.outputDir ?? join(process.cwd(), 'public', 'audio', 'generated');
     this.format = options.format ?? 'mp3';
     this.sampleRate = options.sampleRate ?? 44100;
     this.interTurnGapMs = options.interTurnGapMs ?? 380;
@@ -598,7 +598,7 @@ export class VoiceSynthesisService {
   }
 
   private async stitchWithFfmpeg(turns: RenderedTurn[]): Promise<Buffer> {
-    const workDir = join(tmpdir(), `podcast-stitch-${randomUUID()}`);
+    const workDir = join(tmpdir(), `audio-stitch-${randomUUID()}`);
     await mkdir(workDir, { recursive: true });
 
     try {

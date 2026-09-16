@@ -99,6 +99,8 @@ export function createApp(dependencies: AppDependencies = {}): Express {
   app.use(optionalAuth);
   app.use('/v1', catalogRouter);
   app.use('/v1/me', meRouter);
+  app.use('/v1/generation-jobs', jobsRouter);
+  // Compatibility alias for older clients.
   app.use('/v1/podcast-jobs', jobsRouter);
   app.use('/v1/editor', editorialRouter);
 

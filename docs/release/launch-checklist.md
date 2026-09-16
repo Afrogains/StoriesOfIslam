@@ -32,7 +32,7 @@ Automation helpers:
 Test current and previous major iOS/Android versions plus Chrome, Safari,
 Firefox, and Edge. Include phone, tablet, small viewport, and large-text modes.
 
-- [ ] Home, Explore, Podcast, Library, and Kids journeys.
+- [ ] Home, Explore, The Names, Library, and Kids journeys.
 - [ ] Arabic shaping, diacritics, RTL alignment, and screen-reader labels.
 - [ ] Slow network, offline catalog cache, interrupted download, expired/changed
       media URL, airplane mode, and recovery.

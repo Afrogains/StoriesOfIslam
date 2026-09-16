@@ -47,6 +47,6 @@ audio stories
 ## Required localized assets
 
 - 6.7-inch iPhone, 13-inch iPad, Android phone, and Android tablet screenshots.
-- Home, Explore, synchronized reader, Podcast, Library sync, and Kids Mode.
+- Home, Explore, synchronized reader, The Names, Library sync, and Kids Mode.
 - English and Arabic screenshots/descriptions after Arabic copy review.
 - Privacy, terms, support, correction, and account-deletion HTTPS URLs.

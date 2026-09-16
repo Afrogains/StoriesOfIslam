@@ -1,7 +1,7 @@
 # Stories of Islam
 
 Production-oriented Islamic learning platform with an Expo client, a Node.js API,
-and a background podcast-generation worker.
+and a background educational audio-generation worker.
 
 ## Architecture
 

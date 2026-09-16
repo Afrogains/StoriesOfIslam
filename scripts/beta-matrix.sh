@@ -21,7 +21,7 @@ done
 cat <<'EOF'
 
 == Manual beta matrix (attach evidence) ==
-[ ] iOS current major: Home/Explore/Podcast/Library/Kids + background audio
+[ ] iOS current major: Home/Explore/The Names/Library/Kids + background audio
 [ ] iOS previous major: resume position + interruption
 [ ] Android current major: lock screen controls + headphones
 [ ] Android previous major: offline download recovery
