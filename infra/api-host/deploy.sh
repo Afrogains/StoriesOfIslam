@@ -10,12 +10,12 @@ cd "$ROOT"
 : "${API_ENV_FILE:=/etc/stories/api.env}"
 
 if [[ ! -f "$API_ENV_FILE" ]]; then
-  printf 'Missing %s\n' "$API_ENV_FILE" >&2
+  printf 'Missing %s (copy infra/api-host/.env.example and fill secrets)\n' "$API_ENV_FILE" >&2
   exit 1
 fi
 
-docker compose pull
-docker compose up -d --remove-orphans
-docker compose ps
+API_ENV_FILE="$API_ENV_FILE" docker compose pull
+API_ENV_FILE="$API_ENV_FILE" docker compose up -d --remove-orphans
+API_ENV_FILE="$API_ENV_FILE" docker compose ps
 curl -fsS "https://${API_HOSTNAME}/health/ready" | jq .
 printf 'API host deployment complete for %s\n' "$API_IMAGE"

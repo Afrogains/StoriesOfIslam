@@ -100,6 +100,7 @@ jobs:
           docker compose -f docker-compose.yml -f docker-compose.host.yml config >/dev/null
           docker compose -f docker-compose.yml -f docker-compose.local.yml config >/dev/null
           API_IMAGE=ghcr.io/example/stories-api:ci API_HOSTNAME=api.example.com \
+            API_ENV_FILE=.env.example \
             docker compose -f ../api-host/docker-compose.yml config >/dev/null
 
   secrets:
