@@ -2,7 +2,7 @@
 # Roll back the API host to a previously known-good image digest.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
 : "${API_IMAGE:?set API_IMAGE to the previous immutable digest}"

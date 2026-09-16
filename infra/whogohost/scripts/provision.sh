@@ -52,7 +52,7 @@ docker compose --env-file "$ENV_FILE" "${COMPOSE_FILES[@]}" up -d --remove-orpha
 printf 'Waiting for healthy services...\n'
 for _ in $(seq 1 60); do
   if docker compose --env-file "$ENV_FILE" "${COMPOSE_FILES[@]}" ps --format json \
-    | jq -e 'all(.[]; .Health == "healthy" or .Health == "" or .State == "exited")' >/dev/null 2>&1; then
+    | jq -s -e 'length > 0 and all(.[]; (.Health // "") == "healthy" or (.Health // "") == "" or .State == "exited")' >/dev/null 2>&1; then
     break
   fi
   sleep 5

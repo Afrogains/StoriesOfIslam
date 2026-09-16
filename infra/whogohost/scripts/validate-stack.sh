@@ -72,39 +72,52 @@ else
   fail 'postgres-app-owner' "unexpected owner ${owner}"
 fi
 
-if curl -fsS "${CURL_OPTS[@]}" --resolve "${MEDIA_HOSTNAME}:443:127.0.0.1" \
-  "https://${MEDIA_HOSTNAME}/minio/health/live" >/dev/null \
+if curl -fsS "${CURL_OPTS[@]}" "https://${MEDIA_HOSTNAME}/minio/health/live" >/dev/null \
+  || curl -fsS "${CURL_OPTS[@]}" --resolve "${MEDIA_HOSTNAME}:443:127.0.0.1" \
+    "https://${MEDIA_HOSTNAME}/minio/health/live" >/dev/null \
   || curl -fsS "http://127.0.0.1:9000/minio/health/live" >/dev/null; then
   pass 'minio-live'
 else
   fail 'minio-live' 'MinIO health endpoint unreachable'
 fi
 
-# Bucket anonymous policy checks
-docker run --rm --network host --entrypoint /bin/sh \
-  -e MINIO_ROOT_USER -e MINIO_ROOT_PASSWORD -e MINIO_ENDPOINT \
-  quay.io/minio/mc:RELEASE.2025-07-21T05-28-08Z \
-  -c '
-    set -eu
-    mc alias set local "$MINIO_ENDPOINT" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
-    pub="$(mc anonymous get local/stories-public)"
-    priv="$(mc anonymous get local/stories-private)"
-    case "$pub" in *download*|*Download*) ;; *) echo "bad public: $pub"; exit 1 ;; esac
-    case "$priv" in *none*|*None*|*private*|*Private*|*AccessDenied*) ;; *) echo "bad private: $priv"; exit 1 ;; esac
-    printf "public=%s private=%s\n" "$pub" "$priv"
-  ' && pass 'minio-anonymous-policies' || fail 'minio-anonymous-policies' 'public/private bucket policies incorrect'
+# Prefer host MinIO when published; otherwise join the Compose network.
+MC_NETWORK=host
+if ! curl -fsS --max-time 2 "http://127.0.0.1:9000/minio/health/live" >/dev/null 2>&1; then
+  MINIO_ENDPOINT="http://minio:9000"
+  export MINIO_ENDPOINT
+  MC_NETWORK="$(compose ps -q minio | xargs -I{} docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{println $k}}{{end}}' {} | head -n1)"
+  if [[ -z "$MC_NETWORK" ]]; then
+    fail 'minio-network' 'unable to resolve MinIO docker network'
+  fi
+fi
+
+run_mc() {
+  docker run --rm --network "$MC_NETWORK" --entrypoint /bin/sh \
+    -e MINIO_ROOT_USER -e MINIO_ROOT_PASSWORD -e MINIO_ENDPOINT \
+    quay.io/minio/mc:RELEASE.2025-07-21T05-28-08Z \
+    -c "$1"
+}
+
+run_mc '
+  set -eu
+  mc alias set local "$MINIO_ENDPOINT" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+  pub="$(mc anonymous get local/stories-public)"
+  priv="$(mc anonymous get local/stories-private)"
+  case "$pub" in *download*|*Download*) ;; *) echo "bad public: $pub"; exit 1 ;; esac
+  case "$priv" in *none*|*None*|*private*|*Private*|*AccessDenied*) ;; *) echo "bad private: $priv"; exit 1 ;; esac
+  printf "public=%s private=%s\n" "$pub" "$priv"
+' && pass 'minio-anonymous-policies' || fail 'minio-anonymous-policies' 'public/private bucket policies incorrect'
 
 object_key="validation/private-$(date -u +%s).txt"
-docker run --rm --network host --entrypoint /bin/sh \
-  -e MINIO_ROOT_USER -e MINIO_ROOT_PASSWORD -e MINIO_ENDPOINT \
-  quay.io/minio/mc:RELEASE.2025-07-21T05-28-08Z \
-  -c "
-    set -eu
-    mc alias set local \"\$MINIO_ENDPOINT\" \"\$MINIO_ROOT_USER\" \"\$MINIO_ROOT_PASSWORD\"
-    printf 'draft-secret\n' | mc pipe local/stories-private/${object_key}
-  "
-if curl -fsS "${CURL_OPTS[@]}" --resolve "${MEDIA_HOSTNAME}:443:127.0.0.1" \
-  "https://${MEDIA_HOSTNAME}/stories-private/${object_key}" >/dev/null 2>&1 \
+run_mc "
+  set -eu
+  mc alias set local \"\$MINIO_ENDPOINT\" \"\$MINIO_ROOT_USER\" \"\$MINIO_ROOT_PASSWORD\"
+  printf 'draft-secret\n' | mc pipe local/stories-private/${object_key}
+"
+if curl -fsS "${CURL_OPTS[@]}" "https://${MEDIA_HOSTNAME}/stories-private/${object_key}" >/dev/null 2>&1 \
+  || curl -fsS "${CURL_OPTS[@]}" --resolve "${MEDIA_HOSTNAME}:443:127.0.0.1" \
+    "https://${MEDIA_HOSTNAME}/stories-private/${object_key}" >/dev/null 2>&1 \
   || curl -fsS "http://127.0.0.1:9000/stories-private/${object_key}" >/dev/null 2>&1; then
   fail 'minio-draft-isolation' 'private object was anonymously readable'
 else

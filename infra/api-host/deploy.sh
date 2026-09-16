@@ -2,7 +2,7 @@
 # Deploy an immutable API/worker image on the dedicated API host.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
 : "${API_IMAGE:?set API_IMAGE}"

@@ -12,7 +12,7 @@ if [[ "$CURL_INSECURE" == "1" ]]; then
 fi
 
 curl "${CURL_OPTS[@]}" "https://${AUTH_HOSTNAME}/realms/stories-of-islam/.well-known/openid-configuration" >/dev/null
-curl "${CURL_OPTS[@]}" "https://${MEDIA_HOSTNAME}/minio/health/live" >/dev/null || true
+curl "${CURL_OPTS[@]}" "https://${MEDIA_HOSTNAME}/minio/health/live" >/dev/null
 
 usage="$(df -P / | awk 'NR==2 {gsub(/%/,"",$5); print $5}')"
 if [[ "$usage" -ge "$DISK_WARN_PCT" ]]; then

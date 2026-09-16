@@ -58,7 +58,11 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
       "protocol": "openid-connect",
-      "redirectUris": ["storiesofislam://oauth/callback", "exp://*"],
+      "redirectUris": [
+        "storiesofislam://oauth/callback",
+        "exp://127.0.0.1:*/*",
+        "exp://localhost:*/*"
+      ],
       "webOrigins": ["+"],
       "defaultClientScopes": [
         "profile",
