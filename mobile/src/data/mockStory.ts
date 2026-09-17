@@ -1,4 +1,4 @@
-export type AuthenticityGrade = 'sahih' | 'hasan' | 'historical';
+export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
 
 export type StoryCue = {
   text: string;

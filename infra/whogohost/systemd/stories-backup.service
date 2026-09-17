@@ -1,0 +1,12 @@
+[Unit]
+Description=Stories of Islam encrypted PostgreSQL + MinIO backup
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/stories/backup.env
+ExecStart=/usr/local/sbin/stories-backup.sh
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

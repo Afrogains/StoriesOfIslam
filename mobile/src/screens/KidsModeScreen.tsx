@@ -1,133 +1,371 @@
-import { BookOpen, Pause, Play, Star, Sun } from 'lucide-react-native';
-import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
-import ModeToggle from '../components/ModeToggle';
-import { kidsStories, lessonOfTheDay, type KidsStoryCard } from '../data/mockHome';
-import { palette } from '../theme/tokens';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  Award,
+  Heart,
+  Pause,
+  Play,
+  Shield,
+  Sparkles,
+  Star,
+  Sun,
+  type LucideIcon,
+} from 'lucide-react-native';
+import { useMemo, useState } from 'react';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import ScreenHeader from '../components/ScreenHeader';
+import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
+import {
+  ArabicTitle,
+  Badge,
+  Body,
+  Caption,
+  Display,
+  Heading,
+  Overline,
+  Pill,
+  PlayButton,
+  ProgressBar,
+  Row,
+  SectionHeading,
+  Small,
+  Title,
+  useTheme,
+} from '../components/ui';
+import { useCatalog } from '../data/CatalogProvider';
+import { sectionsMeta } from '../data/catalogMeta';
+import { kidsStoryToReaderStory } from '../data/storyAdapters';
+import { alpha, brandGradients, kidsGradients, radius, shadow } from '../theme/tokens';
+import type { KidsStoryCard, SectionSlug } from '../types/catalog';
 
-const tintColor: Record<KidsStoryCard['tint'], string> = {
-  sunset: palette.kids.sunset,
-  teal: palette.kids.teal,
-  sky: palette.kids.sky,
-  coral: palette.kids.coral,
+const previewKidsStories: KidsStoryCard[] = __DEV__
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
+  ? (require('../data/mockHome').kidsStories as KidsStoryCard[])
+  : [];
+
+type Tint = KidsStoryCard['tint'];
+
+const tints: Record<Tint, { primary: string; soft: string; gradient: readonly [string, string] }> = {
+  sunset: { primary: '#EA580C', soft: '#FFF3E8', gradient: ['#F97316', '#FB7185'] },
+  teal: { primary: '#0D9488', soft: '#F0FDF4', gradient: ['#0D9488', '#10B981'] },
+  sky: { primary: '#0284C7', soft: '#F0F9FF', gradient: ['#38BDF8', '#0284C7'] },
+  coral: { primary: '#E11D48', soft: '#FFF1F2', gradient: ['#FB7185', '#E11D48'] },
+  yellow: { primary: '#D97706', soft: '#FEFCE8', gradient: ['#FBBF24', '#F59E0B'] },
 };
 
-export default function KidsModeScreen() {
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  const [progress] = useState(0.28);
+const sectionBadges: Record<SectionSlug, { icon: LucideIcon; color: string }> = {
+  'qisas-al-anbiya': { icon: Star, color: '#EA580C' },
+  'seerah-shamail': { icon: Heart, color: '#D97706' },
+  sahabah: { icon: Shield, color: '#0284C7' },
+  gleanings: { icon: Sparkles, color: '#0D9488' },
+};
 
-  const nowPlaying =
-    kidsStories.find((story) => story.id === playingId) ?? lessonOfTheDay;
-  const isPlaying = playingId != null;
+/** Stars needed for the next reward tier — drives the progress meter. */
+const NEXT_BADGE_AT = 30;
+
+export default function KidsModeScreen() {
+  const { colors, isDark } = useTheme();
+  const { stories } = useCatalog();
+
+  const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
+  const [readerStory, setReaderStory] = useState<KidsStoryCard | null>(null);
+  const stars = 0;
+  const completed: Record<string, boolean> = {};
+
+  const availableStories = useMemo(
+    (): KidsStoryCard[] =>
+      stories.length
+        ? stories.map((story) => ({
+            id: story.id,
+            sectionSlug: story.sectionSlug,
+            title: story.title,
+            titleAr: story.titleAr,
+            figureName: story.figureName,
+            summary: story.summary,
+            durationLabel: story.durationLabel,
+            durationMs: story.durationMs,
+            audioUrl: story.audioUrl,
+            artworkUrl: story.artworkUrl,
+            timedCues: story.timedCues,
+            lesson: story.summary,
+            badgeLabel: '✨ Read & reflect',
+            tint:
+              story.sectionSlug === 'qisas-al-anbiya'
+                ? 'sunset'
+                : story.sectionSlug === 'seerah-shamail'
+                  ? 'yellow'
+                  : story.sectionSlug === 'sahabah'
+                    ? 'sky'
+                    : 'teal',
+            rewardStarCount: 3,
+          }))
+        : previewKidsStories,
+    [stories],
+  );
+  const visibleStories = useMemo(
+    () =>
+      selectedSection === 'all'
+        ? availableStories
+        : availableStories.filter((story) => story.sectionSlug === selectedSection),
+    [availableStories, selectedSection],
+  );
+
+  const lessonStory =
+    availableStories.find((story) => story.id === 'the-first-revelation') ??
+    availableStories[0];
+
+  const finishedCount = Object.keys(completed).length;
 
   return (
-    <View className="flex-1 bg-kids-cream">
+    <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 16, paddingBottom: 120 }}
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
       >
-        <View className="mb-4 flex-row items-start justify-between">
-          <View className="flex-1 pr-3">
-            <Text className="text-base text-kids-sunset">Assalamu Alaikum, friend</Text>
-            <Text className="mt-1 text-3xl font-extrabold text-kids-ink">Kids Mode</Text>
-            <Text className="mt-1 text-base text-kids-ink">Stories that are kind and true</Text>
-          </View>
-          <ModeToggle />
-        </View>
+        <ScreenHeader
+          eyebrow="Assalamu alaikum, friend"
+          title="Kids Mode"
+          arabic="قصص الأطفال"
+          arabicColor={colors.sunset}
+          subtitle="Gentle stories full of light and wisdom"
+        />
 
-        <View className="mb-5 rounded-[28px] bg-kids-butter p-5">
-          <View className="mb-3 flex-row items-center gap-2">
-            <Sun size={20} color={palette.kids.sunset} />
-            <Text className="text-sm font-bold uppercase tracking-wide text-kids-sunset">
-              Lesson of the Day
-            </Text>
-          </View>
-          <Text className="text-2xl font-extrabold leading-8 text-kids-ink">
-            {lessonOfTheDay.lesson}
-          </Text>
-          <Text className="mt-3 text-base leading-7 text-kids-ink">
-            From {lessonOfTheDay.title}
-          </Text>
-        </View>
+        {/* Reward meter */}
+        <LinearGradient
+          colors={isDark ? ['#2A1506', '#431D0A'] : ['#FFF7ED', '#FFE8CC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[styles.reward, { borderColor: colors.border }, shadow('sm', isDark)]}
+        >
+          <Row justify="space-between">
+            <Row gap={11}>
+              <LinearGradient colors={['#FBBF24', '#F59E0B']} style={styles.starBubble}>
+                <Star size={19} color="#78350F" fill="#78350F" />
+              </LinearGradient>
+              <View>
+                <Heading>Your star jar</Heading>
+                <Caption color={colors.inkMuted}>
+                  {finishedCount} {finishedCount === 1 ? 'story' : 'stories'} finished
+                </Caption>
+              </View>
+            </Row>
 
-        {kidsStories.map((story) => {
-          const active = playingId === story.id;
-          const tint = tintColor[story.tint];
-          return (
-            <Pressable
-              key={story.id}
-              onPress={() => setPlayingId(active ? null : story.id)}
-              className="mb-4 rounded-[28px] bg-white p-5"
-              style={{ borderWidth: 3, borderColor: active ? tint : '#FFEDD5' }}
-              accessibilityRole="button"
-              accessibilityLabel={`${story.title}. ${story.summary}`}
+            <View style={[styles.starCount, { backgroundColor: alpha('#F59E0B', 0.9) }]}>
+              <Title color="#451A03" style={styles.starNumber}>
+                {stars}
+              </Title>
+              <Overline color="#78350F">stars</Overline>
+            </View>
+          </Row>
+
+          <View style={styles.rewardProgress}>
+            <ProgressBar
+              value={Math.min(1, stars / NEXT_BADGE_AT)}
+              gradient={['#FBBF24', '#EA580C']}
+              trackColor={isDark ? '#431D0A' : '#FFE0B8'}
+              height={9}
+            />
+            <Caption color={colors.inkMuted} style={styles.rewardHint}>
+              {Math.max(0, NEXT_BADGE_AT - stars)} more stars until your next badge
+            </Caption>
+          </View>
+        </LinearGradient>
+
+        {/* Section filters */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.pills}
+          contentContainerStyle={styles.pillsContent}
+        >
+          <Pill
+            label="All fun stories"
+            selected={selectedSection === 'all'}
+            onPress={() => setSelectedSection('all')}
+            gradient={brandGradients.kidsSunset}
+            bold
+          />
+          {(Object.keys(sectionsMeta) as SectionSlug[]).map((slug) => (
+            <Pill
+              key={slug}
+              label={sectionsMeta[slug].kidsTitle}
+              icon={sectionBadges[slug].icon}
+              selected={selectedSection === slug}
+              onPress={() => setSelectedSection(slug)}
+              gradient={kidsGradients[slug]}
+              bold
+            />
+          ))}
+        </ScrollView>
+
+        {/* Lesson of the day */}
+        {selectedSection === 'all' ? (
+          <LinearGradient
+            colors={brandGradients.kidsGold[isDark ? 'dark' : 'light']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[
+              styles.lesson,
+              { borderColor: isDark ? '#431D0A' : '#FACC15' },
+              shadow('md', isDark),
+            ]}
+          >
+            <Row justify="space-between">
+              <Row gap={8}>
+                <Sun size={20} color={isDark ? '#FBBF24' : '#B45309'} />
+                <Overline color={isDark ? '#FDBA74' : '#78350F'}>Lesson of the day</Overline>
+              </Row>
+              <Award size={18} color={isDark ? '#FBBF24' : '#B45309'} />
+            </Row>
+
+            <Display
+              color={isDark ? '#FFEDD5' : '#3B1808'}
+              style={styles.lessonText}
             >
-              <View className="mb-3 flex-row items-center justify-between">
+              “{lessonStory?.lesson ?? 'Reviewed family-friendly lessons will appear here.'}”
+            </Display>
+
+            <Row justify="space-between" style={[styles.lessonFooter, { borderTopColor: isDark ? '#431D0A' : '#EAB308' }]}>
+              <Caption color={isDark ? '#FDBA74' : '#78350F'} style={styles.lessonSource}>
+                {lessonStory ? `From ${lessonStory.title}` : 'Awaiting reviewed content'}
+              </Caption>
+              <PlayButton
+                playing={false}
+                onPress={() => lessonStory && setReaderStory(lessonStory)}
+                gradient={['#EA580C', '#C2410C']}
+                size={40}
+                icons={{ play: Play, pause: Pause }}
+                accessibilityLabel="Play the lesson of the day"
+              />
+            </Row>
+          </LinearGradient>
+        ) : null}
+
+        <SectionHeading
+          label={selectedSection === 'all' ? 'Stories picked for you' : sectionsMeta[selectedSection].kidsTitle}
+          trailing={`${visibleStories.length} ${visibleStories.length === 1 ? 'story' : 'stories'}`}
+          trailingColor={colors.sunset}
+        />
+
+        <View style={styles.list}>
+          {visibleStories.map((story) => {
+            const active = false;
+            const tint = tints[story.tint];
+            const done = !!completed[story.id];
+            const badge = sectionBadges[story.sectionSlug];
+
+            return (
+              <View
+                key={story.id}
+                accessibilityLabel={`${story.title}. ${story.summary}`}
+                style={[
+                  styles.storyCard,
+                  {
+                    backgroundColor: active ? (isDark ? colors.cardAlt : tint.soft) : colors.card,
+                    borderColor: active ? tint.primary : colors.border,
+                  },
+                  shadow(active ? 'md' : 'sm', isDark),
+                ]}
+              >
+                <Row justify="space-between" align="flex-start">
+                  <Row gap={7} style={styles.storyBadges}>
+                    <Badge label={story.badgeLabel} color={tint.primary} icon={badge.icon} />
+                    {done ? <Badge label="done +3" color="#15803D" icon={Star} /> : null}
+                  </Row>
+
+                  <PlayButton
+                    playing={false}
+                    onPress={() => setReaderStory(story)}
+                    gradient={tint.gradient}
+                    size={50}
+                    icons={{ play: Play, pause: Pause }}
+                    accessibilityLabel={`${active ? 'Pause' : 'Play'} ${story.title}`}
+                  />
+                </Row>
+
+                <Display style={styles.storyTitle}>{story.title}</Display>
+                <ArabicTitle color={tint.primary}>{story.titleAr}</ArabicTitle>
+
+                <Caption color={colors.inkMuted} style={styles.storyMeta}>
+                  {story.figureName} · {story.durationLabel} listen
+                </Caption>
+
+                <Body color={colors.ink} style={styles.storySummary}>
+                  {story.summary}
+                </Body>
+
                 <View
-                  className="h-14 w-14 items-center justify-center rounded-full"
-                  style={{ backgroundColor: `${tint}22` }}
+                  style={[
+                    styles.moral,
+                    {
+                      backgroundColor: isDark ? colors.cardAlt : tint.soft,
+                      borderColor: isDark ? colors.border : alpha(tint.primary, 0.25),
+                    },
+                  ]}
                 >
-                  <Star size={22} color={tint} fill={tint} />
+                  <Overline color={tint.primary}>What we learn</Overline>
+                  <Small color={colors.ink} style={styles.moralText}>
+                    {story.lesson}
+                  </Small>
                 </View>
-                <Pressable
-                  onPress={() => setPlayingId(active ? null : story.id)}
-                  className="h-14 w-14 items-center justify-center rounded-full"
-                  style={{ backgroundColor: tint }}
-                  accessibilityRole="button"
-                  accessibilityLabel={active ? `Pause ${story.title}` : `Play ${story.title}`}
-                >
-                  {active ? (
-                    <Pause size={22} color="#FFF7ED" fill="#FFF7ED" />
-                  ) : (
-                    <Play size={22} color="#FFF7ED" fill="#FFF7ED" />
-                  )}
-                </Pressable>
+
+                <Row justify="space-between" style={styles.storyFooter}>
+                  <Caption color={colors.inkMuted}>Tap the card to read along</Caption>
+                  <Caption color={tint.primary}>Read &amp; listen →</Caption>
+                </Row>
               </View>
-              <Text className="text-2xl font-extrabold text-kids-ink">{story.title}</Text>
-              <Text className="mt-1 text-right text-xl text-kids-teal">{story.titleAr}</Text>
-              <Text className="mt-2 text-sm font-semibold text-kids-sunset">
-                {story.figureName} · {story.durationLabel}
-              </Text>
-              <Text className="mt-3 text-lg leading-7 text-kids-ink">{story.summary}</Text>
-              <View className="mt-4 rounded-2xl bg-kids-cream px-4 py-3">
-                <Text className="text-xs font-bold uppercase text-kids-teal">Lesson</Text>
-                <Text className="mt-1 text-base font-semibold leading-6 text-kids-ink">
-                  {story.lesson}
-                </Text>
-              </View>
-            </Pressable>
-          );
-        })}
+            );
+          })}
+        </View>
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 right-0 bg-kids-teal px-4 pb-5 pt-3">
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => setPlayingId(isPlaying ? null : nowPlaying.id)}
-            className="h-12 w-12 items-center justify-center rounded-full bg-white"
-            accessibilityRole="button"
-            accessibilityLabel={isPlaying ? 'Pause story' : 'Play story'}
-          >
-            {isPlaying ? (
-              <Pause size={20} color={palette.kids.teal} fill={palette.kids.teal} />
-            ) : (
-              <Play size={20} color={palette.kids.teal} fill={palette.kids.teal} />
-            )}
-          </Pressable>
-          <View className="flex-1">
-            <Text className="text-sm font-bold text-white" numberOfLines={1}>
-              {nowPlaying.title}
-            </Text>
-            <View className="mt-2 h-2 overflow-hidden rounded-full bg-white/30">
-              <View
-                className="h-2 rounded-full bg-kids-butter"
-                style={{ width: `${progress * 100}%` }}
-              />
-            </View>
-          </View>
-          <BookOpen size={20} color="#FFF7ED" />
-        </View>
-      </View>
+      <Modal
+        visible={readerStory !== null}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setReaderStory(null)}
+      >
+        {readerStory ? (
+          <SynchronizedAudioReader
+            story={kidsStoryToReaderStory(readerStory)}
+            sectionSlug={readerStory.sectionSlug}
+            initiallyExpanded
+            onClose={() => setReaderStory(null)}
+          />
+        ) : null}
+      </Modal>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1 },
+  scroll: { flex: 1 },
+  content: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 160 },
+  pressed: { opacity: 0.85, transform: [{ scale: 0.995 }] },
+
+  reward: { borderRadius: radius['3xl'], borderWidth: 2, padding: 18, marginBottom: 18 },
+  starBubble: { width: 42, height: 42, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  starCount: { alignItems: 'center', paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.lg },
+  starNumber: { lineHeight: 24 },
+  rewardProgress: { marginTop: 16 },
+  rewardHint: { marginTop: 7 },
+
+  pills: { marginBottom: 18, overflow: 'visible' },
+  pillsContent: { gap: 8, paddingRight: 4 },
+
+  lesson: { borderRadius: radius['3xl'], borderWidth: 3, padding: 20, marginBottom: 22 },
+  lessonText: { marginTop: 14, lineHeight: 34 },
+  lessonFooter: { marginTop: 18, paddingTop: 14, borderTopWidth: 2 },
+  lessonSource: { flex: 1, paddingRight: 12 },
+
+  list: { gap: 16 },
+  storyCard: { borderRadius: 30, borderWidth: 2, padding: 18 },
+  storyBadges: { flex: 1, flexWrap: 'wrap', paddingRight: 10 },
+  storyTitle: { marginTop: 16 },
+  storyMeta: { marginTop: 4 },
+  storySummary: { marginTop: 10 },
+  moral: { marginTop: 14, borderRadius: radius.xl, borderWidth: 2, paddingHorizontal: 14, paddingVertical: 12 },
+  moralText: { marginTop: 4, fontWeight: '700' },
+  storyFooter: { marginTop: 14 },
+});

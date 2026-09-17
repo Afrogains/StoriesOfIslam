@@ -1,51 +1,94 @@
-import { Audio, AVPlaybackStatus } from 'expo-av';
 import {
+  setAudioModeAsync,
+  useAudioPlayer,
+  useAudioPlayerStatus,
+} from 'expo-audio';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  AlertCircle,
   BookOpen,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Gauge,
+  Download,
   Pause,
   Play,
+  RotateCcw,
+  RotateCw,
+  ShieldCheck,
   X,
+  type LucideIcon,
 } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Modal,
   NativeSyntheticEvent,
   NativeTouchEvent,
   Pressable,
+  Platform,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {
   cueIndexAt,
   formatClock,
-  mockStory,
-  type MockStory,
+  type ReaderStory as MockStory,
   type StoryCue,
-} from '../data/mockStory';
+} from '../types/reader';
+import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
+import { audioDownloads } from '../services/audioDownloads';
+import {
+  alpha,
+  brandGradients,
+  radius,
+  sectionAccent,
+  shadow,
+  type SectionSlug,
+} from '../theme/tokens';
+import {
+  ArabicBody,
+  ArabicInline,
+  Badge,
+  Body,
+  Caption,
+  Display,
+  Mono,
+  Overline,
+  PlayButton,
+  Row,
+  Title,
+  useTheme,
+} from './ui';
 
 type PlaybackRate = 1 | 1.25 | 1.5;
 
 type SynchronizedAudioReaderProps = {
-  story?: MockStory;
+  story: MockStory;
+  sectionSlug?: SectionSlug;
   initiallyExpanded?: boolean;
   onExpandChange?: (expanded: boolean) => void;
+  onClose?: () => void;
 };
 
 const RATES: PlaybackRate[] = [1, 1.25, 1.5];
 
 export default function SynchronizedAudioReader({
-  story = mockStory,
+  story,
+  sectionSlug = 'qisas-al-anbiya',
   initiallyExpanded = true,
   onExpandChange,
+  onClose,
 }: SynchronizedAudioReaderProps) {
-  const soundRef = useRef<Audio.Sound | null>(null);
+  const { colors, isDark } = useTheme();
+
   const scrollRef = useRef<ScrollView>(null);
   const cueY = useRef<number[]>([]);
   const barWidth = useRef(1);
+  const positionRef = useRef(0);
+  const lastSavedRef = useRef(0);
+  const { load: loadProgress, save: saveProgress } = usePlaybackProgress(story.id);
 
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [playing, setPlaying] = useState(false);
@@ -53,74 +96,102 @@ export default function SynchronizedAudioReader({
   const [durationMs, setDurationMs] = useState(story.durationMs);
   const [rate, setRate] = useState<PlaybackRate>(1);
   const [citationOpen, setCitationOpen] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  const activeIndex = useMemo(
-    () => cueIndexAt(positionMs, story.cues),
-    [positionMs, story.cues],
+  const [audioError, setAudioError] = useState<string | null>(null);
+  const [downloaded, setDownloaded] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const player = useAudioPlayer(
+    story.audioUrl ? { uri: story.audioUrl } : null,
+    { updateInterval: 250, keepAudioSessionActive: true },
   );
+  const status = useAudioPlayerStatus(player);
+  const ready = status.isLoaded;
 
-  const onStatus = useCallback((status: AVPlaybackStatus) => {
+  const accent = sectionAccent(sectionSlug, isDark);
+
+  const activeIndex = useMemo(() => cueIndexAt(positionMs, story.cues), [positionMs, story.cues]);
+
+  useEffect(() => {
     if (!status.isLoaded) return;
-    setPositionMs(status.positionMillis);
-    if (status.durationMillis) setDurationMs(status.durationMillis);
-    setPlaying(status.isPlaying);
-  }, []);
+    const currentMs = Math.round(status.currentTime * 1000);
+    setPositionMs(currentMs);
+    positionRef.current = currentMs;
+    if (status.duration) setDurationMs(Math.round(status.duration * 1000));
+    setPlaying(status.playing);
+    if (status.didJustFinish) {
+      void saveProgress(0, true).catch(() => undefined);
+    } else if (Math.abs(currentMs - lastSavedRef.current) >= 5_000) {
+      lastSavedRef.current = currentMs;
+      void saveProgress(currentMs).catch(() => undefined);
+    }
+  }, [status, saveProgress]);
 
   useEffect(() => {
     let alive = true;
+    setAudioError(null);
+
+    if (!story.audioUrl) {
+      setAudioError('Audio is not available for this story yet. You can still read the complete text.');
+      return () => {
+        alive = false;
+      };
+    }
 
     (async () => {
       try {
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          playsInSilentModeIOS: true,
-          staysActiveInBackground: true,
-          shouldDuckAndroid: true,
-          playThroughEarpieceAndroid: false,
+        await setAudioModeAsync({
+          allowsRecording: false,
+          playsInSilentMode: true,
+          shouldPlayInBackground: true,
+          interruptionMode: 'doNotMix',
+          shouldRouteThroughEarpiece: false,
         });
 
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: story.audioUrl },
-          {
-            shouldPlay: false,
-            progressUpdateIntervalMillis: 100,
-            rate,
-            shouldCorrectPitch: true,
-          },
-          onStatus,
-        );
-
-        if (!alive) {
-          await sound.unloadAsync();
-          return;
-        }
-
-        soundRef.current = sound;
-        setReady(true);
+        const resumeAt = await loadProgress();
+        const localUri = await audioDownloads.localUri(story.id, story.audioUrl);
+        if (alive) setDownloaded(Boolean(localUri));
+        if (!alive) return;
+        if (localUri) player.replace({ uri: localUri });
+        await player.seekTo(Math.min(resumeAt, story.durationMs) / 1000);
+        player.setActiveForLockScreen(true, {
+          title: story.title,
+          artist: story.figureName || 'Stories of Islam',
+          artworkUrl: story.artworkUrl || undefined,
+        });
       } catch {
-        if (alive) setReady(false);
+        if (alive) {
+          setAudioError('Audio could not be loaded. Check your connection and try again.');
+        }
       }
     })();
 
     return () => {
       alive = false;
-      setReady(false);
-      soundRef.current?.unloadAsync();
-      soundRef.current = null;
+      void saveProgress(positionRef.current).catch(() => undefined);
+      player.pause();
+      player.clearLockScreenControls();
     };
-  }, [story.audioUrl, onStatus]);
+  }, [
+    story.id,
+    story.audioUrl,
+    story.durationMs,
+    story.title,
+    story.figureName,
+    story.artworkUrl,
+    loadProgress,
+    saveProgress,
+    player,
+  ]);
 
   useEffect(() => {
     if (!ready) return;
-    soundRef.current?.setRateAsync(rate, true);
-  }, [rate, ready]);
+    player.setPlaybackRate(rate, 'medium');
+  }, [rate, ready, player]);
 
   useEffect(() => {
     if (!expanded) return;
     const y = cueY.current[activeIndex];
     if (y == null) return;
-    scrollRef.current?.scrollTo({ y: Math.max(0, y - 16), animated: true });
+    scrollRef.current?.scrollTo({ y: Math.max(0, y - 24), animated: true });
   }, [activeIndex, expanded]);
 
   const setExpandedState = (next: boolean) => {
@@ -129,76 +200,145 @@ export default function SynchronizedAudioReader({
   };
 
   const togglePlay = async () => {
-    const sound = soundRef.current;
-    if (!sound || !ready) return;
-    const status = await sound.getStatusAsync();
-    if (!status.isLoaded) return;
-    if (status.isPlaying) await sound.pauseAsync();
-    else await sound.playAsync();
+    if (!ready) return;
+    if (playing) player.pause();
+    else player.play();
   };
 
   const seekTo = async (ms: number) => {
     const clamped = Math.max(0, Math.min(ms, durationMs));
-    await soundRef.current?.setPositionAsync(clamped);
+    await player.seekTo(clamped / 1000);
     setPositionMs(clamped);
   };
 
-  const onBarGrant = (evt: NativeSyntheticEvent<NativeTouchEvent>) => {
-    const ratio = Math.max(0, Math.min(1, evt.nativeEvent.locationX / barWidth.current));
+  const onScrub = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
+    const ratio = Math.max(0, Math.min(1, event.nativeEvent.locationX / barWidth.current));
     void seekTo(ratio * durationMs);
   };
 
-  const cycleRate = () => {
-    const i = RATES.indexOf(rate);
-    setRate(RATES[(i + 1) % RATES.length] as PlaybackRate);
+  const downloadAudio = async () => {
+    if (!story.audioUrl || downloading) return;
+    setDownloading(true);
+    try {
+      await audioDownloads.download(story.id, story.audioUrl);
+      setDownloaded(true);
+    } catch (error) {
+      setAudioError(error instanceof Error ? error.message : 'Audio download failed');
+    } finally {
+      setDownloading(false);
+    }
   };
 
+  const progress = durationMs ? positionMs / durationMs : 0;
+
   return (
-    <View style={styles.shell} accessibilityLabel="Synchronized audio reader">
+    <View style={[styles.shell, { backgroundColor: colors.paper }]} accessibilityLabel="Synchronized audio reader">
       {expanded ? (
         <View style={styles.reader}>
-          <View style={styles.header}>
-            <Text style={styles.title} accessibilityRole="header">
-              {story.title}
-            </Text>
-            <Text style={styles.titleAr} accessibilityLanguage="ar">
-              {story.titleAr}
-            </Text>
-            <Text style={styles.figure}>
-              {story.figureName} · {story.honorific}
-            </Text>
-            <Text style={styles.figureAr} accessibilityLanguage="ar">
-              {story.figureNameAr} {story.honorificAr}
-            </Text>
-            <View style={styles.metaRow}>
-              <Text style={styles.duration}>{formatClock(durationMs)}</Text>
-              <Pressable
-                onPress={cycleRate}
-                style={styles.chip}
-                accessibilityRole="button"
-                accessibilityLabel={`Playback speed ${rate} times`}
-              >
-                <Gauge size={14} color={theme.gold} />
-                <Text style={styles.chipText}>{rate}x</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => setCitationOpen(true)}
-                style={styles.chip}
-                accessibilityRole="button"
-                accessibilityLabel="Open source citation"
-              >
-                <BookOpen size={14} color={theme.gold} />
-                <Text style={styles.chipText}>Source</Text>
-              </Pressable>
-            </View>
-          </View>
+          {/* Header sits on the section gradient so the source is instantly legible. */}
+          <LinearGradient
+            colors={accent.gradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.header}
+          >
+            <Row justify="space-between" align="flex-start">
+              <Badge
+                label={`${story.authenticityGrade} · verified`}
+                color="#FFFFFF"
+                background="rgba(255,255,255,0.2)"
+                icon={ShieldCheck}
+              />
+              {onClose ? (
+                <Pressable
+                  onPress={onClose}
+                  hitSlop={10}
+                  style={styles.closeButton}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close reader"
+                >
+                  <X size={18} color="#FFFFFF" />
+                </Pressable>
+              ) : null}
+            </Row>
 
+            <Display color="#FFFFFF" style={styles.title}>
+              {story.title}
+            </Display>
+            <ArabicInline color="#FDE68A" style={styles.titleArabic}>
+              {story.titleAr}
+            </ArabicInline>
+
+            <Row justify="space-between" style={styles.figureRow}>
+              <Caption color="#E7E5E4" style={styles.figure}>
+                {story.figureName} · {story.honorific}
+              </Caption>
+              <ArabicInline color="rgba(255,255,255,0.75)">
+                {story.figureNameAr} {story.honorificAr}
+              </ArabicInline>
+            </Row>
+
+            {/* Transport controls */}
+            <Row justify="space-between" style={styles.controls}>
+              <Mono color="#E7E5E4">
+                {formatClock(positionMs)} / {formatClock(durationMs)}
+              </Mono>
+
+              <Row gap={7}>
+                <ControlChip
+                  label="15"
+                  icon={RotateCcw}
+                  onPress={() => void seekTo(positionMs - 15000)}
+                  accessibilityLabel="Rewind 15 seconds"
+                />
+                <ControlChip
+                  label={`${rate}×`}
+                  icon={Gauge}
+                  onPress={() => setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length] as PlaybackRate)}
+                  accessibilityLabel={`Playback speed ${rate} times`}
+                />
+                <ControlChip
+                  label="15"
+                  icon={RotateCw}
+                  onPress={() => void seekTo(positionMs + 15000)}
+                  accessibilityLabel="Forward 15 seconds"
+                />
+                <ControlChip
+                  label="Source"
+                  icon={BookOpen}
+                  onPress={() => setCitationOpen(true)}
+                  accessibilityLabel="Open source citation"
+                />
+                {Platform.OS !== 'web' ? (
+                  <ControlChip
+                    label={downloaded ? 'Saved' : downloading ? 'Saving' : 'Offline'}
+                    icon={downloaded ? CheckCircle2 : Download}
+                    onPress={() => void downloadAudio()}
+                    accessibilityLabel="Save audio for offline listening"
+                  />
+                ) : null}
+              </Row>
+            </Row>
+          </LinearGradient>
+
+          {/* Cue list */}
           <ScrollView
             ref={scrollRef}
             style={styles.scroll}
             contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
             accessibilityLabel="Story text"
           >
+            <Overline style={styles.transcriptLabel}>Follow along</Overline>
+            {audioError ? (
+              <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
+                <AlertCircle size={15} color={accent.primary} />
+                <Caption color={colors.inkMuted} style={styles.audioErrorText}>
+                  {audioError}
+                </Caption>
+              </View>
+            ) : null}
+
             {story.cues.map((cue, index) => (
               <CueBlock
                 key={`${cue.startMs}-${index}`}
@@ -206,43 +346,55 @@ export default function SynchronizedAudioReader({
                 index={index}
                 active={index === activeIndex}
                 past={index < activeIndex}
+                accent={accent.primary}
+                activeBg={isDark ? colors.cardAlt : alpha(accent.primary, 0.08)}
+                inkColor={colors.ink}
+                mutedColor={colors.inkMuted}
                 onLayoutY={(y) => {
                   cueY.current[index] = y;
                 }}
                 onPress={() => void seekTo(cue.startMs)}
               />
             ))}
+
+            <Caption align="center" style={styles.endNote}>
+              {story.sourceCitation}
+            </Caption>
           </ScrollView>
         </View>
       ) : null}
 
-      <View style={styles.mini} accessibilityLabel="Mini player">
-        <Pressable
-          onPress={togglePlay}
-          style={styles.playBtn}
-          accessibilityRole="button"
-          accessibilityLabel={playing ? 'Pause' : 'Play'}
-        >
-          {playing ? (
-            <Pause size={22} color={theme.barText} fill={theme.barText} />
-          ) : (
-            <Play size={22} color={theme.barText} fill={theme.barText} />
-          )}
-        </Pressable>
+      {/* Mini player */}
+      <LinearGradient
+        colors={brandGradients.night[isDark ? 'dark' : 'light']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={[styles.mini, shadow('lg', isDark)]}
+        accessibilityLabel="Mini player"
+      >
+        <PlayButton
+          playing={playing}
+          onPress={() => void togglePlay()}
+          gradient={accent.accentGradient}
+          size={44}
+          icons={{ play: Play, pause: Pause }}
+          disabled={!story.audioUrl || !ready}
+        />
 
         <View style={styles.miniBody}>
-          <Text style={styles.miniTitle} numberOfLines={1}>
+          <Caption color="#FAFAF9" numberOfLines={1}>
             {story.title}
-          </Text>
-          <Text style={styles.miniSub} numberOfLines={1}>
-            {story.figureName} · {formatClock(positionMs)} / {formatClock(durationMs)}
-          </Text>
+          </Caption>
+          <Mono color="#A8A29E">
+            {formatClock(positionMs)} / {formatClock(durationMs)} · {Math.round(progress * 100)}%
+          </Mono>
+
           <Pressable
-            onLayout={(e) => {
-              barWidth.current = e.nativeEvent.layout.width || 1;
+            onLayout={(event) => {
+              barWidth.current = event.nativeEvent.layout.width || 1;
             }}
-            onPress={onBarGrant}
-            style={styles.barTrack}
+            onPress={onScrub}
+            style={styles.scrubTrack}
             accessibilityRole="adjustable"
             accessibilityLabel="Playback progress"
             accessibilityValue={{
@@ -251,35 +403,57 @@ export default function SynchronizedAudioReader({
               max: Math.round(durationMs / 1000),
             }}
           >
-            <View
-              style={[
-                styles.barFill,
-                { width: `${durationMs ? (positionMs / durationMs) * 100 : 0}%` },
-              ]}
+            <LinearGradient
+              colors={accent.accentGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[styles.scrubFill, { width: `${progress * 100}%` }]}
             />
           </Pressable>
         </View>
 
         <Pressable
           onPress={() => setExpandedState(!expanded)}
-          style={styles.expandBtn}
+          hitSlop={8}
+          style={styles.expandButton}
           accessibilityRole="button"
           accessibilityLabel={expanded ? 'Collapse reader' : 'Expand reader'}
         >
-          {expanded ? (
-            <ChevronDown size={22} color={theme.barText} />
-          ) : (
-            <ChevronUp size={22} color={theme.barText} />
-          )}
+          {expanded ? <ChevronDown size={20} color="#FAFAF9" /> : <ChevronUp size={20} color="#FAFAF9" />}
         </Pressable>
-      </View>
+      </LinearGradient>
 
       <CitationModal
         visible={citationOpen}
         story={story}
+        accent={accent.primary}
         onClose={() => setCitationOpen(false)}
       />
     </View>
+  );
+}
+
+function ControlChip({
+  label,
+  icon: Icon,
+  onPress,
+  accessibilityLabel,
+}: {
+  label: string;
+  icon: LucideIcon;
+  onPress: () => void;
+  accessibilityLabel: string;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      style={({ pressed }) => [styles.controlChip, pressed && styles.pressed]}
+    >
+      <Icon size={12} color="#FFFFFF" />
+      <Caption color="#FFFFFF">{label}</Caption>
+    </Pressable>
   );
 }
 
@@ -288,6 +462,10 @@ function CueBlock({
   index,
   active,
   past,
+  accent,
+  activeBg,
+  inkColor,
+  mutedColor,
   onLayoutY,
   onPress,
 }: {
@@ -295,29 +473,35 @@ function CueBlock({
   index: number;
   active: boolean;
   past: boolean;
+  accent: string;
+  activeBg: string;
+  inkColor: string;
+  mutedColor: string;
   onLayoutY: (y: number) => void;
   onPress: () => void;
 }) {
   return (
     <Pressable
-      onLayout={(e) => onLayoutY(e.nativeEvent.layout.y)}
+      onLayout={(event) => onLayoutY(event.nativeEvent.layout.y)}
       onPress={onPress}
-      style={[
-        styles.cue,
-        active && styles.cueActive,
-        past && !active && styles.cuePast,
-      ]}
       accessibilityRole="button"
       accessibilityLabel={`Sentence ${index + 1}`}
       accessibilityState={{ selected: active }}
+      style={[
+        styles.cue,
+        active && { backgroundColor: activeBg, borderLeftColor: accent, borderLeftWidth: 3 },
+        past && !active && styles.cuePast,
+      ]}
     >
-      <Text style={[styles.cueEn, active && styles.cueEnActive]}>{cue.text}</Text>
-      <Text
-        style={[styles.cueAr, active && styles.cueArActive]}
-        accessibilityLanguage="ar"
+      <Body
+        color={active ? accent : inkColor}
+        style={[styles.cueText, active && styles.cueTextActive]}
       >
+        {cue.text}
+      </Body>
+      <ArabicBody color={active ? accent : mutedColor} style={styles.cueArabic}>
         {cue.textAr}
-      </Text>
+      </ArabicBody>
     </Pressable>
   );
 }
@@ -325,142 +509,130 @@ function CueBlock({
 function CitationModal({
   visible,
   story,
+  accent,
   onClose,
 }: {
   visible: boolean;
   story: MockStory;
+  accent: string;
   onClose: () => void;
 }) {
+  const { colors } = useTheme();
+
   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
-      <Pressable style={styles.modalScrim} onPress={onClose}>
-        <Pressable style={styles.modalCard} onPress={() => undefined}>
-          <View style={styles.modalHead}>
-            <Text style={styles.modalTitle}>Source citation</Text>
-            <Pressable
-              onPress={onClose}
-              accessibilityRole="button"
-              accessibilityLabel="Close citation"
-            >
-              <X size={20} color={theme.ink} />
+      <Pressable style={[styles.modalScrim, { backgroundColor: colors.scrim }]} onPress={onClose}>
+        <Pressable
+          style={[styles.modalCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+          onPress={() => undefined}
+        >
+          <Row justify="space-between">
+            <Row gap={8}>
+              <ShieldCheck size={17} color={accent} />
+              <Title>Source & authenticity</Title>
+            </Row>
+            <Pressable onPress={onClose} hitSlop={8} accessibilityRole="button" accessibilityLabel="Close citation">
+              <X size={18} color={colors.inkMuted} />
             </Pressable>
-          </View>
-          <Text style={styles.modalGrade}>
-            Authenticity: {story.authenticityGrade}
-          </Text>
-          <Text style={styles.modalBody}>{story.sourceCitation}</Text>
+          </Row>
+
+          <Badge
+            label={`Grade: ${story.authenticityGrade}`}
+            color={accent}
+            style={styles.modalBadge}
+          />
+
+          <Body color={colors.ink} style={styles.modalBody}>
+            {story.sourceCitation}
+          </Body>
+
+          <Caption style={styles.modalNote}>
+            Every narration in the app is traced to a named classical collection before publication.
+          </Caption>
         </Pressable>
       </Pressable>
     </Modal>
   );
 }
 
-const theme = {
-  paper: '#F6F0E4',
-  ink: '#1C1917',
-  muted: '#57534E',
-  gold: '#B45309',
-  goldSoft: 'rgba(180, 83, 9, 0.16)',
-  bar: '#1C1917',
-  barText: '#FAFAF9',
-  accent: '#0F766E',
-};
-
 const styles = StyleSheet.create({
-  shell: { flex: 1, backgroundColor: theme.paper },
+  shell: { flex: 1 },
   reader: { flex: 1 },
-  header: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12 },
-  title: { fontSize: 26, fontWeight: '700', color: theme.ink },
-  titleAr: {
-    marginTop: 4,
-    fontSize: 22,
-    color: theme.ink,
-    textAlign: 'right',
-    writingDirection: 'rtl',
+  pressed: { opacity: 0.7 },
+
+  header: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 18 },
+  closeButton: {
+    width: 30,
+    height: 30,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  figure: { marginTop: 10, fontSize: 15, color: theme.muted },
-  figureAr: {
-    marginTop: 2,
-    fontSize: 14,
-    color: theme.muted,
-    textAlign: 'right',
-    writingDirection: 'rtl',
-  },
-  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 14 },
-  duration: { fontSize: 13, color: theme.muted, marginRight: 4 },
-  chip: {
+  title: { marginTop: 14 },
+  titleArabic: { marginTop: 4 },
+  figureRow: { marginTop: 12 },
+  figure: { flex: 1, paddingRight: 10 },
+  controls: { marginTop: 16 },
+  controlChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 10,
+    gap: 4,
+    paddingHorizontal: 9,
     paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: theme.goldSoft,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(255,255,255,0.18)',
   },
-  chipText: { fontSize: 13, fontWeight: '600', color: theme.gold },
+
   scroll: { flex: 1 },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 24 },
-  cue: { paddingVertical: 12, paddingHorizontal: 12, borderRadius: 10, marginBottom: 6 },
-  cueActive: { backgroundColor: theme.goldSoft },
-  cuePast: { opacity: 0.55 },
-  cueEn: { fontSize: 18, lineHeight: 30, color: theme.ink },
-  cueEnActive: { fontWeight: '600' },
-  cueAr: {
-    marginTop: 6,
-    fontSize: 20,
-    lineHeight: 34,
-    color: theme.ink,
-    textAlign: 'right',
-    writingDirection: 'rtl',
+  scrollContent: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 28 },
+  transcriptLabel: { marginBottom: 12 },
+  audioError: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    padding: 12,
+    marginBottom: 12,
   },
-  cueArActive: { fontWeight: '600' },
+  audioErrorText: { flex: 1 },
+  cue: {
+    paddingVertical: 13,
+    paddingHorizontal: 14,
+    borderRadius: radius.md,
+    marginBottom: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: 'transparent',
+  },
+  cuePast: { opacity: 0.55 },
+  cueText: { fontSize: 16, lineHeight: 27 },
+  cueTextActive: { fontWeight: '700' },
+  cueArabic: { marginTop: 8 },
+  endNote: { marginTop: 18, paddingHorizontal: 12 },
+
   mini: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.bar,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    gap: 10,
-  },
-  playBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: theme.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 14,
   },
   miniBody: { flex: 1 },
-  miniTitle: { color: theme.barText, fontSize: 14, fontWeight: '600' },
-  miniSub: { color: '#A8A29E', fontSize: 12, marginTop: 2, marginBottom: 8 },
-  barTrack: {
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#44403C',
+  scrubTrack: {
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.18)',
     overflow: 'hidden',
+    marginTop: 7,
   },
-  barFill: { height: 4, backgroundColor: theme.gold },
-  expandBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  modalScrim: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  modalCard: { backgroundColor: theme.paper, borderRadius: 16, padding: 20 },
-  modalHead: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  modalTitle: { fontSize: 18, fontWeight: '700', color: theme.ink },
-  modalGrade: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.accent,
-    textTransform: 'capitalize',
-    marginBottom: 10,
-  },
-  modalBody: { fontSize: 16, lineHeight: 26, color: theme.ink },
+  scrubFill: { height: 5, borderRadius: 3 },
+  expandButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
+
+  modalScrim: { flex: 1, justifyContent: 'center', padding: 24 },
+  modalCard: { borderRadius: radius['2xl'], borderWidth: 1, padding: 20 },
+  modalBadge: { marginTop: 14 },
+  modalBody: { marginTop: 12 },
+  modalNote: { marginTop: 14 },
 });

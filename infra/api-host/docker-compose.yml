@@ -1,0 +1,68 @@
+# Separately hosted Node API + worker. Connects to WhoGoHost PostgreSQL,
+# Keycloak, and MinIO over TLS. Do not co-locate with the VPS data plane.
+name: stories-api
+
+services:
+  api:
+    image: ${API_IMAGE:?set API_IMAGE to the immutable GHCR digest}
+    restart: unless-stopped
+    env_file:
+      - ${API_ENV_FILE:-.env.example}
+    ports:
+      - "127.0.0.1:3000:3000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  worker:
+    image: ${API_IMAGE:?set API_IMAGE to the immutable GHCR digest}
+    restart: unless-stopped
+    command: ["node", "dist/worker.js"]
+    env_file:
+      - ${API_ENV_FILE:-.env.example}
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_HOSTNAME: ${API_HOSTNAME:?set API_HOSTNAME}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  caddy-data:
+  caddy-config:

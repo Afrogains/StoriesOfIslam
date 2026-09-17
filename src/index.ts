@@ -1,33 +1,31 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import dotenv from 'dotenv';
-import express from 'express';
-import type { SeedData } from './types';
+import 'dotenv/config';
+import { getEnv } from './config/env';
+import { logger } from './config/logger';
+import { closeDatabase } from './db/pool';
+import { createApp } from './http/app';
 
-dotenv.config();
-
-const seedPath = path.resolve(__dirname, '../db/seed.json');
-const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8')) as SeedData;
-
-const app = express();
-const port = Number(process.env.PORT ?? 3000);
-
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
+const env = getEnv();
+const server = createApp().listen(env.PORT, () => {
+  logger.info({ port: env.PORT }, 'Stories API listening');
 });
 
-app.get('/v1/categories', (_req, res) => {
-  res.json(seed.categories);
-});
+let closing = false;
+async function shutdown(signal: string): Promise<void> {
+  if (closing) return;
+  closing = true;
+  logger.info({ signal }, 'Shutting down API');
+  server.close(async (error) => {
+    await closeDatabase();
+    if (error) {
+      logger.error({ err: error }, 'HTTP server shutdown failed');
+      process.exitCode = 1;
+    }
+  });
+  setTimeout(() => {
+    logger.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 10_000).unref();
+}
 
-app.get('/v1/figures', (_req, res) => {
-  res.json(seed.figures);
-});
-
-app.get('/v1/stories', (_req, res) => {
-  res.json(seed.stories);
-});
-
-app.listen(port, () => {
-  process.stdout.write(`listening :${port}\n`);
-});
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
+process.on('SIGINT', () => void shutdown('SIGINT'));

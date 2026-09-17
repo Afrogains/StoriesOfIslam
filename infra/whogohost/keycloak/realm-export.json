@@ -1,0 +1,102 @@
+{
+  "realm": "stories-of-islam",
+  "enabled": true,
+  "displayName": "Stories of Islam",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "verifyEmail": true,
+  "loginWithEmailAllowed": true,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "revokeRefreshToken": true,
+  "refreshTokenMaxReuse": 0,
+  "accessTokenLifespan": 600,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 43200,
+  "passwordPolicy": "length(12) and digits(1) and lowerCase(1) and upperCase(1) and notUsername(undefined)",
+  "roles": {
+    "realm": [
+      { "name": "listener", "description": "Regular application account" },
+      { "name": "reviewer", "description": "Qualified content reviewer" },
+      { "name": "editor", "description": "Content and generation operator" },
+      { "name": "admin", "description": "Platform administrator" }
+    ]
+  },
+  "defaultRoles": ["listener"],
+  "clientScopes": [
+    {
+      "name": "stories-api-audience",
+      "protocol": "openid-connect",
+      "protocolMappers": [
+        {
+          "name": "stories-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "stories-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "stories-api",
+      "name": "Stories API",
+      "enabled": true,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "stories-mobile",
+      "name": "Stories Mobile",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "storiesofislam://oauth/callback",
+        "exp://127.0.0.1:*/*",
+        "exp://localhost:*/*"
+      ],
+      "webOrigins": ["+"],
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "roles",
+        "stories-api-audience"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    },
+    {
+      "clientId": "stories-web",
+      "name": "Stories Web",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "https://app.example.com/oauth/callback",
+        "http://localhost:8081/oauth/callback"
+      ],
+      "webOrigins": ["https://app.example.com", "http://localhost:8081"],
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "roles",
+        "stories-api-audience"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    }
+  ],
+  "smtpServer": {}
+}

@@ -1,0 +1,12 @@
+.git
+.github
+node_modules
+mobile
+dist
+coverage
+.env
+.env.*
+*.log
+tmp
+tmp-voice-smoke
+public/audio

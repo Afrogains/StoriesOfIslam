@@ -1,0 +1,34 @@
+# Local/CI bring-up overlay. Exposes service ports to the API host loopback and
+# relaxes Keycloak hostname strictness for self-signed TLS drills.
+#
+# The production Compose file keeps `internal: true` on the data plane. Some
+# nested/cloud-agent Docker runtimes break container-to-container traffic on
+# internal-only networks, so local drills redeclare the network as routable.
+networks:
+  internal:
+    internal: false
+
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  keycloak:
+    command:
+      [
+        "start",
+        "--import-realm",
+        "--proxy-headers=xforwarded",
+        "--http-enabled=true",
+        "--hostname-strict=false",
+      ]
+    environment:
+      KC_HOSTNAME: ${AUTH_HOSTNAME}
+      KC_HOSTNAME_STRICT: "false"
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  minio:
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"

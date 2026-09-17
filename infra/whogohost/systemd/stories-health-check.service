@@ -1,0 +1,9 @@
+[Unit]
+Description=Stories of Islam WhoGoHost health probe
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/stories/platform.env
+ExecStart=/usr/local/sbin/stories-health-check.sh
