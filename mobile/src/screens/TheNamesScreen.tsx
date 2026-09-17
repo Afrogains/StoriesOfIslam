@@ -3,6 +3,7 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  Headphones,
   Search,
   Sparkles,
 } from 'lucide-react-native';
@@ -14,6 +15,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import NamesAudioPlayer from '../components/NamesAudioPlayer';
 import ScreenHeader from '../components/ScreenHeader';
 import {
   ArabicInline,
@@ -36,6 +38,11 @@ import {
   findName,
   type DivineName,
 } from '../data/theNames';
+import {
+  audioForName,
+  nameAudioByNumber,
+  namesWithAudioCount,
+} from '../data/theNamesAudio';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 
 export default function TheNamesScreen() {
@@ -43,6 +50,11 @@ export default function TheNamesScreen() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
+  const selectedAudio = useMemo(
+    () => audioForName(selected.number),
+    [selected.number],
+  );
+  const audioCount = namesWithAudioCount();
 
   const filtered = useMemo(() => findName(query), [query]);
 
@@ -79,8 +91,10 @@ export default function TheNamesScreen() {
                 {THE_NAMES_SERIES.credit}
               </Title>
               <Small color="#D6D3D1" style={styles.seriesBody}>
-                {THE_NAMES_SERIES.description} Named scholar references are for
-                learning attribution only — never voice impersonation or endorsement.
+                {THE_NAMES_SERIES.description} Listen to Shaykh Mikaeel Smith’s
+                official episodes in-app — playback continues when minimized.
+                Named scholar references are for learning attribution only —
+                never voice impersonation or endorsement.
               </Small>
             </LinearGradient>
 
@@ -130,10 +144,13 @@ export default function TheNamesScreen() {
               </BodyStrong>
               <Body style={styles.detailReflection}>{selected.reflection}</Body>
 
+              <NamesAudioPlayer name={selected} episode={selectedAudio} />
+
               <Row gap={8} style={styles.creditRow}>
                 <IconBubble icon={BookOpen} color={colors.gold} size={26} rounded={radius.sm} />
                 <Caption color={colors.inkMuted} style={styles.creditText}>
-                  Companion study: {THE_NAMES_SERIES.credit}
+                  Companion study: {THE_NAMES_SERIES.credit}. {audioCount} names
+                  currently have official podcast audio from Muslim Central.
                 </Caption>
               </Row>
             </Card>
@@ -165,11 +182,12 @@ export default function TheNamesScreen() {
         }
         renderItem={({ item }) => {
           const active = item.number === selected.number;
+          const hasAudio = Boolean(nameAudioByNumber[item.number]);
           return (
             <Pressable
               onPress={() => setSelected(item)}
               accessibilityRole="button"
-              accessibilityLabel={`${item.transliteration}, ${item.meaning}`}
+              accessibilityLabel={`${item.transliteration}, ${item.meaning}${hasAudio ? ', has podcast audio' : ''}`}
               style={({ pressed }) => [
                 styles.nameRow,
                 {
@@ -195,9 +213,18 @@ export default function TheNamesScreen() {
               <View style={styles.nameCopy}>
                 <Row justify="space-between" align="center">
                   <BodyStrong>{item.transliteration}</BodyStrong>
-                  <ArabicInline color={colors.gold} style={styles.rowArabic}>
-                    {item.arabic}
-                  </ArabicInline>
+                  <Row gap={8} align="center">
+                    {hasAudio ? (
+                      <Headphones
+                        size={14}
+                        color={active ? colors.gold : colors.inkSubtle}
+                        accessibilityLabel="Has podcast audio"
+                      />
+                    ) : null}
+                    <ArabicInline color={colors.gold} style={styles.rowArabic}>
+                      {item.arabic}
+                    </ArabicInline>
+                  </Row>
                 </Row>
                 <Small color={colors.inkMuted}>{item.meaning}</Small>
               </View>
