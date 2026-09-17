@@ -11,7 +11,7 @@ import {
   RotateCcw,
   RotateCw,
 } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   NativeTouchEvent,
@@ -25,6 +25,7 @@ import {
 } from '../data/theNamesAudio';
 import type { DivineName } from '../data/theNames';
 import { THE_NAMES_SERIES } from '../data/theNames';
+import { playbackUrlForNamesAudio } from '../services/theNamesAudioUrl';
 import { formatClock } from '../types/reader';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 import {
@@ -52,8 +53,13 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
   const [playing, setPlaying] = useState(false);
   const [audioError, setAudioError] = useState<string | null>(null);
 
+  const streamUrl = useMemo(
+    () => (episode?.audioUrl ? playbackUrlForNamesAudio(episode.audioUrl) : null),
+    [episode?.audioUrl],
+  );
+
   const player = useAudioPlayer(
-    episode?.audioUrl ? { uri: episode.audioUrl } : null,
+    streamUrl ? { uri: streamUrl } : null,
     { updateInterval: 250, keepAudioSessionActive: true },
   );
   const status = useAudioPlayerStatus(player);
@@ -110,7 +116,7 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
         // Player may already be released when switching names.
       }
     };
-  }, [episode?.audioUrl, name.transliteration, name.meaning, player]);
+  }, [streamUrl, name.transliteration, name.meaning, player]);
 
   const togglePlay = () => {
     if (!ready || !episode) return;
@@ -206,12 +212,16 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
           size={48}
           icons={{ play: Play, pause: Pause }}
           disabled={!ready}
-          accessibilityLabel={playing ? 'Pause episode' : 'Play episode'}
+          accessibilityLabel={
+            !ready ? 'Loading episode' : playing ? 'Pause episode' : 'Play episode'
+          }
         />
 
         <View style={styles.progressBlock}>
           <Mono color={colors.inkMuted}>
-            {formatClock(positionMs)} / {formatClock(durationMs)}
+            {!ready && !audioError
+              ? 'Loading audio…'
+              : `${formatClock(positionMs)} / ${formatClock(durationMs)}`}
           </Mono>
           <Pressable
             onLayout={(event) => {
