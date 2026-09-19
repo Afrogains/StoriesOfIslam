@@ -11,7 +11,7 @@ import {
   RotateCcw,
   RotateCw,
 } from 'lucide-react-native';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   NativeTouchEvent,
@@ -53,10 +53,7 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
   const [playing, setPlaying] = useState(false);
   const [audioError, setAudioError] = useState<string | null>(null);
 
-  const streamUrl = useMemo(
-    () => (episode?.audioUrl ? playbackUrlForNamesAudio(episode.audioUrl) : null),
-    [episode?.audioUrl],
-  );
+  const streamUrl = episode?.audioUrl ? playbackUrlForNamesAudio(episode.audioUrl) : null;
 
   const player = useAudioPlayer(
     streamUrl ? { uri: streamUrl } : null,
@@ -79,7 +76,7 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
     setDurationMs(0);
     setPlaying(false);
 
-    if (!episode?.audioUrl) {
+    if (!streamUrl) {
       return () => {
         alive = false;
       };
