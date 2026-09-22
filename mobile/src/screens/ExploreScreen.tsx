@@ -36,8 +36,9 @@ import type {
   StoryItem,
 } from '../types/catalog';
 import { useCatalog } from '../data/CatalogProvider';
-import { toReaderStory } from '../data/storyAdapters';
+import { storiesForProphetSlug, toReaderStory } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
+import type { ProphetFigure } from '../data/theProphets';
 
 type GradeFilter = 'all' | AuthenticityGrade;
 type SortKey = 'default' | 'duration' | 'title';
@@ -108,6 +109,11 @@ export default function ExploreScreen() {
     filteredStories.reduce((sum, story) => sum + story.durationMs, 0) / 60000,
   );
 
+  const openProphetStories = (prophet: ProphetFigure) => {
+    const matches = storiesForProphetSlug(stories, prophet.slug, prophet.nameEn);
+    if (matches[0]) setActiveStory(matches[0]);
+  };
+
   const resetAll = () => {
     setQuery('');
     setMediaFilter('all');
@@ -156,7 +162,9 @@ export default function ExploreScreen() {
           ))}
         </ScrollView>
 
-        {selectedSection === 'qisas-al-anbiya' ? <ProphetsRoster /> : null}
+        {selectedSection === 'qisas-al-anbiya' ? (
+          <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
 
         {/* Search */}
         <View

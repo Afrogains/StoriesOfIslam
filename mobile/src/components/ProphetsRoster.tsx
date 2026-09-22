@@ -40,11 +40,15 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
         <Overline color={colors.emerald}>{PROPHETS_SERIES.credit}</Overline>
       </Row>
       <Small color={colors.inkMuted} style={styles.seriesNote}>
-        {PROPHETS_SERIES.description} Muhammad ﷺ is covered under Seerah & Shama’il.
+        {PROPHETS_SERIES.description} Tap a prophet to open the full story to read
+        {compact ? '' : ' or play'}. Muhammad ﷺ is covered under Seerah & Shama’il.
       </Small>
 
       {!compact ? (
-        <View
+        <Pressable
+          onPress={() => onSelect?.(selected)}
+          accessibilityRole="button"
+          accessibilityLabel={`Open full story for ${selected.nameEn}`}
           style={[
             styles.detail,
             {
@@ -63,7 +67,10 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
           </Row>
           <Caption color={colors.inkMuted}>{selected.honorificEn}</Caption>
           <Body style={styles.summary}>{selected.summaryEn}</Body>
-        </View>
+          <Caption color={colors.emerald} style={styles.openHint}>
+            Tap to read the full story
+          </Caption>
+        </Pressable>
       ) : null}
 
       <ScrollView
@@ -78,7 +85,7 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
               key={item.slug}
               onPress={() => choose(item)}
               accessibilityRole="button"
-              accessibilityLabel={`${item.nameEn}, ${item.honorificEn}`}
+              accessibilityLabel={`Open full story for ${item.nameEn}`}
               style={({ pressed }) => [
                 styles.chip,
                 {
@@ -116,6 +123,7 @@ const styles = StyleSheet.create({
   },
   detailArabic: { fontSize: 22, lineHeight: 32 },
   summary: { marginTop: 4, lineHeight: 20 },
+  openHint: { marginTop: 8, fontWeight: '700' },
   chipRow: { gap: 8, paddingVertical: 2 },
   chip: {
     borderWidth: 1,

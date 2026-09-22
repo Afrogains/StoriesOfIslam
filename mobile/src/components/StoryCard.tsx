@@ -54,7 +54,13 @@ export default function StoryCard({
   const saved = isSaved(story.id);
 
   return (
-    <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${story.hasAudio ? 'Open and listen to' : 'Open and read'} ${story.title}`}
+      style={({ pressed }) => [pressed && styles.pressed]}
+    >
+      <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
       <Row justify="space-between" style={styles.metaRow}>
         <Row gap={6}>
           <Badge label={meta.title} color={accent.badgeText} background={accent.badgeBg} />
@@ -127,26 +133,28 @@ export default function StoryCard({
           ) : (
             <BookOpen size={13} color={colors.inkSubtle} />
           )}
-          <Caption>{story.hasAudio ? `${story.durationLabel} audio` : 'Text only'}</Caption>
+          <Caption>{story.hasAudio ? `${story.durationLabel} audio` : 'Full text'}</Caption>
           <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
           <Clock size={12} color={colors.inkSubtle} />
           <Caption>{story.durationLabel}</Caption>
         </Row>
 
         <GradientButton
-          label={story.hasAudio ? 'Listen' : 'Read'}
+          label={story.hasAudio ? 'Open' : 'Read'}
           icon={story.hasAudio ? Play : BookOpen}
           gradient={accent.accentGradient}
           size="sm"
           onPress={onPress}
-          accessibilityLabel={`${story.hasAudio ? 'Listen to' : 'Read'} ${story.title}`}
+          accessibilityLabel={`Open full story: ${story.title}`}
         />
       </Row>
     </Card>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  pressed: { opacity: 0.92 },
   metaRow: { marginBottom: 12 },
   bookmark: { padding: 2 },
   arabic: { marginTop: 2 },

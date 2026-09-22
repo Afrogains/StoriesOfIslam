@@ -329,12 +329,22 @@ export default function SynchronizedAudioReader({
             showsVerticalScrollIndicator={false}
             accessibilityLabel="Story text"
           >
-            <Overline style={styles.transcriptLabel}>Follow along</Overline>
+            <Overline style={styles.transcriptLabel}>
+              {story.audioUrl ? 'Follow along' : 'Full story'}
+            </Overline>
             {audioError ? (
               <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
                 <AlertCircle size={15} color={accent.primary} />
                 <Caption color={colors.inkMuted} style={styles.audioErrorText}>
                   {audioError}
+                </Caption>
+              </View>
+            ) : null}
+            {!story.audioUrl && !audioError ? (
+              <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
+                <BookOpen size={15} color={accent.primary} />
+                <Caption color={colors.inkMuted} style={styles.audioErrorText}>
+                  Audio is being prepared for this account. You can read the full story below.
                 </Caption>
               </View>
             ) : null}

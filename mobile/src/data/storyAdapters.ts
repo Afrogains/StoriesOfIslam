@@ -1,20 +1,60 @@
 import type { KidsStoryCard, StoryItem } from '../types/catalog';
-import type { ReaderStory } from '../types/reader';
+import type { ReaderStory, StoryCue } from '../types/reader';
+
+function isPlaceholderAudio(url?: string | null): boolean {
+  if (!url) return true;
+  return url.includes('.example') || url.includes('placeholder');
+}
+
+function cuesFromFullText(
+  contentEn: string,
+  contentAr: string,
+  durationMs: number,
+): StoryCue[] {
+  const enParts = contentEn
+    .split(/(?<=[.!?۔])\s+|\n+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const arParts = contentAr
+    .split(/(?<=[.!?۔])\s+|\n+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const parts = enParts.length ? enParts : [contentEn];
+  const slice = Math.max(Math.floor(durationMs / parts.length), 8_000);
+
+  return parts.map((text, index) => ({
+    text,
+    textAr: arParts[index] ?? (index === 0 ? contentAr : ''),
+    startMs: index * slice,
+    endMs: (index + 1) * slice,
+  }));
+}
 
 export function toReaderStory(story: StoryItem): ReaderStory {
-  const cues = story.timedCues?.length
-    ? story.timedCues.map((cue) => ({
-        text: cue.textEn,
-        textAr: cue.textAr,
-        startMs: cue.startMs,
-        endMs: cue.endMs,
-      }))
-    : [{
-        text: story.content ?? story.summary,
-        textAr: story.contentAr ?? story.titleAr,
-        startMs: 0,
-        endMs: Math.max(story.durationMs, 30_000),
-      }];
+  const playableUrl = isPlaceholderAudio(story.audioUrl) ? '' : (story.audioUrl ?? '');
+  const fullEn = (story.content ?? story.summary ?? '').trim();
+  const fullAr = (story.contentAr ?? story.titleAr ?? '').trim();
+
+  let cues: StoryCue[];
+  if (story.timedCues?.length) {
+    cues = story.timedCues.map((cue) => ({
+      text: cue.textEn,
+      textAr: cue.textAr,
+      startMs: cue.startMs,
+      endMs: cue.endMs,
+    }));
+  } else if (fullEn) {
+    cues = cuesFromFullText(fullEn, fullAr, Math.max(story.durationMs, 30_000));
+  } else {
+    cues = [{
+      text: story.summary,
+      textAr: story.titleAr,
+      startMs: 0,
+      endMs: Math.max(story.durationMs, 30_000),
+    }];
+  }
+
   return {
     id: story.id,
     slug: story.id,
@@ -26,7 +66,7 @@ export function toReaderStory(story: StoryItem): ReaderStory {
     honorificAr: story.honorificAr ?? 'عليه السلام',
     sourceCitation: story.sourceCitation,
     authenticityGrade: story.authenticityGrade,
-    audioUrl: story.audioUrl ?? '',
+    audioUrl: playableUrl,
     artworkUrl: story.artworkUrl ?? '',
     durationMs: story.durationMs,
     cues,
@@ -35,6 +75,7 @@ export function toReaderStory(story: StoryItem): ReaderStory {
 
 export function kidsStoryToReaderStory(story: KidsStoryCard): ReaderStory {
   const durationMs = story.durationMs ?? 30_000;
+  const playableUrl = isPlaceholderAudio(story.audioUrl) ? '' : (story.audioUrl ?? '');
   const cues = story.timedCues?.length
     ? story.timedCues.map((cue) => ({
         text: cue.textEn,
@@ -42,12 +83,7 @@ export function kidsStoryToReaderStory(story: KidsStoryCard): ReaderStory {
         startMs: cue.startMs,
         endMs: cue.endMs,
       }))
-    : [{
-        text: story.summary,
-        textAr: story.titleAr,
-        startMs: 0,
-        endMs: durationMs,
-      }];
+    : cuesFromFullText(story.summary, story.titleAr, durationMs);
   return {
     id: story.id,
     slug: story.id,
@@ -59,9 +95,28 @@ export function kidsStoryToReaderStory(story: KidsStoryCard): ReaderStory {
     honorificAr: 'قصة للأطفال',
     sourceCitation: 'Authentic Islamic Children’s Story Collection',
     authenticityGrade: 'sahih',
-    audioUrl: story.audioUrl ?? '',
+    audioUrl: playableUrl,
     artworkUrl: story.artworkUrl ?? '',
     durationMs,
     cues,
   };
+}
+
+/** Match a prophet roster entry to catalog stories for that figure. */
+export function storiesForProphetSlug(
+  stories: StoryItem[],
+  slug: string,
+  nameEn: string,
+): StoryItem[] {
+  const normalized = nameEn.toLowerCase();
+  return stories.filter((story) => {
+    if (story.sectionSlug !== 'qisas-al-anbiya') return false;
+    const figure = story.figureName.toLowerCase();
+    return (
+      figure === normalized ||
+      figure.includes(normalized) ||
+      story.id.includes(slug) ||
+      story.title.toLowerCase().includes(normalized)
+    );
+  });
 }
