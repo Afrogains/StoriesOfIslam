@@ -3,10 +3,13 @@
     {
       "id": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
       "slug": "qisas-al-anbiya",
-      "name": { "en": "Qisas al-Anbiya", "ar": "قصص الأنبياء" },
+      "name": {
+        "en": "Qisas al-Anbiya",
+        "ar": "قصص الأنبياء"
+      },
       "description": {
-        "en": "Stories of the Prophets drawn from the Quran and reliable tafsir.",
-        "ar": "قصص الأنبياء مستمدة من القرآن والتفاسير الموثوقة."
+        "en": "Stories of the Prophets drawn from the Quran, reliable tafsir, and Ibn Kathir’s Qisas al-Anbiya.",
+        "ar": "قصص الأنبياء مستمدة من القرآن والتفاسير الموثوقة وقصص الأنبياء لابن كثير."
       },
       "sortOrder": 1,
       "createdAt": "2026-09-03T00:00:00.000Z",
@@ -15,7 +18,10 @@
     {
       "id": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
       "slug": "seerah-shamail",
-      "name": { "en": "Seerah & Shama'il", "ar": "السيرة والشمائل" },
+      "name": {
+        "en": "Seerah & Shama'il",
+        "ar": "السيرة والشمائل"
+      },
       "description": {
         "en": "The life and noble character of Prophet Muhammad ﷺ.",
         "ar": "حياة النبي محمد ﷺ وشمائله الكريمة."
@@ -27,7 +33,10 @@
     {
       "id": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "sahabah",
-      "name": { "en": "Sahabah", "ar": "الصحابة" },
+      "name": {
+        "en": "Sahabah",
+        "ar": "الصحابة"
+      },
       "description": {
         "en": "Companions of the Prophet ﷺ, including twelve key figures.",
         "ar": "صحابة النبي ﷺ، ومنهم اثنا عشر علماً من أعلامهم."
@@ -39,7 +48,10 @@
     {
       "id": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
       "slug": "gleanings",
-      "name": { "en": "Gleanings", "ar": "قبسات" },
+      "name": {
+        "en": "Gleanings",
+        "ar": "قبسات"
+      },
       "description": {
         "en": "Short authentic accounts of the Tabi'un, successors, and other righteous predecessors.",
         "ar": "قبسات قصيرة موثقة من أخبار التابعين ومن بعدهم من السلف."
@@ -51,16 +63,610 @@
   ],
   "figures": [
     {
-      "id": "10a1b2c3-d4e5-4060-8071-111111111001",
+      "id": "10a1b2c3-d4e5-4060-8071-111111110001",
       "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
-      "slug": "ibrahim",
-      "name": { "en": "Ibrahim", "ar": "إبراهيم" },
-      "honorific": { "en": "peace be upon him", "ar": "عليه السلام" },
+      "slug": "adam",
+      "name": {
+        "en": "Adam",
+        "ar": "آدم"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
       "isKeyFigure": false,
       "sortOrder": 1,
       "bio": {
-        "en": "The Friend of Allah, father of the prophets, who called his people to tawhid.",
-        "ar": "خليل الله وأبو الأنبياء، الذي دعا قومه إلى التوحيد."
+        "en": "The first human and prophet, taught the names and placed on earth as Allah’s vicegerent.",
+        "ar": "أول البشر والأنبياء، علّمه الله الأسماء وجعله خليفة في الأرض."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110002",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "idris",
+      "name": {
+        "en": "Idris",
+        "ar": "إدريس"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 2,
+      "bio": {
+        "en": "A truthful prophet raised to a high station; called people back to Adam’s religion and taught justice and charity.",
+        "ar": "نبي صدّيق رفعه الله مكاناً عليّاً، دعا الناس إلى دين آبائه وعلّمهم العدل والصدقة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110003",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "nuh",
+      "name": {
+        "en": "Nuh",
+        "ar": "نوح"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 3,
+      "bio": {
+        "en": "Called his people to worship Allah alone for centuries; those who believed were saved in the Ark from the Flood.",
+        "ar": "دعا قومه إلى عبادة الله وحده قروناً، ونجّى الله المؤمنين معه في السفينة من الطوفان."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110004",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "hud",
+      "name": {
+        "en": "Hud",
+        "ar": "هود"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 4,
+      "bio": {
+        "en": "Sent to the powerful people of ‘Ad, who were arrogant builders; he called them to worship Allah alone.",
+        "ar": "أرسل إلى قوم عاد الأقوياء المتجبرين، فدعاهم إلى إفراد الله بالعبادة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110005",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "salih",
+      "name": {
+        "en": "Salih",
+        "ar": "صالح"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 5,
+      "bio": {
+        "en": "Sent to Thamud after ‘Ad; called them to tawhid and warned them concerning the she-camel of Allah.",
+        "ar": "أرسل إلى ثمود بعد عاد، فدعاهم إلى التوحيد وحذّرهم في شأن ناقة الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111111001",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ibrahim",
+      "name": {
+        "en": "Ibrahim",
+        "ar": "إبراهيم"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 6,
+      "bio": {
+        "en": "The Friend of Allah and father of the prophets, who broke the idols and called his people to pure tawhid.",
+        "ar": "خليل الله وأبو الأنبياء، كسّر الأصنام ودعا قومه إلى التوحيد الخالص."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110007",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ismail",
+      "name": {
+        "en": "Isma‘il",
+        "ar": "إسماعيل"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 7,
+      "bio": {
+        "en": "Son of Ibrahim, left with his mother Hajar in the barren valley of Makkah; linked to Zamzam and the Ka‘bah.",
+        "ar": "ابن إبراهيم، تُرك مع أمه هاجر في وادٍ غير ذي زرع بمكة، وارتبط باسم زمزم والبيت."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110008",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ishaq",
+      "name": {
+        "en": "Ishaq",
+        "ar": "إسحاق"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 8,
+      "bio": {
+        "en": "Son of Ibrahim, granted after glad tidings; father of Yaqub and a prophet in the line of guidance.",
+        "ar": "ابن إبراهيم بُشّر به بعد الكبر، أبو يعقوب ونبي في سلسلة الهداية."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110009",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "yaqub",
+      "name": {
+        "en": "Yaqub",
+        "ar": "يعقوب"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 9,
+      "bio": {
+        "en": "Also called Israel; favored with prophethood, father of the twelve tribes including Yusuf.",
+        "ar": "يُدعى إسرائيل، آتاه الله النبوة، وأبو الأسباط الاثني عشر ومنهم يوسف."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110010",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "lut",
+      "name": {
+        "en": "Lut",
+        "ar": "لوط"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 10,
+      "bio": {
+        "en": "Nephew of Ibrahim, sent to the people of Sodom to forbid their open immorality and call them to Allah.",
+        "ar": "ابن أخي إبراهيم، أرسل إلى أهل سدوم لينهاهم عن الفواحش ويدعوهم إلى الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110011",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "shuaib",
+      "name": {
+        "en": "Shu‘aib",
+        "ar": "شعيب"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 11,
+      "bio": {
+        "en": "Sent to Madyan; commanded worship of Allah alone and fair measure in trade, forbidding corruption.",
+        "ar": "أرسل إلى مدين، فأمرهم بعبادة الله وإيفاء الكيل والميزان ونهاهم عن الفساد."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110012",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "yusuf",
+      "name": {
+        "en": "Yusuf",
+        "ar": "يوسف"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 12,
+      "bio": {
+        "en": "Son of Yaqub; thrown into a well, sold into Egypt, then raised by Allah through patience and trust to authority.",
+        "ar": "ابن يعقوب؛ أُلقي في الجبّ ثم بيع بمصر، فرفعه الله بالصبر والتوكل إلى الملك."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110013",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ayyub",
+      "name": {
+        "en": "Ayyub",
+        "ar": "أيوب"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 13,
+      "bio": {
+        "en": "Patient prophet stricken with severe trial in health and wealth; he turned to Allah and was restored.",
+        "ar": "نبيٌّ صابر ابتُلي في بدنه وماله، فأناب إلى الله فردّ عليه عافيته."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110014",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "dhul-kifl",
+      "name": {
+        "en": "Dhul-Kifl",
+        "ar": "ذو الكفل"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 14,
+      "bio": {
+        "en": "Mentioned among the patient and righteous; Ibn Kathir places him among the prophets of firm resolve in obedience.",
+        "ar": "ذُكر مع الصابرين والصالحين، وعدّه ابن كثير فيمن ثبتوا على طاعة الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110015",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "yunus",
+      "name": {
+        "en": "Yunus",
+        "ar": "يونس"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 15,
+      "bio": {
+        "en": "Left his people in anger, was swallowed by the whale, then called upon Allah in the darkness and was rescued.",
+        "ar": "غادر قومه مغاضباً فالتقمه الحوت، فنادى الله في الظلمات فنجّاه."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110016",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "musa",
+      "name": {
+        "en": "Musa",
+        "ar": "موسى"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 16,
+      "bio": {
+        "en": "Sent to Pharaoh with clear signs; led the Children of Israel and received the Torah.",
+        "ar": "أرسل إلى فرعون بالآيات، وأخرج بني إسرائيل وأنزلت عليه التوراة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110017",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "harun",
+      "name": {
+        "en": "Harun",
+        "ar": "هارون"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 17,
+      "bio": {
+        "en": "Brother of Musa and a prophet who supported him in calling Pharaoh and guiding the Israelites.",
+        "ar": "أخو موسى ونبيّ أيّده في دعوة فرعون وهداية بني إسرائيل."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110018",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "hizqeel",
+      "name": {
+        "en": "Hizqeel",
+        "ar": "حزقيل"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 18,
+      "bio": {
+        "en": "Known as Ezekiel; Ibn Kathir recounts him among the prophets after Musa who revived hope for the Israelites.",
+        "ar": "يُعرف بحزقيال؛ ذكره ابن كثير فيمن بعث بعد موسى لإحياء رجاء بني إسرائيل."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110019",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "ilyas",
+      "name": {
+        "en": "Ilyas",
+        "ar": "إلياس"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 19,
+      "bio": {
+        "en": "Called his people away from idolatry; Ibn Kathir includes him among the prophets between Musa and the later messengers.",
+        "ar": "دعا قومه لترك الشرك، وعدّه ابن كثير في الأنبياء بين موسى ومن بعدهم."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110020",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "shammil",
+      "name": {
+        "en": "Shammil",
+        "ar": "شمويل"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 20,
+      "bio": {
+        "en": "Samuel; appointed when the Israelites asked for a king after defeat, and guided them under Allah’s command.",
+        "ar": "شمويل؛ بُعث حين طلب بنو إسرائيل ملكاً بعد الهزيمة، فهداهم بأمر الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110021",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "dawud",
+      "name": {
+        "en": "Dawud",
+        "ar": "داود"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 21,
+      "bio": {
+        "en": "Defeated Goliath, was given kingship and the Zabur, and judged with justice and beautiful remembrance of Allah.",
+        "ar": "هزم جالوت، وآتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110022",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "sulaiman",
+      "name": {
+        "en": "Sulaiman",
+        "ar": "سليمان"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 22,
+      "bio": {
+        "en": "Inherited Dawud’s prophethood; taught the speech of birds and given dominion over jinn, men, and the wind.",
+        "ar": "ورث نبوة داود، وعُلّم منطق الطير وسُخّر له الجنّ والإنس والريح."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110023",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "shia",
+      "name": {
+        "en": "Shi‘a",
+        "ar": "شعيا"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 23,
+      "bio": {
+        "en": "Isaiah; advised the righteous king of his time and, according to Ibn Kathir, foretold later messengers.",
+        "ar": "شعيا؛ نصح ملك زمانه الصالح، وذكر ابن كثير أنه بشّر بمن يأتي من الرسل."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110024",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "aramaya",
+      "name": {
+        "en": "Aramaya",
+        "ar": "أرميا"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 24,
+      "bio": {
+        "en": "Jeremiah; warned his people and lived through the trials of Jerusalem as related by Ibn Kathir.",
+        "ar": "أرميا؛ أنذر قومه وعاش محنة بيت المقدس كما روى ابن كثير."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110025",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "daniel",
+      "name": {
+        "en": "Daniel",
+        "ar": "دانيال"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 25,
+      "bio": {
+        "en": "Preserved by Allah when cast among lions; a righteous figure of the Babylonian captivity in Ibn Kathir’s accounts.",
+        "ar": "نجّاه الله إذ أُلقي إلى الأسود؛ من صلحاء سبي بابل في روايات ابن كثير."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110026",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "uzair",
+      "name": {
+        "en": "Uzair",
+        "ar": "عزير"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 26,
+      "bio": {
+        "en": "Ezra; the Quranic account of one who passed by ruined dwellings and whom Allah caused to die a hundred years then raised.",
+        "ar": "عزير؛ صاحب قصة من مرّ على قرية خاوية فأماته الله مائة عام ثم بعثه."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110027",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "zakariyah",
+      "name": {
+        "en": "Zakariyah",
+        "ar": "زكريا"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 27,
+      "bio": {
+        "en": "Elderly prophet who cared for Maryam and prayed for an heir; granted Yahya in his old age.",
+        "ar": "نبي طاعن في السن كفل مريم ودعا بالذرية، فوُهب يحيى على الكبر."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110028",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "yahya",
+      "name": {
+        "en": "Yahya",
+        "ar": "يحيى"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 28,
+      "bio": {
+        "en": "Son of Zakariyah; given wisdom as a child, devout and merciful, holding fast to the Scripture.",
+        "ar": "ابن زكريا؛ أوتي الحكم صبيّاً، وكان تقيّاً رحيماً آخذاً بالكتاب بقوة."
+      },
+      "createdAt": "2026-09-03T00:00:00.000Z",
+      "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "10a1b2c3-d4e5-4060-8071-111111110029",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "slug": "isa",
+      "name": {
+        "en": "Isa",
+        "ar": "عيسى"
+      },
+      "honorific": {
+        "en": "peace be upon him",
+        "ar": "عليه السلام"
+      },
+      "isKeyFigure": false,
+      "sortOrder": 29,
+      "bio": {
+        "en": "Son of Maryam, created by Allah’s word; a messenger supported with clear signs, not a son of God.",
+        "ar": "ابن مريم خلقه الله بكلمة منه، رسول مؤيّد بالآيات، وليس ابناً لله."
       },
       "createdAt": "2026-09-03T00:00:00.000Z",
       "updatedAt": "2026-09-03T00:00:00.000Z"
@@ -69,7 +675,10 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111002",
       "categoryId": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
       "slug": "muhammad",
-      "name": { "en": "Muhammad", "ar": "محمد" },
+      "name": {
+        "en": "Muhammad",
+        "ar": "محمد"
+      },
       "honorific": {
         "en": "peace and blessings of Allah be upon him",
         "ar": "صلى الله عليه وسلم"
@@ -87,8 +696,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111101",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "abu-bakr-as-siddiq",
-      "name": { "en": "Abu Bakr as-Siddiq", "ar": "أبو بكر الصديق" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Abu Bakr as-Siddiq",
+        "ar": "أبو بكر الصديق"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 1,
       "bio": {
@@ -102,8 +717,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111102",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "umar-ibn-al-khattab",
-      "name": { "en": "Umar ibn al-Khattab", "ar": "عمر بن الخطاب" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Umar ibn al-Khattab",
+        "ar": "عمر بن الخطاب"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 2,
       "bio": {
@@ -117,8 +738,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111103",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "uthman-ibn-affan",
-      "name": { "en": "Uthman ibn Affan", "ar": "عثمان بن عفان" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Uthman ibn Affan",
+        "ar": "عثمان بن عفان"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 3,
       "bio": {
@@ -132,8 +759,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111104",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "ali-ibn-abi-talib",
-      "name": { "en": "Ali ibn Abi Talib", "ar": "علي بن أبي طالب" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Ali ibn Abi Talib",
+        "ar": "علي بن أبي طالب"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 4,
       "bio": {
@@ -147,8 +780,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111105",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "talhah-ibn-ubaydullah",
-      "name": { "en": "Talhah ibn Ubaydullah", "ar": "طلحة بن عبيد الله" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Talhah ibn Ubaydullah",
+        "ar": "طلحة بن عبيد الله"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 5,
       "bio": {
@@ -162,8 +801,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111106",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "az-zubayr-ibn-al-awwam",
-      "name": { "en": "Az-Zubayr ibn al-Awwam", "ar": "الزبير بن العوام" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Az-Zubayr ibn al-Awwam",
+        "ar": "الزبير بن العوام"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 6,
       "bio": {
@@ -177,8 +822,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111107",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "abd-al-rahman-ibn-awf",
-      "name": { "en": "Abd al-Rahman ibn Awf", "ar": "عبد الرحمن بن عوف" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Abd al-Rahman ibn Awf",
+        "ar": "عبد الرحمن بن عوف"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 7,
       "bio": {
@@ -192,8 +843,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111108",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "sad-ibn-abi-waqqas",
-      "name": { "en": "Sa'd ibn Abi Waqqas", "ar": "سعد بن أبي وقاص" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Sa'd ibn Abi Waqqas",
+        "ar": "سعد بن أبي وقاص"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 8,
       "bio": {
@@ -207,8 +864,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111109",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "said-ibn-zayd",
-      "name": { "en": "Sa'id ibn Zayd", "ar": "سعيد بن زيد" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Sa'id ibn Zayd",
+        "ar": "سعيد بن زيد"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 9,
       "bio": {
@@ -222,8 +885,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111110",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "abu-ubaydah-ibn-al-jarrah",
-      "name": { "en": "Abu Ubaydah ibn al-Jarrah", "ar": "أبو عبيدة بن الجراح" },
-      "honorific": { "en": "may Allah be pleased with him", "ar": "رضي الله عنه" },
+      "name": {
+        "en": "Abu Ubaydah ibn al-Jarrah",
+        "ar": "أبو عبيدة بن الجراح"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with him",
+        "ar": "رضي الله عنه"
+      },
       "isKeyFigure": true,
       "sortOrder": 10,
       "bio": {
@@ -237,8 +906,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111111",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "khadijah-bint-khuwaylid",
-      "name": { "en": "Khadijah bint Khuwaylid", "ar": "خديجة بنت خويلد" },
-      "honorific": { "en": "may Allah be pleased with her", "ar": "رضي الله عنها" },
+      "name": {
+        "en": "Khadijah bint Khuwaylid",
+        "ar": "خديجة بنت خويلد"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with her",
+        "ar": "رضي الله عنها"
+      },
       "isKeyFigure": true,
       "sortOrder": 11,
       "bio": {
@@ -252,8 +927,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111112",
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "slug": "aishah-bint-abi-bakr",
-      "name": { "en": "Aishah bint Abi Bakr", "ar": "عائشة بنت أبي بكر" },
-      "honorific": { "en": "may Allah be pleased with her", "ar": "رضي الله عنها" },
+      "name": {
+        "en": "Aishah bint Abi Bakr",
+        "ar": "عائشة بنت أبي بكر"
+      },
+      "honorific": {
+        "en": "may Allah be pleased with her",
+        "ar": "رضي الله عنها"
+      },
       "isKeyFigure": true,
       "sortOrder": 12,
       "bio": {
@@ -267,8 +948,14 @@
       "id": "10a1b2c3-d4e5-4060-8071-111111111201",
       "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
       "slug": "uways-al-qarni",
-      "name": { "en": "Uways al-Qarni", "ar": "أويس القرني" },
-      "honorific": { "en": "may Allah have mercy on him", "ar": "رحمه الله" },
+      "name": {
+        "en": "Uways al-Qarni",
+        "ar": "أويس القرني"
+      },
+      "honorific": {
+        "en": "may Allah have mercy on him",
+        "ar": "رحمه الله"
+      },
       "isKeyFigure": false,
       "sortOrder": 1,
       "bio": {
@@ -285,7 +972,10 @@
       "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
       "figureId": "10a1b2c3-d4e5-4060-8071-111111111001",
       "slug": "ibrahim-and-the-fire",
-      "title": { "en": "Ibrahim and the Fire", "ar": "إبراهيم والنار" },
+      "title": {
+        "en": "Ibrahim and the Fire",
+        "ar": "إبراهيم والنار"
+      },
       "content": {
         "en": "When Ibrahim, peace be upon him, broke the idols of his people, they kindled a great fire and cast him into it. Allah commanded: \"O fire, be coolness and safety upon Ibrahim.\" The fire did not harm him, and his call to tawhid remained.",
         "ar": "لما كسّر إبراهيم عليه السلام أصنام قومه أوقدوا له ناراً عظيمة وألقوه فيها. فقال الله تعالى: «يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَىٰ إِبْرَاهِيمَ». فلم تمسّه النار بسوء، وبقي نداؤه بالتوحيد."
@@ -344,7 +1034,10 @@
       "categoryId": "1a7b3c9e-4d2f-4e18-8c6a-2f9d0b5e7a13",
       "figureId": "10a1b2c3-d4e5-4060-8071-111111111002",
       "slug": "the-first-revelation",
-      "title": { "en": "The First Revelation", "ar": "بدء الوحي" },
+      "title": {
+        "en": "The First Revelation",
+        "ar": "بدء الوحي"
+      },
       "content": {
         "en": "The Messenger of Allah ﷺ would seclude himself in the cave of Hira. Jibril came to him and said, \"Read.\" He replied, \"I am not one who reads.\" The angel pressed him, then said: \"Read in the name of your Lord who created.\" Thus the first verses of Surah Al-Alaq were revealed.",
         "ar": "كان رسول الله ﷺ يتحنّث في غار حراء. فجاءه جبريل فقال: اقرأ. قال: ما أنا بقارئ. فغطّه ثم قال: «اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ». فنزلت أوائل سورة العلق."
@@ -403,7 +1096,10 @@
       "categoryId": "2b8c4d0f-5e3a-4f29-9d7b-3a0e1c6f8b24",
       "figureId": "10a1b2c3-d4e5-4060-8071-111111111101",
       "slug": "abu-bakr-in-the-cave",
-      "title": { "en": "Abu Bakr in the Cave", "ar": "أبو بكر في الغار" },
+      "title": {
+        "en": "Abu Bakr in the Cave",
+        "ar": "أبو بكر في الغار"
+      },
       "content": {
         "en": "During the Hijrah, the Prophet ﷺ and Abu Bakr hid in the cave of Thawr. Abu Bakr said, \"If one of them looks at his feet he will see us.\" The Prophet ﷺ replied, \"What do you think of two, the third of whom is Allah?\"",
         "ar": "في الهجرة اختبأ النبي ﷺ وأبو بكر في غار ثور. فقال أبو بكر: لو أن أحدهم نظر إلى قدميه لأبصرنا. فقال النبي ﷺ: «ما ظنك باثنين الله ثالثهما؟»"
@@ -462,7 +1158,10 @@
       "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
       "figureId": "10a1b2c3-d4e5-4060-8071-111111111201",
       "slug": "uways-al-qarni-of-yemen",
-      "title": { "en": "Uways al-Qarni of Yemen", "ar": "أويس القرني من أهل اليمن" },
+      "title": {
+        "en": "Uways al-Qarni of Yemen",
+        "ar": "أويس القرني من أهل اليمن"
+      },
       "content": {
         "en": "The Prophet ﷺ told Umar and Ali of a man from Yemen named Uways. He would have a white mark from illness, and he was deeply devoted to his mother. The Prophet ﷺ instructed them: if they met him, to ask him to seek forgiveness for them.",
         "ar": "أخبر النبي ﷺ عمر وعلياً برجل من اليمن اسمه أويس، به بياض من مرض، وكان بارّاً بوالدته. وأمرهما إن لقياه أن يستغفرا به."
@@ -515,6 +1214,126 @@
       ],
       "createdAt": "2026-09-03T00:00:00.000Z",
       "updatedAt": "2026-09-03T00:00:00.000Z"
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222010",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110016",
+      "slug": "musa-and-the-parting-of-the-sea",
+      "title": {
+        "en": "Musa and the Parting of the Sea",
+        "ar": "موسى وانفلاق البحر"
+      },
+      "content": {
+        "en": "Trapped between Pharaoh’s army and the sea, Musa said, “Indeed, with me is my Lord; He will guide me.” Allah commanded him to strike the sea; it parted into dry paths, and the Children of Israel crossed in safety while Pharaoh was drowned.",
+        "ar": "لما حُصر موسى بين جند فرعون والبحر قال: «إِنَّ مَعِيَ رَبِّي سَيَهْدِينِ». فأمره الله أن يضرب البحر فانفلق طرقاً يبساً، فعبر بنو إسرائيل سالمين وأُغرق فرعون."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets; Quran 26:61-66",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/musa-and-the-sea.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/musa-and-the-sea.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 90,
+        "fileSizeBytes": 1440000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/musa-and-the-sea.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/musa-and-the-sea.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Musa and the Parting of the Sea",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/musa.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Trapped between Pharaoh’s army and the sea, Musa said, “Indeed, with me is my Lord; He will guide me.”",
+          "textAr": "لما حُصر موسى بين جند فرعون والبحر قال: «إِنَّ مَعِيَ رَبِّي سَيَهْدِينِ»."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Allah commanded him to strike the sea; it parted into dry paths.",
+          "textAr": "فأمره الله أن يضرب البحر فانفلق طرقاً يبساً."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "The Children of Israel crossed in safety while Pharaoh was drowned.",
+          "textAr": "فعبر بنو إسرائيل سالمين وأُغرق فرعون."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-222222222011",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110015",
+      "slug": "yunus-in-the-belly-of-the-whale",
+      "title": {
+        "en": "Yunus in the Belly of the Whale",
+        "ar": "يونس في بطن الحوت"
+      },
+      "content": {
+        "en": "In three layers of darkness, Yunus called out: “There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.” Allah answered him, delivered him from the whale, and caused a plant to grow over him.",
+        "ar": "في ظلمات ثلاث نادى يونس: «لَا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ». فاستجاب الله له ونجّاه من الحوت وأنبت عليه شجرة."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets; Quran 21:87-88; 37:139-148",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/yunus-and-the-whale.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/yunus-and-the-whale.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 85,
+        "fileSizeBytes": 1360000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/yunus-and-the-whale.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/yunus-and-the-whale.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Yunus in the Belly of the Whale",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/yunus.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 28000,
+          "textEn": "In three layers of darkness, Yunus called out the prayer of tawhid and repentance.",
+          "textAr": "في ظلمات ثلاث نادى يونس بدعاء التوحيد والتوبة."
+        },
+        {
+          "startMs": 28000,
+          "endMs": 56000,
+          "textEn": "Allah answered him and delivered him from the belly of the whale.",
+          "textAr": "فاستجاب الله له ونجّاه من بطن الحوت."
+        },
+        {
+          "startMs": 56000,
+          "endMs": 85000,
+          "textEn": "He was cast onto the shore, and Allah caused a plant to grow over him.",
+          "textAr": "فألقي إلى الشاطئ وأنبت الله عليه شجرة."
+        }
+      ]
     }
   ]
 }

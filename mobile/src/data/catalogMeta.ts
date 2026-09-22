@@ -6,7 +6,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     title: 'Prophets',
     titleAr: 'قصص الأنبياء',
     subtitle: 'Qisas al-Anbiya',
-    description: 'Timeless accounts of the messengers of Allah, grounded in Quranic verses and authentic tafsir.',
+    description: 'Timeless accounts of the messengers of Allah, ordered as in Ibn Kathir’s Stories of the Prophets and grounded in Quranic verses and authentic tafsir.',
     countLabel: 'Stories',
     accentColor: '#0F766E',
     bgTint: '#E6F4F1',

@@ -14,6 +14,7 @@ import {
 import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
+import ProphetsRoster from '../components/ProphetsRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
 import {
@@ -154,6 +155,8 @@ export default function ExploreScreen() {
             />
           ))}
         </ScrollView>
+
+        {selectedSection === 'qisas-al-anbiya' ? <ProphetsRoster /> : null}
 
         {/* Search */}
         <View
