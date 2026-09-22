@@ -13,7 +13,6 @@ export const DISPLAY_FONT_FAMILY =
 export const BODY_FONT_FAMILY =
   Platform.OS === 'web' ? 'Inter, system-ui, sans-serif' : 'Inter';
 
-export type AppMode = 'standard' | 'kids';
 export type ColorScheme = 'light' | 'dark';
 export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah' | 'gleanings';
 
@@ -142,7 +141,7 @@ export const kidsGradients: Record<SectionSlug, readonly [string, string]> = {
 
 /** Shared app-level gradients keyed by intent rather than by section. */
 export const brandGradients = {
-  emerald: { light: ['#0F766E', '#115E59'] as const, dark: ['#2DD4BF', '#0F766E'] as const },
+  emerald: { light: ['#064E3B', '#047857'] as const, dark: ['#10B981', '#064E3B'] as const },
   gold: { light: ['#D97706', '#B45309'] as const, dark: ['#FBBF24', '#D97706'] as const },
   night: { light: ['#1C1917', '#0F172A', '#020617'] as const, dark: ['#121C19', '#0B1220', '#020617'] as const },
   verse: {
@@ -195,8 +194,8 @@ export type ThemeColors = {
 };
 
 const lightColors: ThemeColors = {
-  paper: '#F8F5EC',
-  paperAlt: '#F1EDE1',
+  paper: '#FCFBF7',
+  paperAlt: '#F7F4EC',
   card: '#FFFFFF',
   cardAlt: '#FBF9F3',
   border: '#E2D9C8',
@@ -207,9 +206,9 @@ const lightColors: ThemeColors = {
   gold: '#B45309',
   goldSoft: '#FEF3C7',
   goldDark: '#78350F',
-  emerald: '#0F766E',
-  emeraldLight: '#CCFBF1',
-  emeraldBg: '#E6F4F1',
+  emerald: '#064E3B',
+  emeraldLight: '#D1FAE5',
+  emeraldBg: '#ECFDF5',
   azure: '#0284C7',
   azureLight: '#E0F2FE',
   azureBg: '#F0F9FF',
@@ -231,21 +230,21 @@ const lightColors: ThemeColors = {
 };
 
 const darkColors: ThemeColors = {
-  paper: '#090F0D',
-  paperAlt: '#0D1512',
-  card: '#121C19',
-  cardAlt: '#16221E',
-  border: '#23342E',
-  borderSoft: '#1A2723',
+  paper: '#0F172A',
+  paperAlt: '#0B1220',
+  card: '#11201B',
+  cardAlt: '#143028',
+  border: '#1E3A32',
+  borderSoft: '#172A24',
   ink: '#F8FAFC',
   inkMuted: '#CBD5E1',
   inkSubtle: '#94A3B8',
   gold: '#F59E0B',
   goldSoft: '#78350F',
   goldDark: '#FDE68A',
-  emerald: '#14B8A6',
-  emeraldLight: '#115E59',
-  emeraldBg: '#0D2D29',
+  emerald: '#10B981',
+  emeraldLight: '#064E3B',
+  emeraldBg: '#022C22',
   azure: '#38BDF8',
   azureLight: '#0369A1',
   azureBg: '#082F49',
@@ -259,10 +258,10 @@ const darkColors: ThemeColors = {
   yellow: '#FBBF24',
   purple: '#C084FC',
   mint: '#34D399',
-  navBg: '#0F1715',
-  navBorder: '#23342E',
-  subtleBg: '#1A2723',
-  trackBg: '#23342E',
+  navBg: '#0B1220',
+  navBorder: '#1E3A32',
+  subtleBg: '#143028',
+  trackBg: '#1E3A32',
   scrim: 'rgba(2, 6, 23, 0.72)',
 };
 
@@ -402,8 +401,8 @@ export const palette = {
         darkText: '#BAE6FD',
       },
       gleanings: {
-        name: 'Gleanings',
-        nameAr: 'قبسات',
+        name: 'Narratives & Successors',
+        nameAr: 'آثار وتابعون',
         primary: '#C2410C',
         secondary: '#9A3412',
         light: '#FFF7ED',
@@ -473,10 +472,7 @@ export const palette = {
   },
 };
 
-export function getColors(isDark: boolean, isKids: boolean): ThemeColors {
-  if (isKids) {
-    return isDark ? kidsDarkColors : kidsLightColors;
-  }
+export function getColors(isDark: boolean): ThemeColors {
   return isDark ? darkColors : lightColors;
 }
 

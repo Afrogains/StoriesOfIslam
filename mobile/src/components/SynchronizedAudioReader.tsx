@@ -330,11 +330,7 @@ export default function SynchronizedAudioReader({
             accessibilityLabel="Story text"
           >
             <Overline style={styles.transcriptLabel}>
-              {story.audioUrl
-                ? 'Follow along'
-                : story.honorific?.toLowerCase().includes('children')
-                  ? 'Story for kids'
-                  : 'Full story'}
+              {story.audioUrl ? 'Follow along' : 'Full story'}
             </Overline>
             {audioError ? (
               <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>

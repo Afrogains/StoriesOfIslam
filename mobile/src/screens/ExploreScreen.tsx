@@ -12,12 +12,11 @@ import {
   X,
 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
 import ProphetsRoster from '../components/ProphetsRoster';
-import ProphetStoryPage from '../components/ProphetStoryPage';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
-import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
+import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
   Caption,
   Card,
@@ -38,15 +37,13 @@ import type {
 } from '../types/catalog';
 import { useCatalog } from '../data/CatalogProvider';
 import {
-  getProphetChapter,
   preferProphetCatalogStory,
   prophetChapterToStoryItem,
 } from '../data/prophetChapters';
-import { storiesForProphetSlug, toReaderStory } from '../data/storyAdapters';
+import { storiesForProphetSlug } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import type { ProphetFigure } from '../data/theProphets';
 import { theProphets } from '../data/theProphets';
-import type { ProphetChapter } from '../data/prophetChapters';
 
 type GradeFilter = 'all' | AuthenticityGrade;
 type SortKey = 'default' | 'duration' | 'title';
@@ -81,12 +78,7 @@ export default function ExploreScreen() {
   const [sortBy, setSortBy] = useState<SortKey>('default');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
-  const [activeChapter, setActiveChapter] = useState<{
-    chapter: ProphetChapter;
-    prophet: ProphetFigure;
-    listenStory: StoryItem | null;
-  } | null>(null);
-  const [listenMode, setListenMode] = useState(false);
+  const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
 
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
@@ -123,23 +115,20 @@ export default function ExploreScreen() {
     filteredStories.reduce((sum, story) => sum + story.durationMs, 0) / 60000,
   );
 
-  const openProphetStories = (prophet: ProphetFigure) => {
+  const resolveProphetStory = (prophet: ProphetFigure): StoryItem | null => {
     const matches = storiesForProphetSlug(stories, prophet.slug, prophet.nameEn);
     const preferred = preferProphetCatalogStory(matches, prophet.nameEn);
-    const listenStory = prophetChapterToStoryItem(prophet.slug, preferred);
-    const chapter = getProphetChapter(prophet.slug);
-
-    if (chapter) {
-      setListenMode(false);
-      setActiveChapter({ chapter, prophet, listenStory });
-      return;
-    }
-
-    if (listenStory) setActiveStory(listenStory);
-    else if (preferred) setActiveStory(preferred);
+    return prophetChapterToStoryItem(prophet.slug, preferred) ?? preferred ?? null;
   };
 
-  const openCatalogStory = (story: StoryItem) => {
+  const openProphetStories = (prophet: ProphetFigure) => {
+    const story = resolveProphetStory(prophet);
+    if (!story) return;
+    setActiveStory(story);
+    setSessionMode('read');
+  };
+
+  const openStory = (story: StoryItem, mode: Exclude<StorySessionMode, null>) => {
     if (story.sectionSlug === 'qisas-al-anbiya') {
       const prophet =
         theProphets.find(
@@ -149,11 +138,16 @@ export default function ExploreScreen() {
             item.nameEn.toLowerCase().includes(story.figureName.toLowerCase()),
         ) ?? null;
       if (prophet) {
-        openProphetStories(prophet);
-        return;
+        const full = resolveProphetStory(prophet);
+        if (full) {
+          setActiveStory(full);
+          setSessionMode(mode);
+          return;
+        }
       }
     }
     setActiveStory(story);
+    setSessionMode(mode);
   };
 
   const resetAll = () => {
@@ -349,7 +343,12 @@ export default function ExploreScreen() {
         ) : (
           <View style={styles.list}>
             {filteredStories.map((story) => (
-              <StoryCard key={story.id} story={story} onPress={() => openCatalogStory(story)} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                onRead={() => openStory(story, 'read')}
+                onListen={() => openStory(story, 'listen')}
+              />
             ))}
 
             <Small align="center" style={styles.listEnd}>
@@ -359,52 +358,14 @@ export default function ExploreScreen() {
         )}
       </ScrollView>
 
-      <Modal
-        visible={activeChapter !== null && !listenMode}
-        animationType="slide"
-        presentationStyle="fullScreen"
-        onRequestClose={() => setActiveChapter(null)}
-      >
-        {activeChapter ? (
-          <ProphetStoryPage
-            chapter={activeChapter.chapter}
-            honorificEn={activeChapter.prophet.honorificEn}
-            honorificAr={activeChapter.prophet.honorificAr}
-            onClose={() => setActiveChapter(null)}
-            onListen={
-              activeChapter.listenStory
-                ? () => setListenMode(true)
-                : undefined
-            }
-          />
-        ) : null}
-      </Modal>
-
-      <Modal
-        visible={activeStory !== null || (activeChapter !== null && listenMode)}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => {
-          setActiveStory(null);
-          setListenMode(false);
+      <StorySessionModal
+        story={activeStory}
+        mode={sessionMode}
+        onChangeMode={(mode) => {
+          setSessionMode(mode);
+          if (!mode) setActiveStory(null);
         }}
-      >
-        {activeChapter && listenMode && activeChapter.listenStory ? (
-          <SynchronizedAudioReader
-            story={toReaderStory(activeChapter.listenStory)}
-            sectionSlug="qisas-al-anbiya"
-            initiallyExpanded
-            onClose={() => setListenMode(false)}
-          />
-        ) : activeStory ? (
-          <SynchronizedAudioReader
-            story={toReaderStory(activeStory)}
-            sectionSlug={activeStory.sectionSlug}
-            initiallyExpanded
-            onClose={() => setActiveStory(null)}
-          />
-        ) : null}
-      </Modal>
+      />
     </View>
   );
 }

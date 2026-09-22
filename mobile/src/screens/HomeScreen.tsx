@@ -16,10 +16,10 @@ import {
 } from 'lucide-react-native';
 import type { LucideIcon } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
-import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
+import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
   ArabicBody,
   ArabicInline,
@@ -42,7 +42,6 @@ import {
 } from '../components/ui';
 import { useCatalog } from '../data/CatalogProvider';
 import { sectionsMeta } from '../data/catalogMeta';
-import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import type { MediaFilter, SectionSlug, StoryItem } from '../types/catalog';
@@ -70,6 +69,7 @@ export default function HomeScreen() {
   const [mediaFilter, setMediaFilter] = useState<MediaFilter>('all');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
+  const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
 
   const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
   const featuredStory = stories[0];
@@ -364,10 +364,13 @@ export default function HomeScreen() {
 
                 <PlayButton
                   playing={false}
-                  onPress={() => setActiveStory(continueStory)}
+                  onPress={() => {
+                    setActiveStory(continueStory);
+                    setSessionMode('listen');
+                  }}
                   gradient={emeraldGradient}
                   icons={{ play: Play, pause: Pause }}
-                  accessibilityLabel={`Open ${continueStory.title}`}
+                  accessibilityLabel={`Continue listening to ${continueStory.title}`}
                 />
               </Row>
 
@@ -380,7 +383,7 @@ export default function HomeScreen() {
                 />
                 <Row justify="space-between" style={styles.playerMeta}>
                   <Caption color="#94A3B8">
-                    Ready to begin
+                    Continue listening
                   </Caption>
                   <Caption color="#FDE68A">{continueStory.durationLabel}</Caption>
                 </Row>
@@ -389,12 +392,13 @@ export default function HomeScreen() {
               <Pressable
                 onPress={() => {
                   setActiveStory(continueStory);
+                  setSessionMode('read');
                 }}
                 style={({ pressed }) => [styles.playerAction, pressed && styles.pressed]}
                 accessibilityRole="button"
-                accessibilityLabel="Open the synchronized reader"
+                accessibilityLabel="Open reading mode"
               >
-                <Caption color="#FFFFFF">Open synchronized reader</Caption>
+                <Caption color="#FFFFFF">Read Story</Caption>
                 <ArrowRight size={12} color="#FFFFFF" />
               </Pressable>
             </LinearGradient>
@@ -420,27 +424,31 @@ export default function HomeScreen() {
         ) : (
           <View style={styles.list}>
             {filteredStories.map((story) => (
-              <StoryCard key={story.id} story={story} onPress={() => setActiveStory(story)} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                onRead={() => {
+                  setActiveStory(story);
+                  setSessionMode('read');
+                }}
+                onListen={() => {
+                  setActiveStory(story);
+                  setSessionMode('listen');
+                }}
+              />
             ))}
           </View>
         )}
       </ScrollView>
 
-      <Modal
-        visible={activeStory !== null}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setActiveStory(null)}
-      >
-        {activeStory ? (
-          <SynchronizedAudioReader
-            story={toReaderStory(activeStory)}
-            sectionSlug={activeStory.sectionSlug}
-            initiallyExpanded
-            onClose={() => setActiveStory(null)}
-          />
-        ) : null}
-      </Modal>
+      <StorySessionModal
+        story={activeStory}
+        mode={sessionMode}
+        onChangeMode={(mode) => {
+          setSessionMode(mode);
+          if (!mode) setActiveStory(null);
+        }}
+      />
     </View>
   );
 }

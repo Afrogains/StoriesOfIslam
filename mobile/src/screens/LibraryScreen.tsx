@@ -1,11 +1,11 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { BookmarkX, Clock, Headphones, LogIn, LogOut, Sparkles, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Alert, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useAuth } from '../auth/AuthProvider';
 import ScreenHeader from '../components/ScreenHeader';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
-import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
+import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
   ArabicInline,
   Badge,
@@ -24,7 +24,6 @@ import {
 } from '../components/ui';
 import { sectionsMeta } from '../data/catalogMeta';
 import type { SectionSlug, StoryItem } from '../types/catalog';
-import { toReaderStory } from '../data/storyAdapters';
 import { useLibrary } from '../hooks/useLibrary';
 import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import { apiRequest } from '../services/api';
@@ -35,6 +34,7 @@ export default function LibraryScreen() {
   const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
+  const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
 
   const visible = useMemo(
     () =>
@@ -223,7 +223,19 @@ export default function LibraryScreen() {
             ) : (
               <View style={styles.list}>
                 {visible.map((story) => (
-                  <StoryCard key={story.id} story={story} onPress={() => setActiveStory(story)} variant="compact" />
+                  <StoryCard
+                    key={story.id}
+                    story={story}
+                    variant="compact"
+                    onRead={() => {
+                      setActiveStory(story);
+                      setSessionMode('read');
+                    }}
+                    onListen={() => {
+                      setActiveStory(story);
+                      setSessionMode('listen');
+                    }}
+                  />
                 ))}
               </View>
             )}
@@ -242,21 +254,14 @@ export default function LibraryScreen() {
         )}
       </ScrollView>
 
-      <Modal
-        visible={activeStory !== null}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setActiveStory(null)}
-      >
-        {activeStory ? (
-          <SynchronizedAudioReader
-            story={toReaderStory(activeStory)}
-            sectionSlug={activeStory.sectionSlug}
-            initiallyExpanded
-            onClose={() => setActiveStory(null)}
-          />
-        ) : null}
-      </Modal>
+      <StorySessionModal
+        story={activeStory}
+        mode={sessionMode}
+        onChangeMode={(mode) => {
+          setSessionMode(mode);
+          if (!mode) setActiveStory(null);
+        }}
+      />
     </View>
   );
 }

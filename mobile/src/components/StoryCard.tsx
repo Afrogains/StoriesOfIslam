@@ -5,9 +5,7 @@ import {
   Clock,
   Headphones,
   Library,
-  Play,
-  Sparkles,
-  Users,
+  User,
   type LucideIcon,
 } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -24,6 +22,7 @@ import {
   Divider,
   GradientButton,
   OutlineBadge,
+  OutlineButton,
   Row,
   Small,
   Title,
@@ -31,19 +30,21 @@ import {
 } from './ui';
 
 export const sectionIcons: Record<SectionSlug, LucideIcon> = {
-  'qisas-al-anbiya': BookOpen,
-  'seerah-shamail': Sparkles,
-  sahabah: Users,
+  'qisas-al-anbiya': User,
+  'seerah-shamail': BookOpen,
+  sahabah: User,
   gleanings: Library,
 };
 
 export default function StoryCard({
   story,
-  onPress,
+  onRead,
+  onListen,
   variant = 'full',
 }: {
   story: StoryItem;
-  onPress: () => void;
+  onRead: () => void;
+  onListen: () => void;
   /** `compact` drops the summary and key-wisdom block for dense lists. */
   variant?: 'full' | 'compact';
 }) {
@@ -52,15 +53,10 @@ export default function StoryCard({
   const meta = sectionsMeta[story.sectionSlug];
   const accent = sectionAccent(story.sectionSlug, isDark);
   const saved = isSaved(story.id);
+  const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
 
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${story.hasAudio ? 'Open and listen to' : 'Open and read'} ${story.title}`}
-      style={({ pressed }) => [pressed && styles.pressed]}
-    >
-      <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
+    <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
       <Row justify="space-between" style={styles.metaRow}>
         <Row gap={6}>
           <Badge label={meta.title} color={accent.badgeText} background={accent.badgeBg} />
@@ -68,10 +64,7 @@ export default function StoryCard({
         </Row>
 
         <Pressable
-          onPress={(event) => {
-            event.stopPropagation();
-            toggleSaved(story.id);
-          }}
+          onPress={() => toggleSaved(story.id)}
           hitSlop={8}
           style={styles.bookmark}
           accessibilityRole="button"
@@ -97,7 +90,9 @@ export default function StoryCard({
 
       {variant === 'full' ? (
         <>
-          <Body style={styles.summary}>{story.summary}</Body>
+          <Body style={styles.summary} numberOfLines={3}>
+            {story.summary}
+          </Body>
 
           {story.keyTakeaway ? (
             <View
@@ -126,35 +121,41 @@ export default function StoryCard({
 
       <Divider style={styles.divider} />
 
-      <Row justify="space-between">
+      <Row justify="space-between" style={styles.metaFooter}>
         <Row gap={5}>
-          {story.hasAudio ? (
-            <Headphones size={13} color={colors.inkSubtle} />
-          ) : (
-            <BookOpen size={13} color={colors.inkSubtle} />
-          )}
-          <Caption>{story.hasAudio ? `${story.durationLabel} audio` : 'Full text'}</Caption>
-          <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
           <Clock size={12} color={colors.inkSubtle} />
           <Caption>{story.durationLabel}</Caption>
+          <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
+          <Caption>{story.hasAudio ? 'Audio ready' : 'Text first'}</Caption>
         </Row>
+      </Row>
 
-        <GradientButton
-          label={story.hasAudio ? 'Open' : 'Read'}
-          icon={story.hasAudio ? Play : BookOpen}
-          gradient={accent.accentGradient}
-          size="sm"
-          onPress={onPress}
-          accessibilityLabel={`Open full story: ${story.title}`}
-        />
+      <Row gap={8} style={styles.ctaRow}>
+        <View style={styles.ctaFlex}>
+          <OutlineButton
+            label="Read Story"
+            icon={BookOpen}
+            onPress={onRead}
+            accessibilityLabel={`Read story: ${story.title}`}
+          />
+        </View>
+        <View style={styles.ctaFlex}>
+          <GradientButton
+            label="Listen"
+            icon={Headphones}
+            gradient={accent.accentGradient}
+            size="sm"
+            onPress={onListen}
+            disabled={!canListen}
+            accessibilityLabel={`Listen to: ${story.title}`}
+          />
+        </View>
       </Row>
     </Card>
-    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  pressed: { opacity: 0.92 },
   metaRow: { marginBottom: 12 },
   bookmark: { padding: 2 },
   arabic: { marginTop: 2 },
@@ -169,5 +170,8 @@ const styles = StyleSheet.create({
   wisdomLabel: { letterSpacing: 1, fontWeight: '800' },
   wisdomText: { marginTop: 3, fontWeight: '600' },
   divider: { marginTop: 16, marginBottom: 12 },
+  metaFooter: { marginBottom: 12 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
+  ctaRow: { marginTop: 2 },
+  ctaFlex: { flex: 1 },
 });

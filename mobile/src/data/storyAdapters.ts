@@ -1,4 +1,4 @@
-import type { KidsStoryCard, StoryItem } from '../types/catalog';
+import type { StoryItem } from '../types/catalog';
 import type { ReaderStory, StoryCue } from '../types/reader';
 
 function isPlaceholderAudio(url?: string | null): boolean {
@@ -79,34 +79,6 @@ export function toReaderStory(story: StoryItem): ReaderStory {
   };
 }
 
-export function kidsStoryToReaderStory(story: KidsStoryCard): ReaderStory {
-  const durationMs = story.durationMs ?? 30_000;
-  const playableUrl = isPlaceholderAudio(story.audioUrl) ? '' : (story.audioUrl ?? '');
-  const cues = story.timedCues?.length
-    ? story.timedCues.map((cue) => ({
-        text: cue.textEn,
-        textAr: cue.textAr,
-        startMs: cue.startMs,
-        endMs: cue.endMs,
-      }))
-    : cuesFromFullText(story.summary, story.titleAr, durationMs);
-  return {
-    id: story.id,
-    slug: story.id,
-    title: story.title,
-    titleAr: story.titleAr,
-    figureName: story.figureName,
-    figureNameAr: story.titleAr,
-    honorific: 'a loving story for children',
-    honorificAr: 'قصة للأطفال',
-    sourceCitation: 'Authentic Islamic Children’s Story Collection',
-    authenticityGrade: 'sahih',
-    audioUrl: playableUrl,
-    artworkUrl: story.artworkUrl ?? '',
-    durationMs,
-    cues,
-  };
-}
 
 /** Match a prophet roster entry to catalog stories for that figure. */
 export function storiesForProphetSlug(
