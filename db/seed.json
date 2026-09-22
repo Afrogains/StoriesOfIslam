@@ -977,7 +977,7 @@
         "ar": "إبراهيم والنار"
       },
       "content": {
-        "en": "When Ibrahim called his people to tawhid and broke their idols, they kindled a great fire and cast him into it. Allah commanded: \"O fire, be coolness and safety upon Ibrahim.\" The fire did not harm him. Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned that created things cannot be gods and called his father and people to the One Creator. He broke the idols, leaving the largest to expose their falsehood. They cast him into a great fire, but Allah commanded the fire to be coolness and safety upon him. He continued calling to tawhid. Later he left Hajar and Isma‘il in Makkah by Allah’s command, and with Isma‘il raised the foundations of the House. His life is the story of a friend of Allah who preferred truth over his people’s customs. Ibn Kathir gathers these trials to show courage, intellect, and trust in Allah.",
+        "en": "When Ibrahim called his people to tawhid and exposed the helplessness of their idols, they answered with fury rather than reason. They gathered wood, kindled a tremendous fire, and prepared a catapult to cast him in. Their aim was to make an example of anyone who insulted their gods. Ibrahim’s certainty did not break. He sought help from none but Allah. As he was thrown, Allah commanded the fire: “Be coolness and safety upon Ibrahim.” The blaze that should have consumed him became a place of safety; he walked out while their plot failed. The Quran preserves this as a sign that creation obeys its Creator, and that those who trust Allah are not abandoned when people unite upon falsehood. Ibn Kathir places the fire after Ibrahim’s breaking of the idols and his public challenge, teaching that da‘wah may meet violence—yet Allah’s protection is nearer than the heat of any flame.",
         "ar": "لما دعا إبراهيم قومه إلى التوحيد وكسّر أصنامهم أوقدوا ناراً عظيمة وألقوه فيها. فقال الله: يا نار كوني برداً وسلاماً على إبراهيم. فلم تمسّه بسوء. نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّهم أن المخلوق لا يكون إلهاً، ودعا أباه وقومه إلى الخالق الواحد. وكسّر الأصنام تاركاً كبيرها ليفضح باطلهم. فألقوه في نار عظيمة فجعلها الله برداً وسلاماً عليه. وواصل الدعوة، ثم أسكن هاجر وإسماعيل بمكة بأمر الله، ورفع مع إسماعيل قواعد البيت. فكانت حياته سيرة خليل آثر الحق على عادة قومه. وجمع ابن كثير هذه الابتلاءات لتظهر الشجاعة والعقل والتوكل."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -986,7 +986,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-and-the-fire.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 175,
+        "durationSeconds": 90,
         "fileSizeBytes": 1474560,
         "bitrateKbps": 128,
         "cdn": {
@@ -1009,33 +1009,27 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "When Ibrahim called his people to tawhid and broke their idols, they kindled a great fire and cast him into it. Allah commanded: \"O fire, be coolness and safety upon Ibrahim.\" The fire did not harm him.",
-          "textAr": "لما دعا إبراهيم قومه إلى التوحيد وكسّر أصنامهم أوقدوا ناراً عظيمة وألقوه فيها. فقال الله: يا نار كوني برداً وسلاماً على إبراهيم. فلم تمسّه بسوء."
+          "endMs": 22500,
+          "textEn": "When Ibrahim called his people to tawhid and exposed the helplessness of their idols, they answered with fury rather than reason. They gathered wood, kindled a tremendous fire, and prepared a catapult to cast him in.",
+          "textAr": "لما دعا إبراهيم قومه إلى التوحيد وكسّر أصنامهم أوقدوا ناراً عظيمة وألقوه فيها."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned that created things cannot be gods and called his father and people to the One Creator.",
-          "textAr": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّهم أن المخلوق لا يكون إلهاً، ودعا أباه وقومه إلى الخالق الواحد."
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "Their aim was to make an example of anyone who insulted their gods. Ibrahim’s certainty did not break.",
+          "textAr": "فقال الله: يا نار كوني برداً وسلاماً على إبراهيم."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "He broke the idols, leaving the largest to expose their falsehood. They cast him into a great fire, but Allah commanded the fire to be coolness and safety upon him.",
-          "textAr": "وكسّر الأصنام تاركاً كبيرها ليفضح باطلهم. فألقوه في نار عظيمة فجعلها الله برداً وسلاماً عليه."
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "He sought help from none but Allah. As he was thrown, Allah commanded the fire: “Be coolness and safety upon Ibrahim.” The blaze that should have consumed him became a place of safety; he walked out while their plot failed.",
+          "textAr": "فلم تمسّه بسوء."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "He continued calling to tawhid. Later he left Hajar and Isma‘il in Makkah by Allah’s command, and with Isma‘il raised the foundations of the House. His life is the story of a friend of Allah who preferred truth over his people’s customs.",
-          "textAr": "وواصل الدعوة، ثم أسكن هاجر وإسماعيل بمكة بأمر الله، ورفع مع إسماعيل قواعد البيت. فكانت حياته سيرة خليل آثر الحق على عادة قومه."
-        },
-        {
-          "startMs": 140000,
-          "endMs": 175000,
-          "textEn": "Ibn Kathir gathers these trials to show courage, intellect, and trust in Allah.",
-          "textAr": "وجمع ابن كثير هذه الابتلاءات لتظهر الشجاعة والعقل والتوكل."
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "The Quran preserves this as a sign that creation obeys its Creator, and that those who trust Allah are not abandoned when people unite upon falsehood. Ibn Kathir places the fire after Ibrahim’s breaking of the idols and his public challenge, teaching that da‘wah may meet violence—yet Allah’s protection is nearer than the heat of any flame.",
+          "textAr": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك."
         }
       ],
       "createdAt": "2026-09-03T00:00:00.000Z",
@@ -1237,7 +1231,7 @@
         "ar": "قصة موسى عليه السلام"
       },
       "content": {
-        "en": "Musa was saved as a baby from Pharaoh’s killing of sons, raised in the palace, then fled after an accidental killing. At the burning bush Allah spoke to him and sent him with Harun to Pharaoh. They showed clear signs; Pharaoh grew arrogant. Musa led the Children of Israel by night. Trapped between the army and the sea, he said, “Indeed, with me is my Lord; He will guide me.” The sea parted, and Pharaoh drowned. Allah revealed the Torah and continued guiding Musa through later trials of his people. Ibn Kathir’s long chapter is a school of courage, reliance, and truth before tyrants.",
+        "en": "Musa’s mother cast him into the river by revelation when Pharaoh was killing the sons of the Israelites. Pharaoh’s household picked him up; his sister watched, and he was returned to his mother’s breast under Allah’s plan. He grew in the palace, then fled after an accidental killing, finding shelter in Madyan and marriage after helping two women at the well. At the burning bush in the sacred valley, Allah spoke to him, gave him signs—the staff and the white hand—and sent him with Harun to Pharaoh. They demanded the release of the Children of Israel and called Pharaoh to Allah. Pharaoh’s sorcerers believed when Musa’s staff exposed their illusion; Pharaoh increased tyranny. Plagues followed as signs, yet he remained arrogant. Musa led the Israelites out by night. At the sea, Allah commanded him to strike with his staff; the sea parted and they crossed. Pharaoh’s army pursued and was drowned. At Sinai, Musa received the Tablets; in his absence some took the calf, and he returned in anger, then sought forgiveness for his people. Ibn Kathir’s long Musa chapter is a school of reliance, courage before tyrants, and the cost of breaking covenant after clear deliverance.",
         "ar": "نُجّي موسى رضيعاً من قتل فرعون للذكور، ورُبّي في القصر، ثم خرج بعد قتل خطأ. وعند النار كلّمه الله وأرسله مع هارون إلى فرعون. فأريا الآيات فتكبّر فرعون. وسار موسى ببني إسرائيل ليلاً. فلما حُصر بين الجند والبحر قال إن معي ربي سيهدين، فانفلق البحر وأُغرق فرعون. وأنزلت التوراة، وتتابعت هداية موسى في فتن قومه. وكتاب ابن كثير في موسى مدرسة شجاعة وتوكل وصدق أمام الطغاة."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1246,7 +1240,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/musa-and-the-sea.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 1440000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1269,21 +1263,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Musa was saved as a baby from Pharaoh’s killing of sons, raised in the palace, then fled after an accidental killing. At the burning bush Allah spoke to him and sent him with Harun to Pharaoh.",
-          "textAr": "نُجّي موسى رضيعاً من قتل فرعون للذكور، ورُبّي في القصر، ثم خرج بعد قتل خطأ. وعند النار كلّمه الله وأرسله مع هارون إلى فرعون."
+          "endMs": 15000,
+          "textEn": "Musa’s mother cast him into the river by revelation when Pharaoh was killing the sons of the Israelites. Pharaoh’s household picked him up; his sister watched, and he was returned to his mother’s breast under Allah’s plan.",
+          "textAr": "نُجّي موسى رضيعاً من قتل فرعون للذكور، ورُبّي في القصر، ثم خرج بعد قتل خطأ."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "They showed clear signs; Pharaoh grew arrogant. Musa led the Children of Israel by night. Trapped between the army and the sea, he said, “Indeed, with me is my Lord; He will guide me.” The sea parted, and Pharaoh drowned.",
-          "textAr": "فأريا الآيات فتكبّر فرعون. وسار موسى ببني إسرائيل ليلاً. فلما حُصر بين الجند والبحر قال إن معي ربي سيهدين، فانفلق البحر وأُغرق فرعون."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "He grew in the palace, then fled after an accidental killing, finding shelter in Madyan and marriage after helping two women at the well. At the burning bush in the sacred valley, Allah spoke to him, gave him signs—the staff and the white hand—and sent him with Harun to Pharaoh.",
+          "textAr": "وعند النار كلّمه الله وأرسله مع هارون إلى فرعون."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Allah revealed the Torah and continued guiding Musa through later trials of his people. Ibn Kathir’s long chapter is a school of courage, reliance, and truth before tyrants.",
-          "textAr": "وأنزلت التوراة، وتتابعت هداية موسى في فتن قومه. وكتاب ابن كثير في موسى مدرسة شجاعة وتوكل وصدق أمام الطغاة."
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "They demanded the release of the Children of Israel and called Pharaoh to Allah. Pharaoh’s sorcerers believed when Musa’s staff exposed their illusion; Pharaoh increased tyranny.",
+          "textAr": "فأريا الآيات فتكبّر فرعون."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "Plagues followed as signs, yet he remained arrogant. Musa led the Israelites out by night.",
+          "textAr": "وسار موسى ببني إسرائيل ليلاً."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "At the sea, Allah commanded him to strike with his staff; the sea parted and they crossed. Pharaoh’s army pursued and was drowned.",
+          "textAr": "فلما حُصر بين الجند والبحر قال إن معي ربي سيهدين، فانفلق البحر وأُغرق فرعون."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "At Sinai, Musa received the Tablets; in his absence some took the calf, and he returned in anger, then sought forgiveness for his people. Ibn Kathir’s long Musa chapter is a school of reliance, courage before tyrants, and the cost of breaking covenant after clear deliverance.",
+          "textAr": "وأنزلت التوراة، وتتابعت هداية موسى في فتن قومه."
         }
       ]
     },
@@ -1297,7 +1309,7 @@
         "ar": "قصة يونس عليه السلام"
       },
       "content": {
-        "en": "Yunus left his people in anger when they delayed belief. A storm rose at sea and he was cast overboard, then swallowed by a great fish. In layers of darkness he called: there is no deity except You; exalted are You; I have been of the wrongdoers. Allah answered him and delivered him. He was cast onto the shore, and Allah caused a plant to grow over him. His people later believed. Ibn Kathir highlights the famous prayer of relief.",
+        "en": "Yunus was sent to a great city. When his people persisted in disbelief, he left before Allah’s command to depart, angry at their rejection. A storm rose at sea; lots were cast and he was thrown overboard, then swallowed by a great fish. In darkness upon darkness he called out: “There is no god but You; glory be to You; I have been among the wrongdoers.” Allah saved him. He was cast ashore weak, shaded by a plant, and restored. He returned to his people and found that they had believed after fearing punishment—so they were spared. Ibn Kathir teaches that even a prophet’s haste has consequences, yet sincere tasbih and tawbah open the door of mercy, and a nation’s repentance can lift approaching doom.",
         "ar": "غادر يونس قومه مغاضباً لتأخر إيمانهم. فهاج البحر وأُلقي ثم التقمه الحوت. فنادى في الظلمات: لا إله إلا أنت سبحانك إني كنت من الظالمين. فاستجاب الله ونجّاه. وأُلقي إلى الشاطئ وأنبت الله عليه شجرة، وآمن قومه من بعد. ويبرز ابن كثير دعاء الفرج المشهور."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1306,7 +1318,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/yunus-and-the-whale.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 1360000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1329,21 +1341,45 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Yunus left his people in anger when they delayed belief. A storm rose at sea and he was cast overboard, then swallowed by a great fish.",
-          "textAr": "غادر يونس قومه مغاضباً لتأخر إيمانهم. فهاج البحر وأُلقي ثم التقمه الحوت."
+          "endMs": 12857,
+          "textEn": "Yunus was sent to a great city.",
+          "textAr": "غادر يونس قومه مغاضباً لتأخر إيمانهم."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "In layers of darkness he called: there is no deity except You; exalted are You; I have been of the wrongdoers. Allah answered him and delivered him.",
-          "textAr": "فنادى في الظلمات: لا إله إلا أنت سبحانك إني كنت من الظالمين. فاستجاب الله ونجّاه."
+          "startMs": 12857,
+          "endMs": 25714,
+          "textEn": "When his people persisted in disbelief, he left before Allah’s command to depart, angry at their rejection.",
+          "textAr": "فهاج البحر وأُلقي ثم التقمه الحوت."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "He was cast onto the shore, and Allah caused a plant to grow over him. His people later believed. Ibn Kathir highlights the famous prayer of relief.",
-          "textAr": "وأُلقي إلى الشاطئ وأنبت الله عليه شجرة، وآمن قومه من بعد. ويبرز ابن كثير دعاء الفرج المشهور."
+          "startMs": 25714,
+          "endMs": 38571,
+          "textEn": "A storm rose at sea; lots were cast and he was thrown overboard, then swallowed by a great fish.",
+          "textAr": "فنادى في الظلمات: لا إله إلا أنت سبحانك إني كنت من الظالمين."
+        },
+        {
+          "startMs": 38571,
+          "endMs": 51428,
+          "textEn": "In darkness upon darkness he called out: “There is no god but You; glory be to You; I have been among the wrongdoers.” Allah saved him.",
+          "textAr": "فاستجاب الله ونجّاه."
+        },
+        {
+          "startMs": 51428,
+          "endMs": 64285,
+          "textEn": "He was cast ashore weak, shaded by a plant, and restored.",
+          "textAr": "وأُلقي إلى الشاطئ وأنبت الله عليه شجرة، وآمن قومه من بعد."
+        },
+        {
+          "startMs": 64285,
+          "endMs": 77142,
+          "textEn": "He returned to his people and found that they had believed after fearing punishment—so they were spared.",
+          "textAr": "ويبرز ابن كثير دعاء الفرج المشهور."
+        },
+        {
+          "startMs": 77142,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir teaches that even a prophet’s haste has consequences, yet sincere tasbih and tawbah open the door of mercy, and a nation’s repentance can lift approaching doom.",
+          "textAr": ""
         }
       ]
     },
@@ -1357,7 +1393,7 @@
         "ar": "قصة آدم عليه السلام"
       },
       "content": {
-        "en": "Allah told the angels He would place successive generations on earth. He taught Adam the names of all things, then asked the angels to name them. They admitted they knew only what Allah had taught them, and Adam spoke by Allah’s teaching, showing the honor given to humankind. Allah commanded the angels to prostrate to Adam as a mark of respect. Iblis refused out of arrogance and was expelled. Adam was placed in Paradise with his wife. They were forbidden one tree; after they slipped, they repented, and Allah accepted their repentance. They were sent to earth to live, worship, and raise children upon tawhid. Adam called his offspring to Allah until his death, longing for Paradise and leaving a covenant of guidance for those after him. Ibn Kathir gathers these reports from the Quran and early narrations so that Adam’s story teaches dignity, repentance, and the danger of pride.",
+        "en": "Allah informed the angels that He would place successive generations of humankind on earth as caretakers. The angels asked about those who might shed blood, while they themselves glorified Allah. Allah answered that He knows what they do not know, then taught Adam the names of all things and asked the angels to name them. They admitted they knew only what He had taught them, and Adam spoke by Allah’s teaching, showing the honor given to humankind through knowledge. Allah commanded the angels to prostrate to Adam as a mark of respect. They all did so except Iblis, who refused out of arrogance, claiming he was better because he was created from fire while Adam was created from clay. For this pride Iblis was expelled from mercy and became an open enemy who vowed to mislead Adam’s offspring. Adam opened his eyes to a universe of obedience and rebellion, learning awe of Allah and the danger of envy. Adam was placed in Paradise. When he was alone, Allah created for him a partner, Eve (Hawwa), so that he might find tranquility. They were permitted every enjoyment except one tree. Satan whispered that the tree would make them angels or immortals, swearing he was a sincere adviser. They tasted it, felt shame, and covered themselves with leaves. Then they prayed: “Our Lord, we have wronged ourselves; if You do not forgive us we will be among the losers.” Allah accepted their repentance, for He is Oft-Forgiving, Most Merciful. They were sent down to earth for a time, with the promise that whoever follows Allah’s guidance will have no fear nor grief. Adam lived as the first prophet, calling his children to tawhid. Narrations related by Ibn Kathir describe clay taken for his creation, the covenant taken from Adam’s progeny (“Am I not your Lord?”), and later dialogue with Musa affirming that Adam’s slip had already been written in decree—yet repentance elevated him. His story teaches dignity through knowledge, the ruin of pride, and the nearness of Allah to those who turn back.",
         "ar": "أخبر الله الملائكة أنه جاعل في الأرض خلفاء، وعلّم آدم الأسماء كلها، ثم سأل الملائكة أن ينبئوه بها. فقالوا لا علم لنا إلا ما علّمتنا، فأنبأهم آدم بما علّمه الله، إظهاراً لتكريم الإنسان. وأمر الله الملائكة بالسجود لآدم تحيةً، فأبى إبليس استكباراً فأُخرج. وأسكن آدم وزوجته الجنة، ونُهيا عن شجرة، فلما زلّا تابا فتاب الله عليهما. ثم أُهبطا إلى الأرض ليعبدوا الله ويربّوا الذرية على التوحيد. فظل آدم يدعو بنيه حتى وفاته، تائقاً إلى الجنة تاركاً عهد الهداية. وجمع ابن كثير ذلك من القرآن والآثار ليعلّم الكرامة والتوبة وخطر الكبر."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1366,7 +1402,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/adam-created-and-taught.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 140,
+        "durationSeconds": 155,
         "fileSizeBytes": 1440000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1389,27 +1425,57 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Allah told the angels He would place successive generations on earth. He taught Adam the names of all things, then asked the angels to name them. They admitted they knew only what Allah had taught them, and Adam spoke by Allah’s teaching, showing the honor given to humankind.",
-          "textAr": "أخبر الله الملائكة أنه جاعل في الأرض خلفاء، وعلّم آدم الأسماء كلها، ثم سأل الملائكة أن ينبئوه بها. فقالوا لا علم لنا إلا ما علّمتنا، فأنبأهم آدم بما علّمه الله، إظهاراً لتكريم الإنسان."
+          "endMs": 17222,
+          "textEn": "Allah informed the angels that He would place successive generations of humankind on earth as caretakers. The angels asked about those who might shed blood, while they themselves glorified Allah.",
+          "textAr": "أخبر الله الملائكة أنه جاعل في الأرض خلفاء، وعلّم آدم الأسماء كلها، ثم سأل الملائكة أن ينبئوه بها."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Allah commanded the angels to prostrate to Adam as a mark of respect. Iblis refused out of arrogance and was expelled. Adam was placed in Paradise with his wife. They were forbidden one tree; after they slipped, they repented, and Allah accepted their repentance.",
-          "textAr": "وأمر الله الملائكة بالسجود لآدم تحيةً، فأبى إبليس استكباراً فأُخرج. وأسكن آدم وزوجته الجنة، ونُهيا عن شجرة، فلما زلّا تابا فتاب الله عليهما."
+          "startMs": 17222,
+          "endMs": 34444,
+          "textEn": "Allah answered that He knows what they do not know, then taught Adam the names of all things and asked the angels to name them. They admitted they knew only what He had taught them, and Adam spoke by Allah’s teaching, showing the honor given to humankind through knowledge.",
+          "textAr": "فقالوا لا علم لنا إلا ما علّمتنا، فأنبأهم آدم بما علّمه الله، إظهاراً لتكريم الإنسان."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "They were sent to earth to live, worship, and raise children upon tawhid. Adam called his offspring to Allah until his death, longing for Paradise and leaving a covenant of guidance for those after him.",
-          "textAr": "ثم أُهبطا إلى الأرض ليعبدوا الله ويربّوا الذرية على التوحيد. فظل آدم يدعو بنيه حتى وفاته، تائقاً إلى الجنة تاركاً عهد الهداية."
+          "startMs": 34444,
+          "endMs": 51666,
+          "textEn": "Allah commanded the angels to prostrate to Adam as a mark of respect. They all did so except Iblis, who refused out of arrogance, claiming he was better because he was created from fire while Adam was created from clay.",
+          "textAr": "وأمر الله الملائكة بالسجود لآدم تحيةً، فأبى إبليس استكباراً فأُخرج."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "Ibn Kathir gathers these reports from the Quran and early narrations so that Adam’s story teaches dignity, repentance, and the danger of pride.",
+          "startMs": 51666,
+          "endMs": 68888,
+          "textEn": "For this pride Iblis was expelled from mercy and became an open enemy who vowed to mislead Adam’s offspring. Adam opened his eyes to a universe of obedience and rebellion, learning awe of Allah and the danger of envy.",
+          "textAr": "وأسكن آدم وزوجته الجنة، ونُهيا عن شجرة، فلما زلّا تابا فتاب الله عليهما."
+        },
+        {
+          "startMs": 68888,
+          "endMs": 86110,
+          "textEn": "Adam was placed in Paradise. When he was alone, Allah created for him a partner, Eve (Hawwa), so that he might find tranquility.",
+          "textAr": "ثم أُهبطا إلى الأرض ليعبدوا الله ويربّوا الذرية على التوحيد."
+        },
+        {
+          "startMs": 86110,
+          "endMs": 103332,
+          "textEn": "They were permitted every enjoyment except one tree. Satan whispered that the tree would make them angels or immortals, swearing he was a sincere adviser.",
+          "textAr": "فظل آدم يدعو بنيه حتى وفاته، تائقاً إلى الجنة تاركاً عهد الهداية."
+        },
+        {
+          "startMs": 103332,
+          "endMs": 120554,
+          "textEn": "They tasted it, felt shame, and covered themselves with leaves. Then they prayed: “Our Lord, we have wronged ourselves; if You do not forgive us we will be among the losers.” Allah accepted their repentance, for He is Oft-Forgiving, Most Merciful.",
           "textAr": "وجمع ابن كثير ذلك من القرآن والآثار ليعلّم الكرامة والتوبة وخطر الكبر."
+        },
+        {
+          "startMs": 120554,
+          "endMs": 137776,
+          "textEn": "They were sent down to earth for a time, with the promise that whoever follows Allah’s guidance will have no fear nor grief. Adam lived as the first prophet, calling his children to tawhid.",
+          "textAr": ""
+        },
+        {
+          "startMs": 137776,
+          "endMs": 155000,
+          "textEn": "Narrations related by Ibn Kathir describe clay taken for his creation, the covenant taken from Adam’s progeny (“Am I not your Lord?”), and later dialogue with Musa affirming that Adam’s slip had already been written in decree—yet repentance elevated him. His story teaches dignity through knowledge, the ruin of pride, and the nearness of Allah to those who turn back.",
+          "textAr": ""
         }
       ]
     },
@@ -1423,7 +1489,7 @@
         "ar": "قصة إدريس عليه السلام"
       },
       "content": {
-        "en": "Idris followed the religion of Adam and Seth. He called people in Babylon to return to truth, justice, prayer, fasting, and charity, but only a few listened. He and his followers moved on, continuing to teach what is fair. The Quran praises him as truthful and a prophet whom Allah raised to a high station. Ibn Kathir presents Idris among the earliest guides after Adam, a reminder that prophethood continued whenever people drifted from Allah’s way.",
+        "en": "Idris followed the religion of Adam and Seth after people began to drift. Ibn Kathir relates that he called the people of Babylon to return to truth: justice between people, prayer, fasting on certain days, and giving a portion of wealth to the poor. Only a few listened, so he and those who believed moved on, continuing to teach fairness wherever they settled. The Quran names him among the truthful and the prophets, and states that Allah raised him to a high station. Commentators preserved wise sayings attributed to him about patience, honesty, and remembering death. Though his chapter is brief, Ibn Kathir places Idris as an early link in the chain of guidance—proof that whenever communities forget Allah, He sends callers who revive Adam’s path of tawhid and good character.",
         "ar": "سار إدريس على دين آدم وشيث، فدعا أهل بابل إلى الحق والعدل والصلاة والصيام والصدقة، فلم يستجب إلا قليل. فخرج بمن معه يعلّم القسط. وأثنى عليه القرآن بأنه صدّيق نبي رفعه الله مكاناً عليّاً. وعدّه ابن كثير في أوائل الهداة بعد آدم، تذكيراً بأن النبوة تتواصل كلما انحرف الناس."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1432,7 +1498,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/idris-raised-in-station.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1455,21 +1521,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Idris followed the religion of Adam and Seth. He called people in Babylon to return to truth, justice, prayer, fasting, and charity, but only a few listened.",
+          "endMs": 15000,
+          "textEn": "Idris followed the religion of Adam and Seth after people began to drift.",
           "textAr": "سار إدريس على دين آدم وشيث، فدعا أهل بابل إلى الحق والعدل والصلاة والصيام والصدقة، فلم يستجب إلا قليل."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He and his followers moved on, continuing to teach what is fair. The Quran praises him as truthful and a prophet whom Allah raised to a high station.",
-          "textAr": "فخرج بمن معه يعلّم القسط. وأثنى عليه القرآن بأنه صدّيق نبي رفعه الله مكاناً عليّاً."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "Ibn Kathir relates that he called the people of Babylon to return to truth: justice between people, prayer, fasting on certain days, and giving a portion of wealth to the poor.",
+          "textAr": "فخرج بمن معه يعلّم القسط."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir presents Idris among the earliest guides after Adam, a reminder that prophethood continued whenever people drifted from Allah’s way.",
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "Only a few listened, so he and those who believed moved on, continuing to teach fairness wherever they settled.",
+          "textAr": "وأثنى عليه القرآن بأنه صدّيق نبي رفعه الله مكاناً عليّاً."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "The Quran names him among the truthful and the prophets, and states that Allah raised him to a high station.",
           "textAr": "وعدّه ابن كثير في أوائل الهداة بعد آدم، تذكيراً بأن النبوة تتواصل كلما انحرف الناس."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "Commentators preserved wise sayings attributed to him about patience, honesty, and remembering death.",
+          "textAr": ""
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "Though his chapter is brief, Ibn Kathir places Idris as an early link in the chain of guidance—proof that whenever communities forget Allah, He sends callers who revive Adam’s path of tawhid and good character.",
+          "textAr": ""
         }
       ]
     },
@@ -1483,7 +1567,7 @@
         "ar": "قصة نوح والسفينة"
       },
       "content": {
-        "en": "Nuh called his people for a very long time to leave idols and worship Allah alone. The chiefs mocked him and said he was in error, yet he answered with patience that he was only a messenger bringing sincere advice. By Allah’s command he built the Ark. When the Flood began, believers boarded with pairs of creatures. Nuh’s son sought a mountain instead of Allah’s mercy and was among the drowned. Then the earth was told to swallow its water and the sky to withhold rain. The Ark rested, and the wrongdoers were destroyed. The story remains a sign for those who take heed. Ibn Kathir walks through these scenes from the Quran so that believers learn steadfastness in calling to tawhid.",
+        "en": "Long after Adam, Nuh’s people fell into idolatry. Ibn Kathir recounts that love for righteous men hardened into statues and then into worship of Wadd, Suwa‘, Yaghuth, Ya‘uq, and Nasr. Nuh was sent as a plain warner: worship Allah alone, fear the Day when deeds are judged, and leave the idols that cannot create or provide. He called them night and day, privately and in public. The chiefs mocked him as “only a man,” accused him of seeking status, and said the weak and poor who followed him proved his message was worthless. Nuh answered with patience that he asked no wage except from Allah, that he did not drive away the believers, and that he was only a sincere messenger. When their rejection grew extreme, Allah commanded him to build the Ark under watchful revelation. The people laughed as he built far from any sea. Then the oven overflowed and the Flood began. Believers boarded with pairs of creatures. Nuh called his son to embark; the son sought refuge on a mountain and was among the drowned. Nuh’s plea for his family was answered with the truth that kinship does not protect disbelief. Then the earth was told to swallow its water and the sky to withhold rain. The Ark came to rest, and the wrongdoers were destroyed. Ibn Kathir presents Nuh’s long da‘wah as the model of steadfast calling: sincerity without arrogance, mercy without compromise, and trust that victory belongs to Allah alone.",
         "ar": "دعا نوح قومه زمناً طويلاً إلى ترك الأصنام وعبادة الله وحده. فسخر منه الملأ وقالوا إنه في ضلال، فصبر وقال إنما هو رسول ناصح. وصنع السفينة بأمر الله. فلما جاء الطوفان ركب المؤمنون ومعهم من كل زوجين اثنين. وطلب ابنه جبلاً يعصمه فكان من المغرقين. ثم قيل للأرض أن تبلع ماءها وللسماء أن تقلع، واستوت السفينة وهلك الظالمون. وبقيت القصة آية لمن يعتبر. ويسوق ابن كثير ذلك من القرآن ليعلّم الثبات على دعوة التوحيد."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1492,7 +1576,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/nuh-and-the-ark.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 140,
+        "durationSeconds": 111,
         "fileSizeBytes": 1440000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1515,26 +1599,50 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Nuh called his people for a very long time to leave idols and worship Allah alone. The chiefs mocked him and said he was in error, yet he answered with patience that he was only a messenger bringing sincere advice.",
-          "textAr": "دعا نوح قومه زمناً طويلاً إلى ترك الأصنام وعبادة الله وحده. فسخر منه الملأ وقالوا إنه في ضلال، فصبر وقال إنما هو رسول ناصح."
+          "endMs": 13875,
+          "textEn": "Long after Adam, Nuh’s people fell into idolatry. Ibn Kathir recounts that love for righteous men hardened into statues and then into worship of Wadd, Suwa‘, Yaghuth, Ya‘uq, and Nasr.",
+          "textAr": "دعا نوح قومه زمناً طويلاً إلى ترك الأصنام وعبادة الله وحده."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "By Allah’s command he built the Ark. When the Flood began, believers boarded with pairs of creatures. Nuh’s son sought a mountain instead of Allah’s mercy and was among the drowned.",
-          "textAr": "وصنع السفينة بأمر الله. فلما جاء الطوفان ركب المؤمنون ومعهم من كل زوجين اثنين. وطلب ابنه جبلاً يعصمه فكان من المغرقين."
+          "startMs": 13875,
+          "endMs": 27750,
+          "textEn": "Nuh was sent as a plain warner: worship Allah alone, fear the Day when deeds are judged, and leave the idols that cannot create or provide. He called them night and day, privately and in public.",
+          "textAr": "فسخر منه الملأ وقالوا إنه في ضلال، فصبر وقال إنما هو رسول ناصح."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Then the earth was told to swallow its water and the sky to withhold rain. The Ark rested, and the wrongdoers were destroyed. The story remains a sign for those who take heed.",
-          "textAr": "ثم قيل للأرض أن تبلع ماءها وللسماء أن تقلع، واستوت السفينة وهلك الظالمون. وبقيت القصة آية لمن يعتبر."
+          "startMs": 27750,
+          "endMs": 41625,
+          "textEn": "The chiefs mocked him as “only a man,” accused him of seeking status, and said the weak and poor who followed him proved his message was worthless. Nuh answered with patience that he asked no wage except from Allah, that he did not drive away the believers, and that he was only a sincere messenger.",
+          "textAr": "وصنع السفينة بأمر الله."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "Ibn Kathir walks through these scenes from the Quran so that believers learn steadfastness in calling to tawhid.",
+          "startMs": 41625,
+          "endMs": 55500,
+          "textEn": "When their rejection grew extreme, Allah commanded him to build the Ark under watchful revelation. The people laughed as he built far from any sea.",
+          "textAr": "فلما جاء الطوفان ركب المؤمنون ومعهم من كل زوجين اثنين."
+        },
+        {
+          "startMs": 55500,
+          "endMs": 69375,
+          "textEn": "Then the oven overflowed and the Flood began. Believers boarded with pairs of creatures.",
+          "textAr": "وطلب ابنه جبلاً يعصمه فكان من المغرقين."
+        },
+        {
+          "startMs": 69375,
+          "endMs": 83250,
+          "textEn": "Nuh called his son to embark; the son sought refuge on a mountain and was among the drowned. Nuh’s plea for his family was answered with the truth that kinship does not protect disbelief.",
+          "textAr": "ثم قيل للأرض أن تبلع ماءها وللسماء أن تقلع، واستوت السفينة وهلك الظالمون."
+        },
+        {
+          "startMs": 83250,
+          "endMs": 97125,
+          "textEn": "Then the earth was told to swallow its water and the sky to withhold rain. The Ark came to rest, and the wrongdoers were destroyed.",
+          "textAr": "وبقيت القصة آية لمن يعتبر."
+        },
+        {
+          "startMs": 97125,
+          "endMs": 111000,
+          "textEn": "Ibn Kathir presents Nuh’s long da‘wah as the model of steadfast calling: sincerity without arrogance, mercy without compromise, and trust that victory belongs to Allah alone.",
           "textAr": "ويسوق ابن كثير ذلك من القرآن ليعلّم الثبات على دعوة التوحيد."
         }
       ]
@@ -1549,7 +1657,7 @@
         "ar": "قصة هود وقوم عاد"
       },
       "content": {
-        "en": "The people of ‘Ad lived between Yemen and Oman. They were strong builders of tall structures, wealthy and proud. They knew of Allah yet joined idols with Him. Hud, one of them, called them to worship Allah alone and warned of a Day when deeds are judged. They listened but disbelieved, and asked for the punishment to be hastened. What they thought was a rain-cloud was a destructive wind by Allah’s command. It ruined everything they trusted in. Hud and those who believed were saved. Ibn Kathir frames ‘Ad as a warning against arrogance born of power and wealth.",
+        "en": "After the people of Nuh, the tribe of ‘Ad arose between Yemen and Oman. They were tall, strong builders of lofty structures, blessed with gardens and wealth, yet they joined idols with Allah and grew proud of their power. Hud, one of them, was sent with the same foundation every prophet taught: worship Allah alone, seek His forgiveness, and do not act as criminals on the earth. He reminded them of the favors they enjoyed and warned of a Day when none can help another. They listened but called him foolish or bewitched, demanding he bring the punishment if he was truthful. Hud declared his trust in Allah and dissociated from their shirk. Clouds they hoped would bring rain became a destructive wind by Allah’s command, raging for days and leveling what they trusted in. Hud and those who believed were saved. Ibn Kathir frames ‘Ad as a warning that strength, architecture, and abundance become a curse when they feed arrogance and drown out the call to tawhid.",
         "ar": "سكنت عاد بين اليمن وعُمان، أشدّاء بنّائين للأبراج، أغنياء متكبرين. عرفوا الله ثم أشركوا معه الأصنام. فدعاهم هود من أنفسهم إلى التوحيد وحذّرهم يوم الحساب. فسمعوا وكذّبوا واستعجلوا العذاب. فكان السحاب الذي رجوا مطره ريحاً مدمّرة بأمر الله أهلكت ما كانوا فيه يثقون. ونجّى الله هوداً ومن آمن. ويعرض ابن كثير عاد عبرةً من الكبر عند القوة والغنى."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1558,7 +1666,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/hud-and-the-people-of-ad.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 140,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1581,27 +1689,33 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "The people of ‘Ad lived between Yemen and Oman. They were strong builders of tall structures, wealthy and proud. They knew of Allah yet joined idols with Him.",
-          "textAr": "سكنت عاد بين اليمن وعُمان، أشدّاء بنّائين للأبراج، أغنياء متكبرين. عرفوا الله ثم أشركوا معه الأصنام."
+          "endMs": 18000,
+          "textEn": "After the people of Nuh, the tribe of ‘Ad arose between Yemen and Oman. They were tall, strong builders of lofty structures, blessed with gardens and wealth, yet they joined idols with Allah and grew proud of their power.",
+          "textAr": "سكنت عاد بين اليمن وعُمان، أشدّاء بنّائين للأبراج، أغنياء متكبرين."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Hud, one of them, called them to worship Allah alone and warned of a Day when deeds are judged. They listened but disbelieved, and asked for the punishment to be hastened.",
-          "textAr": "فدعاهم هود من أنفسهم إلى التوحيد وحذّرهم يوم الحساب. فسمعوا وكذّبوا واستعجلوا العذاب."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "Hud, one of them, was sent with the same foundation every prophet taught: worship Allah alone, seek His forgiveness, and do not act as criminals on the earth. He reminded them of the favors they enjoyed and warned of a Day when none can help another.",
+          "textAr": "عرفوا الله ثم أشركوا معه الأصنام."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "What they thought was a rain-cloud was a destructive wind by Allah’s command. It ruined everything they trusted in. Hud and those who believed were saved.",
-          "textAr": "فكان السحاب الذي رجوا مطره ريحاً مدمّرة بأمر الله أهلكت ما كانوا فيه يثقون. ونجّى الله هوداً ومن آمن."
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "They listened but called him foolish or bewitched, demanding he bring the punishment if he was truthful. Hud declared his trust in Allah and dissociated from their shirk.",
+          "textAr": "فدعاهم هود من أنفسهم إلى التوحيد وحذّرهم يوم الحساب."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "Ibn Kathir frames ‘Ad as a warning against arrogance born of power and wealth.",
-          "textAr": "ويعرض ابن كثير عاد عبرةً من الكبر عند القوة والغنى."
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "Clouds they hoped would bring rain became a destructive wind by Allah’s command, raging for days and leveling what they trusted in. Hud and those who believed were saved.",
+          "textAr": "فسمعوا وكذّبوا واستعجلوا العذاب."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir frames ‘Ad as a warning that strength, architecture, and abundance become a curse when they feed arrogance and drown out the call to tawhid.",
+          "textAr": "فكان السحاب الذي رجوا مطره ريحاً مدمّرة بأمر الله أهلكت ما كانوا فيه يثقون."
         }
       ]
     },
@@ -1615,7 +1729,7 @@
         "ar": "قصة صالح والناقة"
       },
       "content": {
-        "en": "After ‘Ad, Thamud rose in power. They carved beautiful homes in the hills yet fell into idolatry and oppression. Salih called them to worship Allah alone. As a clear sign, Allah brought forth the she-camel. Some believed, but many complained and plotted to kill the camel and harm Salih. Allah saved Salih and the believers. After his warning, a crushing cry destroyed the wrongdoers. The valley that once boasted of its craftsmanship became a lesson. Ibn Kathir stresses that rejecting clear signs after they arrive brings ruin.",
+        "en": "Thamud succeeded ‘Ad in power. They carved elegant homes in the rocky hills, yet fell into idolatry and oppression. Salih called them to worship Allah alone and to remember the fate of earlier nations. They demanded a miracle as proof. By Allah’s leave, a she-camel emerged as a clear sign, with rights to water on appointed days. Some believed, but many resented the camel for sharing their water and frightening their cattle. They plotted in secret, hamstrung her, and threatened Salih. He warned them of three days. They did not repent. After his warning, a crushing cry seized the wrongdoers in their dwellings, while Salih and the believers were delivered. Ibn Kathir stresses that when Allah’s sign is rejected after it arrives in plain view, excuses collapse. Craftsmanship and carved stone could not shield a people who mocked the messenger and harmed what Allah had made sacred.",
         "ar": "بعد عاد ارتفعت ثمود، فنحتوا بيوتاً في الجبال ووقعوا في الشرك والظلم. فدعاهم صالح إلى عبادة الله وحده. وجعل الله الناقة آية بينة. فآمن بعضٌ وتآمر آخرون على عقرها وأذى صالح. فنجّى الله صالحاً والمؤمنين، وأهلك الظالمين بالصيحة بعد إنذاره. وصار الوادي الذي افتخر ببنائه عبرة. ويؤكّد ابن كثير أن ردّ الآيات بعد مجيئها سبب للهلاك."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1624,7 +1738,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/salih-and-the-she-camel.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 140,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1647,27 +1761,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "After ‘Ad, Thamud rose in power. They carved beautiful homes in the hills yet fell into idolatry and oppression. Salih called them to worship Allah alone.",
-          "textAr": "بعد عاد ارتفعت ثمود، فنحتوا بيوتاً في الجبال ووقعوا في الشرك والظلم. فدعاهم صالح إلى عبادة الله وحده."
+          "endMs": 15000,
+          "textEn": "Thamud succeeded ‘Ad in power. They carved elegant homes in the rocky hills, yet fell into idolatry and oppression.",
+          "textAr": "بعد عاد ارتفعت ثمود، فنحتوا بيوتاً في الجبال ووقعوا في الشرك والظلم."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "As a clear sign, Allah brought forth the she-camel. Some believed, but many complained and plotted to kill the camel and harm Salih.",
-          "textAr": "وجعل الله الناقة آية بينة. فآمن بعضٌ وتآمر آخرون على عقرها وأذى صالح."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "Salih called them to worship Allah alone and to remember the fate of earlier nations. They demanded a miracle as proof.",
+          "textAr": "فدعاهم صالح إلى عبادة الله وحده."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Allah saved Salih and the believers. After his warning, a crushing cry destroyed the wrongdoers. The valley that once boasted of its craftsmanship became a lesson.",
-          "textAr": "فنجّى الله صالحاً والمؤمنين، وأهلك الظالمين بالصيحة بعد إنذاره. وصار الوادي الذي افتخر ببنائه عبرة."
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "By Allah’s leave, a she-camel emerged as a clear sign, with rights to water on appointed days. Some believed, but many resented the camel for sharing their water and frightening their cattle.",
+          "textAr": "وجعل الله الناقة آية بينة."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "Ibn Kathir stresses that rejecting clear signs after they arrive brings ruin.",
-          "textAr": "ويؤكّد ابن كثير أن ردّ الآيات بعد مجيئها سبب للهلاك."
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "They plotted in secret, hamstrung her, and threatened Salih. He warned them of three days.",
+          "textAr": "فآمن بعضٌ وتآمر آخرون على عقرها وأذى صالح."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "They did not repent. After his warning, a crushing cry seized the wrongdoers in their dwellings, while Salih and the believers were delivered.",
+          "textAr": "فنجّى الله صالحاً والمؤمنين، وأهلك الظالمين بالصيحة بعد إنذاره."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir stresses that when Allah’s sign is rejected after it arrives in plain view, excuses collapse. Craftsmanship and carved stone could not shield a people who mocked the messenger and harmed what Allah had made sacred.",
+          "textAr": "وصار الوادي الذي افتخر ببنائه عبرة."
         }
       ]
     },
@@ -1681,7 +1807,7 @@
         "ar": "قصة إبراهيم عليه السلام"
       },
       "content": {
-        "en": "Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned that created things cannot be gods and called his father and people to the One Creator. He broke the idols, leaving the largest to expose their falsehood. They cast him into a great fire, but Allah commanded the fire to be coolness and safety upon him. He continued calling to tawhid. Later he left Hajar and Isma‘il in Makkah by Allah’s command, and with Isma‘il raised the foundations of the House. His life is the story of a friend of Allah who preferred truth over his people’s customs. Ibn Kathir gathers these trials to show courage, intellect, and trust in Allah.",
+        "en": "Ibrahim grew up among people who worshipped idols, stars, and kings. From childhood his insight pushed him to question statues that neither speak nor benefit. He reasoned about the celestial bodies: a setting star, moon, or sun cannot be the Lord who never fails. He declared his face turned to the One who originated the heavens and the earth, free of partnership. He called his father Azar and his people to leave idols. When they left for a festival, he broke the idols, leaving the largest so they might ask it—if it could speak. Enraged, they kindled a great fire and cast him into it. Allah commanded: “O fire, be coolness and safety upon Ibrahim.” He emerged unharmed, then continued calling to tawhid even when facing a tyrant who claimed divinity. Later, by Allah’s leave, he migrated. With Hajar and Isma‘il he fulfilled the trial of settling a barren valley; with Isma‘il he raised the foundations of the Sacred House. He was tested with the command concerning his son and responded with submission. Ibn Kathir gathers these scenes so believers see a friend of Allah whose courage, intellect, and trust outweighed custom, kinship pressure, and fear of fire.",
         "ar": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّهم أن المخلوق لا يكون إلهاً، ودعا أباه وقومه إلى الخالق الواحد. وكسّر الأصنام تاركاً كبيرها ليفضح باطلهم. فألقوه في نار عظيمة فجعلها الله برداً وسلاماً عليه. وواصل الدعوة، ثم أسكن هاجر وإسماعيل بمكة بأمر الله، ورفع مع إسماعيل قواعد البيت. فكانت حياته سيرة خليل آثر الحق على عادة قومه. وجمع ابن كثير هذه الابتلاءات لتظهر الشجاعة والعقل والتوكل."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1690,7 +1816,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-breaks-the-idols.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 140,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1713,27 +1839,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned that created things cannot be gods and called his father and people to the One Creator.",
-          "textAr": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّهم أن المخلوق لا يكون إلهاً، ودعا أباه وقومه إلى الخالق الواحد."
+          "endMs": 15000,
+          "textEn": "Ibrahim grew up among people who worshipped idols, stars, and kings. From childhood his insight pushed him to question statues that neither speak nor benefit.",
+          "textAr": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He broke the idols, leaving the largest to expose their falsehood. They cast him into a great fire, but Allah commanded the fire to be coolness and safety upon him.",
-          "textAr": "وكسّر الأصنام تاركاً كبيرها ليفضح باطلهم. فألقوه في نار عظيمة فجعلها الله برداً وسلاماً عليه."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "He reasoned about the celestial bodies: a setting star, moon, or sun cannot be the Lord who never fails. He declared his face turned to the One who originated the heavens and the earth, free of partnership.",
+          "textAr": "فحاجّهم أن المخلوق لا يكون إلهاً، ودعا أباه وقومه إلى الخالق الواحد."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "He continued calling to tawhid. Later he left Hajar and Isma‘il in Makkah by Allah’s command, and with Isma‘il raised the foundations of the House. His life is the story of a friend of Allah who preferred truth over his people’s customs.",
-          "textAr": "وواصل الدعوة، ثم أسكن هاجر وإسماعيل بمكة بأمر الله، ورفع مع إسماعيل قواعد البيت. فكانت حياته سيرة خليل آثر الحق على عادة قومه."
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "He called his father Azar and his people to leave idols. When they left for a festival, he broke the idols, leaving the largest so they might ask it—if it could speak.",
+          "textAr": "وكسّر الأصنام تاركاً كبيرها ليفضح باطلهم."
         },
         {
-          "startMs": 105000,
-          "endMs": 140000,
-          "textEn": "Ibn Kathir gathers these trials to show courage, intellect, and trust in Allah.",
-          "textAr": "وجمع ابن كثير هذه الابتلاءات لتظهر الشجاعة والعقل والتوكل."
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "Enraged, they kindled a great fire and cast him into it. Allah commanded: “O fire, be coolness and safety upon Ibrahim.” He emerged unharmed, then continued calling to tawhid even when facing a tyrant who claimed divinity.",
+          "textAr": "فألقوه في نار عظيمة فجعلها الله برداً وسلاماً عليه."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "Later, by Allah’s leave, he migrated. With Hajar and Isma‘il he fulfilled the trial of settling a barren valley; with Isma‘il he raised the foundations of the Sacred House.",
+          "textAr": "وواصل الدعوة، ثم أسكن هاجر وإسماعيل بمكة بأمر الله، ورفع مع إسماعيل قواعد البيت."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "He was tested with the command concerning his son and responded with submission. Ibn Kathir gathers these scenes so believers see a friend of Allah whose courage, intellect, and trust outweighed custom, kinship pressure, and fear of fire.",
+          "textAr": "فكانت حياته سيرة خليل آثر الحق على عادة قومه."
         }
       ]
     },
@@ -1747,7 +1885,7 @@
         "ar": "قصة إسماعيل وزمزم"
       },
       "content": {
-        "en": "Ibrahim brought Hajar and their nursing son Isma‘il to a barren valley with little water, then left them by Allah’s command. When the water finished, Hajar ran between the hills seeking help until Zamzam sprang forth. Ibrahim returned at times Allah willed. With Isma‘il he raised the foundations of the Ka‘bah. Isma‘il remained patient in that sanctuary, a prophet in the line of Ibrahim. Ibn Kathir links this valley to mercy: water, house, and a people who would later receive the final messenger.",
+        "en": "Ibrahim brought Hajar and their nursing son Isma‘il to the barren valley of Makkah by Allah’s command, leaving them with a small water-skin and dates. When he turned to leave, Hajar asked if Allah had ordered this; hearing that He had, she said Allah would not neglect them. Ibrahim prayed that hearts would incline to them and that they would be given fruits so they might give thanks. The water finished. Hajar ran between Safa and Marwah seeking help until Zamzam sprang forth. Birds and travelers later settled near the water. Isma‘il grew among Jurhum; narrations describe Ibrahim’s visits, advice about Isma‘il’s household, and finally the raising of the Ka‘bah’s foundations with Isma‘il—father and son praying that their work be accepted and that a messenger arise from their offspring. Isma‘il remained patient in that sanctuary, a prophet in Ibrahim’s line. Ibn Kathir links the dry valley to mercy: water, a House, and a people prepared for the final message.",
         "ar": "جاء إبراهيم بهاجر وابنها إسماعيل الرضيع إلى وادٍ غير ذي زرع بقليل من الماء، وتركهما بأمر الله. فلما نفد الماء سعت هاجر بين الصفا والمروة حتى نبع زمزم. وعاد إبراهيم حين شاء الله، فرفع مع إسماعيل قواعد الكعبة. وبقي إسماعيل صابراً في الحرم نبياً من آل إبراهيم. ويربط ابن كثير هذا الوادي بالرحمة: ماءٌ وبيتٌ وأمة سيأتيها الخاتم."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1756,7 +1894,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ismail-and-zamzam.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1779,20 +1917,32 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Ibrahim brought Hajar and their nursing son Isma‘il to a barren valley with little water, then left them by Allah’s command. When the water finished, Hajar ran between the hills seeking help until Zamzam sprang forth.",
-          "textAr": "جاء إبراهيم بهاجر وابنها إسماعيل الرضيع إلى وادٍ غير ذي زرع بقليل من الماء، وتركهما بأمر الله. فلما نفد الماء سعت هاجر بين الصفا والمروة حتى نبع زمزم."
+          "endMs": 18000,
+          "textEn": "Ibrahim brought Hajar and their nursing son Isma‘il to the barren valley of Makkah by Allah’s command, leaving them with a small water-skin and dates. When he turned to leave, Hajar asked if Allah had ordered this; hearing that He had, she said Allah would not neglect them.",
+          "textAr": "جاء إبراهيم بهاجر وابنها إسماعيل الرضيع إلى وادٍ غير ذي زرع بقليل من الماء، وتركهما بأمر الله."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Ibrahim returned at times Allah willed. With Isma‘il he raised the foundations of the Ka‘bah. Isma‘il remained patient in that sanctuary, a prophet in the line of Ibrahim.",
-          "textAr": "وعاد إبراهيم حين شاء الله، فرفع مع إسماعيل قواعد الكعبة. وبقي إسماعيل صابراً في الحرم نبياً من آل إبراهيم."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "Ibrahim prayed that hearts would incline to them and that they would be given fruits so they might give thanks. The water finished.",
+          "textAr": "فلما نفد الماء سعت هاجر بين الصفا والمروة حتى نبع زمزم."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir links this valley to mercy: water, house, and a people who would later receive the final messenger.",
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "Hajar ran between Safa and Marwah seeking help until Zamzam sprang forth. Birds and travelers later settled near the water.",
+          "textAr": "وعاد إبراهيم حين شاء الله، فرفع مع إسماعيل قواعد الكعبة."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "Isma‘il grew among Jurhum; narrations describe Ibrahim’s visits, advice about Isma‘il’s household, and finally the raising of the Ka‘bah’s foundations with Isma‘il—father and son praying that their work be accepted and that a messenger arise from their offspring. Isma‘il remained patient in that sanctuary, a prophet in Ibrahim’s line.",
+          "textAr": "وبقي إسماعيل صابراً في الحرم نبياً من آل إبراهيم."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir links the dry valley to mercy: water, a House, and a people prepared for the final message.",
           "textAr": "ويربط ابن كثير هذا الوادي بالرحمة: ماءٌ وبيتٌ وأمة سيأتيها الخاتم."
         }
       ]
@@ -1807,7 +1957,7 @@
         "ar": "قصة إسحاق عليه السلام"
       },
       "content": {
-        "en": "Glad tidings of Ishaq came to Ibrahim in old age. Commentators related that Ibrahim sought for him a righteous wife from his kin, not from pagan Canaanites. From Ishaq came Yaqub, continuing the prophetic line. Though the Quran gives few details of Ishaq’s personal life, he is named among the guided prophets. Ibn Kathir places him as a link of blessing between Ibrahim and the Children of Israel.",
+        "en": "Glad tidings of Ishaq came to Ibrahim and Sarah in old age, a mercy after long waiting. Commentators related that Ibrahim sought for him a righteous wife from his kin rather than from pagan Canaanites. From Ishaq came Yaqub (Israel), continuing the prophetic line among the Children of Israel. Though the Quran gives few personal episodes of Ishaq’s life, he is named among the guided prophets and righteous servants. Ibn Kathir places him as a link of blessing between Ibrahim and the tribes that would later receive Musa, Dawud, and many messengers—showing that Allah’s favor travels through obedience and covenant, not merely lineage.",
         "ar": "بُشّر إبراهيم بإسحاق على الكبر. وذكر المفسرون أنه طلب له زوجة صالحة من أهله لا من الكنعانيين المشركين. ومن إسحاق جاء يعقوب فامتدت سلسلة النبوة. وقلّ تفصيل حياته في القرآن، وهو معدود في الأنبياء المهتدين. ويجعله ابن كثير حلقة بركة بين إبراهيم وبني إسرائيل."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1816,7 +1966,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ishaq-and-the-covenant-line.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1839,20 +1989,32 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Glad tidings of Ishaq came to Ibrahim in old age. Commentators related that Ibrahim sought for him a righteous wife from his kin, not from pagan Canaanites.",
-          "textAr": "بُشّر إبراهيم بإسحاق على الكبر. وذكر المفسرون أنه طلب له زوجة صالحة من أهله لا من الكنعانيين المشركين."
+          "endMs": 18000,
+          "textEn": "Glad tidings of Ishaq came to Ibrahim and Sarah in old age, a mercy after long waiting.",
+          "textAr": "بُشّر إبراهيم بإسحاق على الكبر."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "From Ishaq came Yaqub, continuing the prophetic line. Though the Quran gives few details of Ishaq’s personal life, he is named among the guided prophets.",
-          "textAr": "ومن إسحاق جاء يعقوب فامتدت سلسلة النبوة. وقلّ تفصيل حياته في القرآن، وهو معدود في الأنبياء المهتدين."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "Commentators related that Ibrahim sought for him a righteous wife from his kin rather than from pagan Canaanites.",
+          "textAr": "وذكر المفسرون أنه طلب له زوجة صالحة من أهله لا من الكنعانيين المشركين."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir places him as a link of blessing between Ibrahim and the Children of Israel.",
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "From Ishaq came Yaqub (Israel), continuing the prophetic line among the Children of Israel.",
+          "textAr": "ومن إسحاق جاء يعقوب فامتدت سلسلة النبوة."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "Though the Quran gives few personal episodes of Ishaq’s life, he is named among the guided prophets and righteous servants.",
+          "textAr": "وقلّ تفصيل حياته في القرآن، وهو معدود في الأنبياء المهتدين."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir places him as a link of blessing between Ibrahim and the tribes that would later receive Musa, Dawud, and many messengers—showing that Allah’s favor travels through obedience and covenant, not merely lineage.",
           "textAr": "ويجعله ابن كثير حلقة بركة بين إبراهيم وبني إسرائيل."
         }
       ]
@@ -1867,7 +2029,7 @@
         "ar": "قصة يعقوب عليه السلام"
       },
       "content": {
-        "en": "Yaqub, also called Israel, was favored with prophethood. Tension with his brother led him to travel and seek Allah’s protection with prayer and humility. He fathered the twelve tribes and loved Yusuf deeply. When Yusuf was taken, Yaqub’s eyes whitened with grief, yet he never despaired of Allah’s mercy. His reunion with Yusuf taught patience and beautiful reliance. Ibn Kathir recounts this as a father’s faith under long sorrow.",
+        "en": "Yaqub, also called Israel, was favored with prophethood. Tension with his brother led him to travel, seeking Allah’s protection with prayer and humility. Narrations in Ibn Kathir’s collection describe his journey, his household, and the twelve sons who became the tribes of Israel. He loved Yusuf deeply. When the brothers plotted and Yusuf was lost, Yaqub’s eyes whitened with grief, yet he never despaired of Allah’s relief, saying he complained of his sorrow only to Allah. Years later, the scent of Yusuf’s shirt restored his sight, and the family reunited in Egypt. Ibn Kathir recounts Yaqub as a father’s faith under long sorrow—patience that does not extinguish hope, and love that does not excuse injustice among brothers.",
         "ar": "يُدعى يعقوب إسرائيل، وآتاه الله النبوة. ووقع بينه وبين أخيه ما حمله على الرحيل والاستعاذة بالله خاشعاً. ورزق الأسباط، وكان أشد حباً ليوسف. فلما فُقد يوسف ابيضّت عيناه من الحزن ولم ييأس من رحمة الله. وكان اجتماعه بيوسف درس صبر وحسن ظن. ويذكره ابن كثير إيمان أبٍ في حزن طويل."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1876,7 +2038,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/yaqub-and-his-sons.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1899,21 +2061,45 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Yaqub, also called Israel, was favored with prophethood. Tension with his brother led him to travel and seek Allah’s protection with prayer and humility.",
-          "textAr": "يُدعى يعقوب إسرائيل، وآتاه الله النبوة. ووقع بينه وبين أخيه ما حمله على الرحيل والاستعاذة بالله خاشعاً."
+          "endMs": 12857,
+          "textEn": "Yaqub, also called Israel, was favored with prophethood.",
+          "textAr": "يُدعى يعقوب إسرائيل، وآتاه الله النبوة."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He fathered the twelve tribes and loved Yusuf deeply. When Yusuf was taken, Yaqub’s eyes whitened with grief, yet he never despaired of Allah’s mercy.",
-          "textAr": "ورزق الأسباط، وكان أشد حباً ليوسف. فلما فُقد يوسف ابيضّت عيناه من الحزن ولم ييأس من رحمة الله."
+          "startMs": 12857,
+          "endMs": 25714,
+          "textEn": "Tension with his brother led him to travel, seeking Allah’s protection with prayer and humility.",
+          "textAr": "ووقع بينه وبين أخيه ما حمله على الرحيل والاستعاذة بالله خاشعاً."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "His reunion with Yusuf taught patience and beautiful reliance. Ibn Kathir recounts this as a father’s faith under long sorrow.",
-          "textAr": "وكان اجتماعه بيوسف درس صبر وحسن ظن. ويذكره ابن كثير إيمان أبٍ في حزن طويل."
+          "startMs": 25714,
+          "endMs": 38571,
+          "textEn": "Narrations in Ibn Kathir’s collection describe his journey, his household, and the twelve sons who became the tribes of Israel.",
+          "textAr": "ورزق الأسباط، وكان أشد حباً ليوسف."
+        },
+        {
+          "startMs": 38571,
+          "endMs": 51428,
+          "textEn": "He loved Yusuf deeply.",
+          "textAr": "فلما فُقد يوسف ابيضّت عيناه من الحزن ولم ييأس من رحمة الله."
+        },
+        {
+          "startMs": 51428,
+          "endMs": 64285,
+          "textEn": "When the brothers plotted and Yusuf was lost, Yaqub’s eyes whitened with grief, yet he never despaired of Allah’s relief, saying he complained of his sorrow only to Allah.",
+          "textAr": "وكان اجتماعه بيوسف درس صبر وحسن ظن."
+        },
+        {
+          "startMs": 64285,
+          "endMs": 77142,
+          "textEn": "Years later, the scent of Yusuf’s shirt restored his sight, and the family reunited in Egypt.",
+          "textAr": "ويذكره ابن كثير إيمان أبٍ في حزن طويل."
+        },
+        {
+          "startMs": 77142,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir recounts Yaqub as a father’s faith under long sorrow—patience that does not extinguish hope, and love that does not excuse injustice among brothers.",
+          "textAr": ""
         }
       ]
     },
@@ -1927,7 +2113,7 @@
         "ar": "قصة لوط عليه السلام"
       },
       "content": {
-        "en": "Lut settled near Sodom, a city known for highway robbery and open indecency. He called them to fear Allah and leave their wrongdoing, but they threatened him instead. Angels came as guests. The people rushed toward them. Lut was taken out by night with his believing household, and the town was overturned as a warning. Ibn Kathir presents the account as a severe lesson: mocking purity and harming guests invites destruction.",
+        "en": "Lut settled near Sodom, a city known for highway robbery, public indecency, and hostility to strangers. He called them to fear Allah and leave their wrongdoing. They answered with threats to drive him out if he continued preaching. Even his wife inclined to the people’s side. Angels came as guests in handsome form. The people rushed toward Lot’s house. He pleaded with them and offered the protection of his household as a host, but they persisted. The angels revealed their mission, told Lut to leave by night with those who believed, and warned him not to look back. At dawn the town was overturned and ruined by a shower of stones—a severe lesson. Ibn Kathir also notes the angels’ visit to Ibrahim with glad tidings before they went to Lut’s people. The account teaches that mocking purity, harming guests, and rejecting a prophet after clear warning invite destruction, while those who obey are led out in safety.",
         "ar": "سكن لوط قرب سدوم حيث قطع الطريق والفواحش المجاهرة. فدعاهم إلى تقوى الله وترك المنكر فهددوه. وجاءته الملائكة أضيافاً فهجم القوم. فأُخرج لوط ليلاً ومن آمن من أهله، وقُلبت القرية عبرة. ويعرض ابن كثير القصة درساً شديداً: أن السخرية من الطهر وإيذاء الضيف سبب للهلاك."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1936,7 +2122,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/lut-and-the-people-of-sodom.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -1959,21 +2145,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Lut settled near Sodom, a city known for highway robbery and open indecency. He called them to fear Allah and leave their wrongdoing, but they threatened him instead.",
-          "textAr": "سكن لوط قرب سدوم حيث قطع الطريق والفواحش المجاهرة. فدعاهم إلى تقوى الله وترك المنكر فهددوه."
+          "endMs": 15000,
+          "textEn": "Lut settled near Sodom, a city known for highway robbery, public indecency, and hostility to strangers. He called them to fear Allah and leave their wrongdoing.",
+          "textAr": "سكن لوط قرب سدوم حيث قطع الطريق والفواحش المجاهرة."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Angels came as guests. The people rushed toward them. Lut was taken out by night with his believing household, and the town was overturned as a warning.",
-          "textAr": "وجاءته الملائكة أضيافاً فهجم القوم. فأُخرج لوط ليلاً ومن آمن من أهله، وقُلبت القرية عبرة."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "They answered with threats to drive him out if he continued preaching. Even his wife inclined to the people’s side.",
+          "textAr": "فدعاهم إلى تقوى الله وترك المنكر فهددوه."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir presents the account as a severe lesson: mocking purity and harming guests invites destruction.",
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "Angels came as guests in handsome form. The people rushed toward Lot’s house.",
+          "textAr": "وجاءته الملائكة أضيافاً فهجم القوم."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "He pleaded with them and offered the protection of his household as a host, but they persisted. The angels revealed their mission, told Lut to leave by night with those who believed, and warned him not to look back.",
+          "textAr": "فأُخرج لوط ليلاً ومن آمن من أهله، وقُلبت القرية عبرة."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "At dawn the town was overturned and ruined by a shower of stones—a severe lesson. Ibn Kathir also notes the angels’ visit to Ibrahim with glad tidings before they went to Lut’s people.",
           "textAr": "ويعرض ابن كثير القصة درساً شديداً: أن السخرية من الطهر وإيذاء الضيف سبب للهلاك."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "The account teaches that mocking purity, harming guests, and rejecting a prophet after clear warning invite destruction, while those who obey are led out in safety.",
+          "textAr": ""
         }
       ]
     },
@@ -1987,7 +2191,7 @@
         "ar": "قصة شعيب عليه السلام"
       },
       "content": {
-        "en": "Shu‘aib was sent to Madyan: worship Allah alone, give full measure and weight, and do not corrupt the land or block the path of believers. They ridiculed him and clung to cheating in trade. After clear warning, a cry and torment seized the wrongdoers while believers were saved. Ibn Kathir ties this story to honesty in the marketplace as part of faith.",
+        "en": "Shu‘aib was sent to Madyan (and the people of the thicket): worship Allah alone, give full measure and weight, do not withhold from people what is theirs, and do not spread corruption or block the path of believers. Trade cheating had become normal; he tied marketplace honesty to faith itself. They ridiculed his prayer and clinging to fairness, and threatened the believers. After clear warning, a cry and torment seized the wrongdoers while Shu‘aib and those who believed were saved. Ibn Kathir presents this story so that justice in buying and selling is remembered as worship—and fraud as a path that destroyed a nation.",
         "ar": "أرسل شعيب إلى مدين: اعبدوا الله وأوفوا الكيل والميزان ولا تفسدوا في الأرض ولا تصدّوا عن سبيل الله. فاستهزؤوا وتمسكوا بالغش في التجارة. فأخذت الظالمين الصيحة والعذاب ونجّى الله المؤمنين. ويربط ابن كثير القصة بأمانة السوق من شعب الإيمان."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -1996,7 +2200,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/shuaib-and-fair-measure.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2019,21 +2223,33 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Shu‘aib was sent to Madyan: worship Allah alone, give full measure and weight, and do not corrupt the land or block the path of believers.",
+          "endMs": 18000,
+          "textEn": "Shu‘aib was sent to Madyan (and the people of the thicket): worship Allah alone, give full measure and weight, do not withhold from people what is theirs, and do not spread corruption or block the path of believers.",
           "textAr": "أرسل شعيب إلى مدين: اعبدوا الله وأوفوا الكيل والميزان ولا تفسدوا في الأرض ولا تصدّوا عن سبيل الله."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "They ridiculed him and clung to cheating in trade. After clear warning, a cry and torment seized the wrongdoers while believers were saved.",
-          "textAr": "فاستهزؤوا وتمسكوا بالغش في التجارة. فأخذت الظالمين الصيحة والعذاب ونجّى الله المؤمنين."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "Trade cheating had become normal; he tied marketplace honesty to faith itself.",
+          "textAr": "فاستهزؤوا وتمسكوا بالغش في التجارة."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir ties this story to honesty in the marketplace as part of faith.",
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "They ridiculed his prayer and clinging to fairness, and threatened the believers.",
+          "textAr": "فأخذت الظالمين الصيحة والعذاب ونجّى الله المؤمنين."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "After clear warning, a cry and torment seized the wrongdoers while Shu‘aib and those who believed were saved.",
           "textAr": "ويربط ابن كثير القصة بأمانة السوق من شعب الإيمان."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir presents this story so that justice in buying and selling is remembered as worship—and fraud as a path that destroyed a nation.",
+          "textAr": ""
         }
       ]
     },
@@ -2047,7 +2263,7 @@
         "ar": "قصة يوسف عليه السلام"
       },
       "content": {
-        "en": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. Travelers drew him out and sold him in Egypt. There he grew in beauty and character, resisted temptation, and chose prison over sin. In prison he interpreted dreams by Allah’s leave. When the king’s dream was explained, Yusuf was raised to authority over the storehouses. He met his brothers again without revenge, then reunited with Yaqub. The Quran calls this the best of stories. Ibn Kathir unfolds its turns so that patience, chastity, and forgiveness shine after hardship.",
+        "en": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. Travelers drew him out and sold him in Egypt. There he grew in beauty and trustworthiness. When tempted, he chose prison over disobedience, and in prison he interpreted dreams with knowledge from Allah. He interpreted the king’s dream of cattle and grain, advising storage for years of drought. Raised to authority, he managed the land with justice. His brothers came seeking food without recognizing him. Through measured tests—demanding they bring their youngest brother, then placing a cup in the baggage—he brought the family to repentance without public revenge. He revealed himself with mercy: “No blame upon you today; Allah forgives.” He settled his parents and brothers in honor. Ibn Kathir walks through the Quran’s long Yusuf narrative to teach that envy destroys, chastity elevates, patience in injustice is rewarded, and forgiveness can heal a household.",
         "ar": "حسد إخوة يوسف أباه فألقوه في الجبّ. فاستخرجه سيّارة وباعوه بمصر. فشبّ على خلقٍ جميل، وعصم من الفتنة، واختار السجن على المعصية. وفي السجن أوّل الرؤيا بإذن الله. فلما فُسّرت رؤيا الملك رُفع إلى خزائن الأرض. ثم لقي إخوته بلا انتقام، واجتمع بيعقوب. وسمّى القرآن ذلك أحسن القصص. ويبسطه ابن كثير ليظهر الصبر والعفاف والعفو بعد البلاء."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2056,7 +2272,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/yusuf-from-the-well-to-authority.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2079,21 +2295,33 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. Travelers drew him out and sold him in Egypt. There he grew in beauty and character, resisted temptation, and chose prison over sin.",
-          "textAr": "حسد إخوة يوسف أباه فألقوه في الجبّ. فاستخرجه سيّارة وباعوه بمصر. فشبّ على خلقٍ جميل، وعصم من الفتنة، واختار السجن على المعصية."
+          "endMs": 18000,
+          "textEn": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. Travelers drew him out and sold him in Egypt.",
+          "textAr": "حسد إخوة يوسف أباه فألقوه في الجبّ."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "In prison he interpreted dreams by Allah’s leave. When the king’s dream was explained, Yusuf was raised to authority over the storehouses. He met his brothers again without revenge, then reunited with Yaqub.",
-          "textAr": "وفي السجن أوّل الرؤيا بإذن الله. فلما فُسّرت رؤيا الملك رُفع إلى خزائن الأرض. ثم لقي إخوته بلا انتقام، واجتمع بيعقوب."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "There he grew in beauty and trustworthiness. When tempted, he chose prison over disobedience, and in prison he interpreted dreams with knowledge from Allah.",
+          "textAr": "فاستخرجه سيّارة وباعوه بمصر."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The Quran calls this the best of stories. Ibn Kathir unfolds its turns so that patience, chastity, and forgiveness shine after hardship.",
-          "textAr": "وسمّى القرآن ذلك أحسن القصص. ويبسطه ابن كثير ليظهر الصبر والعفاف والعفو بعد البلاء."
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "He interpreted the king’s dream of cattle and grain, advising storage for years of drought. Raised to authority, he managed the land with justice.",
+          "textAr": "فشبّ على خلقٍ جميل، وعصم من الفتنة، واختار السجن على المعصية."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "His brothers came seeking food without recognizing him. Through measured tests—demanding they bring their youngest brother, then placing a cup in the baggage—he brought the family to repentance without public revenge.",
+          "textAr": "وفي السجن أوّل الرؤيا بإذن الله."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "He revealed himself with mercy: “No blame upon you today; Allah forgives.” He settled his parents and brothers in honor. Ibn Kathir walks through the Quran’s long Yusuf narrative to teach that envy destroys, chastity elevates, patience in injustice is rewarded, and forgiveness can heal a household.",
+          "textAr": "فلما فُسّرت رؤيا الملك رُفع إلى خزائن الأرض."
         }
       ]
     },
@@ -2107,7 +2335,7 @@
         "ar": "قصة أيوب عليه السلام"
       },
       "content": {
-        "en": "Ayyub was granted health, family, and wealth. Then he was severely tested in body and property. He remained grateful and turned to Allah with a humble plea. Allah answered him, removed his affliction, and restored his family as a mercy. The patient are remembered with honor. Ibn Kathir keeps Ayyub as the model of steadfast praise in long trial.",
+        "en": "Ayyub was a grateful prophet blessed with family and wealth. Severe trial then struck his health, property, and children. He remained patient, remembering Allah without complaint that crossed into despair. People who had gathered around him in prosperity drifted away, yet he did not abandon worship. He called upon his Lord that harm had touched him and that Allah is the Most Merciful of the merciful. Allah answered, restored his health, and returned family and blessings as a mercy and reminder for the worshippers. Ibn Kathir holds Ayyub up as the emblem of sabr: affliction is not proof of Allah’s anger when the servant’s tongue and heart stay with Him.",
         "ar": "أوتي أيوب الصحة والأهل والمال، ثم ابتُلي في بدنه وماله بلاء شديداً. فبقي شاكراً وأناب إلى الله بدعاء خاشع. فاستجاب الله وكشف ضرّه وردّ أهله رحمة. ويُذكر الصابرون بثناء. ويبقى أيوب عند ابن كثير إمام الحمد في طول البلاء."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2116,7 +2344,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ayyub-patience-in-trial.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2139,21 +2367,45 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Ayyub was granted health, family, and wealth. Then he was severely tested in body and property. He remained grateful and turned to Allah with a humble plea.",
-          "textAr": "أوتي أيوب الصحة والأهل والمال، ثم ابتُلي في بدنه وماله بلاء شديداً. فبقي شاكراً وأناب إلى الله بدعاء خاشع."
+          "endMs": 12857,
+          "textEn": "Ayyub was a grateful prophet blessed with family and wealth.",
+          "textAr": "أوتي أيوب الصحة والأهل والمال، ثم ابتُلي في بدنه وماله بلاء شديداً."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Allah answered him, removed his affliction, and restored his family as a mercy. The patient are remembered with honor.",
-          "textAr": "فاستجاب الله وكشف ضرّه وردّ أهله رحمة. ويُذكر الصابرون بثناء."
+          "startMs": 12857,
+          "endMs": 25714,
+          "textEn": "Severe trial then struck his health, property, and children.",
+          "textAr": "فبقي شاكراً وأناب إلى الله بدعاء خاشع."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir keeps Ayyub as the model of steadfast praise in long trial.",
+          "startMs": 25714,
+          "endMs": 38571,
+          "textEn": "He remained patient, remembering Allah without complaint that crossed into despair.",
+          "textAr": "فاستجاب الله وكشف ضرّه وردّ أهله رحمة."
+        },
+        {
+          "startMs": 38571,
+          "endMs": 51428,
+          "textEn": "People who had gathered around him in prosperity drifted away, yet he did not abandon worship.",
+          "textAr": "ويُذكر الصابرون بثناء."
+        },
+        {
+          "startMs": 51428,
+          "endMs": 64285,
+          "textEn": "He called upon his Lord that harm had touched him and that Allah is the Most Merciful of the merciful.",
           "textAr": "ويبقى أيوب عند ابن كثير إمام الحمد في طول البلاء."
+        },
+        {
+          "startMs": 64285,
+          "endMs": 77142,
+          "textEn": "Allah answered, restored his health, and returned family and blessings as a mercy and reminder for the worshippers.",
+          "textAr": ""
+        },
+        {
+          "startMs": 77142,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir holds Ayyub up as the emblem of sabr: affliction is not proof of Allah’s anger when the servant’s tongue and heart stay with Him.",
+          "textAr": ""
         }
       ]
     },
@@ -2167,7 +2419,7 @@
         "ar": "قصة ذي الكفل عليه السلام"
       },
       "content": {
-        "en": "Dhul-Kifl is mentioned with the patient and righteous. Ibn Kathir places him among those steadfast in obedience and judgment. Though details are fewer than for other prophets, his mention teaches constancy upon the trust Allah places on His servants. The lesson is not length of narration but firmness upon what Allah commands.",
+        "en": "Dhul-Kifl is mentioned in the Quran among the patient and the righteous. Ibn Kathir relates reports that he was a just man—or a prophet—who pledged to fast by day, pray by night, and judge fairly among people without anger. He kept his pledge despite attempts to provoke him. Whether counted as a prophet or a righteous successor in the prophetic path, his mention teaches reliability (‘kifl’ as a pledge fulfilled): leadership is proven by self-control, prayer, and justice when people try to make the judge impatient.",
         "ar": "ذُكر ذو الكفل مع الصابرين والصالحين. وعدّه ابن كثير فيمن ثبتوا على الطاعة والعدل. ومع قلّة التفصيل ففي ذكره عبرة في حفظ الأمانة. والمقصود ليس طول الرواية بل الثبات على أمر الله."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2176,7 +2428,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/dhul-kifl-among-the-patient.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2199,20 +2451,26 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Dhul-Kifl is mentioned with the patient and righteous. Ibn Kathir places him among those steadfast in obedience and judgment.",
-          "textAr": "ذُكر ذو الكفل مع الصابرين والصالحين. وعدّه ابن كثير فيمن ثبتوا على الطاعة والعدل."
+          "endMs": 22500,
+          "textEn": "Dhul-Kifl is mentioned in the Quran among the patient and the righteous.",
+          "textAr": "ذُكر ذو الكفل مع الصابرين والصالحين."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Though details are fewer than for other prophets, his mention teaches constancy upon the trust Allah places on His servants.",
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "Ibn Kathir relates reports that he was a just man—or a prophet—who pledged to fast by day, pray by night, and judge fairly among people without anger.",
+          "textAr": "وعدّه ابن كثير فيمن ثبتوا على الطاعة والعدل."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "He kept his pledge despite attempts to provoke him.",
           "textAr": "ومع قلّة التفصيل ففي ذكره عبرة في حفظ الأمانة."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The lesson is not length of narration but firmness upon what Allah commands.",
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "Whether counted as a prophet or a righteous successor in the prophetic path, his mention teaches reliability (‘kifl’ as a pledge fulfilled): leadership is proven by self-control, prayer, and justice when people try to make the judge impatient.",
           "textAr": "والمقصود ليس طول الرواية بل الثبات على أمر الله."
         }
       ]
@@ -2227,7 +2485,7 @@
         "ar": "قصة هارون عليه السلام"
       },
       "content": {
-        "en": "When Musa feared he would not speak clearly, Allah appointed his brother Harun as prophet and helper. Together they went to Pharaoh with clear proofs. Harun stood with Musa in calling to Allah and guiding the Children of Israel. In later trials he sought to keep the people from splitting until Musa returned. Ibn Kathir shows Harun as sincere support in conveying the message—eloquence joined to brotherhood.",
+        "en": "Harun was Musa’s brother and supporter, gifted with eloquence to help carry the message to Pharaoh. Together they said: “We are messengers of the Lord of the worlds,” asking that the Israelites be sent with them and warning of punishment for denial. When Musa went to the appointed rendezvous with his Lord, Harun remained with the people. Some followed the Samiri into worship of the calf. Harun had advised and restrained them as far as he could; Musa later seized his beard in grief, then learned Harun had feared division. The Quran clears him as a sincere partner in prophethood. Ibn Kathir presents Harun as the ally whose speech and steadfastness completed Musa’s mission.",
         "ar": "لما خشي موسى ألا يفصح لسانه جعل الله أخاه هارون نبياً ووزيراً. فذهبا معاً إلى فرعون بالبينات. وثبت هارون مع موسى في الدعوة وهداية بني إسرائيل. وفي الفتن حرص على ألا يتفرّقوا حتى يرجع موسى. ويظهره ابن كثير نصرة صادقة للرسالة: فصاحة مع أخوّة."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2236,7 +2494,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/harun-supports-musa.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2259,21 +2517,45 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "When Musa feared he would not speak clearly, Allah appointed his brother Harun as prophet and helper. Together they went to Pharaoh with clear proofs.",
-          "textAr": "لما خشي موسى ألا يفصح لسانه جعل الله أخاه هارون نبياً ووزيراً. فذهبا معاً إلى فرعون بالبينات."
+          "endMs": 12857,
+          "textEn": "Harun was Musa’s brother and supporter, gifted with eloquence to help carry the message to Pharaoh.",
+          "textAr": "لما خشي موسى ألا يفصح لسانه جعل الله أخاه هارون نبياً ووزيراً."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Harun stood with Musa in calling to Allah and guiding the Children of Israel. In later trials he sought to keep the people from splitting until Musa returned.",
-          "textAr": "وثبت هارون مع موسى في الدعوة وهداية بني إسرائيل. وفي الفتن حرص على ألا يتفرّقوا حتى يرجع موسى."
+          "startMs": 12857,
+          "endMs": 25714,
+          "textEn": "Together they said: “We are messengers of the Lord of the worlds,” asking that the Israelites be sent with them and warning of punishment for denial.",
+          "textAr": "فذهبا معاً إلى فرعون بالبينات."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir shows Harun as sincere support in conveying the message—eloquence joined to brotherhood.",
+          "startMs": 25714,
+          "endMs": 38571,
+          "textEn": "When Musa went to the appointed rendezvous with his Lord, Harun remained with the people.",
+          "textAr": "وثبت هارون مع موسى في الدعوة وهداية بني إسرائيل."
+        },
+        {
+          "startMs": 38571,
+          "endMs": 51428,
+          "textEn": "Some followed the Samiri into worship of the calf.",
+          "textAr": "وفي الفتن حرص على ألا يتفرّقوا حتى يرجع موسى."
+        },
+        {
+          "startMs": 51428,
+          "endMs": 64285,
+          "textEn": "Harun had advised and restrained them as far as he could; Musa later seized his beard in grief, then learned Harun had feared division.",
           "textAr": "ويظهره ابن كثير نصرة صادقة للرسالة: فصاحة مع أخوّة."
+        },
+        {
+          "startMs": 64285,
+          "endMs": 77142,
+          "textEn": "The Quran clears him as a sincere partner in prophethood.",
+          "textAr": ""
+        },
+        {
+          "startMs": 77142,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir presents Harun as the ally whose speech and steadfastness completed Musa’s mission.",
+          "textAr": ""
         }
       ]
     },
@@ -2287,7 +2569,7 @@
         "ar": "قصة حزقيل عليه السلام"
       },
       "content": {
-        "en": "Ibn Kathir recounts Hizqeel (Ezekiel) among prophets after Musa when the Israelites needed renewal of hope and obedience. Reports describe guidance that revived hearts after fear and loss. Whether every detail is equally strong, the core lesson stands: Allah sends reminders whenever communities grow weak. The account keeps hope alive after great messengers have passed.",
+        "en": "After Musa, Ibn Kathir mentions Hizqeel (often identified with Ezekiel) among those who called the Children of Israel when hearts grew hard. Reports speak of a people who fled death and were caused to die, then raised as a sign so they might know Allah’s power over life—reminding them that escape from decree is impossible and that revival belongs to Allah alone. Though details vary among narrations, the teaching Ibn Kathir preserves is clear: prophets after Musa continued to confront forgetfulness and fear, calling a covenant people back to the Lord who splits the grain and the date-stone and resurrects the dead.",
         "ar": "ذكر ابن كثير حزقيل فيمن بعث بعد موسى حين احتاج بنو إسرائيل لتجديد الرجاء والطاعة. وترد أخبار عن هداية أحيت القلوب بعد الخوف والخسارة. ومع تفاوت قوة التفاصيل يبقى الأصل: أن الله يرسل المذكرين كلما ضعف الناس. فتبقى القصة رجاءً بعد ذهاب كبار الرسل."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2296,7 +2578,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/hizqeel-after-musa.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2319,21 +2601,21 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Ibn Kathir recounts Hizqeel (Ezekiel) among prophets after Musa when the Israelites needed renewal of hope and obedience.",
+          "endMs": 30000,
+          "textEn": "After Musa, Ibn Kathir mentions Hizqeel (often identified with Ezekiel) among those who called the Children of Israel when hearts grew hard.",
           "textAr": "ذكر ابن كثير حزقيل فيمن بعث بعد موسى حين احتاج بنو إسرائيل لتجديد الرجاء والطاعة."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Reports describe guidance that revived hearts after fear and loss. Whether every detail is equally strong, the core lesson stands: Allah sends reminders whenever communities grow weak.",
-          "textAr": "وترد أخبار عن هداية أحيت القلوب بعد الخوف والخسارة. ومع تفاوت قوة التفاصيل يبقى الأصل: أن الله يرسل المذكرين كلما ضعف الناس."
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Reports speak of a people who fled death and were caused to die, then raised as a sign so they might know Allah’s power over life—reminding them that escape from decree is impossible and that revival belongs to Allah alone.",
+          "textAr": "وترد أخبار عن هداية أحيت القلوب بعد الخوف والخسارة."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The account keeps hope alive after great messengers have passed.",
-          "textAr": "فتبقى القصة رجاءً بعد ذهاب كبار الرسل."
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "Though details vary among narrations, the teaching Ibn Kathir preserves is clear: prophets after Musa continued to confront forgetfulness and fear, calling a covenant people back to the Lord who splits the grain and the date-stone and resurrects the dead.",
+          "textAr": "ومع تفاوت قوة التفاصيل يبقى الأصل: أن الله يرسل المذكرين كلما ضعف الناس."
         }
       ]
     },
@@ -2347,7 +2629,7 @@
         "ar": "قصة إلياس عليه السلام"
       },
       "content": {
-        "en": "Ilyas called his people to leave idolatry and return to Allah alone. Ibn Kathir includes him among prophets between Musa and later messengers. His message matches the shared call of the prophets: worship is for Allah alone, and idols cannot benefit or harm. Steadfast calling in a forgetful age is the heart of his story.",
+        "en": "Ilyas (Elyas/Elisha in some listings) was sent when Israelites inclined to an idol such as Ba‘l. He called them to abandon false gods and return to the worship of Allah alone. Many rejected him; Allah’s help came against the idolaters, and the call of tawhid was renewed. Ibn Kathir’s brief notice places Ilyas in the chain of reformers after Musa—proof that idolatry can return even among those who knew revelation, and that Allah raises callers who smash the prestige of false deities with clear reminder.",
         "ar": "دعا إلياس قومه لترك الأصنام والرجوع إلى الله وحده. وعدّه ابن كثير بين موسى ومن بعده. ورسالته رسالة الأنبياء: العبادة لله وحده، والأصنام لا تنفع ولا تضر. والثبات على الدعوة في زمن الغفلة لبّ قصته."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2356,7 +2638,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/ilyas-against-idolatry.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2379,20 +2661,26 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Ilyas called his people to leave idolatry and return to Allah alone. Ibn Kathir includes him among prophets between Musa and later messengers.",
-          "textAr": "دعا إلياس قومه لترك الأصنام والرجوع إلى الله وحده. وعدّه ابن كثير بين موسى ومن بعده."
+          "endMs": 22500,
+          "textEn": "Ilyas (Elyas/Elisha in some listings) was sent when Israelites inclined to an idol such as Ba‘l.",
+          "textAr": "دعا إلياس قومه لترك الأصنام والرجوع إلى الله وحده."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "His message matches the shared call of the prophets: worship is for Allah alone, and idols cannot benefit or harm.",
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "He called them to abandon false gods and return to the worship of Allah alone.",
+          "textAr": "وعدّه ابن كثير بين موسى ومن بعده."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "Many rejected him; Allah’s help came against the idolaters, and the call of tawhid was renewed.",
           "textAr": "ورسالته رسالة الأنبياء: العبادة لله وحده، والأصنام لا تنفع ولا تضر."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Steadfast calling in a forgetful age is the heart of his story.",
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir’s brief notice places Ilyas in the chain of reformers after Musa—proof that idolatry can return even among those who knew revelation, and that Allah raises callers who smash the prestige of false deities with clear reminder.",
           "textAr": "والثبات على الدعوة في زمن الغفلة لبّ قصته."
         }
       ]
@@ -2407,7 +2695,7 @@
         "ar": "قصة شمويل عليه السلام"
       },
       "content": {
-        "en": "After defeat and the loss of the Ark, the Israelites asked for a prophet to appoint a king. Allah sent Shammil (Samuel). He guided them under revelation, warned about the burdens of kingship, and tested who would obey Allah’s limits before battle. Ibn Kathir uses this episode to show that victory follows obedience more than numbers.",
+        "en": "Shammil (Samuel) guided the Israelites when they asked for a king to fight in Allah’s way. He warned them about the duties of kingship, then—by Allah’s leave—Talut (Saul) was appointed. People objected that Talut was not of great wealth; Shammil answered that Allah had increased him in knowledge and stature, and that Allah gives dominion to whom He wills. When they went out, a river tested their obedience: those who drank fully showed weakness of will. Few remained steadfast for the battle in which Dawud later slew Jalut. Ibn Kathir uses Shammil’s episode to teach that leadership is by Allah’s choice and that victory follows discipline, not mere numbers.",
         "ar": "بعد الهزيمة وفقدان التابوت طلب بنو إسرائيل نبياً يبعث لهم ملكاً. فبعث الله شمويل. فهداهم بالوحي، وحذّرهم تبعات الملك، وابتلاهم في حدود الطاعة قبل القتال. ويبين ابن كثير أن النصر مع الطاعة لا مع كثرة العدد فقط."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2416,7 +2704,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/shammil-and-the-king.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2439,21 +2727,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "After defeat and the loss of the Ark, the Israelites asked for a prophet to appoint a king. Allah sent Shammil (Samuel).",
-          "textAr": "بعد الهزيمة وفقدان التابوت طلب بنو إسرائيل نبياً يبعث لهم ملكاً. فبعث الله شمويل."
+          "endMs": 15000,
+          "textEn": "Shammil (Samuel) guided the Israelites when they asked for a king to fight in Allah’s way.",
+          "textAr": "بعد الهزيمة وفقدان التابوت طلب بنو إسرائيل نبياً يبعث لهم ملكاً."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He guided them under revelation, warned about the burdens of kingship, and tested who would obey Allah’s limits before battle.",
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "He warned them about the duties of kingship, then—by Allah’s leave—Talut (Saul) was appointed.",
+          "textAr": "فبعث الله شمويل."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "People objected that Talut was not of great wealth; Shammil answered that Allah had increased him in knowledge and stature, and that Allah gives dominion to whom He wills.",
           "textAr": "فهداهم بالوحي، وحذّرهم تبعات الملك، وابتلاهم في حدود الطاعة قبل القتال."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir uses this episode to show that victory follows obedience more than numbers.",
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "When they went out, a river tested their obedience: those who drank fully showed weakness of will.",
           "textAr": "ويبين ابن كثير أن النصر مع الطاعة لا مع كثرة العدد فقط."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "Few remained steadfast for the battle in which Dawud later slew Jalut.",
+          "textAr": ""
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir uses Shammil’s episode to teach that leadership is by Allah’s choice and that victory follows discipline, not mere numbers.",
+          "textAr": ""
         }
       ]
     },
@@ -2467,7 +2773,7 @@
         "ar": "قصة داود عليه السلام"
       },
       "content": {
-        "en": "When Goliath challenged Saul’s army, young Dawud stepped forward while others feared. Allah gave him victory over the giant. Dawud was later given kingship and the Zabur. He judged with justice and was known for beautiful remembrance of Allah. Trials refined him when he hastened in judgment and then sought forgiveness. Ibn Kathir balances courage, worship, and humility in a prophet-king.",
+        "en": "Dawud was a young man of courage and faith when he faced Jalut and killed him by Allah’s leave, turning fear into victory for the Israelites. Kingdom and prophethood were given to him. Mountains and birds glorified Allah with him; iron was made soft for his armor-making, a practical mercy for defense. He judged with justice, yet the Quran also recounts a trial concerning litigants that taught him haste in judgment must yield to fuller hearing. He turned to Allah in repentance and remained a devoted worshipper whose zabur (psalms) praised his Lord. Ibn Kathir presents Dawud as strength joined to remembrance: a warrior-prophet whose power did not cancel humility.",
         "ar": "لما تحدّى جالوت جيش طالوت تقدّم داود الشاب وقد فزع الناس. فنصره الله على الجبار. ثم آتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله. وهذّبته الابتلاءات حين استعجل الحكم ثم استغفر. ويوازن ابن كثير بين الشجاعة والعبادة والتواضع في نبيٍّ ملك."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2476,7 +2782,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/dawud-and-goliath.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2499,21 +2805,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "When Goliath challenged Saul’s army, young Dawud stepped forward while others feared. Allah gave him victory over the giant.",
-          "textAr": "لما تحدّى جالوت جيش طالوت تقدّم داود الشاب وقد فزع الناس. فنصره الله على الجبار."
+          "endMs": 15000,
+          "textEn": "Dawud was a young man of courage and faith when he faced Jalut and killed him by Allah’s leave, turning fear into victory for the Israelites.",
+          "textAr": "لما تحدّى جالوت جيش طالوت تقدّم داود الشاب وقد فزع الناس."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Dawud was later given kingship and the Zabur. He judged with justice and was known for beautiful remembrance of Allah. Trials refined him when he hastened in judgment and then sought forgiveness.",
-          "textAr": "ثم آتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله. وهذّبته الابتلاءات حين استعجل الحكم ثم استغفر."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "Kingdom and prophethood were given to him.",
+          "textAr": "فنصره الله على الجبار."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir balances courage, worship, and humility in a prophet-king.",
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "Mountains and birds glorified Allah with him; iron was made soft for his armor-making, a practical mercy for defense.",
+          "textAr": "ثم آتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "He judged with justice, yet the Quran also recounts a trial concerning litigants that taught him haste in judgment must yield to fuller hearing.",
+          "textAr": "وهذّبته الابتلاءات حين استعجل الحكم ثم استغفر."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "He turned to Allah in repentance and remained a devoted worshipper whose zabur (psalms) praised his Lord.",
           "textAr": "ويوازن ابن كثير بين الشجاعة والعبادة والتواضع في نبيٍّ ملك."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir presents Dawud as strength joined to remembrance: a warrior-prophet whose power did not cancel humility.",
+          "textAr": ""
         }
       ]
     },
@@ -2527,7 +2851,7 @@
         "ar": "قصة سليمان عليه السلام"
       },
       "content": {
-        "en": "Sulaiman inherited prophethood—not wealth—from Dawud. Allah taught him the speech of birds and subjected jinn, men, and the wind to his command. When the Queen of Sheba sent gifts, he refused alliance by wealth and called her to submit to Allah. His hosts of men, jinn, and birds marched in order by Allah’s leave. Ibn Kathir joins power with gratitude: dominion is a trust, not a toy.",
+        "en": "Sulaiman inherited Dawud’s prophethood and a kingdom unlike any other. Allah taught him the speech of birds, subjected the wind and the jinn to his command, and poured molten copper for his works. He reviewed the hoopoe, which brought news of Bilqis, the queen of Saba, and her people’s sun-worship. Sulaiman sent a letter calling her to Allah. Her throne was brought in an instant; she recognized the sign, abandoned sun-worship, and submitted with Sulaiman to the Lord of the worlds. He also prayed for a kingdom that should belong to none after him, and remained grateful in inspection of his horses and hosts. Ibn Kathir’s Sulaiman is mastery under tawhid—power used to invite, not to tyrannize.",
         "ar": "ورث سليمان النبوة لا المال عن داود. وعلّمه الله منطق الطير وسخّر له الجن والإنس والريح. ولما بعثت ملكة سبأ بالهدايا أبى موالاة الدنيا ودعاها إلى الإسلام لله. وسارت جنوده من إنس وجن وطير بأمر الله. ويقرن ابن كثير الملك بالشكر: فالسلطان أمانة لا لعبة."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2536,7 +2860,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/sulaiman-and-the-dominion.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2559,21 +2883,45 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Sulaiman inherited prophethood—not wealth—from Dawud. Allah taught him the speech of birds and subjected jinn, men, and the wind to his command.",
-          "textAr": "ورث سليمان النبوة لا المال عن داود. وعلّمه الله منطق الطير وسخّر له الجن والإنس والريح."
+          "endMs": 12857,
+          "textEn": "Sulaiman inherited Dawud’s prophethood and a kingdom unlike any other.",
+          "textAr": "ورث سليمان النبوة لا المال عن داود."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "When the Queen of Sheba sent gifts, he refused alliance by wealth and called her to submit to Allah. His hosts of men, jinn, and birds marched in order by Allah’s leave.",
-          "textAr": "ولما بعثت ملكة سبأ بالهدايا أبى موالاة الدنيا ودعاها إلى الإسلام لله. وسارت جنوده من إنس وجن وطير بأمر الله."
+          "startMs": 12857,
+          "endMs": 25714,
+          "textEn": "Allah taught him the speech of birds, subjected the wind and the jinn to his command, and poured molten copper for his works.",
+          "textAr": "وعلّمه الله منطق الطير وسخّر له الجن والإنس والريح."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir joins power with gratitude: dominion is a trust, not a toy.",
+          "startMs": 25714,
+          "endMs": 38571,
+          "textEn": "He reviewed the hoopoe, which brought news of Bilqis, the queen of Saba, and her people’s sun-worship.",
+          "textAr": "ولما بعثت ملكة سبأ بالهدايا أبى موالاة الدنيا ودعاها إلى الإسلام لله."
+        },
+        {
+          "startMs": 38571,
+          "endMs": 51428,
+          "textEn": "Sulaiman sent a letter calling her to Allah.",
+          "textAr": "وسارت جنوده من إنس وجن وطير بأمر الله."
+        },
+        {
+          "startMs": 51428,
+          "endMs": 64285,
+          "textEn": "Her throne was brought in an instant; she recognized the sign, abandoned sun-worship, and submitted with Sulaiman to the Lord of the worlds.",
           "textAr": "ويقرن ابن كثير الملك بالشكر: فالسلطان أمانة لا لعبة."
+        },
+        {
+          "startMs": 64285,
+          "endMs": 77142,
+          "textEn": "He also prayed for a kingdom that should belong to none after him, and remained grateful in inspection of his horses and hosts.",
+          "textAr": ""
+        },
+        {
+          "startMs": 77142,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir’s Sulaiman is mastery under tawhid—power used to invite, not to tyrannize.",
+          "textAr": ""
         }
       ]
     },
@@ -2587,7 +2935,7 @@
         "ar": "قصة شعيا عليه السلام"
       },
       "content": {
-        "en": "Shi‘a (Isaiah) lived between Dawud’s line and Zakariyah. Ibn Kathir relates that he advised an obedient king and warned of invading armies. He called rulers and people back to Allah and spoke of messengers yet to come. Counsel to the powerful is itself a form of prophethood’s burden. The story urges leaders to listen before pride destroys a city.",
+        "en": "Shi‘a (Isaiah) is recounted by Ibn Kathir among prophets who warned Israel and its kings when injustice and idolatry spread. He called rulers and people to return to Allah’s law, warning that neglecting revelation brings humiliation and that repentance restores dignity. His chapter, drawn from reports of earlier scriptures filtered through Muslim historians, serves Ibn Kathir’s aim: every age of the Children of Israel that forgot Musa’s covenant heard another voice until proof was completed against them.",
         "ar": "عاش شعيا بين آل داود وزكريا. وذكر ابن كثير أنه نصح ملكاً مطيعاً وحذّر من جيوش غازية. فردّ الحكام والناس إلى الله وبشّر بمن يأتي من الرسل. ونصح الأقوياء من ثقل النبوة. وتحثّ القصة القادة على السمع قبل أن يهلك الكبر مدينة."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2596,7 +2944,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/shia-and-the-king.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2619,21 +2967,21 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Shi‘a (Isaiah) lived between Dawud’s line and Zakariyah. Ibn Kathir relates that he advised an obedient king and warned of invading armies.",
-          "textAr": "عاش شعيا بين آل داود وزكريا. وذكر ابن كثير أنه نصح ملكاً مطيعاً وحذّر من جيوش غازية."
+          "endMs": 30000,
+          "textEn": "Shi‘a (Isaiah) is recounted by Ibn Kathir among prophets who warned Israel and its kings when injustice and idolatry spread.",
+          "textAr": "عاش شعيا بين آل داود وزكريا."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He called rulers and people back to Allah and spoke of messengers yet to come. Counsel to the powerful is itself a form of prophethood’s burden.",
-          "textAr": "فردّ الحكام والناس إلى الله وبشّر بمن يأتي من الرسل. ونصح الأقوياء من ثقل النبوة."
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He called rulers and people to return to Allah’s law, warning that neglecting revelation brings humiliation and that repentance restores dignity.",
+          "textAr": "وذكر ابن كثير أنه نصح ملكاً مطيعاً وحذّر من جيوش غازية."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The story urges leaders to listen before pride destroys a city.",
-          "textAr": "وتحثّ القصة القادة على السمع قبل أن يهلك الكبر مدينة."
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "His chapter, drawn from reports of earlier scriptures filtered through Muslim historians, serves Ibn Kathir’s aim: every age of the Children of Israel that forgot Musa’s covenant heard another voice until proof was completed against them.",
+          "textAr": "فردّ الحكام والناس إلى الله وبشّر بمن يأتي من الرسل."
         }
       ]
     },
@@ -2647,7 +2995,7 @@
         "ar": "قصة أرميا عليه السلام"
       },
       "content": {
-        "en": "Aramaya (Jeremiah) warned his people as injustice grew. Ibn Kathir describes siege and harsh rule that followed disobedience. Ignoring prophetic warning brought loss of security and sanctuary. The tone is sober: cities fall when truth is mocked. Yet warning itself is mercy, if anyone will listen.",
+        "en": "Aramaya (Jeremiah) warned Jerusalem when corruption and alliance with wrong paths invited disaster. He called king and people to sincere repentance. When they persisted, the city faced ruin and exile—yet Allah’s promise of return and rebuilding remained for those who would turn back. Ibn Kathir narrates this as history of warning fulfilled: prophets do not invent doom; they announce the consequence already tied to injustice. The tears of Aramaya are the grief of a messenger who loved his people and could not force their hearts.",
         "ar": "أنذر أرميا قومه وقد فشا الظلم. ووصف ابن كثير الحصار والحكم القاسي بعد العصيان. فالإعراض عن نذر الأنبياء يذهب بالأمن والمقدّسات. والنبرة موقرة: تسقط المدن إذا سُخر من الحق. غير أن الإنذار نفسه رحمة لمن سمع."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2656,7 +3004,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/aramaya-and-jerusalem.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2679,20 +3027,32 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Aramaya (Jeremiah) warned his people as injustice grew. Ibn Kathir describes siege and harsh rule that followed disobedience.",
-          "textAr": "أنذر أرميا قومه وقد فشا الظلم. ووصف ابن كثير الحصار والحكم القاسي بعد العصيان."
+          "endMs": 18000,
+          "textEn": "Aramaya (Jeremiah) warned Jerusalem when corruption and alliance with wrong paths invited disaster.",
+          "textAr": "أنذر أرميا قومه وقد فشا الظلم."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Ignoring prophetic warning brought loss of security and sanctuary. The tone is sober: cities fall when truth is mocked.",
-          "textAr": "فالإعراض عن نذر الأنبياء يذهب بالأمن والمقدّسات. والنبرة موقرة: تسقط المدن إذا سُخر من الحق."
+          "startMs": 18000,
+          "endMs": 36000,
+          "textEn": "He called king and people to sincere repentance.",
+          "textAr": "ووصف ابن كثير الحصار والحكم القاسي بعد العصيان."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Yet warning itself is mercy, if anyone will listen.",
+          "startMs": 36000,
+          "endMs": 54000,
+          "textEn": "When they persisted, the city faced ruin and exile—yet Allah’s promise of return and rebuilding remained for those who would turn back.",
+          "textAr": "فالإعراض عن نذر الأنبياء يذهب بالأمن والمقدّسات."
+        },
+        {
+          "startMs": 54000,
+          "endMs": 72000,
+          "textEn": "Ibn Kathir narrates this as history of warning fulfilled: prophets do not invent doom; they announce the consequence already tied to injustice.",
+          "textAr": "والنبرة موقرة: تسقط المدن إذا سُخر من الحق."
+        },
+        {
+          "startMs": 72000,
+          "endMs": 90000,
+          "textEn": "The tears of Aramaya are the grief of a messenger who loved his people and could not force their hearts.",
           "textAr": "غير أن الإنذار نفسه رحمة لمن سمع."
         }
       ]
@@ -2707,7 +3067,7 @@
         "ar": "قصة دانيال عليه السلام"
       },
       "content": {
-        "en": "Under a tyrant’s captivity, Daniel was thrown to lions, yet they did not harm him by Allah’s will. Provision reached him through Allah’s command even in the pit. Ibn Kathir preserves this as a sign that Allah protects whom He wills in prisons and pits. Trust does not die in chains. The story comforts the oppressed without denying the hardness of tyranny.",
+        "en": "Daniel was among the righteous of Israel in the time of exile under a mighty pagan king. He held to prayer and refused food and honors that compromised his faith. Enemies plotted until he was cast into a den of lions; Allah shut their mouths and brought him out safe, while falsehood was exposed. Ibn Kathir preserves the episode as tawakkul under empire: a believer may lack political power yet never lacks a Lord who vindicates those who refuse shirk and persist in salah.",
         "ar": "في الأسر أُلقي دانيال إلى أسود فلم تمسّه بإذن الله، وأُتي له بالرزق بأمر الله ولو في الجبّ. وحفظ ابن كثير ذلك آية على أن الله يحفظ من يشاء في السجون والقلوب. فالتوكل لا يموت في القيود. وتواسي المظلوم من غير إنكار لشدة الطغيان."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2716,7 +3076,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/daniel-in-the-lions-den.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2739,20 +3099,26 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Under a tyrant’s captivity, Daniel was thrown to lions, yet they did not harm him by Allah’s will. Provision reached him through Allah’s command even in the pit.",
+          "endMs": 22500,
+          "textEn": "Daniel was among the righteous of Israel in the time of exile under a mighty pagan king.",
           "textAr": "في الأسر أُلقي دانيال إلى أسود فلم تمسّه بإذن الله، وأُتي له بالرزق بأمر الله ولو في الجبّ."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Ibn Kathir preserves this as a sign that Allah protects whom He wills in prisons and pits. Trust does not die in chains.",
-          "textAr": "وحفظ ابن كثير ذلك آية على أن الله يحفظ من يشاء في السجون والقلوب. فالتوكل لا يموت في القيود."
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "He held to prayer and refused food and honors that compromised his faith.",
+          "textAr": "وحفظ ابن كثير ذلك آية على أن الله يحفظ من يشاء في السجون والقلوب."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The story comforts the oppressed without denying the hardness of tyranny.",
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "Enemies plotted until he was cast into a den of lions; Allah shut their mouths and brought him out safe, while falsehood was exposed.",
+          "textAr": "فالتوكل لا يموت في القيود."
+        },
+        {
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir preserves the episode as tawakkul under empire: a believer may lack political power yet never lacks a Lord who vindicates those who refuse shirk and persist in salah.",
           "textAr": "وتواسي المظلوم من غير إنكار لشدة الطغيان."
         }
       ]
@@ -2767,7 +3133,7 @@
         "ar": "قصة عزير عليه السلام"
       },
       "content": {
-        "en": "Passing a ruined settlement, Uzair wondered how Allah would bring life after death. Allah caused him to die a hundred years, then raised him to see his food and donkey restored. He returned to his people as a living sign of resurrection and renewed teaching of the Scripture. Ibn Kathir connects the scene to Quran 2:259. The heart of the tale is certainty in the rising after death.",
+        "en": "Uzair (Ezra) passed by a ruined town and wondered how Allah would bring it to life. Allah caused him to die for a hundred years, then raised him and showed food and drink unchanged while his donkey’s bones revived before his eyes. He said: “I know that Allah is able to do all things.” Some later exaggerated about him wrongly; Ibn Kathir recounts the Quran’s lesson without endorsing excess: resurrection is real, and reflection on ruined towns should lead to certainty in Allah’s power—not to ascribe divinity to a righteous servant.",
         "ar": "مرّ عزير على قرية خاوية فقال أنى يحييها الله بعد موتها. فأماته الله مائة عام ثم بعثه ليرى طعامه وحماره قد أُعيدا. فرجع إلى قومه آية على البعث وجدّد تعليم الكتاب. ويربط ابن كثير المشهد بآية البقرة. ولبّ القصة اليقين بالنشور بعد الموت."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2776,7 +3142,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/uzair-and-the-ruined-town.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2799,21 +3165,21 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Passing a ruined settlement, Uzair wondered how Allah would bring life after death. Allah caused him to die a hundred years, then raised him to see his food and donkey restored.",
-          "textAr": "مرّ عزير على قرية خاوية فقال أنى يحييها الله بعد موتها. فأماته الله مائة عام ثم بعثه ليرى طعامه وحماره قد أُعيدا."
+          "endMs": 30000,
+          "textEn": "Uzair (Ezra) passed by a ruined town and wondered how Allah would bring it to life.",
+          "textAr": "مرّ عزير على قرية خاوية فقال أنى يحييها الله بعد موتها."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He returned to his people as a living sign of resurrection and renewed teaching of the Scripture. Ibn Kathir connects the scene to Quran 2:259.",
-          "textAr": "فرجع إلى قومه آية على البعث وجدّد تعليم الكتاب. ويربط ابن كثير المشهد بآية البقرة."
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Allah caused him to die for a hundred years, then raised him and showed food and drink unchanged while his donkey’s bones revived before his eyes.",
+          "textAr": "فأماته الله مائة عام ثم بعثه ليرى طعامه وحماره قد أُعيدا."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "The heart of the tale is certainty in the rising after death.",
-          "textAr": "ولبّ القصة اليقين بالنشور بعد الموت."
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "He said: “I know that Allah is able to do all things.” Some later exaggerated about him wrongly; Ibn Kathir recounts the Quran’s lesson without endorsing excess: resurrection is real, and reflection on ruined towns should lead to certainty in Allah’s power—not to ascribe divinity to a righteous servant.",
+          "textAr": "فرجع إلى قومه آية على البعث وجدّد تعليم الكتاب."
         }
       ]
     },
@@ -2827,7 +3193,7 @@
         "ar": "قصة زكريا عليه السلام"
       },
       "content": {
-        "en": "Elderly Zakariyah cared for Maryam in the sanctuary and saw out-of-season provision with her. He prayed for a pure heir despite old age and barrenness. Allah gave him glad tidings of Yahya and a sign that he would not speak to people for three nights though unimpaired. He came out signaling them to glorify Allah. Ibn Kathir paints tenderness: an old prophet’s prayer answered against every ordinary limit.",
+        "en": "Zakariyah served Allah in old age, guardian of Maryam in the mihrab. Seeing her provisions, he asked for a pure offspring. Angels gave glad tidings of Yahya, a name not given before. He asked for a sign and was told he would not speak to people for three nights except by gesture, while glorifying Allah morning and evening. Ibn Kathir ties Zakariyah’s answered prayer to hope for those who think the door of mercy is shut by age. Prophethood and righteous children are gifts Allah opens when servants call in secret and public with sincerity.",
         "ar": "كفل زكريا الشيخ مريم في المحراب ورأى عندها رزقاً من غير أوان. فدعا بذرية طيبة على الكبر والعقم. فبشّره الله بيحيى وجعل آيته ألا يكلم الناس ثلاث ليال سوياً. فخرج يومئ إليهم أن سبّحوا. ويرسم ابن كثير رقّة دعاء شيخٍ استُجيب له فوق العادة."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2836,7 +3202,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/zakariyah-and-the-glad-tidings.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2859,21 +3225,39 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Elderly Zakariyah cared for Maryam in the sanctuary and saw out-of-season provision with her. He prayed for a pure heir despite old age and barrenness.",
-          "textAr": "كفل زكريا الشيخ مريم في المحراب ورأى عندها رزقاً من غير أوان. فدعا بذرية طيبة على الكبر والعقم."
+          "endMs": 15000,
+          "textEn": "Zakariyah served Allah in old age, guardian of Maryam in the mihrab.",
+          "textAr": "كفل زكريا الشيخ مريم في المحراب ورأى عندها رزقاً من غير أوان."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "Allah gave him glad tidings of Yahya and a sign that he would not speak to people for three nights though unimpaired. He came out signaling them to glorify Allah.",
-          "textAr": "فبشّره الله بيحيى وجعل آيته ألا يكلم الناس ثلاث ليال سوياً. فخرج يومئ إليهم أن سبّحوا."
+          "startMs": 15000,
+          "endMs": 30000,
+          "textEn": "Seeing her provisions, he asked for a pure offspring.",
+          "textAr": "فدعا بذرية طيبة على الكبر والعقم."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir paints tenderness: an old prophet’s prayer answered against every ordinary limit.",
+          "startMs": 30000,
+          "endMs": 45000,
+          "textEn": "Angels gave glad tidings of Yahya, a name not given before.",
+          "textAr": "فبشّره الله بيحيى وجعل آيته ألا يكلم الناس ثلاث ليال سوياً."
+        },
+        {
+          "startMs": 45000,
+          "endMs": 60000,
+          "textEn": "He asked for a sign and was told he would not speak to people for three nights except by gesture, while glorifying Allah morning and evening.",
+          "textAr": "فخرج يومئ إليهم أن سبّحوا."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 75000,
+          "textEn": "Ibn Kathir ties Zakariyah’s answered prayer to hope for those who think the door of mercy is shut by age.",
           "textAr": "ويرسم ابن كثير رقّة دعاء شيخٍ استُجيب له فوق العادة."
+        },
+        {
+          "startMs": 75000,
+          "endMs": 90000,
+          "textEn": "Prophethood and righteous children are gifts Allah opens when servants call in secret and public with sincerity.",
+          "textAr": ""
         }
       ]
     },
@@ -2887,7 +3271,7 @@
         "ar": "قصة يحيى عليه السلام"
       },
       "content": {
-        "en": "Yahya was serious and merciful from childhood, given wisdom while still young and commanded to hold fast to the Scripture. He lived simply, warning people and judging by Allah’s guidance, devoted to purity and remembrance. Beasts felt safe around him as he praised Allah in the open. Ibn Kathir remembers a youth whose strength was piety, not play.",
+        "en": "Yahya confirmed a Word from Allah, was noble and chaste, and a prophet from among the righteous. Even as a youth he was given wisdom: compassion, devotion, and courage to speak truth to rulers. He called people to repentance and purity of life. Ibn Kathir recounts that his integrity made him enemies among the corrupt; yet his short life shone as fulfillment of Zakariyah’s glad tidings—proof that Allah protects the message even when tyrants strike the messenger.",
         "ar": "كان يحيى جدّياً رحيماً من صباه، وأوتي الحكم صبياً وأُمر أن يأخذ الكتاب بقوة. فعاش زاهداً ينذر ويقضي بهدى الله، مقبلاً على الطهارة والذكر. وكانت الوحوش تأمن حوله وهو يسبّح في الخلاء. ويذكره ابن كثير شاباً قوّته التقوى لا اللعب."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2896,7 +3280,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/yahya-wisdom-in-youth.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2919,20 +3303,26 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Yahya was serious and merciful from childhood, given wisdom while still young and commanded to hold fast to the Scripture.",
+          "endMs": 22500,
+          "textEn": "Yahya confirmed a Word from Allah, was noble and chaste, and a prophet from among the righteous.",
           "textAr": "كان يحيى جدّياً رحيماً من صباه، وأوتي الحكم صبياً وأُمر أن يأخذ الكتاب بقوة."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He lived simply, warning people and judging by Allah’s guidance, devoted to purity and remembrance. Beasts felt safe around him as he praised Allah in the open.",
-          "textAr": "فعاش زاهداً ينذر ويقضي بهدى الله، مقبلاً على الطهارة والذكر. وكانت الوحوش تأمن حوله وهو يسبّح في الخلاء."
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "Even as a youth he was given wisdom: compassion, devotion, and courage to speak truth to rulers.",
+          "textAr": "فعاش زاهداً ينذر ويقضي بهدى الله، مقبلاً على الطهارة والذكر."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir remembers a youth whose strength was piety, not play.",
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "He called people to repentance and purity of life.",
+          "textAr": "وكانت الوحوش تأمن حوله وهو يسبّح في الخلاء."
+        },
+        {
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir recounts that his integrity made him enemies among the corrupt; yet his short life shone as fulfillment of Zakariyah’s glad tidings—proof that Allah protects the message even when tyrants strike the messenger.",
           "textAr": "ويذكره ابن كثير شاباً قوّته التقوى لا اللعب."
         }
       ]
@@ -2947,7 +3337,7 @@
         "ar": "قصة عيسى عليه السلام"
       },
       "content": {
-        "en": "Isa son of Maryam was created by Allah’s word without a father, a messenger supported with clear signs. The Quran rejects claims that Allah has a son or that He is one of three. He called to worship Allah alone, affirmed earlier scripture, and stood against empty materialism. His miraculous birth and mission are signs of Allah’s power and mercy—not a share in divinity. Ibn Kathir closes the prophetic line before Muhammad ﷺ by affirming Isa’s honor as Abdullah, the servant and messenger of Allah.",
+        "en": "Isa son of Maryam was created by Allah’s command “Be,” without a father—his likeness in that is as Adam. Angels gave Maryam glad tidings of a pure boy. He spoke in the cradle in her defense, and later called the Children of Israel to worship Allah as his Lord and their Lord. He healed the blind and the leper by Allah’s leave, raised the dead by Allah’s leave, and told them what they stored in their houses—as signs, not as independent power. Disciples believed; enemies plotted. Allah raised Isa and protected him from those who claimed to have crucified him. Ibn Kathir insists on the Quranic creed: Isa is a servant and messenger, the Messiah, honored—but not a son of God, and not to be worshipped. His table-spread and miracles invite gratitude to Allah alone.",
         "ar": "خلق الله عيسى ابن مريم بكلمة منه من غير أب، رسولاً مؤيداً بالبينات. ونفى القرآن أن يكون لله ولد أو أنه ثالث ثلاثة. فدعا إلى عبادة الله وحده وصدّق ما بين يديه، ووقف ضد مادية جوفاء. فميلاده ومعجزاته آية لقدرة الله ورحمته لا شرك في الألوهية. ويختم ابن كثير ما قبل محمد ﷺ بتقرير أن عيسى عبد الله ورسوله."
       },
       "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); teaching paraphrase from the English edition",
@@ -2956,7 +3346,7 @@
       "audio": {
         "url": "https://cdn.storiesofislam.example/audio/qisas/isa-messenger-not-son.mp3",
         "mimeType": "audio/mpeg",
-        "durationSeconds": 105,
+        "durationSeconds": 90,
         "fileSizeBytes": 960000,
         "bitrateKbps": 128,
         "cdn": {
@@ -2979,21 +3369,27 @@
       "timedCues": [
         {
           "startMs": 0,
-          "endMs": 35000,
-          "textEn": "Isa son of Maryam was created by Allah’s word without a father, a messenger supported with clear signs. The Quran rejects claims that Allah has a son or that He is one of three.",
-          "textAr": "خلق الله عيسى ابن مريم بكلمة منه من غير أب، رسولاً مؤيداً بالبينات. ونفى القرآن أن يكون لله ولد أو أنه ثالث ثلاثة."
+          "endMs": 22500,
+          "textEn": "Isa son of Maryam was created by Allah’s command “Be,” without a father—his likeness in that is as Adam. Angels gave Maryam glad tidings of a pure boy.",
+          "textAr": "خلق الله عيسى ابن مريم بكلمة منه من غير أب، رسولاً مؤيداً بالبينات."
         },
         {
-          "startMs": 35000,
-          "endMs": 70000,
-          "textEn": "He called to worship Allah alone, affirmed earlier scripture, and stood against empty materialism. His miraculous birth and mission are signs of Allah’s power and mercy—not a share in divinity.",
-          "textAr": "فدعا إلى عبادة الله وحده وصدّق ما بين يديه، ووقف ضد مادية جوفاء. فميلاده ومعجزاته آية لقدرة الله ورحمته لا شرك في الألوهية."
+          "startMs": 22500,
+          "endMs": 45000,
+          "textEn": "He spoke in the cradle in her defense, and later called the Children of Israel to worship Allah as his Lord and their Lord. He healed the blind and the leper by Allah’s leave, raised the dead by Allah’s leave, and told them what they stored in their houses—as signs, not as independent power.",
+          "textAr": "ونفى القرآن أن يكون لله ولد أو أنه ثالث ثلاثة."
         },
         {
-          "startMs": 70000,
-          "endMs": 105000,
-          "textEn": "Ibn Kathir closes the prophetic line before Muhammad ﷺ by affirming Isa’s honor as Abdullah, the servant and messenger of Allah.",
-          "textAr": "ويختم ابن كثير ما قبل محمد ﷺ بتقرير أن عيسى عبد الله ورسوله."
+          "startMs": 45000,
+          "endMs": 67500,
+          "textEn": "Disciples believed; enemies plotted. Allah raised Isa and protected him from those who claimed to have crucified him.",
+          "textAr": "فدعا إلى عبادة الله وحده وصدّق ما بين يديه، ووقف ضد مادية جوفاء."
+        },
+        {
+          "startMs": 67500,
+          "endMs": 90000,
+          "textEn": "Ibn Kathir insists on the Quranic creed: Isa is a servant and messenger, the Messiah, honored—but not a son of God, and not to be worshipped. His table-spread and miracles invite gratitude to Allah alone.",
+          "textAr": "فميلاده ومعجزاته آية لقدرة الله ورحمته لا شرك في الألوهية."
         }
       ]
     }

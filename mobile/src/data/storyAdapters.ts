@@ -37,15 +37,21 @@ export function toReaderStory(story: StoryItem): ReaderStory {
   const fullAr = (story.contentAr ?? story.titleAr ?? '').trim();
 
   let cues: StoryCue[];
-  if (story.timedCues?.length) {
+  const cueText = (story.timedCues ?? []).map((c) => c.textEn).join(' ').trim();
+  const cuesCoverFullStory =
+    Boolean(story.timedCues?.length) &&
+    cueText.length >= Math.min(fullEn.length * 0.85, fullEn.length - 40);
+
+  // Prefer regenerating from full content when cues are only a short excerpt.
+  if (fullEn && (!story.timedCues?.length || !cuesCoverFullStory || !playableUrl)) {
+    cues = cuesFromFullText(fullEn, fullAr, Math.max(story.durationMs, 30_000));
+  } else if (story.timedCues?.length) {
     cues = story.timedCues.map((cue) => ({
       text: cue.textEn,
       textAr: cue.textAr,
       startMs: cue.startMs,
       endMs: cue.endMs,
     }));
-  } else if (fullEn) {
-    cues = cuesFromFullText(fullEn, fullAr, Math.max(story.durationMs, 30_000));
   } else {
     cues = [{
       text: story.summary,

@@ -37,8 +37,13 @@ import { kidsStoryToReaderStory } from '../data/storyAdapters';
 import { alpha, brandGradients, kidsGradients, radius, shadow } from '../theme/tokens';
 import type { KidsStoryCard, SectionSlug } from '../types/catalog';
 
-const previewKidsStories: KidsStoryCard[] = __DEV__
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
+const useKidsPreviewFixtures =
+  __DEV__ ||
+  process.env.EXPO_PUBLIC_ENVIRONMENT === 'preview' ||
+  process.env.EXPO_PUBLIC_ENVIRONMENT === 'development';
+/** Dedicated short kids summaries — never reuse adult full prophet accounts here. */
+const previewKidsStories: KidsStoryCard[] = useKidsPreviewFixtures
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro tree-shakes this fixture branch in production exports.
   ? (require('../data/mockHome').kidsStories as KidsStoryCard[])
   : [];
 
@@ -71,36 +76,48 @@ export default function KidsModeScreen() {
   const stars = 0;
   const completed: Record<string, boolean> = {};
 
-  const availableStories = useMemo(
-    (): KidsStoryCard[] =>
-      stories.length
-        ? stories.map((story) => ({
-            id: story.id,
-            sectionSlug: story.sectionSlug,
-            title: story.title,
-            titleAr: story.titleAr,
-            figureName: story.figureName,
-            summary: story.summary,
-            durationLabel: story.durationLabel,
-            durationMs: story.durationMs,
-            audioUrl: story.audioUrl,
-            artworkUrl: story.artworkUrl,
-            timedCues: story.timedCues,
-            lesson: story.summary,
-            badgeLabel: '✨ Read & reflect',
-            tint:
-              story.sectionSlug === 'qisas-al-anbiya'
-                ? 'sunset'
-                : story.sectionSlug === 'seerah-shamail'
-                  ? 'yellow'
-                  : story.sectionSlug === 'sahabah'
-                    ? 'sky'
-                    : 'teal',
-            rewardStarCount: 3,
-          }))
-        : previewKidsStories,
-    [stories],
-  );
+  const availableStories = useMemo((): KidsStoryCard[] => {
+    // Always prefer kids-specific short summaries when fixtures are available.
+    // Mapping adult catalog stories here previously showed full prophet accounts in Kids.
+    if (previewKidsStories.length) {
+      return previewKidsStories;
+    }
+    return stories.map((story) => {
+      const shortSummary = story.summary.split(/(?<=[.!?])\s+/)[0] ?? story.summary;
+      return {
+        id: story.id,
+        sectionSlug: story.sectionSlug,
+        title: story.title,
+        titleAr: story.titleAr,
+        figureName: story.figureName,
+        summary: shortSummary,
+        durationLabel: story.durationLabel,
+        durationMs: Math.min(story.durationMs, 120_000),
+        audioUrl: story.audioUrl,
+        artworkUrl: story.artworkUrl,
+        // Kids read the short summary only — do not pass adult full-story cues.
+        timedCues: [
+          {
+            startMs: 0,
+            endMs: 60_000,
+            textEn: shortSummary,
+            textAr: story.titleAr,
+          },
+        ],
+        lesson: shortSummary,
+        badgeLabel: '✨ Read & reflect',
+        tint:
+          story.sectionSlug === 'qisas-al-anbiya'
+            ? 'sunset'
+            : story.sectionSlug === 'seerah-shamail'
+              ? 'yellow'
+              : story.sectionSlug === 'sahabah'
+                ? 'sky'
+                : 'teal',
+        rewardStarCount: 3,
+      };
+    });
+  }, [stories]);
   const visibleStories = useMemo(
     () =>
       selectedSection === 'all'
