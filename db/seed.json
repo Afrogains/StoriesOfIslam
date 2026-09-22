@@ -1334,6 +1334,1476 @@
           "textAr": "فألقي إلى الشاطئ وأنبت الله عليه شجرة."
         }
       ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220101",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110001",
+      "slug": "adam-created-and-taught",
+      "title": {
+        "en": "Adam: Created and Taught",
+        "ar": "آدم: خُلق وعُلّم"
+      },
+      "content": {
+        "en": "Allah informed the angels He would place successive generations on earth and taught Adam the names of all things. When the angels could not name them, Adam spoke by Allah’s teaching, showing the honor given to humankind. Iblis refused to prostrate and was expelled. Adam and his wife were placed in Paradise, then after the slip of eating from the forbidden tree they were sent to earth with repentance accepted. Adam lived calling his children to worship Allah alone until his death, longing for Paradise and leaving a covenant of guidance for those after him.",
+        "ar": "أخبر الله الملائكة أنه جاعل في الأرض خلفاء، وعلّم آدم الأسماء كلها. فلما عجزت الملائكة أخبرهم آدم بما علّمه الله، إظهاراً لتكريم الإنسان. أبى إبليس السجود فأُخرج. وأسكن آدم وزوجته الجنة، ثم بعد الزلة بإتيان الشجرة أُهبطا إلى الأرض وقد تاب الله عليه. وظل آدم يدعو بنيه إلى توحيد الله حتى وفاته، تائقاً إلى الجنة تاركاً عهد الهداية لمن بعده."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: adam",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/adam-created-and-taught.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/adam-created-and-taught.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 90,
+        "fileSizeBytes": 1440000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/adam-created-and-taught.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/adam-created-and-taught.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Adam: Created and Taught",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/adam.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Allah informed the angels He would place successive generations on earth and taught Adam the names of all things. When the angels could not name them, Adam spoke by Allah’s teaching, showing the honor given to humankind.",
+          "textAr": "أخبر الله الملائكة أنه جاعل في الأرض خلفاء، وعلّم آدم الأسماء كلها. فلما عجزت الملائكة أخبرهم آدم بما علّمه الله، إظهاراً لتكريم الإنسان."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Iblis refused to prostrate and was expelled. Adam and his wife were placed in Paradise, then after the slip of eating from the forbidden tree they were sent to earth with repentance accepted.",
+          "textAr": "أبى إبليس السجود فأُخرج. وأسكن آدم وزوجته الجنة، ثم بعد الزلة بإتيان الشجرة أُهبطا إلى الأرض وقد تاب الله عليه."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "Adam lived calling his children to worship Allah alone until his death, longing for Paradise and leaving a covenant of guidance for those after him.",
+          "textAr": "وظل آدم يدعو بنيه إلى توحيد الله حتى وفاته، تائقاً إلى الجنة تاركاً عهد الهداية لمن بعده."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220102",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110002",
+      "slug": "idris-raised-in-station",
+      "title": {
+        "en": "Idris: Raised to a High Station",
+        "ar": "إدريس: رُفع مكاناً عليّاً"
+      },
+      "content": {
+        "en": "Idris followed the religion of Adam and Seth, calling people in Babylon to truth. Few listened, so he and his followers moved on, teaching prayer, fasting, and giving to the poor. The Quran praises him as truthful and a prophet whom Allah raised to a high station. Ibn Kathir recounts him as among the earliest guides after Adam.",
+        "ar": "سار إدريس على دين آدم وشيث، داعياً أهل بابل إلى الحق. فلم يستجب إلا قليل، فخرج بمن معه يعلّم الصلاة والصيام والصدقة. وأثنى عليه القرآن بأنه صدّيق نبي رفعه الله مكاناً عليّاً. وذكره ابن كثير في أوائل الهداة بعد آدم."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: idris",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/idris-raised-in-station.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/idris-raised-in-station.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/idris-raised-in-station.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/idris-raised-in-station.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Idris: Raised to a High Station",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/idris.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Idris followed the religion of Adam and Seth, calling people in Babylon to truth. Few listened, so he and his followers moved on, teaching prayer, fasting, and giving to the poor.",
+          "textAr": "سار إدريس على دين آدم وشيث، داعياً أهل بابل إلى الحق. فلم يستجب إلا قليل، فخرج بمن معه يعلّم الصلاة والصيام والصدقة."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "The Quran praises him as truthful and a prophet whom Allah raised to a high station. Ibn Kathir recounts him as among the earliest guides after Adam.",
+          "textAr": "وأثنى عليه القرآن بأنه صدّيق نبي رفعه الله مكاناً عليّاً. وذكره ابن كثير في أوائل الهداة بعد آدم."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220103",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110003",
+      "slug": "nuh-and-the-ark",
+      "title": {
+        "en": "Nuh and the Ark",
+        "ar": "نوح والسفينة"
+      },
+      "content": {
+        "en": "Nuh called his people for ages to abandon idols and worship Allah alone. The chiefs mocked him, yet he kept building the Ark by Allah’s command. When the Flood came, believers boarded with pairs of creatures. Nuh’s son sought a mountain instead of mercy and was among the drowned. Then the earth and sky were commanded to settle, and the Ark rested, leaving a lasting sign for those who take heed.",
+        "ar": "دعا نوح قومه أحقاباً إلى ترك الأصنام وعبادة الله وحده. فسخر منه الملأ، فصنع السفينة بأمر الله. لما جاء الطوفان ركب المؤمنون ومعهم من كل زوجين اثنين. وطلب ابنه جبلاً يعصمه فكان من المغرقين. ثم قيل للأرض والسماء أن تقلعا، واستوت السفينة آيةً لمن يعتبر."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: nuh",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/nuh-and-the-ark.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/nuh-and-the-ark.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 90,
+        "fileSizeBytes": 1440000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/nuh-and-the-ark.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/nuh-and-the-ark.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Nuh and the Ark",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/nuh.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Nuh called his people for ages to abandon idols and worship Allah alone. The chiefs mocked him, yet he kept building the Ark by Allah’s command.",
+          "textAr": "دعا نوح قومه أحقاباً إلى ترك الأصنام وعبادة الله وحده. فسخر منه الملأ، فصنع السفينة بأمر الله."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "When the Flood came, believers boarded with pairs of creatures. Nuh’s son sought a mountain instead of mercy and was among the drowned.",
+          "textAr": "لما جاء الطوفان ركب المؤمنون ومعهم من كل زوجين اثنين. وطلب ابنه جبلاً يعصمه فكان من المغرقين."
+        },
+        {
+          "startMs": 60000,
+          "endMs": 90000,
+          "textEn": "Then the earth and sky were commanded to settle, and the Ark rested, leaving a lasting sign for those who take heed.",
+          "textAr": "ثم قيل للأرض والسماء أن تقلعا، واستوت السفينة آيةً لمن يعتبر."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220104",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110004",
+      "slug": "hud-and-the-people-of-ad",
+      "title": {
+        "en": "Hud and the People of ‘Ad",
+        "ar": "هود وقوم عاد"
+      },
+      "content": {
+        "en": "‘Ad were strong builders between Yemen and Oman, rich yet arrogant, worshipping idols beside Allah. Hud, one of them, called them to pure tawhid and warned of a Day of reckoning. They rejected him and demanded the punishment. What they thought was a rain cloud was a destructive wind by Allah’s command that left them ruined.",
+        "ar": "كانت عاد أقوياء بين اليمن وعُمان، أغنياء متجبرين يعبدون مع الله أصناماً. فدعاهم هود من أنفسهم إلى التوحيد الخالص وحذّرهم يوم الحساب. فكذبوه واستعجلوا العذاب، فإذا السحاب الذي رجوا مطره ريح مهلكة بأمر الله أهلكتهم."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: hud",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/hud-and-the-people-of-ad.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/hud-and-the-people-of-ad.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/hud-and-the-people-of-ad.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/hud-and-the-people-of-ad.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Hud and the People of ‘Ad",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/hud.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "‘Ad were strong builders between Yemen and Oman, rich yet arrogant, worshipping idols beside Allah. Hud, one of them, called them to pure tawhid and warned of a Day of reckoning.",
+          "textAr": "كانت عاد أقوياء بين اليمن وعُمان، أغنياء متجبرين يعبدون مع الله أصناماً. فدعاهم هود من أنفسهم إلى التوحيد الخالص وحذّرهم يوم الحساب."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "They rejected him and demanded the punishment. What they thought was a rain cloud was a destructive wind by Allah’s command that left them ruined.",
+          "textAr": "فكذبوه واستعجلوا العذاب، فإذا السحاب الذي رجوا مطره ريح مهلكة بأمر الله أهلكتهم."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220105",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110005",
+      "slug": "salih-and-the-she-camel",
+      "title": {
+        "en": "Salih and the She-Camel",
+        "ar": "صالح والناقة"
+      },
+      "content": {
+        "en": "After ‘Ad, Thamud carved homes in the rock and sank into idolatry. Salih called them to worship Allah alone and showed them the she-camel as a clear sign. They plotted to kill the camel and harm Salih. Allah saved him and his followers; after his warning, a crushing cry destroyed the wrongdoers.",
+        "ar": "خلفت ثمود عاداً فنحتوا من الجبال بيوتاً ووقعوا في الشرك. فدعاهم صالح إلى عبادة الله وأراهم الناقة آية بينة. فتآمروا على عقر الناقة وأذى صالح. فنجّاه الله ومن معه، وأهلك الظالمين بعد إنذاره بالصيحة."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: salih",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/salih-and-the-she-camel.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/salih-and-the-she-camel.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/salih-and-the-she-camel.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/salih-and-the-she-camel.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Salih and the She-Camel",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/salih.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "After ‘Ad, Thamud carved homes in the rock and sank into idolatry. Salih called them to worship Allah alone and showed them the she-camel as a clear sign.",
+          "textAr": "خلفت ثمود عاداً فنحتوا من الجبال بيوتاً ووقعوا في الشرك. فدعاهم صالح إلى عبادة الله وأراهم الناقة آية بينة."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "They plotted to kill the camel and harm Salih. Allah saved him and his followers; after his warning, a crushing cry destroyed the wrongdoers.",
+          "textAr": "فتآمروا على عقر الناقة وأذى صالح. فنجّاه الله ومن معه، وأهلك الظالمين بعد إنذاره بالصيحة."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220106",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111111001",
+      "slug": "ibrahim-breaks-the-idols",
+      "title": {
+        "en": "Ibrahim Breaks the Idols",
+        "ar": "إبراهيم يحطم الأصنام"
+      },
+      "content": {
+        "en": "Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned with his father and people that created things cannot be gods, then broke the idols leaving the largest to confront their falsehood. They cast him into a great fire, but Allah made it cool and safe. He continued calling to tawhid and later settled his family by Allah’s command.",
+        "ar": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّ أباه وقومه أن المخلوق لا يكون إلهاً، ثم كسّر الأصنام تاركاً كبيرها ليُظهر باطلهم. فألقوه في نار عظيمة فجعلها الله برداً وسلاماً. وواصل الدعوة إلى التوحيد ثم أسكن أهله حيث أمره الله."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: ibrahim",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-breaks-the-idols.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-breaks-the-idols.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ibrahim-breaks-the-idols.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ibrahim-breaks-the-idols.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Ibrahim Breaks the Idols",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ibrahim.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Ibrahim grew up among people who worshipped idols, stars, and kings. He reasoned with his father and people that created things cannot be gods, then broke the idols leaving the largest to confront their falsehood.",
+          "textAr": "نشأ إبراهيم بين من يعبدون الأصنام والكواكب والملوك. فحاجّ أباه وقومه أن المخلوق لا يكون إلهاً، ثم كسّر الأصنام تاركاً كبيرها ليُظهر باطلهم."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "They cast him into a great fire, but Allah made it cool and safe. He continued calling to tawhid and later settled his family by Allah’s command.",
+          "textAr": "فألقوه في نار عظيمة فجعلها الله برداً وسلاماً. وواصل الدعوة إلى التوحيد ثم أسكن أهله حيث أمره الله."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220107",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110007",
+      "slug": "ismail-and-zamzam",
+      "title": {
+        "en": "Isma‘il and the Valley of Zamzam",
+        "ar": "إسماعيل ووادي زمزم"
+      },
+      "content": {
+        "en": "Ibrahim left Hajar and nursing Isma‘il in a barren Makkan valley with little water. When the water finished, Hajar ran between the hills seeking help until Zamzam sprang forth. Later Ibrahim returned, and with Isma‘il raised the foundations of the House. Isma‘il remained a prophet in that sanctuary, patient upon the command of Allah.",
+        "ar": "ترك إبراهيم هاجر وإسماعيل الرضيع في وادٍ غير ذي زرع بمكة بقليل من الماء. فلما نفد سعت هاجر بين الصفا والمروة حتى نبع زمزم. ثم عاد إبراهيم فرفع مع إسماعيل قواعد البيت، وبقي إسماعيل نبياً في ذلك الحرم صابراً على أمر الله."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: ismail",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ismail-and-zamzam.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ismail-and-zamzam.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ismail-and-zamzam.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ismail-and-zamzam.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Isma‘il and the Valley of Zamzam",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ismail.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Ibrahim left Hajar and nursing Isma‘il in a barren Makkan valley with little water. When the water finished, Hajar ran between the hills seeking help until Zamzam sprang forth.",
+          "textAr": "ترك إبراهيم هاجر وإسماعيل الرضيع في وادٍ غير ذي زرع بمكة بقليل من الماء. فلما نفد سعت هاجر بين الصفا والمروة حتى نبع زمزم."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Later Ibrahim returned, and with Isma‘il raised the foundations of the House. Isma‘il remained a prophet in that sanctuary, patient upon the command of Allah.",
+          "textAr": "ثم عاد إبراهيم فرفع مع إسماعيل قواعد البيت، وبقي إسماعيل نبياً في ذلك الحرم صابراً على أمر الله."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220108",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110008",
+      "slug": "ishaq-and-the-covenant-line",
+      "title": {
+        "en": "Ishaq and the Line of Guidance",
+        "ar": "إسحاق وسلسلة الهداية"
+      },
+      "content": {
+        "en": "Glad tidings of Ishaq came to Ibrahim in old age. Commentators relate that Ibrahim sought a righteous wife for him from his kin, not from the pagan Canaanites. From Ishaq came Yaqub, continuing the prophetic line. His life is little detailed in the Quran, yet he is named among the guided prophets.",
+        "ar": "بُشّر إبراهيم بإسحاق على الكبر. وذكر المفسرون أنه طلب له زوجة صالحة من أهله لا من الكنعانيين المشركين. ومن إسحاق جاء يعقوب فامتدت سلسلة النبوة. وقلّ تفصيل حياته في القرآن، وهو معدود في الأنبياء المهتدين."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: ishaq",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ishaq-and-the-covenant-line.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ishaq-and-the-covenant-line.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ishaq-and-the-covenant-line.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ishaq-and-the-covenant-line.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Ishaq and the Line of Guidance",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ishaq.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Glad tidings of Ishaq came to Ibrahim in old age. Commentators relate that Ibrahim sought a righteous wife for him from his kin, not from the pagan Canaanites.",
+          "textAr": "بُشّر إبراهيم بإسحاق على الكبر. وذكر المفسرون أنه طلب له زوجة صالحة من أهله لا من الكنعانيين المشركين."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "From Ishaq came Yaqub, continuing the prophetic line. His life is little detailed in the Quran, yet he is named among the guided prophets.",
+          "textAr": "ومن إسحاق جاء يعقوب فامتدت سلسلة النبوة. وقلّ تفصيل حياته في القرآن، وهو معدود في الأنبياء المهتدين."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220109",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110009",
+      "slug": "yaqub-and-his-sons",
+      "title": {
+        "en": "Yaqub and His Sons",
+        "ar": "يعقوب وبنوه"
+      },
+      "content": {
+        "en": "Yaqub, also called Israel, was favored with prophethood. Tension with his brother led him to travel and seek Allah’s protection. He fathered the twelve tribes, loving Yusuf especially. His grief and eventual reunion with Yusuf became a lesson in patience and trust in Allah’s plan.",
+        "ar": "يُدعى يعقوب إسرائيل، وآتاه الله النبوة. ووقع بينه وبين أخيه ما حمله على الرحيل والاستعاذة بالله. ورزق الأسباط الاثني عشر، وكان أشد حباً ليوسف. فصار حزنه ثم اجتماعه بيوسف عبرة في الصبر وحسن الظن بالله."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: yaqub",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/yaqub-and-his-sons.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/yaqub-and-his-sons.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/yaqub-and-his-sons.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/yaqub-and-his-sons.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Yaqub and His Sons",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/yaqub.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Yaqub, also called Israel, was favored with prophethood. Tension with his brother led him to travel and seek Allah’s protection.",
+          "textAr": "يُدعى يعقوب إسرائيل، وآتاه الله النبوة. ووقع بينه وبين أخيه ما حمله على الرحيل والاستعاذة بالله."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He fathered the twelve tribes, loving Yusuf especially. His grief and eventual reunion with Yusuf became a lesson in patience and trust in Allah’s plan.",
+          "textAr": "ورزق الأسباط الاثني عشر، وكان أشد حباً ليوسف. فصار حزنه ثم اجتماعه بيوسف عبرة في الصبر وحسن الظن بالله."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220110",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110010",
+      "slug": "lut-and-the-people-of-sodom",
+      "title": {
+        "en": "Lut and the People of Sodom",
+        "ar": "لوط وأهل سدوم"
+      },
+      "content": {
+        "en": "Lut settled near Sodom, a city open in robbery and unnatural vice. He called them to fear Allah and leave their indecency, but they threatened him instead. Angels came as guests; the people rushed them. Lut was taken out by night, and the town was overturned as a warning.",
+        "ar": "سكن لوط قرب سدوم حيث قطع الطريق والفواحش المجاهرة. فدعاهم إلى تقوى الله وترك المنكر فهددوه. وجاءته الملائكة أضيافاً فهجم القوم. فأُخرج لوط ليلاً وقُلبت القرية عبرة."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: lut",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/lut-and-the-people-of-sodom.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/lut-and-the-people-of-sodom.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/lut-and-the-people-of-sodom.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/lut-and-the-people-of-sodom.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Lut and the People of Sodom",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/lut.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Lut settled near Sodom, a city open in robbery and unnatural vice. He called them to fear Allah and leave their indecency, but they threatened him instead.",
+          "textAr": "سكن لوط قرب سدوم حيث قطع الطريق والفواحش المجاهرة. فدعاهم إلى تقوى الله وترك المنكر فهددوه."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Angels came as guests; the people rushed them. Lut was taken out by night, and the town was overturned as a warning.",
+          "textAr": "وجاءته الملائكة أضيافاً فهجم القوم. فأُخرج لوط ليلاً وقُلبت القرية عبرة."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220111",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110011",
+      "slug": "shuaib-and-fair-measure",
+      "title": {
+        "en": "Shu‘aib and Fair Measure",
+        "ar": "شعيب والكيل بالقسط"
+      },
+      "content": {
+        "en": "Shu‘aib was sent to Madyan: worship Allah alone, give full measure and weight, and do not corrupt the land or block the path of believers. They ridiculed him and clung to unjust trade. After his warning, a cry and torment seized the wrongdoers while believers were saved.",
+        "ar": "أرسل شعيب إلى مدين: اعبدوا الله وأوفوا الكيل والميزان ولا تفسدوا في الأرض ولا تصدّوا عن سبيل الله. فاستهزؤوا وتمسكوا بالظلم في التجارة. فأخذت الظالمين الصيحة والعذاب ونجّى الله المؤمنين."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: shuaib",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/shuaib-and-fair-measure.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/shuaib-and-fair-measure.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/shuaib-and-fair-measure.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/shuaib-and-fair-measure.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Shu‘aib and Fair Measure",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/shuaib.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Shu‘aib was sent to Madyan: worship Allah alone, give full measure and weight, and do not corrupt the land or block the path of believers.",
+          "textAr": "أرسل شعيب إلى مدين: اعبدوا الله وأوفوا الكيل والميزان ولا تفسدوا في الأرض ولا تصدّوا عن سبيل الله."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "They ridiculed him and clung to unjust trade. After his warning, a cry and torment seized the wrongdoers while believers were saved.",
+          "textAr": "فاستهزؤوا وتمسكوا بالظلم في التجارة. فأخذت الظالمين الصيحة والعذاب ونجّى الله المؤمنين."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220112",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110012",
+      "slug": "yusuf-from-the-well-to-authority",
+      "title": {
+        "en": "Yusuf: From the Well to Authority",
+        "ar": "يوسف: من الجبّ إلى الملك"
+      },
+      "content": {
+        "en": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. He was sold into Egypt, resisted temptation, and endured prison with trust in Allah. Through the interpretation of dreams Allah raised him to authority. He reunited with Yaqub and forgave his brothers, showing excellence after hardship.",
+        "ar": "حسد إخوة يوسف أباه فألقوه في الجبّ. فبيع بمصر، وعصم من الفتنة، وصبر في السجن متوكلاً على الله. فرفعه الله بتأويل الرؤيا إلى الملك، واجتمع بيعقوب وعفا عن إخوته إحساناً بعد البلاء."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: yusuf",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/yusuf-from-the-well-to-authority.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/yusuf-from-the-well-to-authority.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/yusuf-from-the-well-to-authority.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/yusuf-from-the-well-to-authority.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Yusuf: From the Well to Authority",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/yusuf.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Yusuf’s brothers, jealous of their father’s love, cast him into a well. He was sold into Egypt, resisted temptation, and endured prison with trust in Allah.",
+          "textAr": "حسد إخوة يوسف أباه فألقوه في الجبّ. فبيع بمصر، وعصم من الفتنة، وصبر في السجن متوكلاً على الله."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Through the interpretation of dreams Allah raised him to authority. He reunited with Yaqub and forgave his brothers, showing excellence after hardship.",
+          "textAr": "فرفعه الله بتأويل الرؤيا إلى الملك، واجتمع بيعقوب وعفا عن إخوته إحساناً بعد البلاء."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220113",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110013",
+      "slug": "ayyub-patience-in-trial",
+      "title": {
+        "en": "Ayyub’s Patience in Trial",
+        "ar": "أيوب وصبره في البلاء"
+      },
+      "content": {
+        "en": "Ayyub was granted health and wealth, then severely tested in body and property. He remained grateful and turned to Allah with a humble plea. Allah answered him, removed his affliction, and restored his family as a mercy and reminder for the patient.",
+        "ar": "أوتي أيوب الصحة والمال ثم ابتُلي في بدنه وماله بلاء شديداً. فبقي شاكراً وأناب إلى الله بدعاء خاشع. فاستجاب الله وكشف ضرّه وردّ أهله رحمة وذكرى للصابرين."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: ayyub",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ayyub-patience-in-trial.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ayyub-patience-in-trial.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ayyub-patience-in-trial.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ayyub-patience-in-trial.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Ayyub’s Patience in Trial",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ayyub.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Ayyub was granted health and wealth, then severely tested in body and property. He remained grateful and turned to Allah with a humble plea.",
+          "textAr": "أوتي أيوب الصحة والمال ثم ابتُلي في بدنه وماله بلاء شديداً. فبقي شاكراً وأناب إلى الله بدعاء خاشع."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Allah answered him, removed his affliction, and restored his family as a mercy and reminder for the patient.",
+          "textAr": "فاستجاب الله وكشف ضرّه وردّ أهله رحمة وذكرى للصابرين."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220114",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110014",
+      "slug": "dhul-kifl-among-the-patient",
+      "title": {
+        "en": "Dhul-Kifl Among the Patient",
+        "ar": "ذو الكفل من الصابرين"
+      },
+      "content": {
+        "en": "Dhul-Kifl is mentioned with the patient and righteous. Ibn Kathir places him among those steadfast in obedience and judgment. Though details are fewer than for other prophets, his mention teaches constancy upon the trust Allah places on His servants.",
+        "ar": "ذُكر ذو الكفل مع الصابرين والصالحين. وعدّه ابن كثير فيمن ثبتوا على الطاعة والعدل. ومع قلّة التفصيل ففي ذكره عبرة في حفظ الأمانة والثبات عليها."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: dhul",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/dhul-kifl-among-the-patient.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/dhul-kifl-among-the-patient.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/dhul-kifl-among-the-patient.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/dhul-kifl-among-the-patient.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Dhul-Kifl Among the Patient",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/dhul.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Dhul-Kifl is mentioned with the patient and righteous. Ibn Kathir places him among those steadfast in obedience and judgment.",
+          "textAr": "ذُكر ذو الكفل مع الصابرين والصالحين. وعدّه ابن كثير فيمن ثبتوا على الطاعة والعدل."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Though details are fewer than for other prophets, his mention teaches constancy upon the trust Allah places on His servants.",
+          "textAr": "ومع قلّة التفصيل ففي ذكره عبرة في حفظ الأمانة والثبات عليها."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220115",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110017",
+      "slug": "harun-supports-musa",
+      "title": {
+        "en": "Harun Supports Musa",
+        "ar": "هارون يؤيد موسى"
+      },
+      "content": {
+        "en": "When Musa feared he would not speak clearly, Allah appointed his brother Harun as a prophet and helper. Together they went to Pharaoh with clear proofs. Harun stood with Musa in calling to Allah and guiding the Children of Israel, a model of sincere support in conveying the message.",
+        "ar": "لما خشي موسى ألا يُفصح لسانه جعل الله أخاه هارون نبياً ووزيراً. فذهبا معاً إلى فرعون بالبينات. وثبت هارون مع موسى في الدعوة وهداية بني إسرائيل، مثالاً في النصرة الصادقة للرسالة."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: harun",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/harun-supports-musa.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/harun-supports-musa.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/harun-supports-musa.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/harun-supports-musa.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Harun Supports Musa",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/harun.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "When Musa feared he would not speak clearly, Allah appointed his brother Harun as a prophet and helper. Together they went to Pharaoh with clear proofs.",
+          "textAr": "لما خشي موسى ألا يُفصح لسانه جعل الله أخاه هارون نبياً ووزيراً. فذهبا معاً إلى فرعون بالبينات."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Harun stood with Musa in calling to Allah and guiding the Children of Israel, a model of sincere support in conveying the message.",
+          "textAr": "وثبت هارون مع موسى في الدعوة وهداية بني إسرائيل، مثالاً في النصرة الصادقة للرسالة."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220116",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110018",
+      "slug": "hizqeel-after-musa",
+      "title": {
+        "en": "Hizqeel Among Later Guides",
+        "ar": "حزقيل فيمن بعد موسى"
+      },
+      "content": {
+        "en": "Ibn Kathir recounts Hizqeel (Ezekiel) among prophets who came after Musa when the Israelites needed renewal of hope and obedience. His account reminds that guidance continued after great messengers, calling people back whenever they drifted.",
+        "ar": "ذكر ابن كثير حزقيل فيمن بعث بعد موسى حين احتاج بنو إسرائيل إلى تجديد الرجاء والطاعة. وفي خبره أن الهداية تتواصل بعد كبار الرسل كلما انحرف الناس."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: hizqeel",
+      "authenticityGrade": "historical",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/hizqeel-after-musa.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/hizqeel-after-musa.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/hizqeel-after-musa.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/hizqeel-after-musa.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Hizqeel Among Later Guides",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/hizqeel.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Ibn Kathir recounts Hizqeel (Ezekiel) among prophets who came after Musa when the Israelites needed renewal of hope and obedience.",
+          "textAr": "ذكر ابن كثير حزقيل فيمن بعث بعد موسى حين احتاج بنو إسرائيل إلى تجديد الرجاء والطاعة."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "His account reminds that guidance continued after great messengers, calling people back whenever they drifted.",
+          "textAr": "وفي خبره أن الهداية تتواصل بعد كبار الرسل كلما انحرف الناس."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220117",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110019",
+      "slug": "ilyas-against-idolatry",
+      "title": {
+        "en": "Ilyas Against Idolatry",
+        "ar": "إلياس ومحاربة الشرك"
+      },
+      "content": {
+        "en": "Ilyas called his people to leave the worship of idols and return to Allah alone. Ibn Kathir includes him among prophets between Musa and later messengers. His message matches the shared call of the prophets: there is no right of worship except for Allah.",
+        "ar": "دعا إلياس قومه إلى ترك الأصنام والرجوع إلى الله وحده. وعدّه ابن كثير بين موسى ومن بعده من الرسل. ورسالته رسالة الأنبياء جميعاً: لا معبود بحق إلا الله."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: ilyas",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/ilyas-against-idolatry.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/ilyas-against-idolatry.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/ilyas-against-idolatry.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/ilyas-against-idolatry.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Ilyas Against Idolatry",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/ilyas.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Ilyas called his people to leave the worship of idols and return to Allah alone. Ibn Kathir includes him among prophets between Musa and later messengers.",
+          "textAr": "دعا إلياس قومه إلى ترك الأصنام والرجوع إلى الله وحده. وعدّه ابن كثير بين موسى ومن بعده من الرسل."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "His message matches the shared call of the prophets: there is no right of worship except for Allah.",
+          "textAr": "ورسالته رسالة الأنبياء جميعاً: لا معبود بحق إلا الله."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220118",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110020",
+      "slug": "shammil-and-the-king",
+      "title": {
+        "en": "Shammil and the Request for a King",
+        "ar": "شمويل وطلب الملك"
+      },
+      "content": {
+        "en": "After defeat and the loss of the Ark, the Israelites asked for a prophet to appoint a king. Allah sent Shammil (Samuel), who guided them under revelation. He warned them about the burdens of kingship and set them toward obedience before battle, testing who would truly follow Allah’s command.",
+        "ar": "بعد الهزيمة وفقدان التابوت طلب بنو إسرائيل نبياً يبعث لهم ملكاً. فبعث الله شمويل فهداهم بالوحي. وحذّرهم تبعات الملك وابتلاهم في الطاعة قبل القتال ليظهر من يتبع أمر الله."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: shammil",
+      "authenticityGrade": "historical",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/shammil-and-the-king.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/shammil-and-the-king.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/shammil-and-the-king.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/shammil-and-the-king.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Shammil and the Request for a King",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/shammil.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "After defeat and the loss of the Ark, the Israelites asked for a prophet to appoint a king. Allah sent Shammil (Samuel), who guided them under revelation.",
+          "textAr": "بعد الهزيمة وفقدان التابوت طلب بنو إسرائيل نبياً يبعث لهم ملكاً. فبعث الله شمويل فهداهم بالوحي."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He warned them about the burdens of kingship and set them toward obedience before battle, testing who would truly follow Allah’s command.",
+          "textAr": "وحذّرهم تبعات الملك وابتلاهم في الطاعة قبل القتال ليظهر من يتبع أمر الله."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220119",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110021",
+      "slug": "dawud-and-goliath",
+      "title": {
+        "en": "Dawud and Goliath",
+        "ar": "داود وجالوت"
+      },
+      "content": {
+        "en": "When Goliath challenged Saul’s army, young Dawud stepped forward while others feared. Allah gave him victory over the giant. Dawud was later given kingship and the Zabur. He judged with justice and was known for beautiful remembrance of Allah, even as trials refined him.",
+        "ar": "لما تحدّى جالوت جيش طالوت تقدم داود الشاب وقد فزع الناس. فنصره الله على الجبار. ثم آتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله، مع ابتلاءات هذّبته."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: dawud",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/dawud-and-goliath.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/dawud-and-goliath.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/dawud-and-goliath.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/dawud-and-goliath.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Dawud and Goliath",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/dawud.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "When Goliath challenged Saul’s army, young Dawud stepped forward while others feared. Allah gave him victory over the giant.",
+          "textAr": "لما تحدّى جالوت جيش طالوت تقدم داود الشاب وقد فزع الناس. فنصره الله على الجبار."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Dawud was later given kingship and the Zabur. He judged with justice and was known for beautiful remembrance of Allah, even as trials refined him.",
+          "textAr": "ثم آتاه الله الملك والزبور، وقضى بالعدل وأكثر من ذكر الله، مع ابتلاءات هذّبته."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220120",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110022",
+      "slug": "sulaiman-and-the-dominion",
+      "title": {
+        "en": "Sulaiman and the Dominion",
+        "ar": "سليمان والملك المسخّر"
+      },
+      "content": {
+        "en": "Sulaiman inherited prophethood—not wealth—from Dawud. Allah taught him the speech of birds and subjected jinn, men, and the wind to his command. When the Queen of Sheba sent gifts, he refused alliance by wealth and called her to submit to Allah. His story joins power with gratitude.",
+        "ar": "ورث سليمان النبوة لا المال عن داود. وعلّمه الله منطق الطير وسخّر له الجن والإنس والريح. ولما بعثت ملكة سبأ بالهدايا أبى موالاة الدنيا ودعاها إلى الإسلام لله، فاجتمع الملك بالشكر."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: sulaiman",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/sulaiman-and-the-dominion.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/sulaiman-and-the-dominion.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/sulaiman-and-the-dominion.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/sulaiman-and-the-dominion.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Sulaiman and the Dominion",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/sulaiman.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Sulaiman inherited prophethood—not wealth—from Dawud. Allah taught him the speech of birds and subjected jinn, men, and the wind to his command.",
+          "textAr": "ورث سليمان النبوة لا المال عن داود. وعلّمه الله منطق الطير وسخّر له الجن والإنس والريح."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "When the Queen of Sheba sent gifts, he refused alliance by wealth and called her to submit to Allah. His story joins power with gratitude.",
+          "textAr": "ولما بعثت ملكة سبأ بالهدايا أبى موالاة الدنيا ودعاها إلى الإسلام لله، فاجتمع الملك بالشكر."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220121",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110023",
+      "slug": "shia-and-the-king",
+      "title": {
+        "en": "Shi‘a Advises His King",
+        "ar": "شعيا ونصح الملك"
+      },
+      "content": {
+        "en": "Shi‘a (Isaiah) lived between Dawud’s line and Zakariyah. Ibn Kathir relates that he advised a obedient king and warned of invading armies. He is remembered among those who called rulers and people back to Allah and spoke of messengers yet to come.",
+        "ar": "عاش شعيا بين آل داود وزكريا. وذكر ابن كثير أنه نصح ملكاً مطيعاً وحذّر من جيوش غازية. ويُذكر فيمن ردّ الحكام والناس إلى الله وبشّر بمن يأتي من الرسل."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: shia",
+      "authenticityGrade": "historical",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/shia-and-the-king.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/shia-and-the-king.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/shia-and-the-king.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/shia-and-the-king.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Shi‘a Advises His King",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/shia.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Shi‘a (Isaiah) lived between Dawud’s line and Zakariyah. Ibn Kathir relates that he advised a obedient king and warned of invading armies.",
+          "textAr": "عاش شعيا بين آل داود وزكريا. وذكر ابن كثير أنه نصح ملكاً مطيعاً وحذّر من جيوش غازية."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He is remembered among those who called rulers and people back to Allah and spoke of messengers yet to come.",
+          "textAr": "ويُذكر فيمن ردّ الحكام والناس إلى الله وبشّر بمن يأتي من الرسل."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220122",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110024",
+      "slug": "aramaya-and-jerusalem",
+      "title": {
+        "en": "Aramaya and the Trial of Jerusalem",
+        "ar": "أرميا ومحنة بيت المقدس"
+      },
+      "content": {
+        "en": "Aramaya (Jeremiah) warned his people as injustice grew. Ibn Kathir describes the siege and harsh rule that followed their disobedience. His story is a sober reminder that ignoring prophetic warning brings loss of security and sanctuary.",
+        "ar": "أنذر أرميا قومه وقد فشا الظلم. ووصف ابن كثير الحصار والحكم القاسي بعد عصيانهم. وفي قصته عبرة أن الإعراض عن نذر الأنبياء يذهب بالأمن والمقدّسات."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: aramaya",
+      "authenticityGrade": "historical",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/aramaya-and-jerusalem.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/aramaya-and-jerusalem.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/aramaya-and-jerusalem.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/aramaya-and-jerusalem.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Aramaya and the Trial of Jerusalem",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/aramaya.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Aramaya (Jeremiah) warned his people as injustice grew. Ibn Kathir describes the siege and harsh rule that followed their disobedience.",
+          "textAr": "أنذر أرميا قومه وقد فشا الظلم. ووصف ابن كثير الحصار والحكم القاسي بعد عصيانهم."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "His story is a sober reminder that ignoring prophetic warning brings loss of security and sanctuary.",
+          "textAr": "وفي قصته عبرة أن الإعراض عن نذر الأنبياء يذهب بالأمن والمقدّسات."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220123",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110025",
+      "slug": "daniel-in-the-lions-den",
+      "title": {
+        "en": "Daniel in the Lions’ Den",
+        "ar": "دانيال في جبّ الأسود"
+      },
+      "content": {
+        "en": "Under a tyrant’s captivity, Daniel was thrown to lions, yet they did not harm him by Allah’s will. Provision reached him through Allah’s command. Ibn Kathir preserves this as a sign that Allah protects whom He wills even in the depths of prisons and pits.",
+        "ar": "في الأسر أُلقي دانيال إلى أسود فلم تمسّه بإذن الله، وأُتي له بالرزق بأمر الله. وحفظ ابن كثير ذلك آيةً على أن الله يحفظ من يشاء ولو في قعر الجبّ والسجن."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: daniel",
+      "authenticityGrade": "historical",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/daniel-in-the-lions-den.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/daniel-in-the-lions-den.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/daniel-in-the-lions-den.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/daniel-in-the-lions-den.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Daniel in the Lions’ Den",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/daniel.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Under a tyrant’s captivity, Daniel was thrown to lions, yet they did not harm him by Allah’s will. Provision reached him through Allah’s command.",
+          "textAr": "في الأسر أُلقي دانيال إلى أسود فلم تمسّه بإذن الله، وأُتي له بالرزق بأمر الله."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Ibn Kathir preserves this as a sign that Allah protects whom He wills even in the depths of prisons and pits.",
+          "textAr": "وحفظ ابن كثير ذلك آيةً على أن الله يحفظ من يشاء ولو في قعر الجبّ والسجن."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220124",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110026",
+      "slug": "uzair-and-the-ruined-town",
+      "title": {
+        "en": "Uzair and the Ruined Town",
+        "ar": "عزير والقرية الخاوية"
+      },
+      "content": {
+        "en": "Passing a ruined settlement, Uzair wondered how Allah would bring life after death. Allah caused him to die a hundred years, then raised him to see his food and donkey restored. He returned to his people as a living sign of resurrection and renewed teaching of the Scripture.",
+        "ar": "مرّ عزير على قرية خاوية فقال أنى يحييها الله بعد موتها. فأماته الله مائة عام ثم بعثه ليرى طعامه وحماره قد أُعيدا. فرجع إلى قومه آية على البعث وجدّد تعليم الكتاب."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: uzair",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/uzair-and-the-ruined-town.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/uzair-and-the-ruined-town.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/uzair-and-the-ruined-town.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/uzair-and-the-ruined-town.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Uzair and the Ruined Town",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/uzair.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Passing a ruined settlement, Uzair wondered how Allah would bring life after death. Allah caused him to die a hundred years, then raised him to see his food and donkey restored.",
+          "textAr": "مرّ عزير على قرية خاوية فقال أنى يحييها الله بعد موتها. فأماته الله مائة عام ثم بعثه ليرى طعامه وحماره قد أُعيدا."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He returned to his people as a living sign of resurrection and renewed teaching of the Scripture.",
+          "textAr": "فرجع إلى قومه آية على البعث وجدّد تعليم الكتاب."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220125",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110027",
+      "slug": "zakariyah-and-the-glad-tidings",
+      "title": {
+        "en": "Zakariyah and the Glad Tidings",
+        "ar": "زكريا والبشارة بيحيى"
+      },
+      "content": {
+        "en": "Elderly Zakariyah cared for Maryam in the sanctuary and saw out-of-season provision with her. He prayed for a pure heir despite old age and barrenness. Allah gave him glad tidings of Yahya and a sign that he would not speak to people for three nights though unimpaired.",
+        "ar": "كفل زكريا الشيخ مريم في المحراب ورأى عندها رزقاً من غير أوان. فدعا بذرية طيبة على الكبر والعقم. فبشّره الله بيحيى وجعل آيته ألا يكلم الناس ثلاث ليال سوياً."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: zakariyah",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/zakariyah-and-the-glad-tidings.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/zakariyah-and-the-glad-tidings.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/zakariyah-and-the-glad-tidings.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/zakariyah-and-the-glad-tidings.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Zakariyah and the Glad Tidings",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/zakariyah.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Elderly Zakariyah cared for Maryam in the sanctuary and saw out-of-season provision with her. He prayed for a pure heir despite old age and barrenness.",
+          "textAr": "كفل زكريا الشيخ مريم في المحراب ورأى عندها رزقاً من غير أوان. فدعا بذرية طيبة على الكبر والعقم."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "Allah gave him glad tidings of Yahya and a sign that he would not speak to people for three nights though unimpaired.",
+          "textAr": "فبشّره الله بيحيى وجعل آيته ألا يكلم الناس ثلاث ليال سوياً."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220126",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110028",
+      "slug": "yahya-wisdom-in-youth",
+      "title": {
+        "en": "Yahya: Wisdom in Youth",
+        "ar": "يحيى: الحكمة في الصبا"
+      },
+      "content": {
+        "en": "Yahya was serious and merciful from childhood, given wisdom while still young and commanded to hold fast to the Scripture. He lived simply, warning people and judging by Allah’s guidance, devoted to purity and remembrance.",
+        "ar": "كان يحيى جدّياً رحيماً من صباه، وأوتي الحكم صبياً وأُمر أن يأخذ الكتاب بقوة. فعاش زاهداً ينذر الناس ويقضي بهدى الله، مقبلاً على الطهارة والذكر."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: yahya",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/yahya-wisdom-in-youth.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/yahya-wisdom-in-youth.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/yahya-wisdom-in-youth.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/yahya-wisdom-in-youth.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Yahya: Wisdom in Youth",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/yahya.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Yahya was serious and merciful from childhood, given wisdom while still young and commanded to hold fast to the Scripture.",
+          "textAr": "كان يحيى جدّياً رحيماً من صباه، وأوتي الحكم صبياً وأُمر أن يأخذ الكتاب بقوة."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He lived simply, warning people and judging by Allah’s guidance, devoted to purity and remembrance.",
+          "textAr": "فعاش زاهداً ينذر الناس ويقضي بهدى الله، مقبلاً على الطهارة والذكر."
+        }
+      ]
+    },
+    {
+      "id": "20a1b2c3-d4e5-4060-8071-2222222220127",
+      "categoryId": "0c4a1e8b-6f2d-4a91-b3e7-1d5f8a2c9b04",
+      "figureId": "10a1b2c3-d4e5-4060-8071-111111110029",
+      "slug": "isa-messenger-not-son",
+      "title": {
+        "en": "Isa: Messenger, Not Son",
+        "ar": "عيسى: رسول لا ابن"
+      },
+      "content": {
+        "en": "Isa son of Maryam was created by Allah’s word without a father, a messenger supported with clear signs. The Quran rejects claims that Allah has a son or that He is one of three. He called to worship Allah alone, affirmed earlier scripture, and remains a sign of Allah’s power and mercy—not a partner in divinity.",
+        "ar": "خلق الله عيسى ابن مريم بكلمة منه من غير أب، رسولاً مؤيداً بالبينات. ونفى القرآن أن يكون لله ولد أو أنه ثالث ثلاثة. فدعا إلى عبادة الله وحده وصدّق ما بين يديه، وهو آية لقدرة الله ورحمته لا شريك في الألوهية."
+      },
+      "sourceCitation": "Ibn Kathir, Stories of the Prophets (Qisas al-Anbiya); summarized for teaching; figure: isa",
+      "authenticityGrade": "sahih",
+      "audioUrl": "https://cdn.storiesofislam.example/audio/qisas/isa-messenger-not-son.mp3",
+      "audio": {
+        "url": "https://cdn.storiesofislam.example/audio/qisas/isa-messenger-not-son.mp3",
+        "mimeType": "audio/mpeg",
+        "durationSeconds": 60,
+        "fileSizeBytes": 960000,
+        "bitrateKbps": 128,
+        "cdn": {
+          "provider": "cloudflare-r2",
+          "bucket": "stories-of-islam-audio",
+          "objectKey": "qisas/isa-messenger-not-son.mp3",
+          "region": "wnam",
+          "publicUrl": "https://cdn.storiesofislam.example/audio/qisas/isa-messenger-not-son.mp3"
+        },
+        "backgroundPlayer": {
+          "title": "Isa: Messenger, Not Son",
+          "artist": "Stories of Islam",
+          "artworkUrl": "https://cdn.storiesofislam.example/artwork/qisas/isa.jpg",
+          "continueInBackground": true,
+          "showLockScreenControls": true,
+          "skipForwardSeconds": 15,
+          "skipBackwardSeconds": 15
+        }
+      },
+      "timedCues": [
+        {
+          "startMs": 0,
+          "endMs": 30000,
+          "textEn": "Isa son of Maryam was created by Allah’s word without a father, a messenger supported with clear signs. The Quran rejects claims that Allah has a son or that He is one of three.",
+          "textAr": "خلق الله عيسى ابن مريم بكلمة منه من غير أب، رسولاً مؤيداً بالبينات. ونفى القرآن أن يكون لله ولد أو أنه ثالث ثلاثة."
+        },
+        {
+          "startMs": 30000,
+          "endMs": 60000,
+          "textEn": "He called to worship Allah alone, affirmed earlier scripture, and remains a sign of Allah’s power and mercy—not a partner in divinity.",
+          "textAr": "فدعا إلى عبادة الله وحده وصدّق ما بين يديه، وهو آية لقدرة الله ورحمته لا شريك في الألوهية."
+        }
+      ]
     }
   ]
 }
