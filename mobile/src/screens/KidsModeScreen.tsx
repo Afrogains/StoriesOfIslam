@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
 import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
 import {
@@ -272,16 +272,19 @@ export default function KidsModeScreen() {
             const badge = sectionBadges[story.sectionSlug];
 
             return (
-              <View
+              <Pressable
                 key={story.id}
+                accessibilityRole="button"
                 accessibilityLabel={`${story.title}. ${story.summary}`}
-                style={[
+                onPress={() => setReaderStory(story)}
+                style={({ pressed }) => [
                   styles.storyCard,
                   {
                     backgroundColor: active ? (isDark ? colors.cardAlt : tint.soft) : colors.card,
                     borderColor: active ? tint.primary : colors.border,
                   },
                   shadow(active ? 'md' : 'sm', isDark),
+                  pressed && styles.pressed,
                 ]}
               >
                 <Row justify="space-between" align="flex-start">
@@ -330,7 +333,7 @@ export default function KidsModeScreen() {
                   <Caption color={colors.inkMuted}>Tap the card to read along</Caption>
                   <Caption color={tint.primary}>Read &amp; listen →</Caption>
                 </Row>
-              </View>
+              </Pressable>
             );
           })}
         </View>
