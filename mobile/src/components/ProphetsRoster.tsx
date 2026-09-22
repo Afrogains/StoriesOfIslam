@@ -40,8 +40,9 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
         <Overline color={colors.emerald}>{PROPHETS_SERIES.credit}</Overline>
       </Row>
       <Small color={colors.inkMuted} style={styles.seriesNote}>
-        {PROPHETS_SERIES.description} Tap a prophet to open the full story to read
-        {compact ? '' : ' or play'}. Muhammad ﷺ is covered under Seerah & Shama’il.
+        {PROPHETS_SERIES.description} Tap a prophet’s name to open the full
+        chapter page{compact ? '' : ' (read or listen)'}. Muhammad ﷺ is covered
+        under Seerah & Shama’il.
       </Small>
 
       {!compact ? (
@@ -68,7 +69,7 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
           <Caption color={colors.inkMuted}>{selected.honorificEn}</Caption>
           <Body style={styles.summary}>{selected.summaryEn}</Body>
           <Caption color={colors.emerald} style={styles.openHint}>
-            Tap to read the full story
+            Open full chapter page
           </Caption>
         </Pressable>
       ) : null}
