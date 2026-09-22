@@ -1,6 +1,8 @@
 import { Modal } from 'react-native';
+import { useEffect } from 'react';
 import AudioPlayerScreen from '../screens/AudioPlayerScreen';
 import ReaderScreen from '../screens/ReaderScreen';
+import { markLastActiveStory } from '../hooks/useLastActiveStory';
 import type { StoryItem } from '../types/catalog';
 
 export type StorySessionMode = 'read' | 'listen' | null;
@@ -13,6 +15,10 @@ type StorySessionModalProps = {
 
 /** Shared read/listen session host for Home, Explore, and Library. */
 export default function StorySessionModal({ story, mode, onChangeMode }: StorySessionModalProps) {
+  useEffect(() => {
+    if (story && mode) void markLastActiveStory(story.id);
+  }, [story, mode]);
+
   if (!story || !mode) return null;
 
   return (
