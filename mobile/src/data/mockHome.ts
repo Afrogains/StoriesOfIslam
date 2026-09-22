@@ -161,7 +161,7 @@ export const continueListening = {
 export const allStandardStories: StoryItem[] = [
   // Prophets — seeded from Ibn Kathir Stories of the Prophets (summaries)
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220101",
+    id: "20a1b2c3-d4e5-4060-8071-222222220101",
     sectionSlug: "qisas-al-anbiya",
     title: "Adam: Created and Taught",
     titleAr: "آدم: خُلق وعُلّم",
@@ -183,7 +183,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Adam.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220102",
+    id: "20a1b2c3-d4e5-4060-8071-222222220102",
     sectionSlug: "qisas-al-anbiya",
     title: "Idris: Raised to a High Station",
     titleAr: "إدريس: رُفع مكاناً عليّاً",
@@ -205,7 +205,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Idris.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220103",
+    id: "20a1b2c3-d4e5-4060-8071-222222220103",
     sectionSlug: "qisas-al-anbiya",
     title: "Nuh and the Ark",
     titleAr: "نوح والسفينة",
@@ -227,7 +227,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Nuh.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220104",
+    id: "20a1b2c3-d4e5-4060-8071-222222220104",
     sectionSlug: "qisas-al-anbiya",
     title: "Hud and the People of ‘Ad",
     titleAr: "هود وقوم عاد",
@@ -249,7 +249,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Hud.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220105",
+    id: "20a1b2c3-d4e5-4060-8071-222222220105",
     sectionSlug: "qisas-al-anbiya",
     title: "Salih and the She-Camel",
     titleAr: "صالح والناقة",
@@ -293,7 +293,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Ibrahim.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220106",
+    id: "20a1b2c3-d4e5-4060-8071-222222220106",
     sectionSlug: "qisas-al-anbiya",
     title: "Ibrahim Breaks the Idols",
     titleAr: "إبراهيم يحطم الأصنام",
@@ -315,7 +315,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Ibrahim.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220107",
+    id: "20a1b2c3-d4e5-4060-8071-222222220107",
     sectionSlug: "qisas-al-anbiya",
     title: "Isma‘il and the Valley of Zamzam",
     titleAr: "إسماعيل ووادي زمزم",
@@ -337,7 +337,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Isma‘il.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220108",
+    id: "20a1b2c3-d4e5-4060-8071-222222220108",
     sectionSlug: "qisas-al-anbiya",
     title: "Ishaq and the Line of Guidance",
     titleAr: "إسحاق وسلسلة الهداية",
@@ -359,7 +359,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Ishaq.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220109",
+    id: "20a1b2c3-d4e5-4060-8071-222222220109",
     sectionSlug: "qisas-al-anbiya",
     title: "Yaqub and His Sons",
     titleAr: "يعقوب وبنوه",
@@ -381,7 +381,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Yaqub.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220110",
+    id: "20a1b2c3-d4e5-4060-8071-222222220110",
     sectionSlug: "qisas-al-anbiya",
     title: "Lut and the People of Sodom",
     titleAr: "لوط وأهل سدوم",
@@ -403,7 +403,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Lut.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220111",
+    id: "20a1b2c3-d4e5-4060-8071-222222220111",
     sectionSlug: "qisas-al-anbiya",
     title: "Shu‘aib and Fair Measure",
     titleAr: "شعيب والكيل بالقسط",
@@ -425,7 +425,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Shu‘aib.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220112",
+    id: "20a1b2c3-d4e5-4060-8071-222222220112",
     sectionSlug: "qisas-al-anbiya",
     title: "Yusuf: From the Well to Authority",
     titleAr: "يوسف: من الجبّ إلى الملك",
@@ -447,7 +447,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Yusuf.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220113",
+    id: "20a1b2c3-d4e5-4060-8071-222222220113",
     sectionSlug: "qisas-al-anbiya",
     title: "Ayyub’s Patience in Trial",
     titleAr: "أيوب وصبره في البلاء",
@@ -469,7 +469,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Ayyub.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220114",
+    id: "20a1b2c3-d4e5-4060-8071-222222220114",
     sectionSlug: "qisas-al-anbiya",
     title: "Dhul-Kifl Among the Patient",
     titleAr: "ذو الكفل من الصابرين",
@@ -535,7 +535,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Musa.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220115",
+    id: "20a1b2c3-d4e5-4060-8071-222222220115",
     sectionSlug: "qisas-al-anbiya",
     title: "Harun Supports Musa",
     titleAr: "هارون يؤيد موسى",
@@ -557,7 +557,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Harun.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220116",
+    id: "20a1b2c3-d4e5-4060-8071-222222220116",
     sectionSlug: "qisas-al-anbiya",
     title: "Hizqeel Among Later Guides",
     titleAr: "حزقيل فيمن بعد موسى",
@@ -579,7 +579,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Hizqeel.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220117",
+    id: "20a1b2c3-d4e5-4060-8071-222222220117",
     sectionSlug: "qisas-al-anbiya",
     title: "Ilyas Against Idolatry",
     titleAr: "إلياس ومحاربة الشرك",
@@ -601,7 +601,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Ilyas.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220118",
+    id: "20a1b2c3-d4e5-4060-8071-222222220118",
     sectionSlug: "qisas-al-anbiya",
     title: "Shammil and the Request for a King",
     titleAr: "شمويل وطلب الملك",
@@ -623,7 +623,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Shammil.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220119",
+    id: "20a1b2c3-d4e5-4060-8071-222222220119",
     sectionSlug: "qisas-al-anbiya",
     title: "Dawud and Goliath",
     titleAr: "داود وجالوت",
@@ -645,7 +645,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Dawud.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220120",
+    id: "20a1b2c3-d4e5-4060-8071-222222220120",
     sectionSlug: "qisas-al-anbiya",
     title: "Sulaiman and the Dominion",
     titleAr: "سليمان والملك المسخّر",
@@ -667,7 +667,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Sulaiman.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220121",
+    id: "20a1b2c3-d4e5-4060-8071-222222220121",
     sectionSlug: "qisas-al-anbiya",
     title: "Shi‘a Advises His King",
     titleAr: "شعيا ونصح الملك",
@@ -689,7 +689,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Shi‘a.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220122",
+    id: "20a1b2c3-d4e5-4060-8071-222222220122",
     sectionSlug: "qisas-al-anbiya",
     title: "Aramaya and the Trial of Jerusalem",
     titleAr: "أرميا ومحنة بيت المقدس",
@@ -711,7 +711,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Aramaya.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220123",
+    id: "20a1b2c3-d4e5-4060-8071-222222220123",
     sectionSlug: "qisas-al-anbiya",
     title: "Daniel in the Lions’ Den",
     titleAr: "دانيال في جبّ الأسود",
@@ -733,7 +733,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Daniel.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220124",
+    id: "20a1b2c3-d4e5-4060-8071-222222220124",
     sectionSlug: "qisas-al-anbiya",
     title: "Uzair and the Ruined Town",
     titleAr: "عزير والقرية الخاوية",
@@ -755,7 +755,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Uzair.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220125",
+    id: "20a1b2c3-d4e5-4060-8071-222222220125",
     sectionSlug: "qisas-al-anbiya",
     title: "Zakariyah and the Glad Tidings",
     titleAr: "زكريا والبشارة بيحيى",
@@ -777,7 +777,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Zakariyah.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220126",
+    id: "20a1b2c3-d4e5-4060-8071-222222220126",
     sectionSlug: "qisas-al-anbiya",
     title: "Yahya: Wisdom in Youth",
     titleAr: "يحيى: الحكمة في الصبا",
@@ -799,7 +799,7 @@ export const allStandardStories: StoryItem[] = [
     keyTakeaway: "A teaching account from Ibn Kathir’s Stories of the Prophets about Yahya.",
   },
   {
-    id: "20a1b2c3-d4e5-4060-8071-2222222220127",
+    id: "20a1b2c3-d4e5-4060-8071-222222220127",
     sectionSlug: "qisas-al-anbiya",
     title: "Isa: Messenger, Not Son",
     titleAr: "عيسى: رسول لا ابن",
