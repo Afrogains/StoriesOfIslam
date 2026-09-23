@@ -21,7 +21,7 @@ import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
 import ExploreScreen from './src/screens/ExploreScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
-import TheNamesScreen from './src/screens/TheNamesScreen';
+import NamesScreen from './src/screens/NamesScreen';
 import {
   BODY_FONT_FAMILY,
   alpha,
@@ -161,7 +161,7 @@ function AppNavigator() {
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Explore" component={ExploreScreen} />
-            <Tab.Screen name="Names" component={TheNamesScreen} options={{ title: 'The Names' }} />
+            <Tab.Screen name="Names" component={NamesScreen} options={{ title: 'The Names' }} />
             <Tab.Screen name="Library" component={LibraryScreen} />
           </Tab.Navigator>
         </NavigationContainer>
