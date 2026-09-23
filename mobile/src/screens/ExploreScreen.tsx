@@ -1,5 +1,6 @@
 import {
   ArrowDownWideNarrow,
+  ArrowRight,
   CheckCircle2,
   Filter,
   Headphones,
@@ -16,15 +17,20 @@ import ProphetsRoster from '../components/ProphetsRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
+  Body,
   Caption,
   Card,
   EmptyState,
+  Heading,
+  IconBubble,
   Overline,
   Pill,
   Row,
   SectionHeading,
+  Small,
   useTheme,
 } from '../components/ui';
+import { SECTION_ORDER, groupStoriesBySection } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
 import type {
   AuthenticityGrade,
@@ -64,6 +70,15 @@ const sorts: { id: SortKey; label: string }[] = [
   { id: 'title', label: 'A → Z' },
 ];
 
+const PREVIEW_PER_SECTION = 2;
+
+function sortStories(list: StoryItem[], sortBy: SortKey): StoryItem[] {
+  if (sortBy === 'duration') return [...list].sort((a, b) => b.durationMs - a.durationMs);
+  if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title));
+  return list;
+}
+
+/** Explore: browse by category first; drill into a section for the full shelf. */
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
   const { stories } = useCatalog();
@@ -82,6 +97,13 @@ export default function ExploreScreen() {
 
   const activeFilterCount =
     (mediaFilter === 'all' ? 0 : 1) + (gradeFilter === 'all' ? 0 : 1) + (sortBy === 'default' ? 0 : 1);
+
+  const sectionCounts = useMemo(() => {
+    const counts = {} as Record<SectionSlug, number>;
+    for (const slug of SECTION_ORDER) counts[slug] = 0;
+    for (const story of stories) counts[story.sectionSlug] += 1;
+    return counts;
+  }, [stories]);
 
   const filteredStories = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -102,12 +124,18 @@ export default function ExploreScreen() {
       );
     });
 
-    if (sortBy === 'duration') return [...list].sort((a, b) => b.durationMs - a.durationMs);
-    if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title));
-    return list;
+    return sortStories(list, sortBy);
   }, [stories, selectedSection, mediaFilter, gradeFilter, query, sortBy]);
 
+  const grouped = useMemo(
+    () => groupStoriesBySection(filteredStories),
+    [filteredStories],
+  );
+
+  const searching = query.trim().length > 0;
+  const showGroupedBrowse = selectedSection === 'all' && !searching;
   const audioCount = filteredStories.filter((story) => story.hasAudio).length;
+  const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
 
   const resolveProphetStory = (prophet: ProphetFigure): StoryItem | null => {
     const matches = storiesForProphetSlug(stories, prophet.slug, prophet.nameEn);
@@ -160,13 +188,8 @@ export default function ExploreScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <ScreenHeader
-          eyebrow="Explore"
-          title="All stories"
-          arabic="جميع القصص"
-        />
+        <ScreenHeader eyebrow="Explore" title="Categories" arabic="التصنيفات" />
 
-        {/* Category pills */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -174,15 +197,15 @@ export default function ExploreScreen() {
           contentContainerStyle={styles.pillsContent}
         >
           <Pill
-            label="All"
+            label={`All · ${stories.length}`}
             selected={selectedSection === 'all'}
             onPress={() => setSelectedSection('all')}
             gradient={emeraldGradient}
           />
-          {(Object.keys(sectionsMeta) as SectionSlug[]).map((slug) => (
+          {SECTION_ORDER.map((slug) => (
             <Pill
               key={slug}
-              label={sectionsMeta[slug].title}
+              label={`${sectionsMeta[slug].title} · ${sectionCounts[slug]}`}
               icon={sectionIcons[slug]}
               selected={selectedSection === slug}
               onPress={() => setSelectedSection(slug)}
@@ -191,7 +214,6 @@ export default function ExploreScreen() {
           ))}
         </ScrollView>
 
-        {/* Search */}
         <View
           style={[
             styles.search,
@@ -203,7 +225,11 @@ export default function ExploreScreen() {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Search title, figure, or citation…"
+            placeholder={
+              selectedSection === 'all'
+                ? 'Search across all categories…'
+                : `Search in ${sectionsMeta[selectedSection].title}…`
+            }
             placeholderTextColor={colors.inkSubtle}
             style={[styles.searchInput, { color: colors.ink }]}
             accessibilityLabel="Search the collection"
@@ -231,17 +257,12 @@ export default function ExploreScreen() {
         </View>
 
         <Caption color={colors.inkMuted} style={styles.summaryRow}>
-          {filteredStories.length} stories
-          {audioCount ? ` · ${audioCount} with audio` : ''}
+          {showGroupedBrowse
+            ? `${SECTION_ORDER.length} categories · ${stories.length} stories`
+            : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
           {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
         </Caption>
 
-        {/* Prophets roster only when browsing that section — avoids doubling the All view */}
-        {selectedSection === 'qisas-al-anbiya' ? (
-          <ProphetsRoster onSelect={openProphetStories} />
-        ) : null}
-
-        {/* Filter panel */}
         {filtersOpen ? (
           <Card style={styles.filterPanel} padding={16}>
             <Row justify="space-between" style={styles.filterHead}>
@@ -307,10 +328,73 @@ export default function ExploreScreen() {
           </Card>
         ) : null}
 
-        <SectionHeading
-          label={selectedSection === 'all' ? 'Catalog' : sectionsMeta[selectedSection].title}
-          trailing={sortBy === 'default' ? 'Recommended' : sorts.find((s) => s.id === sortBy)?.label}
-        />
+        {showGroupedBrowse ? (
+          <View style={styles.categoryGrid}>
+            {SECTION_ORDER.map((slug) => {
+              const meta = sectionsMeta[slug];
+              const accent = sectionAccent(slug, isDark);
+              const count = sectionCounts[slug];
+              return (
+                <Card
+                  key={slug}
+                  style={styles.categoryCard}
+                  padding={14}
+                  accent={accent.primary}
+                  onPress={() => setSelectedSection(slug)}
+                  accessibilityLabel={`${meta.title}: ${count} stories`}
+                >
+                  <Row justify="space-between" align="flex-start">
+                    <IconBubble
+                      icon={sectionIcons[slug]}
+                      color={accent.primary}
+                      background={isDark ? colors.cardAlt : accent.surface}
+                      size={34}
+                    />
+                    <Caption color={accent.primary}>{count}</Caption>
+                  </Row>
+                  <Heading style={styles.categoryTitle} numberOfLines={1}>
+                    {meta.title}
+                  </Heading>
+                  <Small color={colors.inkMuted} numberOfLines={2} style={styles.categorySubtitle}>
+                    {meta.subtitle}
+                  </Small>
+                  <Row justify="space-between" style={styles.categoryFooter}>
+                    <Caption color={accent.primary}>Open category</Caption>
+                    <ArrowRight size={13} color={accent.primary} />
+                  </Row>
+                </Card>
+              );
+            })}
+          </View>
+        ) : null}
+
+        {activeMeta ? (
+          <Card
+            style={styles.sectionIntro}
+            padding={14}
+            accent={sectionAccent(selectedSection as SectionSlug, isDark).primary}
+          >
+            <Overline color={sectionAccent(selectedSection as SectionSlug, isDark).primary}>
+              {activeMeta.conceptTagline}
+            </Overline>
+            <Heading style={styles.sectionIntroTitle}>{activeMeta.title}</Heading>
+            <Body color={colors.inkMuted} numberOfLines={2} style={styles.sectionIntroBody}>
+              {activeMeta.description}
+            </Body>
+            <Pressable
+              onPress={() => setSelectedSection('all')}
+              accessibilityRole="button"
+              accessibilityLabel="Back to all categories"
+              style={styles.backLink}
+            >
+              <Caption color={colors.gold}>← All categories</Caption>
+            </Pressable>
+          </Card>
+        ) : null}
+
+        {selectedSection === 'qisas-al-anbiya' ? (
+          <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
 
         {filteredStories.length === 0 ? (
           <EmptyState
@@ -321,8 +405,53 @@ export default function ExploreScreen() {
             onAction={resetAll}
             gradient={emeraldGradient}
           />
+        ) : showGroupedBrowse ? (
+          <View style={styles.grouped}>
+            {grouped.map(({ slug, stories: sectionStories }) => {
+              const meta = sectionsMeta[slug];
+              const preview = sectionStories.slice(0, PREVIEW_PER_SECTION);
+              return (
+                <View key={slug} style={styles.groupBlock}>
+                  <SectionHeading
+                    label={meta.title}
+                    trailing={`${sectionStories.length} ${meta.countLabel.toLowerCase()}`}
+                  />
+                  <View style={styles.list}>
+                    {preview.map((story) => (
+                      <StoryCard
+                        key={story.id}
+                        story={story}
+                        variant="compact"
+                        onRead={() => openStory(story, 'read')}
+                        onListen={() => openStory(story, 'listen')}
+                      />
+                    ))}
+                  </View>
+                  {sectionStories.length > PREVIEW_PER_SECTION ? (
+                    <Pressable
+                      onPress={() => setSelectedSection(slug)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`View all ${meta.title}`}
+                      style={styles.viewAll}
+                    >
+                      <Caption color={sectionAccent(slug, isDark).primary}>
+                        View all {sectionStories.length} in {meta.title}
+                      </Caption>
+                      <ArrowRight size={13} color={sectionAccent(slug, isDark).primary} />
+                    </Pressable>
+                  ) : null}
+                </View>
+              );
+            })}
+          </View>
         ) : (
           <View style={styles.list}>
+            <SectionHeading
+              label={searching ? 'Search results' : activeMeta?.title ?? 'Catalog'}
+              trailing={
+                sortBy === 'default' ? 'Recommended' : sorts.find((s) => s.id === sortBy)?.label
+              }
+            />
             {filteredStories.map((story) => (
               <StoryCard
                 key={story.id}
@@ -389,5 +518,31 @@ const styles = StyleSheet.create({
   filterGroup: { marginBottom: 16, flexWrap: 'wrap' },
   filterGroupLast: { flexWrap: 'wrap' },
 
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 10,
+    marginBottom: 18,
+  },
+  categoryCard: { width: '47.8%' },
+  categoryTitle: { marginTop: 10 },
+  categorySubtitle: { marginTop: 3, minHeight: 32 },
+  categoryFooter: { marginTop: 10 },
+
+  sectionIntro: { marginBottom: 14, gap: 4 },
+  sectionIntroTitle: { marginTop: 4 },
+  sectionIntroBody: { marginTop: 4 },
+  backLink: { marginTop: 8, alignSelf: 'flex-start' },
+
+  grouped: { gap: 8 },
+  groupBlock: { marginBottom: 12 },
   list: { gap: 10 },
+  viewAll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 10,
+    alignSelf: 'flex-start',
+  },
 });

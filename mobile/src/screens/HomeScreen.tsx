@@ -17,6 +17,7 @@ import {
   useTheme,
 } from '../components/ui';
 import { useCatalog } from '../data/CatalogProvider';
+import { SECTION_ORDER, pickCrossCategorySuggestions } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
 import {
   useLastActiveStory,
@@ -47,9 +48,9 @@ function resolveResumeMode(
   return hasAudio ? 'listen' : 'read';
 }
 
-const SUGGESTED_LIMIT = 3;
+const SECTION_PREVIEW_LIMIT = 3;
 
-/** Lean home: resume + section chips + a short suggested list. Browse lives on Explore. */
+/** Lean home: resume + section chips + cross-category suggested picks. */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
   const { stories } = useCatalog();
@@ -98,13 +99,15 @@ export default function HomeScreen() {
       : 0;
 
   const suggested = useMemo(() => {
-    const pool =
-      spotlight === 'all'
-        ? stories
-        : stories.filter((story) => story.sectionSlug === spotlight);
-    return pool
-      .filter((story) => story.id !== continueStory?.id)
-      .slice(0, SUGGESTED_LIMIT);
+    if (spotlight === 'all') {
+      return pickCrossCategorySuggestions(stories, {
+        excludeId: continueStory?.id,
+        limit: SECTION_ORDER.length,
+      });
+    }
+    return stories
+      .filter((story) => story.sectionSlug === spotlight && story.id !== continueStory?.id)
+      .slice(0, SECTION_PREVIEW_LIMIT);
   }, [stories, spotlight, continueStory?.id]);
 
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
@@ -212,12 +215,12 @@ export default function HomeScreen() {
           contentContainerStyle={styles.pillsContent}
         >
           <Pill
-            label="Suggested"
+            label="Across categories"
             selected={spotlight === 'all'}
             onPress={() => setSpotlight('all')}
             gradient={emeraldGradient}
           />
-          {(Object.keys(sectionsMeta) as SectionSlug[]).map((slug) => (
+          {SECTION_ORDER.map((slug) => (
             <Pill
               key={slug}
               label={sectionsMeta[slug].title}
@@ -230,8 +233,12 @@ export default function HomeScreen() {
         </ScrollView>
 
         <SectionHeading
-          label={spotlight === 'all' ? 'Start here' : sectionsMeta[spotlight].title}
-          trailing={`${suggested.length} picks`}
+          label={spotlight === 'all' ? 'Suggested for you' : sectionsMeta[spotlight].title}
+          trailing={
+            spotlight === 'all'
+              ? 'One from each category'
+              : `${suggested.length} picks`
+          }
         />
 
         {suggested.length === 0 ? (
