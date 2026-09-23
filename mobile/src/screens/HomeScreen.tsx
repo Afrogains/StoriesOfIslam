@@ -2,22 +2,21 @@ import { BookOpen, Headphones } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import ScreenHeader from '../components/ScreenHeader';
-import StoryCard, { sectionIcons } from '../components/StoryCard';
+import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
+  ArabicInline,
   Body,
+  BodyStrong,
   Caption,
-  Heading,
   Overline,
-  Pill,
   ProgressBar,
   Row,
-  SectionHeading,
+  Small,
   useTheme,
 } from '../components/ui';
 import { useCatalog } from '../data/CatalogProvider';
-import { SECTION_ORDER, pickCrossCategorySuggestions } from '../data/catalogBrowse';
+import { pickCrossCategorySuggestions } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
 import {
   useLastActiveStory,
@@ -25,8 +24,15 @@ import {
 } from '../hooks/useLastActiveStory';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
-import { BODY_FONT_FAMILY, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
-import type { SectionSlug, StoryItem } from '../types/catalog';
+import {
+  BODY_FONT_FAMILY,
+  alpha,
+  brandGradients,
+  radius,
+  sectionAccent,
+  shadow,
+} from '../theme/tokens';
+import type { StoryItem } from '../types/catalog';
 
 function formatClock(ms: number): string {
   const total = Math.max(0, Math.floor(ms / 1000));
@@ -48,15 +54,89 @@ function resolveResumeMode(
   return hasAudio ? 'listen' : 'read';
 }
 
-const SECTION_PREVIEW_LIMIT = 3;
+function SuggestionRow({
+  story,
+  onRead,
+  onListen,
+}: {
+  story: StoryItem;
+  onRead: () => void;
+  onListen: () => void;
+}) {
+  const { colors, isDark } = useTheme();
+  const meta = sectionsMeta[story.sectionSlug];
+  const accent = sectionAccent(story.sectionSlug, isDark);
+  const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
 
-/** Lean home: resume + section chips + cross-category suggested picks. */
+  return (
+    <View
+      style={[
+        styles.suggestRow,
+        {
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+        },
+      ]}
+    >
+      <View style={[styles.suggestAccent, { backgroundColor: accent.primary }]} />
+      <View style={styles.suggestCopy}>
+        <Caption color={accent.primary} numberOfLines={1}>
+          {meta.title}
+        </Caption>
+        <BodyStrong numberOfLines={1} style={styles.suggestTitle}>
+          {story.title}
+        </BodyStrong>
+        <Small color={colors.inkMuted} numberOfLines={1}>
+          {story.figureName}
+          {story.hasAudio ? ` · ${story.durationLabel}` : ''}
+        </Small>
+      </View>
+      <Row gap={6}>
+        <Pressable
+          onPress={onRead}
+          accessibilityRole="button"
+          accessibilityLabel={`Read ${story.title}`}
+          style={({ pressed }) => [
+            styles.miniCta,
+            {
+              borderColor: accent.primary,
+              backgroundColor: isDark ? alpha(accent.primary, 0.12) : accent.surface,
+              opacity: pressed ? 0.75 : 1,
+            },
+          ]}
+        >
+          <BookOpen size={13} color={accent.primary} />
+        </Pressable>
+        <Pressable
+          onPress={onListen}
+          disabled={!canListen}
+          accessibilityRole="button"
+          accessibilityLabel={`Listen to ${story.title}`}
+          style={({ pressed }) => [
+            styles.miniCta,
+            styles.miniCtaSolid,
+            {
+              backgroundColor: canListen ? accent.primary : colors.subtleBg,
+              opacity: !canListen ? 0.4 : pressed ? 0.75 : 1,
+            },
+          ]}
+        >
+          <Headphones size={13} color="#FFFFFF" />
+        </Pressable>
+      </Row>
+    </View>
+  );
+}
+
+/**
+ * Home — one calm composition: greeting, resume, and four cross-category
+ * suggestions. Browse/search live on Explore.
+ */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
   const { stories } = useCatalog();
   const { lastActive, refresh, markActive } = useLastActiveStory();
 
-  const [spotlight, setSpotlight] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
 
@@ -98,19 +178,13 @@ export default function HomeScreen() {
       ? Math.min(1, audioMs / continueStory.durationMs)
       : 0;
 
-  const suggested = useMemo(() => {
-    if (spotlight === 'all') {
-      return pickCrossCategorySuggestions(stories, {
+  const suggested = useMemo(
+    () =>
+      pickCrossCategorySuggestions(stories, {
         excludeId: continueStory?.id,
-        limit: SECTION_ORDER.length,
-      });
-    }
-    return stories
-      .filter((story) => story.sectionSlug === spotlight && story.id !== continueStory?.id)
-      .slice(0, SECTION_PREVIEW_LIMIT);
-  }, [stories, spotlight, continueStory?.id]);
-
-  const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
+      }),
+    [stories, continueStory?.id],
+  );
 
   const openResume = () => {
     if (!continueStory) return;
@@ -125,48 +199,72 @@ export default function HomeScreen() {
     setSessionMode(mode);
   };
 
+  const resumeSection = continueStory
+    ? sectionsMeta[continueStory.sectionSlug]?.title
+    : null;
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
+      <LinearGradient
+        colors={
+          isDark
+            ? ['#0B3B32', '#0F172A', '#0F172A']
+            : ['#D1FAE5', '#FCFBF7', '#FCFBF7']
+        }
+        locations={[0, 0.42, 1]}
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
+      />
+
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <ScreenHeader
-          eyebrow="Assalamu alaikum"
-          title="Stories of Islam"
-          arabic="السلام عليكم ورحمة الله"
-        />
-
-        <SectionHeading label="Resume" trailing="Pick up where you left off" />
+        <Row justify="space-between" align="flex-start" style={styles.top}>
+          <View style={styles.brand}>
+            <Overline color={colors.emerald}>Assalamu alaikum</Overline>
+            <Text style={[styles.brandTitle, { color: colors.ink }]}>Stories of Islam</Text>
+            <ArabicInline color={colors.gold} style={styles.brandArabic}>
+              السلام عليكم ورحمة الله
+            </ArabicInline>
+          </View>
+          <ModeToggle />
+        </Row>
 
         {continueStory ? (
           <LinearGradient
             colors={brandGradients.night[isDark ? 'dark' : 'light']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={[styles.resumeBar, shadow('md', isDark)]}
+            style={[styles.resume, shadow('md', isDark)]}
           >
-            <Overline color="#FDE68A">Last active</Overline>
-            <Heading color="#FFFFFF" style={styles.resumeTitle} numberOfLines={2}>
+            <Row justify="space-between" align="center">
+              <Overline color="#FDE68A">Continue</Overline>
+              {resumeSection ? (
+                <Caption color="#94A3B8">{resumeSection}</Caption>
+              ) : null}
+            </Row>
+
+            <BodyStrong color="#FFFFFF" style={styles.resumeTitle} numberOfLines={2}>
               {continueStory.title}
-            </Heading>
-            <Caption color="#94A3B8" style={styles.resumeMeta}>
+            </BodyStrong>
+            <Caption color="#94A3B8" style={styles.resumeMeta} numberOfLines={1}>
               {continueStory.figureName}
               {resumeMode === 'listen'
                 ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
                 : readY > 0
-                  ? ' · bookmark saved'
+                  ? ' · reading bookmark'
                   : ''}
             </Caption>
-            <View style={styles.resumeProgress}>
-              <ProgressBar
-                value={resumeMode === 'listen' ? audioProgress : readY > 0 ? 0.28 : 0}
-                gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
-                trackColor="rgba(255,255,255,0.14)"
-                height={4}
-              />
-            </View>
+
+            <ProgressBar
+              value={resumeMode === 'listen' ? audioProgress : readY > 0 ? 0.28 : 0}
+              gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
+              trackColor="rgba(255,255,255,0.14)"
+              height={3}
+            />
+
             <Pressable
               onPress={openResume}
               accessibilityRole="button"
@@ -203,63 +301,30 @@ export default function HomeScreen() {
             ]}
           >
             <Body color={colors.inkMuted}>
-              Browse Explore to start a story. It will appear here next time.
+              Open a story from Explore — it will land here for quick resume.
             </Body>
           </View>
         )}
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.pills}
-          contentContainerStyle={styles.pillsContent}
-        >
-          <Pill
-            label="Across categories"
-            selected={spotlight === 'all'}
-            onPress={() => setSpotlight('all')}
-            gradient={emeraldGradient}
-          />
-          {SECTION_ORDER.map((slug) => (
-            <Pill
-              key={slug}
-              label={sectionsMeta[slug].title}
-              icon={sectionIcons[slug]}
-              selected={spotlight === slug}
-              onPress={() => setSpotlight(slug)}
-              gradient={sectionAccent(slug, isDark).accentGradient}
-            />
-          ))}
-        </ScrollView>
-
-        <SectionHeading
-          label={spotlight === 'all' ? 'Suggested for you' : sectionsMeta[spotlight].title}
-          trailing={
-            spotlight === 'all'
-              ? 'One from each category'
-              : `${suggested.length} picks`
-          }
-        />
+        <Row justify="space-between" align="center" style={styles.suggestHead}>
+          <Overline>Today’s path</Overline>
+          <Caption color={colors.inkSubtle}>One from each category</Caption>
+        </Row>
 
         {suggested.length === 0 ? (
-          <Caption color={colors.inkMuted}>No other stories in this collection yet.</Caption>
+          <Caption color={colors.inkMuted}>No suggestions yet.</Caption>
         ) : (
-          <View style={styles.list}>
+          <View style={styles.suggestList}>
             {suggested.map((story) => (
-              <StoryCard
+              <SuggestionRow
                 key={story.id}
                 story={story}
-                variant="compact"
                 onRead={() => openStory(story, 'read')}
                 onListen={() => openStory(story, 'listen')}
               />
             ))}
           </View>
         )}
-
-        <Caption color={colors.inkSubtle} style={styles.exploreHint}>
-          Full catalog, search, and filters live on Explore.
-        </Caption>
       </ScrollView>
 
       <StorySessionModal
@@ -282,18 +347,31 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 120 },
-  resumeBar: {
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 120,
+  },
+  top: { marginBottom: 18 },
+  brand: { flex: 1, paddingRight: 12 },
+  brandTitle: {
+    fontFamily: BODY_FONT_FAMILY,
+    fontSize: 26,
+    fontWeight: '800',
+    letterSpacing: -0.4,
+    marginTop: 2,
+  },
+  brandArabic: { marginTop: 2, fontSize: 16, lineHeight: 26 },
+  resume: {
     borderRadius: radius['2xl'],
     padding: 16,
-    marginTop: 2,
-    marginBottom: 14,
+    gap: 8,
+    marginBottom: 22,
   },
-  resumeTitle: { marginTop: 6 },
-  resumeMeta: { marginTop: 4 },
-  resumeProgress: { marginTop: 12 },
+  resumeTitle: { fontSize: 16, lineHeight: 22 },
+  resumeMeta: { marginBottom: 4 },
   resumeCta: {
-    marginTop: 12,
+    marginTop: 6,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -324,10 +402,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius['2xl'],
     padding: 16,
-    marginBottom: 14,
+    marginBottom: 22,
   },
-  pills: { marginBottom: 12, overflow: 'visible' },
-  pillsContent: { gap: 8, paddingRight: 4 },
-  list: { gap: 10 },
-  exploreHint: { marginTop: 16, textAlign: 'center' },
+  suggestHead: { marginBottom: 10 },
+  suggestList: { gap: 8 },
+  suggestRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    paddingVertical: 10,
+    paddingRight: 10,
+    paddingLeft: 0,
+    overflow: 'hidden',
+  },
+  suggestAccent: {
+    width: 3,
+    alignSelf: 'stretch',
+    borderTopRightRadius: 2,
+    borderBottomRightRadius: 2,
+  },
+  suggestCopy: { flex: 1, minWidth: 0, paddingLeft: 10, gap: 1 },
+  suggestTitle: { fontSize: 14 },
+  miniCta: {
+    width: 34,
+    height: 34,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  miniCtaSolid: { borderWidth: 0 },
 });
