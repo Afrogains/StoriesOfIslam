@@ -112,28 +112,29 @@ export default function StoryCard({
               </Small>
             </View>
           ) : null}
+
+          <Divider style={styles.divider} />
+
+          <Row justify="space-between" style={styles.metaFooter}>
+            <Row gap={5}>
+              <Clock size={12} color={colors.inkSubtle} />
+              <Caption>{story.durationLabel}</Caption>
+              <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
+              <Caption>{story.hasAudio ? 'Audio ready' : 'Text first'}</Caption>
+            </Row>
+          </Row>
         </>
       ) : (
-        <Body numberOfLines={2} style={styles.summary}>
-          {story.summary}
-        </Body>
+        <Caption color={colors.inkSubtle} style={styles.compactMeta}>
+          {story.durationLabel}
+          {story.hasAudio ? ' · audio' : ' · text'}
+        </Caption>
       )}
-
-      <Divider style={styles.divider} />
-
-      <Row justify="space-between" style={styles.metaFooter}>
-        <Row gap={5}>
-          <Clock size={12} color={colors.inkSubtle} />
-          <Caption>{story.durationLabel}</Caption>
-          <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
-          <Caption>{story.hasAudio ? 'Audio ready' : 'Text first'}</Caption>
-        </Row>
-      </Row>
 
       <Row gap={8} style={styles.ctaRow}>
         <View style={styles.ctaFlex}>
           <OutlineButton
-            label="Read Story"
+            label="Read"
             icon={BookOpen}
             onPress={onRead}
             accessibilityLabel={`Read story: ${story.title}`}
@@ -161,6 +162,7 @@ const styles = StyleSheet.create({
   arabic: { marginTop: 2 },
   figure: { marginTop: 4 },
   summary: { marginTop: 8 },
+  compactMeta: { marginTop: 6, marginBottom: 2 },
   wisdom: {
     marginTop: 14,
     padding: 12,
@@ -172,6 +174,6 @@ const styles = StyleSheet.create({
   divider: { marginTop: 16, marginBottom: 12 },
   metaFooter: { marginBottom: 12 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
-  ctaRow: { marginTop: 2 },
+  ctaRow: { marginTop: 8 },
   ctaFlex: { flex: 1 },
 });
