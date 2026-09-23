@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react-native';
+import { Headphones, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import {
   FlatList,
@@ -15,8 +15,7 @@ import ScreenHeader from '../components/ScreenHeader';
 import {
   ArabicInline,
   BodyStrong,
-  Overline,
-  Row,
+  Caption,
   Small,
   useTheme,
 } from '../components/ui';
@@ -28,6 +27,7 @@ import {
 import { nameAudioByNumber, namesWithAudioCount } from '../data/theNamesAudio';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 
+/** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
   const { colors, isDark } = useTheme();
   const [query, setQuery] = useState('');
@@ -45,42 +45,40 @@ export default function NamesScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
+      <View style={styles.topBar}>
+        <ScreenHeader
+          eyebrow="Asma’ul Husna"
+          title="The Names"
+          arabic="الأسماء الحسنى"
+        />
+        <View
+          style={[
+            styles.searchBox,
+            { backgroundColor: colors.card, borderColor: colors.border },
+          ]}
+        >
+          <Search size={15} color={colors.inkSubtle} />
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search names…"
+            placeholderTextColor={colors.inkSubtle}
+            accessibilityLabel="Search the 99 names"
+            style={[styles.searchInput, { color: colors.ink }]}
+          />
+          <Caption color={colors.inkSubtle}>
+            {filtered.length === 99 ? `${audioCount} audio` : `${filtered.length}`}
+          </Caption>
+        </View>
+      </View>
+
       <FlatList
         data={filtered}
         keyExtractor={(item) => String(item.number)}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <View style={styles.listHeader}>
-            <ScreenHeader
-              eyebrow="Asma’ul Husna"
-              title="The Names"
-              arabic="الأسماء الحسنى"
-              subtitle={`${audioCount} names with podcast audio · tap a name`}
-            />
-
-            <View
-              style={[
-                styles.searchBox,
-                { backgroundColor: colors.card, borderColor: colors.border },
-              ]}
-            >
-              <Search size={16} color={colors.inkSubtle} />
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Search by name, meaning, or number"
-                placeholderTextColor={colors.inkSubtle}
-                accessibilityLabel="Search the 99 names"
-                style={[styles.searchInput, { color: colors.ink }]}
-              />
-            </View>
-
-            <Overline>
-              {filtered.length === 99 ? 'All 99 names' : `${filtered.length} matching names`}
-            </Overline>
-          </View>
-        }
         renderItem={({ item }) => {
           const active = item.number === selected.number;
           const hasAudio = Boolean(nameAudioByNumber[item.number]);
@@ -104,28 +102,26 @@ export default function NamesScreen() {
                 active ? shadow('sm', isDark) : null,
               ]}
             >
-              <LinearGradient
-                colors={active ? goldGradient : [colors.cardAlt, colors.cardAlt]}
-                style={styles.numberPill}
-              >
-                <BodyStrong color={active ? '#FFFFFF' : colors.inkMuted}>
-                  {item.number}
-                </BodyStrong>
-              </LinearGradient>
-              <View style={styles.tileCopy}>
-                <Row justify="space-between" align="center">
-                  <BodyStrong numberOfLines={1} style={styles.tileName}>
-                    {item.transliteration}
+              <View style={styles.tileTop}>
+                <LinearGradient
+                  colors={active ? goldGradient : [colors.cardAlt, colors.cardAlt]}
+                  style={styles.numberPill}
+                >
+                  <BodyStrong color={active ? '#FFFFFF' : colors.inkMuted} style={styles.numberText}>
+                    {item.number}
                   </BodyStrong>
-                  <ArabicInline color={colors.gold} style={styles.tileArabic}>
-                    {item.arabic}
-                  </ArabicInline>
-                </Row>
-                <Small color={colors.inkMuted} numberOfLines={1}>
-                  {item.meaning}
-                  {hasAudio ? ' · audio' : ''}
-                </Small>
+                </LinearGradient>
+                {hasAudio ? <Headphones size={12} color={active ? colors.gold : colors.inkSubtle} /> : null}
               </View>
+              <ArabicInline color={colors.gold} style={styles.tileArabic} numberOfLines={1}>
+                {item.arabic}
+              </ArabicInline>
+              <BodyStrong numberOfLines={1} style={styles.tileName}>
+                {item.transliteration}
+              </BodyStrong>
+              <Small color={colors.inkMuted} numberOfLines={1}>
+                {item.meaning}
+              </Small>
             </Pressable>
           );
         }}
@@ -145,15 +141,10 @@ export default function NamesScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  listContent: {
+  topBar: {
     paddingHorizontal: 16,
-    paddingTop: 18,
-    paddingBottom: 220,
-    gap: 8,
-  },
-  listHeader: {
-    gap: 12,
-    marginBottom: 6,
+    paddingTop: 12,
+    gap: 10,
   },
   searchBox: {
     flexDirection: 'row',
@@ -162,31 +153,47 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.lg,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 7,
+    marginBottom: 6,
   },
   searchInput: {
     flex: 1,
     fontSize: 13,
     fontWeight: '500',
-    paddingVertical: 4,
+    paddingVertical: 2,
     ...(({ outlineStyle: 'none' } as unknown) as object),
   },
+  listContent: {
+    paddingHorizontal: 12,
+    paddingBottom: 200,
+    gap: 8,
+  },
+  row: {
+    gap: 8,
+    paddingHorizontal: 4,
+  },
   nameTile: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+    flex: 1,
     borderWidth: 1,
     borderRadius: radius.lg,
-    padding: 12,
+    padding: 10,
+    gap: 2,
+    minHeight: 96,
+  },
+  tileTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
   },
   numberPill: {
-    width: 36,
-    height: 36,
+    width: 26,
+    height: 26,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tileCopy: { flex: 1, gap: 2 },
-  tileName: { flexShrink: 1, marginRight: 8 },
-  tileArabic: { fontSize: 18, lineHeight: 28 },
+  numberText: { fontSize: 11 },
+  tileArabic: { fontSize: 18, lineHeight: 26, textAlign: 'right' },
+  tileName: { marginTop: 2 },
 });

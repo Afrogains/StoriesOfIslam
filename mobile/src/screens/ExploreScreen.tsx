@@ -1,14 +1,12 @@
 import {
   ArrowDownWideNarrow,
   CheckCircle2,
-  Clock,
   Filter,
   Headphones,
   Search,
   SearchX,
   SlidersHorizontal,
   SortAsc,
-  Sparkles,
   X,
 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
@@ -25,7 +23,6 @@ import {
   Pill,
   Row,
   SectionHeading,
-  Small,
   useTheme,
 } from '../components/ui';
 import { sectionsMeta } from '../data/catalogMeta';
@@ -111,9 +108,6 @@ export default function ExploreScreen() {
   }, [stories, selectedSection, mediaFilter, gradeFilter, query, sortBy]);
 
   const audioCount = filteredStories.filter((story) => story.hasAudio).length;
-  const totalMinutes = Math.round(
-    filteredStories.reduce((sum, story) => sum + story.durationMs, 0) / 60000,
-  );
 
   const resolveProphetStory = (prophet: ProphetFigure): StoryItem | null => {
     const matches = storiesForProphetSlug(stories, prophet.slug, prophet.nameEn);
@@ -167,10 +161,9 @@ export default function ExploreScreen() {
         showsVerticalScrollIndicator={false}
       >
         <ScreenHeader
-          eyebrow="Explore collection"
+          eyebrow="Explore"
           title="All stories"
           arabic="جميع القصص"
-          subtitle="Authentic accounts drawn from classical sources"
         />
 
         {/* Category pills */}
@@ -181,7 +174,7 @@ export default function ExploreScreen() {
           contentContainerStyle={styles.pillsContent}
         >
           <Pill
-            label="All categories"
+            label="All"
             selected={selectedSection === 'all'}
             onPress={() => setSelectedSection('all')}
             gradient={emeraldGradient}
@@ -197,13 +190,6 @@ export default function ExploreScreen() {
             />
           ))}
         </ScrollView>
-
-        {selectedSection === 'all' || selectedSection === 'qisas-al-anbiya' ? (
-          <ProphetsRoster
-            compact={selectedSection === 'all'}
-            onSelect={openProphetStories}
-          />
-        ) : null}
 
         {/* Search */}
         <View
@@ -244,21 +230,16 @@ export default function ExploreScreen() {
           </Pressable>
         </View>
 
-        {/* Result summary strip */}
-        <Row gap={14} style={styles.summaryRow}>
-          <Row gap={5}>
-            <Sparkles size={12} color={colors.gold} />
-            <Caption>{filteredStories.length} results</Caption>
-          </Row>
-          <Row gap={5}>
-            <Headphones size={12} color={colors.emerald} />
-            <Caption>{audioCount} with audio</Caption>
-          </Row>
-          <Row gap={5}>
-            <Clock size={12} color={colors.inkSubtle} />
-            <Caption>{totalMinutes} min total</Caption>
-          </Row>
-        </Row>
+        <Caption color={colors.inkMuted} style={styles.summaryRow}>
+          {filteredStories.length} stories
+          {audioCount ? ` · ${audioCount} with audio` : ''}
+          {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
+        </Caption>
+
+        {/* Prophets roster only when browsing that section — avoids doubling the All view */}
+        {selectedSection === 'qisas-al-anbiya' ? (
+          <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
 
         {/* Filter panel */}
         {filtersOpen ? (
@@ -328,7 +309,7 @@ export default function ExploreScreen() {
 
         <SectionHeading
           label={selectedSection === 'all' ? 'Catalog' : sectionsMeta[selectedSection].title}
-          trailing={sortBy === 'default' ? 'Recommended order' : sorts.find((s) => s.id === sortBy)?.label}
+          trailing={sortBy === 'default' ? 'Recommended' : sorts.find((s) => s.id === sortBy)?.label}
         />
 
         {filteredStories.length === 0 ? (
@@ -346,14 +327,11 @@ export default function ExploreScreen() {
               <StoryCard
                 key={story.id}
                 story={story}
+                variant="compact"
                 onRead={() => openStory(story, 'read')}
                 onListen={() => openStory(story, 'listen')}
               />
             ))}
-
-            <Small align="center" style={styles.listEnd}>
-              You’ve reached the end of the catalog · {filteredStories.length} stories
-            </Small>
           </View>
         )}
       </ScrollView>
@@ -373,9 +351,9 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 130 },
+  content: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 120 },
 
-  pills: { marginBottom: 16, overflow: 'visible' },
+  pills: { marginBottom: 12, overflow: 'visible' },
   pillsContent: { gap: 8, paddingRight: 4 },
 
   search: {
@@ -403,14 +381,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  summaryRow: { marginTop: 12, marginBottom: 16, flexWrap: 'wrap' },
+  summaryRow: { marginTop: 10, marginBottom: 12 },
 
-  filterPanel: { marginBottom: 20 },
+  filterPanel: { marginBottom: 14 },
   filterHead: { marginBottom: 14 },
   filterGroupLabel: { marginBottom: 8 },
   filterGroup: { marginBottom: 16, flexWrap: 'wrap' },
   filterGroupLast: { flexWrap: 'wrap' },
 
-  list: { gap: 14 },
-  listEnd: { marginTop: 10, paddingVertical: 8 },
+  list: { gap: 10 },
 });
