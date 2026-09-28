@@ -13,7 +13,7 @@ Environment: staging | production
 Operator:
 Date (UTC):
 
-## WhoGoHost
+## HostAfrica
 - [ ] Fresh migrations + deterministic seed evidence attached
 - [ ] Keycloak login/refresh/logout/account-deletion evidence attached
 - [ ] MinIO public/private policy probe output attached

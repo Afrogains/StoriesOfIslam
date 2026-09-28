@@ -1,8 +1,8 @@
-# WhoGoHost platform runbook
+# HostAfrica platform runbook
 
 ## Scope
 
-The WhoGoHost VPS hosts PostgreSQL (Keycloak only), Keycloak, MinIO, and Nginx.
+The HostAfrica VPS hosts PostgreSQL (Keycloak only), Keycloak, MinIO, and Nginx.
 Application data lives on HostAfrica MySQL (`afroclov_StoriesOfIslam`). The Node
 API and worker run on a separate managed host and reach MySQL plus the VPS
 through restricted endpoints. Staging and production must use separate
@@ -20,7 +20,7 @@ databases, VPS instances, and credentials.
 5. Point the auth, media, and restricted storage-console DNS records at the VPS.
 6. Issue TLS certificates with ACME. Use DNS validation when wildcard
    certificates are required.
-7. Copy `infra/whogohost`, create `.env` from `.env.example`, and generate every
+7. Copy `infra/hostafrica`, create `.env` from `.env.example`, and generate every
    password with at least 32 random characters.
 8. Replace the example Keycloak web origins and redirect URIs with the exact
    staging hostnames before importing the realm.
@@ -30,16 +30,16 @@ databases, VPS instances, and credentials.
     import. Grant only `realm-management.manage-users`; store its rotated secret
     on the API host.
 
-Never expose the MinIO console publicly. Restrict it at both the WhoGoHost
+Never expose the MinIO console publicly. Restrict it at both the HostAfrica
 firewall and a VPN/reverse-proxy allowlist.
 
 ## Application database roles
 
 Application CRUD uses HostAfrica MySQL. Prefer a migration-capable user for
 `npm run db:migrate:prod` and a narrower runtime user for the API/worker once
-schema is applied. See `infra/mysql/hostafrica-grants.sql`.
+schema is applied. See `infra/hostafrica/mysql/hostafrica-grants.sql`.
 
-WhoGoHost PostgreSQL remains for Keycloak. Clients never receive database
+HostAfrica PostgreSQL remains for Keycloak. Clients never receive database
 credentials and never connect to MySQL or PostgreSQL directly.
 
 ## MinIO policy
@@ -61,7 +61,7 @@ a second volume on the same VPS is not a backup.
 
 - HostAfrica MySQL: encrypted daily dumps of `afroclov_StoriesOfIslam`, 35-day
   minimum retention.
-- WhoGoHost PostgreSQL: encrypted daily dumps for Keycloak, 35-day minimum
+- HostAfrica PostgreSQL: encrypted daily dumps for Keycloak, 35-day minimum
   retention.
 - MinIO: versioning plus daily offsite mirror/snapshot.
 - Keycloak: captured by the PostgreSQL backup; export realm configuration after
@@ -79,14 +79,14 @@ Alert on:
 
 - filesystem above 75% and forecast exhaustion;
 - HostAfrica MySQL connection saturation and backup failures;
-- WhoGoHost PostgreSQL (Keycloak) connection saturation and backup failures;
+- HostAfrica PostgreSQL (Keycloak) connection saturation and backup failures;
 - Keycloak login error and latency spikes;
 - MinIO unavailable disks, healing, object count, and failed replication;
 - certificate expiry below 21 days;
 - container restarts and OOM kills;
 - missed backups and failed restore drills.
 
-Install Prometheus rule files from `infra/whogohost/monitoring/alerts.yml` and
+Install Prometheus rule files from `infra/hostafrica/monitoring/alerts.yml` and
 `infra/monitoring/api-alerts.yml`. Run `scripts/health-check.sh` through the
 systemd timer installed by `scripts/install-systemd.sh`.
 
@@ -103,8 +103,8 @@ npm run platform:local
 
 This generates local TLS material, starts PostgreSQL (Keycloak)/Keycloak/MinIO/
 Nginx, and runs `scripts/validate-stack.sh` (OIDC discovery, bucket anonymity,
-draft isolation). Use `infra/mysql/docker-compose.yml` for local app MySQL.
-Production still requires HostAfrica MySQL, a separate WhoGoHost VPS, ACME
+draft isolation). Use `infra/hostafrica/mysql/docker-compose.yml` for local app MySQL.
+Production still requires HostAfrica MySQL, a separate HostAfrica VPS, ACME
 certificates, off-site encrypted backups, and a recorded restore drill.
 
 ## Upgrade procedure

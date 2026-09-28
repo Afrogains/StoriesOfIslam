@@ -9,11 +9,11 @@ require authorized humans.
 
 Automation helpers:
 
-- `npm run platform:local` — local WhoGoHost Compose drill
+- `npm run platform:local` — local HostAfrica Compose drill
 - `npm run platform:validate` — OIDC, Keycloak Postgres, MinIO policy probes
 - `npm run acceptance:staging` — deployed staging HTTP probes
 - `bash scripts/beta-matrix.sh` — legal/page probes + manual device matrix
-- HostAfrica MySQL dump/restore + `infra/whogohost/scripts/backup-postgres-age.sh`
+- HostAfrica MySQL dump/restore + `infra/hostafrica/scripts/backup-postgres-age.sh`
   (Keycloak) + `restore-drill.sh`
 
 - [ ] Fresh staging migration and deterministic seed complete.
@@ -61,7 +61,7 @@ Firefox, and Edge. Include phone, tablet, small viewport, and large-text modes.
 
 ## Production readiness
 
-- [ ] Staging and production use isolated HostAfrica MySQL databases, WhoGoHost
+- [ ] Staging and production use isolated HostAfrica MySQL databases, HostAfrica
       VPSs, Keycloak realms, MinIO buckets, API services, and secrets.
 - [ ] DNS, TLS renewal, firewall, SSH, OS updates, least privilege, and console
       allowlist are verified.

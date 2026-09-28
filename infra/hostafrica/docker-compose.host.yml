@@ -1,5 +1,5 @@
 # Host-network local drill for environments where Docker bridge networking is
-# unavailable. Production WhoGoHost deployments must use docker-compose.yml with
+# unavailable. Production HostAfrica deployments must use docker-compose.yml with
 # the isolated `internal` network, not this file.
 services:
   postgres:

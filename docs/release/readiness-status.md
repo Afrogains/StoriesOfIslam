@@ -1,18 +1,18 @@
 # Production readiness status (cloud agent)
 
-## WhoGoHost
+## HostAfrica
 
 Validated locally with `docker-compose.yml` + `docker-compose.host.yml`:
 
 - HostAfrica-compatible MySQL schema via `migrations/` (`afroclov_StoriesOfIslam`)
-- WhoGoHost PostgreSQL retained for Keycloak only
+- HostAfrica PostgreSQL retained for Keycloak only
 - Keycloak 26 imports `stories-of-islam` realm; HTTPS issuer advertised behind
   Nginx TLS (`https://auth.local.test/realms/stories-of-islam`)
 - MinIO public download / private isolation policies verified
 - Keycloak PostgreSQL backup/restore drill path remains under
-  `infra/whogohost/scripts/`
+  `infra/hostafrica/scripts/`
 
-Production still requires a customer WhoGoHost VPS, ACME certificates, off-site
+Production still requires a customer HostAfrica VPS, ACME certificates, off-site
 rclone/MinIO replication, and operator SSH/firewall hardening via
 `scripts/harden-host.sh`.
 

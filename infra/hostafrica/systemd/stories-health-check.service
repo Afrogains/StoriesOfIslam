@@ -1,5 +1,5 @@
 [Unit]
-Description=Stories of Islam WhoGoHost health probe
+Description=Stories of Islam HostAfrica health probe
 After=docker.service network-online.target
 Wants=network-online.target
 

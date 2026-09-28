@@ -54,7 +54,7 @@ server {
   ssl_certificate_key /etc/nginx/tls/privkey.pem;
   ssl_protocols TLSv1.2 TLSv1.3;
 
-  # Restrict this hostname at the WhoGoHost firewall and/or replace with an
+  # Restrict this hostname at the HostAfrica firewall and/or replace with an
   # operator IP allowlist. It must not be generally public.
   location / {
     proxy_pass http://${MINIO_CONSOLE_UPSTREAM};

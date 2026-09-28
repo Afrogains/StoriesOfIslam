@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Harden a fresh WhoGoHost Ubuntu VPS for the platform stack.
+# Harden a fresh HostAfrica Ubuntu VPS for the platform stack.
 # Run as root after creating an operator user with SSH keys.
 set -euo pipefail
 

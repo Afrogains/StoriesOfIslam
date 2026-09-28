@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install backup and health-check systemd units on the WhoGoHost VPS.
+# Install backup and health-check systemd units on the HostAfrica VPS.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -82,8 +82,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate WhoGoHost and API host Compose files
-        working-directory: infra/whogohost
+      - name: Validate HostAfrica and API host Compose files
+        working-directory: infra/hostafrica
         env:
           POSTGRES_PASSWORD: ci-only-postgres-password-32chars
           KEYCLOAK_DB_PASSWORD: ci-only-keycloak-db-password-32

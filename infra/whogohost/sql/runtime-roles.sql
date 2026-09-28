@@ -1,6 +1,0 @@
--- Legacy WhoGoHost PostgreSQL app roles.
--- Application data now lives on HostAfrica MySQL (`afroclov_StoriesOfIslam`).
--- WhoGoHost PostgreSQL is retained for Keycloak only; do not grant API
--- application table privileges here.
---
--- For MySQL grants see: infra/mysql/hostafrica-grants.sql

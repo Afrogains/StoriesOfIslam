@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Provision or refresh the WhoGoHost Docker Compose stack.
+# Provision or refresh the HostAfrica Docker Compose stack.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

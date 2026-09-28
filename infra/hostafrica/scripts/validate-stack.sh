@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate WhoGoHost PostgreSQL (Keycloak), Keycloak, MinIO, Nginx TLS, and bucket policies.
+# Validate HostAfrica PostgreSQL (Keycloak), Keycloak, MinIO, Nginx TLS, and bucket policies.
 # Application MySQL (HostAfrica) is validated by the API /health/ready check.
 set -euo pipefail
 
@@ -129,4 +129,4 @@ if [[ "$failures" -gt 0 ]]; then
   printf '%s validation check(s) failed\n' "$failures" >&2
   exit 1
 fi
-printf 'All WhoGoHost stack validation checks passed\n'
+printf 'All HostAfrica stack validation checks passed\n'

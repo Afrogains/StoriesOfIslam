@@ -19,8 +19,8 @@
     "db:seed": "tsx src/cli/seed.ts",
     "db:seed:prod": "node dist/cli/seed.js",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm --prefix mobile run check",
-    "platform:local": "bash scripts/bringup-local-whogohost.sh",
-    "platform:validate": "bash infra/whogohost/scripts/validate-stack.sh",
+    "platform:local": "bash scripts/bringup-local-hostafrica.sh",
+    "platform:validate": "bash infra/hostafrica/scripts/validate-stack.sh",
     "acceptance:staging": "bash scripts/staging-acceptance.sh"
   },
   "engines": {

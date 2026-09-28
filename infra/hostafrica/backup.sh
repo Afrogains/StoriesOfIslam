@@ -8,7 +8,7 @@ set -eu
 : "${RCLONE_REMOTE:?set RCLONE_REMOTE, for example b2:stories-backups}"
 : "${MINIO_ALIAS:=production}"
 : "${MINIO_OFFSITE_ALIAS:=offsite}"
-: "${COMPOSE_PROJECT_DIR:=/opt/stories/whogohost}"
+: "${COMPOSE_PROJECT_DIR:=/opt/stories/hostafrica}"
 : "${POSTGRES_SERVICE:=postgres}"
 : "${POSTGRES_USER:=stories_app}"
 : "${POSTGRES_DB:=stories_of_islam}"

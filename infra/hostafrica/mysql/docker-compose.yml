@@ -1,6 +1,6 @@
 # Local MySQL for the Stories of Islam API (HostAfrica-compatible).
 # Production app data lives on HostAfrica MySQL `afroclov_StoriesOfIslam`.
-# WhoGoHost PostgreSQL remains only for Keycloak.
+# HostAfrica PostgreSQL remains only for Keycloak.
 name: stories-mysql
 
 services:
