@@ -3,25 +3,11 @@ import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import mysql from 'mysql2/promise';
-import { getEnv } from '../config/env';
+import { mysqlConnectionOptions } from '../db/mysqlConfig';
 import type { SeedData } from '../types';
 
 function createSeedConnection() {
-  const env = getEnv();
-  if (env.DATABASE_URL) {
-    return mysql.createConnection({
-      uri: env.DATABASE_URL,
-      ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-    });
-  }
-  return mysql.createConnection({
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-  });
+  return mysql.createConnection(mysqlConnectionOptions());
 }
 
 export async function seedDatabase(): Promise<void> {

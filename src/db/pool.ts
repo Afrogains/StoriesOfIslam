@@ -7,6 +7,7 @@ import mysql, {
 } from 'mysql2/promise';
 import { getEnv } from '../config/env';
 import { logger } from '../config/logger';
+import { mysqlConnectionOptions } from './mysqlConfig';
 
 export type DbClient = {
   query: <T extends RowDataPacket = RowDataPacket>(
@@ -23,32 +24,19 @@ export type QueryResult<T> = {
 
 const env = getEnv();
 
-const sharedPoolOptions = {
-  waitForConnections: true,
-  connectionLimit: env.DB_POOL_MAX,
-  maxIdle: env.DB_POOL_MAX,
-  idleTimeout: 30_000,
-  connectTimeout: 5_000,
-  enableKeepAlive: true,
-  timezone: 'Z' as const,
-  dateStrings: false,
-  namedPlaceholders: false,
-  ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-};
-
-export const pool: Pool = env.DATABASE_URL
-  ? mysql.createPool({
-      uri: env.DATABASE_URL,
-      ...sharedPoolOptions,
-    })
-  : mysql.createPool({
-      host: env.DB_HOST,
-      port: env.DB_PORT,
-      user: env.DB_USER,
-      password: env.DB_PASSWORD,
-      database: env.DB_NAME,
-      ...sharedPoolOptions,
-    });
+export const pool: Pool = mysql.createPool(
+  mysqlConnectionOptions({
+    waitForConnections: true,
+    connectionLimit: env.DB_POOL_MAX,
+    maxIdle: env.DB_POOL_MAX,
+    idleTimeout: 30_000,
+    connectTimeout: 5_000,
+    enableKeepAlive: true,
+    timezone: 'Z',
+    dateStrings: false,
+    namedPlaceholders: false,
+  }),
+);
 
 pool.on('connection', () => {
   logger.debug('MySQL pool connection established');

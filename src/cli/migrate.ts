@@ -3,26 +3,14 @@ import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import mysql from 'mysql2/promise';
-import { getEnv } from '../config/env';
+import { mysqlConnectionOptions } from '../db/mysqlConfig';
 
 function createMigrationConnection() {
-  const env = getEnv();
-  if (env.DATABASE_URL) {
-    return mysql.createConnection({
-      uri: env.DATABASE_URL,
+  return mysql.createConnection(
+    mysqlConnectionOptions({
       multipleStatements: true,
-      ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-    });
-  }
-  return mysql.createConnection({
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    multipleStatements: true,
-    ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-  });
+    }),
+  );
 }
 
 export async function runMigrations(): Promise<void> {

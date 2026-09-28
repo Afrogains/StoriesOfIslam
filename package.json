@@ -25,6 +25,7 @@
     "go-live": "bash scripts/go-live.sh",
     "go-live:preflight": "bash scripts/go-live-preflight.sh",
     "go-live:local": "bash scripts/go-live.sh all-local",
+    "go-live:hostafrica": "bash scripts/hostafrica-apply-on-server.sh",
     "assert:no-example-cdn": "bash scripts/assert-no-example-cdn.sh"
   },
   "engines": {

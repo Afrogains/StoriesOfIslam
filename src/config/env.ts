@@ -21,6 +21,8 @@ const EnvSchema = z
     DATABASE_URL: z.string().optional().or(z.literal('')),
     DB_HOST: z.string().default('127.0.0.1'),
     DB_PORT: z.coerce.number().int().positive().default(3306),
+    /** HostAfrica cPanel often uses a UNIX socket instead of TCP. */
+    DB_SOCKET: z.string().optional().or(z.literal('')),
     DB_NAME: z.string().default('afroclov_StoriesOfIslam'),
     DB_USER: z.string().default('stories_app'),
     DB_PASSWORD: z.string().default('change-me'),
@@ -60,11 +62,12 @@ const EnvSchema = z
   })
   .superRefine((data, ctx) => {
     const hasUrl = Boolean(data.DATABASE_URL && data.DATABASE_URL.length > 0);
-    const hasDiscrete = Boolean(data.DB_HOST && data.DB_NAME && data.DB_USER);
+    const hasSocket = Boolean(data.DB_SOCKET && data.DB_SOCKET.length > 0);
+    const hasDiscrete = Boolean((data.DB_HOST || hasSocket) && data.DB_NAME && data.DB_USER);
     if (!hasUrl && !hasDiscrete) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Provide DATABASE_URL or DB_HOST/DB_NAME/DB_USER for MySQL',
+        message: 'Provide DATABASE_URL, or DB_NAME/DB_USER with DB_HOST or DB_SOCKET',
         path: ['DB_HOST'],
       });
     }

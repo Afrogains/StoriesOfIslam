@@ -29,16 +29,25 @@ Also set real DNS hostnames (replace every `*.example.com`).
 
 ## Operator steps
 
+HostAfrica shared MySQL is `localhost` + UNIX socket `/var/lib/mysql/mysql.sock`.
+Apply schema/seed **on that server** (see `docs/operations/hostafrica-mysql-import.md`).
+
 ```bash
-# 1) Validate secrets (fails on placeholders)
+# On HostAfrica (SSH / cPanel Terminal) — not from a laptop/agent:
+export DB_NAME=afroclov_StoriesOfIslam
+export DB_USER=afroclov_StoriesOfIslam
+export DB_PASSWORD='...'   # never commit
+export DB_SOCKET=/var/lib/mysql/mysql.sock
+export DB_HOST=localhost
+bash scripts/hostafrica-apply-on-server.sh
+# Or import hostafrica-bootstrap.sql via phpMyAdmin
+```
+
+```bash
+# 1) Validate API env (fails on placeholders)
 ./scripts/go-live.sh preflight /etc/stories/api.env
 
-# 2) Schema + seed on HostAfrica MySQL
-export $(grep -v '^#' /etc/stories/api.env | xargs)
-./scripts/go-live.sh migrate
-./scripts/go-live.sh seed
-
-# 3) Platform (Keycloak/MinIO/Nginx) on HostAfrica VPS
+# 2) Platform (Keycloak/MinIO/Nginx) if using the Compose stack
 cd infra/hostafrica
 cp .env.example .env   # fill secrets + hostnames
 ./scripts/harden-host.sh
@@ -46,11 +55,11 @@ cp .env.example .env   # fill secrets + hostnames
 ./scripts/install-systemd.sh
 ./scripts/validate-stack.sh
 
-# 4) API + worker
+# 3) API + worker (same HostAfrica host can use DB_SOCKET)
 cd infra/api-host
 API_IMAGE=ghcr.io/<org>/stories-api:<sha> API_HOSTNAME=api.your.domain ./deploy.sh
 
-# 5) Acceptance
+# 4) Acceptance
 API_BASE_URL=https://api.your.domain \
 KEYCLOAK_ISSUER=https://auth.your.domain/realms/stories-of-islam \
 MEDIA_BASE_URL=https://media.your.domain \
@@ -58,11 +67,9 @@ WEB_BASE_URL=https://app.your.domain \
 METRICS_TOKEN=... \
 ./scripts/go-live.sh accept
 
-# 6) Encrypted MySQL backup drill
+# 5) Encrypted MySQL backup drill (on HostAfrica)
 BACKUP_AGE_RECIPIENT=age1... BACKUP_OUTPUT_DIR=/var/backups/stories \
   ./infra/hostafrica/scripts/backup-mysql-age.sh
-BACKUP_FILE=... BACKUP_AGE_IDENTITY=... RESTORE_DB_NAME=stories_restore_drill \
-  ./infra/hostafrica/scripts/restore-mysql-drill.sh
 ```
 
 ## Content / stores (human)
