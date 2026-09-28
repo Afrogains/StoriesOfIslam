@@ -4,13 +4,13 @@
 
 Validated locally with `docker-compose.yml` + `docker-compose.host.yml`:
 
-- PostgreSQL 17 healthy with `stories_app` ownership and least-privilege
-  `stories_runtime` / `stories_worker` roles applied
+- HostAfrica-compatible MySQL schema via `migrations/` (`afroclov_StoriesOfIslam`)
+- WhoGoHost PostgreSQL retained for Keycloak only
 - Keycloak 26 imports `stories-of-islam` realm; HTTPS issuer advertised behind
   Nginx TLS (`https://auth.local.test/realms/stories-of-islam`)
 - MinIO public download / private isolation policies verified
-- Encrypted `age` PostgreSQL dump restored into isolated
-  `stories_restore_drill` (see `/opt/cursor/artifacts/whogohost-restore-drill.txt`)
+- Keycloak PostgreSQL backup/restore drill path remains under
+  `infra/whogohost/scripts/`
 
 Production still requires a customer WhoGoHost VPS, ACME certificates, off-site
 rclone/MinIO replication, and operator SSH/firewall hardening via

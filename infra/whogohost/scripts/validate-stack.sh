@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Validate PostgreSQL, Keycloak, MinIO, Nginx TLS, and bucket policies.
+# Validate WhoGoHost PostgreSQL (Keycloak), Keycloak, MinIO, Nginx TLS, and bucket policies.
+# Application MySQL (HostAfrica) is validated by the API /health/ready check.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -18,7 +18,14 @@ done
 ./scripts/provision.sh host
 CURL_INSECURE=1 ./scripts/validate-stack.sh
 
-printf 'Local WhoGoHost stack is up. API can use:\n'
-printf '  DATABASE_URL=postgresql://stories_app:local-only-postgres-password-32chars@127.0.0.1:5432/stories_of_islam\n'
+printf 'Local WhoGoHost stack is up (Keycloak/MinIO/Nginx; Postgres is for Keycloak only).\n'
+printf 'Start local MySQL for the app (or point DB_* at HostAfrica):\n'
+printf '  docker compose -f infra/mysql/docker-compose.yml up -d\n'
+printf 'API MySQL env:\n'
+printf '  DB_HOST=127.0.0.1\n'
+printf '  DB_PORT=3306\n'
+printf '  DB_NAME=afroclov_StoriesOfIslam\n'
+printf '  DB_USER=stories_app\n'
+printf '  DB_PASSWORD=local-only-mysql-password-32chars\n'
 printf '  KEYCLOAK_ISSUER=https://auth.local.test/realms/stories-of-islam\n'
 printf '  S3_ENDPOINT=http://127.0.0.1:9000\n'

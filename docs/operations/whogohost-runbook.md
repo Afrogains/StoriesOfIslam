@@ -2,10 +2,11 @@
 
 ## Scope
 
-The WhoGoHost VPS hosts PostgreSQL, Keycloak, MinIO, and Nginx only. The Node
-API and worker run on a separate managed host and reach the VPS through
-restricted TLS endpoints. Staging and production must use separate VPS
-instances and credentials.
+The WhoGoHost VPS hosts PostgreSQL (Keycloak only), Keycloak, MinIO, and Nginx.
+Application data lives on HostAfrica MySQL (`afroclov_StoriesOfIslam`). The Node
+API and worker run on a separate managed host and reach MySQL plus the VPS
+through restricted endpoints. Staging and production must use separate
+databases, VPS instances, and credentials.
 
 ## Initial provisioning
 
@@ -34,13 +35,12 @@ firewall and a VPN/reverse-proxy allowlist.
 
 ## Application database roles
 
-Use `stories_app` for migrations and a separate `stories_runtime` role for the
-API where operational policy permits. The runtime role needs CRUD only on
-application tables and sequence usage; it must not create extensions, roles, or
-schemas. The worker can share the runtime role initially, but production should
-use a dedicated role with access to generation and media tables.
+Application CRUD uses HostAfrica MySQL. Prefer a migration-capable user for
+`npm run db:migrate:prod` and a narrower runtime user for the API/worker once
+schema is applied. See `infra/mysql/hostafrica-grants.sql`.
 
-Clients never receive database credentials and never connect to PostgreSQL.
+WhoGoHost PostgreSQL remains for Keycloak. Clients never receive database
+credentials and never connect to MySQL or PostgreSQL directly.
 
 ## MinIO policy
 
@@ -54,12 +54,15 @@ public key; it does not make the draft bucket public.
 
 ## Backups and restore
 
-Install `age`, `rclone`, PostgreSQL client tools, and MinIO `mc` on the backup
-runner. Schedule `backup.sh` daily using systemd. The rclone and MinIO offsite
-destinations must be in another provider/account; a second volume on the same
-VPS is not a backup.
+Install `age`, `rclone`, MySQL client tools (for HostAfrica), PostgreSQL client
+tools (for Keycloak), and MinIO `mc` on the backup runner. Schedule `backup.sh`
+daily using systemd. Offsite destinations must be in another provider/account;
+a second volume on the same VPS is not a backup.
 
-- PostgreSQL: encrypted daily custom-format dumps, 35-day minimum retention.
+- HostAfrica MySQL: encrypted daily dumps of `afroclov_StoriesOfIslam`, 35-day
+  minimum retention.
+- WhoGoHost PostgreSQL: encrypted daily dumps for Keycloak, 35-day minimum
+  retention.
 - MinIO: versioning plus daily offsite mirror/snapshot.
 - Keycloak: captured by the PostgreSQL backup; export realm configuration after
   every administrative change.
@@ -75,8 +78,8 @@ and result in the release evidence.
 Alert on:
 
 - filesystem above 75% and forecast exhaustion;
-- PostgreSQL connection saturation, replication/backup failures, and long
-  transactions;
+- HostAfrica MySQL connection saturation and backup failures;
+- WhoGoHost PostgreSQL (Keycloak) connection saturation and backup failures;
 - Keycloak login error and latency spikes;
 - MinIO unavailable disks, healing, object count, and failed replication;
 - certificate expiry below 21 days;
@@ -87,7 +90,7 @@ Install Prometheus rule files from `infra/whogohost/monitoring/alerts.yml` and
 `infra/monitoring/api-alerts.yml`. Run `scripts/health-check.sh` through the
 systemd timer installed by `scripts/install-systemd.sh`.
 
-The Node `/health/ready` endpoint verifies PostgreSQL and MinIO. Independently
+The Node `/health/ready` endpoint verifies MySQL and MinIO. Independently
 monitor Keycloak discovery and the public media hostname.
 
 ## Local validation drill
@@ -98,9 +101,10 @@ Cloud agents and operators can prove the Compose stack without a public VPS:
 npm run platform:local
 ```
 
-This generates local TLS material, starts PostgreSQL/Keycloak/MinIO/Nginx, and
-runs `scripts/validate-stack.sh` (OIDC discovery, bucket anonymity, draft
-isolation). Production still requires a separate WhoGoHost VPS, ACME
+This generates local TLS material, starts PostgreSQL (Keycloak)/Keycloak/MinIO/
+Nginx, and runs `scripts/validate-stack.sh` (OIDC discovery, bucket anonymity,
+draft isolation). Use `infra/mysql/docker-compose.yml` for local app MySQL.
+Production still requires HostAfrica MySQL, a separate WhoGoHost VPS, ACME
 certificates, off-site encrypted backups, and a recorded restore drill.
 
 ## Upgrade procedure

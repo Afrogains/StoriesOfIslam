@@ -11,11 +11,11 @@ groups:
 
       - alert: StoriesPostgresDown
         expr: up{job="postgres-exporter"} == 0
-        for: 5m
-        labels:
-          severity: critical
-        annotations:
-          summary: PostgreSQL exporter unreachable on WhoGoHost
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Keycloak PostgreSQL exporter unreachable on WhoGoHost
 
       - alert: StoriesKeycloakDiscoveryFailing
         expr: probe_success{job="blackbox-keycloak"} == 0

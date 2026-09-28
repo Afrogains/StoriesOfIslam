@@ -21,9 +21,9 @@ collect precise location, contacts, photos, or microphone recordings.
 
 ## Providers
 
-Authentication, PostgreSQL data, and media storage run on separate
-staging/production services provisioned on WhoGoHost infrastructure using
-Keycloak and MinIO. The API/worker hosting provider processes requests and logs.
+Authentication, MySQL application data, and media storage run on separate
+staging/production services (HostAfrica MySQL for app data; WhoGoHost for
+Keycloak and MinIO). The API/worker hosting provider processes requests and logs.
 Authorized content-generation workflows may send reviewed source text to
 OpenAI and synthesized script text to ElevenLabs or Google TTS. Public users do
 not send story listening activity to those AI/TTS providers.

@@ -7,23 +7,24 @@ and a background educational audio-generation worker.
 
 - `mobile/`: Expo Web, iOS, and Android client.
 - `src/index.ts`: public HTTP API.
-- `src/worker.ts`: durable PostgreSQL-backed AI/audio worker.
-- `migrations/`: application-owned PostgreSQL migrations.
+- `src/worker.ts`: durable MySQL-backed AI/audio worker.
+- `migrations/`: application-owned MySQL migrations (HostAfrica-compatible).
+- `infra/mysql/`: local MySQL Compose stack matching the HostAfrica app database.
 - `infra/whogohost/`: Docker Compose stack for a WhoGoHost VPS:
-  PostgreSQL, Keycloak, MinIO, and Nginx.
+  PostgreSQL (Keycloak only), Keycloak, MinIO, and Nginx.
 - Approved media is stored in the public MinIO bucket. Draft media remains
   private and is only accessible through short-lived signed URLs.
 
 Clients authenticate with Keycloak using Authorization Code + PKCE. The API
 validates Keycloak JWTs and is the only application component allowed to access
-PostgreSQL. Provider keys and database credentials must never be placed in an
-Expo `EXPO_PUBLIC_*` variable.
+MySQL (`afroclov_StoriesOfIslam` on HostAfrica). Provider keys and database
+credentials must never be placed in an Expo `EXPO_PUBLIC_*` variable.
 
 ## Prerequisites
 
 - Node.js 20 or newer
 - npm
-- Docker with Compose (for the local production stack)
+- Docker with Compose (for local MySQL and/or the WhoGoHost stack)
 - FFmpeg (included in the production worker image)
 - Expo/EAS account for native releases
 
@@ -34,11 +35,15 @@ cp .env.example .env
 cp mobile/.env.example mobile/.env
 npm install
 npm --prefix mobile install
+docker compose -f infra/mysql/docker-compose.yml up -d
+# Optional: Keycloak + MinIO platform stack (Postgres remains for Keycloak only)
 docker compose -f infra/whogohost/docker-compose.yml up -d
 npm run db:migrate
 npm run db:seed
 npm run dev
 ```
+
+Point `DB_*` in `.env` at HostAfrica when not using local MySQL.
 
 Run the worker separately:
 
@@ -63,8 +68,8 @@ same gate and also validates the Expo web export and container build.
 
 ## Environment model
 
-Use separate WhoGoHost VPS instances, Keycloak realms, databases, buckets, and
-secrets for staging and production. See `.env.example`,
+Use separate HostAfrica MySQL databases, WhoGoHost VPS instances, Keycloak
+realms, buckets, and secrets for staging and production. See `.env.example`,
 `mobile/.env.example`, and `docs/operations/whogohost-runbook.md`.
 
 The recommended hostnames are:
@@ -90,15 +95,19 @@ must never be published.
 
 ## Deployment
 
-1. Provision staging using `infra/whogohost/` (`scripts/harden-host.sh`,
+1. Create HostAfrica MySQL database `afroclov_StoriesOfIslam` and an app user
+   with CRUD privileges (see `infra/mysql/hostafrica-grants.sql`).
+2. Set `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` on the API
+   host (never in the Expo client).
+3. Provision WhoGoHost auth/media with `infra/whogohost/` (`scripts/harden-host.sh`,
    `scripts/provision.sh`, `scripts/install-systemd.sh`).
-2. Validate with `scripts/validate-stack.sh` and record a restore drill.
-3. Deploy the API and worker with `infra/api-host/docker-compose.yml`.
-4. Run migrations as a one-off release job.
-5. Deploy Expo Web from `mobile/dist`.
-6. Build signed preview binaries with EAS (`scripts/eas-beta.sh` or the Release
+4. Validate with `scripts/validate-stack.sh` and record a restore drill.
+5. Deploy the API and worker with `infra/api-host/docker-compose.yml`.
+6. Run migrations as a one-off release job (`npm run db:migrate:prod`).
+7. Deploy Expo Web from `mobile/dist`.
+8. Build signed preview binaries with EAS (`scripts/eas-beta.sh` or the Release
    workflow).
-7. Complete the release checklist in `docs/release/launch-checklist.md`.
+9. Complete the release checklist in `docs/release/launch-checklist.md`.
 
 Local cloud-agent drill (host networking when Docker bridge is unavailable):
 

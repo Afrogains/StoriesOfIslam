@@ -1,25 +1,20 @@
 #!/usr/bin/env bash
-# Create/rotate least-privilege API and worker database roles.
+# Application roles now live on HostAfrica MySQL.
+# See infra/mysql/hostafrica-grants.sql and apply grants via HostAfrica/cPanel
+# or the mysql client against the HostAfrica host.
 set -euo pipefail
 
-: "${DATABASE_URL:?set DATABASE_URL}"
-: "${STORIES_RUNTIME_PASSWORD:?set STORIES_RUNTIME_PASSWORD}"
-: "${STORIES_WORKER_PASSWORD:?set STORIES_WORKER_PASSWORD}"
+ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+cat <<EOF
+Application database roles are managed on HostAfrica MySQL.
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+1. Create database afroclov_StoriesOfIslam (utf8mb4).
+2. Create the API user in cPanel / MySQL.
+3. Apply grants from:
+   ${ROOT}/infra/mysql/hostafrica-grants.sql
+4. Set DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD on the API host.
+5. Run: npm run db:migrate:prod && npm run db:seed:prod
 
-psql "$DATABASE_URL" --set ON_ERROR_STOP=1 \
-  --set=runtime_password="$STORIES_RUNTIME_PASSWORD" \
-  --set=worker_password="$STORIES_WORKER_PASSWORD" <<'SQL'
-SELECT format('CREATE ROLE stories_runtime LOGIN PASSWORD %L', :'runtime_password')
-WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'stories_runtime')\gexec
-SELECT format('ALTER ROLE stories_runtime LOGIN PASSWORD %L', :'runtime_password')
-WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'stories_runtime')\gexec
-SELECT format('CREATE ROLE stories_worker LOGIN PASSWORD %L', :'worker_password')
-WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'stories_worker')\gexec
-SELECT format('ALTER ROLE stories_worker LOGIN PASSWORD %L', :'worker_password')
-WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'stories_worker')\gexec
-SQL
-
-psql "$DATABASE_URL" --set ON_ERROR_STOP=1 -f "$ROOT/sql/runtime-roles.sql"
-printf 'Applied stories_runtime and stories_worker roles\n'
+WhoGoHost PostgreSQL is for Keycloak only; this script no longer creates
+PostgreSQL application roles.
+EOF

@@ -8,7 +8,7 @@ Production controls:
 - Keycloak Authorization Code + PKCE for public clients; no Expo client secret.
 - Short-lived access tokens with rotating refresh tokens.
 - JWT issuer, audience, signature, algorithm, and expiry validation at the API.
-- PostgreSQL and private MinIO buckets reachable only by server identities.
+- HostAfrica MySQL and private MinIO buckets reachable only by server identities.
 - Explicit role and ownership checks for user, generation, review, and
   publication operations.
 - Request size/rate limits, allowlisted CORS, security headers, parameterized
