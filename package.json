@@ -21,7 +21,11 @@
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm --prefix mobile run check",
     "platform:local": "bash scripts/bringup-local-hostafrica.sh",
     "platform:validate": "bash infra/hostafrica/scripts/validate-stack.sh",
-    "acceptance:staging": "bash scripts/staging-acceptance.sh"
+    "acceptance:staging": "bash scripts/staging-acceptance.sh",
+    "go-live": "bash scripts/go-live.sh",
+    "go-live:preflight": "bash scripts/go-live-preflight.sh",
+    "go-live:local": "bash scripts/go-live.sh all-local",
+    "assert:no-example-cdn": "bash scripts/assert-no-example-cdn.sh"
   },
   "engines": {
     "node": ">=20"
