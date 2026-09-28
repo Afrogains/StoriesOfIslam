@@ -92,6 +92,16 @@ AI-created scripts and synthesized audio are always drafts. Publication requires
 Fallback AI text, estimated timelines, empty audio, and unlicensed voice clones
 must never be published.
 
+## Go-live
+
+Operator path: `docs/release/go-live-runbook.md` and `npm run go-live`.
+
+```bash
+npm run go-live:local          # local MySQL migrate/seed + checks
+./scripts/go-live.sh preflight /etc/stories/api.env
+./scripts/go-live.sh migrate && ./scripts/go-live.sh seed
+```
+
 ## Deployment
 
 1. Create HostAfrica MySQL database `afroclov_StoriesOfIslam` and an app user
