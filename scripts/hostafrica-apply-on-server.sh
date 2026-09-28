@@ -44,15 +44,20 @@ EOF
   exit 1
 fi
 
-if ! command -v npm >/dev/null 2>&1; then
-  printf 'npm not found. Import db/hostafrica-bootstrap.sql via phpMyAdmin instead.\n' >&2
+DUMP="$ROOT/db/hostafrica-bootstrap.sql"
+
+if command -v npm >/dev/null 2>&1; then
+  npm ci
+  npm run db:migrate
+  npm run db:seed
+  npm run db:migrate
+elif [[ -f "$DUMP" ]]; then
+  printf 'npm not found — importing %s via %s\n' "$DUMP" "$MYSQL_BIN"
+  "$MYSQL_BIN" --socket="$DB_SOCKET" -u"$DB_USER" "$DB_NAME" <"$DUMP"
+else
+  printf 'npm not found and %s missing. Import via phpMyAdmin.\n' "$DUMP" >&2
   exit 1
 fi
-
-npm ci
-npm run db:migrate
-npm run db:seed
-npm run db:migrate
 
 "$MYSQL_BIN" --socket="$DB_SOCKET" -u"$DB_USER" "$DB_NAME" -e "
   SELECT 'categories' t, COUNT(*) n FROM categories
