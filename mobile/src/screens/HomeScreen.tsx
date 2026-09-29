@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { BookOpen, ChevronRight, Headphones } from 'lucide-react-native';
+import { BookOpen, Headphones } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -247,6 +247,44 @@ export default function HomeScreen() {
         )}
 
         <View style={styles.section}>
+          <Overline color={colors.inkSubtle}>Go to</Overline>
+          <Row gap={10}>
+            <Pressable
+              onPress={() => navigation.navigate('Explore')}
+              accessibilityRole="button"
+              accessibilityLabel="Go to Explore"
+              style={({ pressed }) => [
+                styles.shortcutChip,
+                {
+                  borderColor: colors.border,
+                  backgroundColor: isDark ? alpha(colors.emerald, 0.12) : alpha(colors.emerald, 0.08),
+                },
+                pressed && styles.pressed,
+              ]}
+            >
+              <BodyStrong color={colors.ink}>Explore</BodyStrong>
+              <Small color={colors.inkMuted}>All stories</Small>
+            </Pressable>
+            <Pressable
+              onPress={() => navigation.navigate('Names')}
+              accessibilityRole="button"
+              accessibilityLabel="Go to The Names"
+              style={({ pressed }) => [
+                styles.shortcutChip,
+                {
+                  borderColor: colors.border,
+                  backgroundColor: isDark ? alpha(colors.gold, 0.12) : alpha(colors.gold, 0.1),
+                },
+                pressed && styles.pressed,
+              ]}
+            >
+              <BodyStrong color={colors.ink}>The Names</BodyStrong>
+              <Small color={colors.inkMuted}>Asma’ul Husna</Small>
+            </Pressable>
+          </Row>
+        </View>
+
+        <View style={styles.section}>
           <Overline color={colors.inkSubtle}>More stories</Overline>
           <View style={[styles.list, { borderColor: divider }]}>
             {suggested.length === 0 ? (
@@ -257,7 +295,7 @@ export default function HomeScreen() {
               suggested.map((story, index) => {
                 const accent = sectionAccent(story.sectionSlug, isDark);
                 const mode = preferredMode(story);
-                const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
+                const canListen = Boolean(story.hasAudio || story.audioUrl);
                 return (
                   <View key={story.id}>
                     {index > 0 ? <View style={[styles.rule, { backgroundColor: divider }]} /> : null}
@@ -290,40 +328,6 @@ export default function HomeScreen() {
                 );
               })
             )}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Overline color={colors.inkSubtle}>Go to</Overline>
-          <View style={styles.shortcuts}>
-            <Pressable
-              onPress={() => navigation.navigate('Explore')}
-              accessibilityRole="button"
-              accessibilityLabel="Go to Explore"
-              style={({ pressed }) => [
-                styles.shortcut,
-                { borderBottomColor: divider },
-                pressed && styles.pressed,
-              ]}
-            >
-              <View>
-                <BodyStrong color={colors.ink}>Explore</BodyStrong>
-                <Small color={colors.inkMuted}>Browse every story</Small>
-              </View>
-              <ChevronRight size={18} color={colors.inkSubtle} />
-            </Pressable>
-            <Pressable
-              onPress={() => navigation.navigate('Names')}
-              accessibilityRole="button"
-              accessibilityLabel="Go to The Names"
-              style={({ pressed }) => [styles.shortcut, pressed && styles.pressed]}
-            >
-              <View>
-                <BodyStrong color={colors.ink}>The Names</BodyStrong>
-                <Small color={colors.inkMuted}>Asma’ul Husna</Small>
-              </View>
-              <ChevronRight size={18} color={colors.inkSubtle} />
-            </Pressable>
           </View>
         </View>
       </ScrollView>
@@ -431,13 +435,13 @@ const styles = StyleSheet.create({
   },
   storyCopy: { flex: 1, minWidth: 0, gap: 2 },
   storyTitle: { fontSize: 15, lineHeight: 20 },
-  shortcuts: { gap: 0 },
-  shortcut: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 14,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  shortcutChip: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    gap: 2,
   },
   pressed: { opacity: 0.78 },
 });
