@@ -1,14 +1,29 @@
 import type { SectionSlug } from '../types/catalog';
 
-/** One-shot intent so Home can open Explore on a specific category. */
-let pendingSection: SectionSlug | 'all' | null = null;
+export type ExploreIntent = {
+  section?: SectionSlug | 'all';
+  query?: string;
+};
 
-export function requestExploreSection(section: SectionSlug | 'all') {
-  pendingSection = section;
+/** One-shot intent so Home can open Explore on a category and/or search query. */
+let pending: ExploreIntent | null = null;
+
+export function requestExplore(intent: ExploreIntent = {}) {
+  pending = intent;
 }
 
-export function takeExploreSection(): SectionSlug | 'all' | null {
-  const next = pendingSection;
-  pendingSection = null;
+/** @deprecated Prefer requestExplore({ section }) */
+export function requestExploreSection(section: SectionSlug | 'all') {
+  requestExplore({ section });
+}
+
+export function takeExploreIntent(): ExploreIntent | null {
+  const next = pending;
+  pending = null;
   return next;
+}
+
+/** @deprecated Prefer takeExploreIntent() */
+export function takeExploreSection(): SectionSlug | 'all' | null {
+  return takeExploreIntent()?.section ?? null;
 }

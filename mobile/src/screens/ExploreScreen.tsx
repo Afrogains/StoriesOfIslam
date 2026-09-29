@@ -14,7 +14,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
-import { takeExploreSection } from '../navigation/exploreIntent';
+import { takeExploreIntent } from '../navigation/exploreIntent';
 import ProphetsRoster from '../components/ProphetsRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
@@ -96,8 +96,10 @@ export default function ExploreScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      const section = takeExploreSection();
-      if (section) setSelectedSection(section);
+      const intent = takeExploreIntent();
+      if (!intent) return;
+      if (intent.section) setSelectedSection(intent.section);
+      if (typeof intent.query === 'string') setQuery(intent.query);
     }, []),
   );
 

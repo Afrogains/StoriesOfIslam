@@ -124,6 +124,15 @@ export const dailyVerse = {
   sectionRef: 'qisas-al-anbiya' as SectionSlug,
 };
 
+export const featuredReflection = {
+  storyId: '20a1b2c3-d4e5-4060-8071-222222222001',
+  grade: 'sahih' as AuthenticityGrade,
+  textAr: 'فَقُلْنَا يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَىٰ إِبْرَاهِيمَ',
+  textEn:
+    'When Prophet Ibrahim called his people to tawhid, they cast him into a blazing fire. Allah commanded the fire to be coolness and peace.',
+  source: 'Ibn Kathir, Qisas al-Anbiya; Quran 21:69',
+};
+
 export const continueListening = {
   storyId: '20a1b2c3-d4e5-4060-8071-222222222001',
   sectionSlug: 'qisas-al-anbiya' as SectionSlug,
