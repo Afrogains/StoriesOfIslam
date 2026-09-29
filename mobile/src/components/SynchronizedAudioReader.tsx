@@ -39,6 +39,7 @@ import {
 } from '../types/reader';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { audioDownloads } from '../services/audioDownloads';
+import { CueNarrator, isClientTtsAvailable } from '../tts';
 import {
   alpha,
   brandGradients,
@@ -88,7 +89,11 @@ export default function SynchronizedAudioReader({
   const barWidth = useRef(1);
   const positionRef = useRef(0);
   const lastSavedRef = useRef(0);
+  const ttsRef = useRef(new CueNarrator());
   const { load: loadProgress, save: saveProgress } = usePlaybackProgress(story.id);
+
+  const hasMp3 = Boolean(story.audioUrl);
+  const ttsAvailable = !hasMp3 && isClientTtsAvailable() && story.cues.length > 0;
 
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [playing, setPlaying] = useState(false);
@@ -99,19 +104,20 @@ export default function SynchronizedAudioReader({
   const [audioError, setAudioError] = useState<string | null>(null);
   const [downloaded, setDownloaded] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [ttsReady, setTtsReady] = useState(false);
   const player = useAudioPlayer(
-    story.audioUrl ? { uri: story.audioUrl } : null,
+    hasMp3 ? { uri: story.audioUrl } : null,
     { updateInterval: 250, keepAudioSessionActive: true },
   );
   const status = useAudioPlayerStatus(player);
-  const ready = status.isLoaded;
+  const ready = hasMp3 ? status.isLoaded : ttsReady;
 
   const accent = sectionAccent(sectionSlug, isDark);
 
   const activeIndex = useMemo(() => cueIndexAt(positionMs, story.cues), [positionMs, story.cues]);
 
   useEffect(() => {
-    if (!status.isLoaded) return;
+    if (!hasMp3 || !status.isLoaded) return;
     const currentMs = Math.round(status.currentTime * 1000);
     setPositionMs(currentMs);
     positionRef.current = currentMs;
@@ -123,18 +129,75 @@ export default function SynchronizedAudioReader({
       lastSavedRef.current = currentMs;
       void saveProgress(currentMs).catch(() => undefined);
     }
-  }, [status, saveProgress]);
+  }, [hasMp3, status, saveProgress]);
+
+  // Client TTS path when no published MP3 is available.
+  useEffect(() => {
+    if (hasMp3) return;
+    let alive = true;
+    setAudioError(null);
+    setTtsReady(false);
+
+    const narrator = ttsRef.current;
+    narrator.setCues(story.cues);
+    narrator.setListeners({
+      onCueIndex: () => undefined,
+      onPositionMs: (ms) => {
+        if (!alive) return;
+        setPositionMs(ms);
+        positionRef.current = ms;
+        if (Math.abs(ms - lastSavedRef.current) >= 5_000) {
+          lastSavedRef.current = ms;
+          void saveProgress(ms).catch(() => undefined);
+        }
+      },
+      onPlayingChange: (next) => {
+        if (alive) setPlaying(next);
+      },
+      onEnded: () => {
+        void saveProgress(0, true).catch(() => undefined);
+      },
+      onError: (message) => {
+        if (alive) setAudioError(message);
+      },
+    });
+
+    const cueDuration =
+      story.cues[story.cues.length - 1]?.endMs ?? Math.max(story.durationMs, 30_000);
+    setDurationMs(Math.max(story.durationMs, cueDuration));
+
+    (async () => {
+      const resumeAt = await loadProgress();
+      if (!alive) return;
+      setPositionMs(resumeAt);
+      positionRef.current = resumeAt;
+      if (!ttsAvailable) {
+        setAudioError(
+          Platform.OS === 'web'
+            ? 'Spoken narration is unavailable in this browser. You can still read the full story.'
+            : 'Spoken narration is available on the web preview. You can still read the full story here.',
+        );
+        setTtsReady(false);
+        return;
+      }
+      setTtsReady(true);
+    })();
+
+    return () => {
+      alive = false;
+      narrator.stop();
+      void saveProgress(positionRef.current).catch(() => undefined);
+    };
+    // rate is applied via a separate effect so changing speed does not remount narration.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- story.cues identity changes with story.id
+  }, [hasMp3, story.id, story.durationMs, ttsAvailable, loadProgress, saveProgress]);
 
   useEffect(() => {
     let alive = true;
+    if (!hasMp3) return () => {
+      alive = false;
+    };
     setAudioError(null);
-
-    if (!story.audioUrl) {
-      setAudioError('Audio is not available for this story yet. You can still read the complete text.');
-      return () => {
-        alive = false;
-      };
-    }
 
     (async () => {
       try {
@@ -171,6 +234,7 @@ export default function SynchronizedAudioReader({
       player.clearLockScreenControls();
     };
   }, [
+    hasMp3,
     story.id,
     story.audioUrl,
     story.durationMs,
@@ -183,9 +247,13 @@ export default function SynchronizedAudioReader({
   ]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!hasMp3 || !ready) return;
     player.setPlaybackRate(rate, 'medium');
-  }, [rate, ready, player]);
+  }, [hasMp3, rate, ready, player]);
+
+  useEffect(() => {
+    if (!hasMp3) ttsRef.current.setRate(rate);
+  }, [hasMp3, rate]);
 
   useEffect(() => {
     if (!expanded) return;
@@ -201,14 +269,25 @@ export default function SynchronizedAudioReader({
 
   const togglePlay = async () => {
     if (!ready) return;
-    if (playing) player.pause();
-    else player.play();
+    if (hasMp3) {
+      if (playing) player.pause();
+      else player.play();
+      return;
+    }
+    if (playing) ttsRef.current.pause();
+    else await ttsRef.current.playFrom(positionRef.current);
   };
 
   const seekTo = async (ms: number) => {
     const clamped = Math.max(0, Math.min(ms, durationMs));
-    await player.seekTo(clamped / 1000);
+    if (hasMp3) {
+      await player.seekTo(clamped / 1000);
+      setPositionMs(clamped);
+      return;
+    }
     setPositionMs(clamped);
+    positionRef.current = clamped;
+    await ttsRef.current.seekTo(clamped);
   };
 
   const onScrub = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
@@ -309,7 +388,7 @@ export default function SynchronizedAudioReader({
                   onPress={() => setCitationOpen(true)}
                   accessibilityLabel="Open source citation"
                 />
-                {Platform.OS !== 'web' ? (
+                {Platform.OS !== 'web' && hasMp3 ? (
                   <ControlChip
                     label={downloaded ? 'Saved' : downloading ? 'Saving' : 'Offline'}
                     icon={downloaded ? CheckCircle2 : Download}
@@ -330,7 +409,7 @@ export default function SynchronizedAudioReader({
             accessibilityLabel="Story text"
           >
             <Overline style={styles.transcriptLabel}>
-              {story.audioUrl ? 'Follow along' : 'Full story'}
+              {hasMp3 ? 'Follow along' : ttsAvailable ? 'Spoken narration' : 'Full story'}
             </Overline>
             {audioError ? (
               <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
@@ -340,13 +419,13 @@ export default function SynchronizedAudioReader({
                 </Caption>
               </View>
             ) : null}
-            {!story.audioUrl && !audioError ? (
+            {!hasMp3 && ttsAvailable && !audioError ? (
               <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
                 <BookOpen size={15} color={accent.primary} />
                 <Caption color={colors.inkMuted} style={styles.audioErrorText}>
                   {sectionSlug === 'qisas-al-anbiya'
-                    ? 'Narration track is being prepared. Cue text below is from the in-app Ibn Kathir Stories of the Prophets PDF — switch to Reading for the full chapter or open the source PDF.'
-                    : 'Audio is being prepared for this account. You can read the full story below.'}
+                    ? 'Listening uses on-device speech from the in-app Ibn Kathir PDF text. Press play to hear each passage; open Reading or the source PDF for the full chapter layout.'
+                    : 'Listening uses on-device speech until a published audio track is ready. Press play to hear each passage.'}
                 </Caption>
               </View>
             ) : null}
@@ -390,7 +469,7 @@ export default function SynchronizedAudioReader({
           gradient={accent.accentGradient}
           size={44}
           icons={{ play: Play, pause: Pause }}
-          disabled={!story.audioUrl || !ready}
+          disabled={!ready}
         />
 
         <View style={styles.miniBody}>

@@ -115,8 +115,15 @@ export function prophetChapterToStoryItem(
     sourceBook: `${IBN_KATHIR_PDF.author} — ${IBN_KATHIR_PDF.title}`,
     sourceVolume: IBN_KATHIR_PDF.edition,
     sourcePageOrHadith: pageLabel,
+    // Listen uses client/cloud TTS until a reviewed MP3 is published.
+    // Do not inherit placeholder example CDN URLs from fixtures.
     hasAudio: true,
-    audioUrl: existing?.audioUrl ?? null,
+    audioUrl:
+      existing?.audioUrl &&
+      !existing.audioUrl.includes('.example') &&
+      !existing.audioUrl.includes('placeholder')
+        ? existing.audioUrl
+        : null,
     artworkUrl: existing?.artworkUrl ?? null,
     timedCues,
     isFavorite: existing?.isFavorite ?? false,

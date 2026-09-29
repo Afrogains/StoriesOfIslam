@@ -1,7 +1,34 @@
 import { Router, type Request, type Response } from 'express';
+import { getEnv } from '../config/env';
 import { HttpError, asyncHandler } from '../http/errors';
 
 export const mediaRouter = Router();
+
+/**
+ * Cloud TTS readiness — mirrors worker VoiceSynthesisService providers so
+ * operators can confirm the TTS package is wired after merging with mobile.
+ */
+mediaRouter.get(
+  '/tts-status',
+  asyncHandler(async (_request: Request, response: Response) => {
+    const env = getEnv();
+    const providers = {
+      elevenlabs: Boolean(env.ELEVENLABS_API_KEY && !env.ELEVENLABS_API_KEY.includes('placeholder')),
+      google: Boolean(env.GOOGLE_TTS_API_KEY),
+      edgeTts: true,
+    };
+    response.setHeader('Cache-Control', 'no-store');
+    response.json({
+      data: {
+        package: 'src/tts',
+        clientPackage: 'mobile/src/tts',
+        workerUses: 'VoiceSynthesisService',
+        providers,
+        readyForBatchSynthesis: providers.elevenlabs || providers.google || providers.edgeTts,
+      },
+    });
+  }),
+);
 
 const ALLOWED_HOSTS = new Set([
   'podcasts.muslimcentral.com',

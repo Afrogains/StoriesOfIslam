@@ -49,4 +49,12 @@ describe('HTTP application', () => {
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('invalid_url');
   });
+
+  it('reports cloud TTS package status', async () => {
+    const response = await request(createApp()).get('/v1/media/tts-status');
+    expect(response.status).toBe(200);
+    expect(response.body.data.package).toBe('src/tts');
+    expect(response.body.data.clientPackage).toBe('mobile/src/tts');
+    expect(response.body.data.readyForBatchSynthesis).toBe(true);
+  });
 });
