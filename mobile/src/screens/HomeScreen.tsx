@@ -1,39 +1,45 @@
 import { useNavigation } from '@react-navigation/native';
-import { BookOpen, Headphones } from 'lucide-react-native';
+import {
+  BookOpen,
+  Bookmark,
+  Compass,
+  Headphones,
+  Library as LibraryIcon,
+  Sparkles,
+  User,
+  Users,
+} from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
   ArabicInline,
-  Body,
   BodyStrong,
   Caption,
-  Overline,
   ProgressBar,
   Row,
   Small,
   useTheme,
 } from '../components/ui';
 import { useCatalog } from '../data/CatalogProvider';
-import { pickCrossCategorySuggestions } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
+import { dailyVerse } from '../data/mockHome';
 import {
   useLastActiveStory,
   type LastActiveMode,
 } from '../hooks/useLastActiveStory';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
+import { requestExploreSection } from '../navigation/exploreIntent';
 import {
   BODY_FONT_FAMILY,
   DISPLAY_FONT_FAMILY,
   alpha,
-  brandGradients,
   radius,
-  sectionAccent,
 } from '../theme/tokens';
-import type { StoryItem } from '../types/catalog';
+import type { SectionSlug, StoryItem } from '../types/catalog';
 
 function formatClock(ms: number): string {
   const total = Math.max(0, Math.floor(ms / 1000));
@@ -55,18 +61,23 @@ function resolveResumeMode(
   return hasAudio ? 'listen' : 'read';
 }
 
-function preferredMode(story: StoryItem): Exclude<StorySessionMode, null> {
-  return story.hasAudio || Boolean(story.audioUrl) ? 'listen' : 'read';
-}
-
-/**
- * Home — brand, one resume action, a short story list, and two clear paths
- * out to Explore / The Names. Browse and search stay on Explore.
- */
 type HomeTabs = {
   navigate: (screen: 'Explore' | 'Names' | 'Library' | 'Home') => void;
 };
 
+type AppTile = {
+  key: string;
+  label: string;
+  hint: string;
+  icon: LucideIcon;
+  wide?: boolean;
+  onPress: () => void;
+};
+
+/**
+ * Home — sage hero with verse + continue CTA, then a soft sheet of app
+ * destinations (Explore, categories, Names, Library).
+ */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
   const navigation = useNavigation<HomeTabs>();
@@ -82,8 +93,13 @@ export default function HomeScreen() {
       const match = stories.find((story) => story.id === lastActive.storyId);
       if (match) return match;
     }
-    return stories.find((story) => story.hasAudio) ?? stories[0] ?? null;
+    return null;
   }, [stories, lastActive.storyId]);
+
+  const fallbackStart = useMemo(
+    () => stories.find((story) => story.hasAudio) ?? stories[0] ?? null,
+    [stories],
+  );
 
   const storyId = continueStory?.id ?? '';
   const { load: loadAudioProgress } = usePlaybackProgress(storyId || 'none');
@@ -109,23 +125,17 @@ export default function HomeScreen() {
     ? resolveResumeMode(lastActive.mode, audioMs, readY, continueStory.hasAudio)
     : 'read';
 
+  const hasContinue = Boolean(continueStory);
   const audioProgress =
     continueStory && continueStory.durationMs > 0
       ? Math.min(1, audioMs / continueStory.durationMs)
       : 0;
 
-  const hasProgress = Boolean(
-    lastActive.storyId && continueStory && (audioMs > 0 || readY > 0 || lastActive.mode),
-  );
-
-  const suggested = useMemo(
-    () =>
-      pickCrossCategorySuggestions(stories, {
-        excludeId: continueStory?.id,
-        limit: 3,
-      }),
-    [stories, continueStory?.id],
-  );
+  const heroGreen = isDark ? '#0F3D36' : '#6F9088';
+  const heroGreenDeep = isDark ? '#0A2A25' : '#5A7A73';
+  const sheetBg = isDark ? colors.paper : '#F3F1EC';
+  const tileBg = isDark ? colors.card : '#FFFFFF';
+  const tileBorder = isDark ? colors.border : 'rgba(90, 122, 115, 0.16)';
 
   const openResume = () => {
     if (!continueStory) return;
@@ -134,202 +144,217 @@ export default function HomeScreen() {
     setSessionMode(resumeMode);
   };
 
-  const openStory = (story: StoryItem, mode: Exclude<StorySessionMode, null>) => {
-    void markActive(story.id, mode);
-    setActiveStory(story);
-    setSessionMode(mode);
+  const openStart = () => {
+    if (continueStory) {
+      openResume();
+      return;
+    }
+    if (fallbackStart) {
+      const mode = fallbackStart.hasAudio ? 'listen' : 'read';
+      void markActive(fallbackStart.id, mode);
+      setActiveStory(fallbackStart);
+      setSessionMode(mode);
+      return;
+    }
+    requestExploreSection('all');
+    navigation.navigate('Explore');
   };
 
-  const divider = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
+  const goExplore = (section: SectionSlug | 'all' = 'all') => {
+    requestExploreSection(section);
+    navigation.navigate('Explore');
+  };
+
+  const tiles: AppTile[] = [
+    {
+      key: 'explore',
+      label: 'Explore stories',
+      hint: 'Browse the full catalog',
+      icon: Compass,
+      wide: true,
+      onPress: () => goExplore('all'),
+    },
+    {
+      key: 'prophets',
+      label: 'Prophets',
+      hint: sectionsMeta['qisas-al-anbiya'].subtitle,
+      icon: User,
+      onPress: () => goExplore('qisas-al-anbiya'),
+    },
+    {
+      key: 'seerah',
+      label: 'Seerah',
+      hint: 'Life & character',
+      icon: BookOpen,
+      onPress: () => goExplore('seerah-shamail'),
+    },
+    {
+      key: 'sahabah',
+      label: 'Sahabah',
+      hint: 'The Companions',
+      icon: Users,
+      onPress: () => goExplore('sahabah'),
+    },
+    {
+      key: 'narratives',
+      label: 'Narratives',
+      hint: 'Successors & athar',
+      icon: LibraryIcon,
+      onPress: () => goExplore('gleanings'),
+    },
+    {
+      key: 'names',
+      label: 'The Names',
+      hint: 'Asma’ul Husna',
+      icon: Sparkles,
+      onPress: () => navigation.navigate('Names'),
+    },
+    {
+      key: 'library',
+      label: 'Library',
+      hint: 'Saved stories',
+      icon: Bookmark,
+      onPress: () => navigation.navigate('Library'),
+    },
+  ];
+
+  const ctaLabel = hasContinue
+    ? resumeMode === 'listen'
+      ? 'Continue listening'
+      : 'Continue reading'
+    : 'Start a story';
 
   return (
-    <View style={[styles.screen, { backgroundColor: colors.paper }]}>
-      <LinearGradient
-        colors={
-          isDark
-            ? ['#0B3B32', '#0F172A', '#0F172A']
-            : ['#D1FAE5', '#FCFBF7', '#FCFBF7']
-        }
-        locations={[0, 0.38, 1]}
-        style={StyleSheet.absoluteFill}
-        pointerEvents="none"
-      />
-
+    <View style={[styles.screen, { backgroundColor: heroGreen }]}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Row justify="space-between" align="flex-start" style={styles.top}>
-          <View style={styles.brand}>
-            <Text style={[styles.brandTitle, { color: colors.ink }]}>Stories of Islam</Text>
-            <Body color={colors.inkMuted} style={styles.tagline}>
-              Classical stories to read or listen — simply.
-            </Body>
-            <ArabicInline color={colors.emerald} style={styles.brandArabic}>
-              السلام عليكم ورحمة الله
-            </ArabicInline>
-          </View>
-          <ModeToggle />
-        </Row>
+        <View style={[styles.hero, { backgroundColor: heroGreen }]}>
+          <Row justify="space-between" align="center" style={styles.heroTop}>
+            <Text style={styles.brand}>Stories of Islam</Text>
+            <ModeToggle />
+          </Row>
 
-        {continueStory ? (
+          <ArabicInline color="#FFFFFF" style={styles.verseAr} align="center">
+            {dailyVerse.textAr}
+          </ArabicInline>
+          <Text style={styles.verseEn}>{dailyVerse.textEn}</Text>
+          <Caption color="rgba(255,255,255,0.72)" style={styles.verseSource}>
+            {dailyVerse.source}
+          </Caption>
+
           <Pressable
-            onPress={openResume}
+            onPress={openStart}
             accessibilityRole="button"
-            accessibilityLabel={
-              hasProgress
-                ? resumeMode === 'listen'
-                  ? `Continue listening to ${continueStory.title}`
-                  : `Continue reading ${continueStory.title}`
-                : `Start ${continueStory.title}`
-            }
-            style={({ pressed }) => [styles.primaryBlock, pressed && styles.pressed]}
-          >
-            <LinearGradient
-              colors={brandGradients.night[isDark ? 'dark' : 'light']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.primaryInner}
-            >
-              <Overline color="#FDE68A">{hasProgress ? 'Continue' : 'Start here'}</Overline>
-              <Text style={styles.primaryTitle} numberOfLines={2}>
-                {continueStory.title}
-              </Text>
-              <Caption color="#94A3B8" numberOfLines={1}>
-                {sectionsMeta[continueStory.sectionSlug]?.title}
-                {' · '}
-                {continueStory.figureName}
-                {resumeMode === 'listen' && hasProgress
-                  ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
-                  : ''}
-              </Caption>
-
-              {hasProgress && resumeMode === 'listen' ? (
-                <ProgressBar
-                  value={audioProgress}
-                  gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
-                  trackColor="rgba(255,255,255,0.14)"
-                  height={3}
-                />
-              ) : null}
-
-              <View style={styles.primaryCta}>
-                {resumeMode === 'listen' ? (
-                  <Headphones size={15} color="#0F172A" />
-                ) : (
-                  <BookOpen size={15} color="#0F172A" />
-                )}
-                <Text style={styles.primaryCtaLabel}>
-                  {hasProgress
-                    ? resumeMode === 'listen'
-                      ? 'Continue listening'
-                      : 'Continue reading'
-                    : resumeMode === 'listen'
-                      ? 'Listen now'
-                      : 'Read now'}
-                </Text>
-              </View>
-            </LinearGradient>
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={() => navigation.navigate('Explore')}
-            accessibilityRole="button"
-            accessibilityLabel="Browse stories in Explore"
+            accessibilityLabel={ctaLabel}
             style={({ pressed }) => [
-              styles.emptyBlock,
-              { borderColor: colors.border, backgroundColor: alpha(colors.emerald, isDark ? 0.12 : 0.08) },
-              pressed && styles.pressed,
+              styles.heroCta,
+              { backgroundColor: alpha('#FFFFFF', pressed ? 0.16 : 0.2) },
             ]}
           >
-            <BodyStrong color={colors.ink}>Browse stories</BodyStrong>
-            <Small color={colors.inkMuted}>Explore opens the full catalog.</Small>
+            {hasContinue && resumeMode === 'listen' ? (
+              <Headphones size={16} color="#FFFFFF" />
+            ) : (
+              <BookOpen size={16} color="#FFFFFF" />
+            )}
+            <Text style={styles.heroCtaLabel}>{ctaLabel}</Text>
           </Pressable>
-        )}
-
-        <View style={styles.section}>
-          <Overline color={colors.inkSubtle}>Go to</Overline>
-          <Row gap={10}>
-            <Pressable
-              onPress={() => navigation.navigate('Explore')}
-              accessibilityRole="button"
-              accessibilityLabel="Go to Explore"
-              style={({ pressed }) => [
-                styles.shortcutChip,
-                {
-                  borderColor: colors.border,
-                  backgroundColor: isDark ? alpha(colors.emerald, 0.12) : alpha(colors.emerald, 0.08),
-                },
-                pressed && styles.pressed,
-              ]}
-            >
-              <BodyStrong color={colors.ink}>Explore</BodyStrong>
-              <Small color={colors.inkMuted}>All stories</Small>
-            </Pressable>
-            <Pressable
-              onPress={() => navigation.navigate('Names')}
-              accessibilityRole="button"
-              accessibilityLabel="Go to The Names"
-              style={({ pressed }) => [
-                styles.shortcutChip,
-                {
-                  borderColor: colors.border,
-                  backgroundColor: isDark ? alpha(colors.gold, 0.12) : alpha(colors.gold, 0.1),
-                },
-                pressed && styles.pressed,
-              ]}
-            >
-              <BodyStrong color={colors.ink}>The Names</BodyStrong>
-              <Small color={colors.inkMuted}>Asma’ul Husna</Small>
-            </Pressable>
-          </Row>
         </View>
 
-        <View style={styles.section}>
-          <Overline color={colors.inkSubtle}>More stories</Overline>
-          <View style={[styles.list, { borderColor: divider }]}>
-            {suggested.length === 0 ? (
-              <Caption color={colors.inkMuted} style={styles.listEmpty}>
-                No stories yet.
-              </Caption>
-            ) : (
-              suggested.map((story, index) => {
-                const accent = sectionAccent(story.sectionSlug, isDark);
-                const mode = preferredMode(story);
-                const canListen = Boolean(story.hasAudio || story.audioUrl);
-                return (
-                  <View key={story.id}>
-                    {index > 0 ? <View style={[styles.rule, { backgroundColor: divider }]} /> : null}
-                    <Pressable
-                      onPress={() => openStory(story, mode)}
-                      accessibilityRole="button"
-                      accessibilityLabel={`${mode === 'listen' ? 'Listen to' : 'Read'} ${story.title}`}
-                      style={({ pressed }) => [styles.storyRow, pressed && styles.pressed]}
-                    >
-                      <View style={[styles.dot, { backgroundColor: accent.primary }]} />
-                      <View style={styles.storyCopy}>
-                        <Caption color={accent.primary} numberOfLines={1}>
-                          {sectionsMeta[story.sectionSlug]?.title}
-                        </Caption>
-                        <BodyStrong numberOfLines={2} style={styles.storyTitle}>
-                          {story.title}
-                        </BodyStrong>
-                        <Small color={colors.inkMuted} numberOfLines={1}>
-                          {story.figureName}
-                          {story.hasAudio ? ` · ${story.durationLabel}` : ''}
-                        </Small>
-                      </View>
-                      {canListen ? (
-                        <Headphones size={16} color={accent.primary} />
-                      ) : (
-                        <BookOpen size={16} color={accent.primary} />
-                      )}
-                    </Pressable>
+        <View style={[styles.sheet, { backgroundColor: sheetBg }]}>
+          {continueStory ? (
+            <Pressable
+              onPress={openResume}
+              accessibilityRole="button"
+              accessibilityLabel={`${ctaLabel}: ${continueStory.title}`}
+              style={({ pressed }) => [
+                styles.continueCard,
+                {
+                  backgroundColor: tileBg,
+                  borderColor: tileBorder,
+                  opacity: pressed ? 0.88 : 1,
+                },
+              ]}
+            >
+              <Row justify="space-between" align="center">
+                <Caption color={heroGreenDeep}>
+                  {resumeMode === 'listen' ? 'Continue listening' : 'Continue reading'}
+                </Caption>
+                <Caption color={colors.inkSubtle}>
+                  {sectionsMeta[continueStory.sectionSlug]?.title}
+                </Caption>
+              </Row>
+              <BodyStrong style={styles.continueTitle} numberOfLines={2}>
+                {continueStory.title}
+              </BodyStrong>
+              <Small color={colors.inkMuted} numberOfLines={1}>
+                {continueStory.figureName}
+                {resumeMode === 'listen'
+                  ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
+                  : readY > 0
+                    ? ' · bookmark saved'
+                    : ''}
+              </Small>
+              <ProgressBar
+                value={resumeMode === 'listen' ? audioProgress : readY > 0 ? 0.3 : 0.08}
+                trackColor={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(90,122,115,0.15)'}
+                height={4}
+              />
+            </Pressable>
+          ) : (
+            <View
+              style={[
+                styles.continueCard,
+                { backgroundColor: tileBg, borderColor: tileBorder },
+              ]}
+            >
+              <BodyStrong>Pick up anytime</BodyStrong>
+              <Small color={colors.inkMuted}>
+                Stories you open will appear here for quick continue listening or reading.
+              </Small>
+            </View>
+          )}
+
+          <Text style={[styles.sheetHeading, { color: colors.ink }]}>Open a section</Text>
+
+          <View style={styles.grid}>
+            {tiles.map((tile) => {
+              const Icon = tile.icon;
+              return (
+                <Pressable
+                  key={tile.key}
+                  onPress={tile.onPress}
+                  accessibilityRole="button"
+                  accessibilityLabel={tile.label}
+                  style={({ pressed }) => [
+                    styles.tile,
+                    tile.wide && styles.tileWide,
+                    {
+                      backgroundColor: tileBg,
+                      borderColor: tileBorder,
+                      opacity: pressed ? 0.85 : 1,
+                    },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.tileIcon,
+                      { backgroundColor: alpha(heroGreen, isDark ? 0.28 : 0.12) },
+                    ]}
+                  >
+                    <Icon size={18} color={isDark ? colors.emeraldLight : heroGreenDeep} />
                   </View>
-                );
-              })
-            )}
+                  <View style={styles.tileCopy}>
+                    <BodyStrong numberOfLines={1}>{tile.label}</BodyStrong>
+                    <Small color={colors.inkMuted} numberOfLines={1}>
+                      {tile.hint}
+                    </Small>
+                  </View>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       </ScrollView>
@@ -354,96 +379,107 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: {
+  content: { paddingBottom: 120 },
+  hero: {
     paddingHorizontal: 22,
     paddingTop: 18,
-    paddingBottom: 140,
+    paddingBottom: 36,
   },
-  top: { marginBottom: 22 },
-  brand: { flex: 1, paddingRight: 12 },
-  brandTitle: {
+  heroTop: { marginBottom: 22 },
+  brand: {
     fontFamily: DISPLAY_FONT_FAMILY,
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: '800',
-    letterSpacing: -0.7,
-    lineHeight: 36,
+    letterSpacing: -0.5,
+    color: '#FFFFFF',
   },
-  tagline: {
-    marginTop: 6,
-    fontSize: 14,
-    lineHeight: 20,
-    maxWidth: 280,
+  verseAr: {
+    fontSize: 22,
+    lineHeight: 40,
+    textAlign: 'center',
+    marginBottom: 10,
   },
-  brandArabic: { marginTop: 8, fontSize: 17, lineHeight: 28 },
-  primaryBlock: {
-    borderRadius: radius['2xl'],
-    overflow: 'hidden',
-    marginBottom: 28,
+  verseEn: {
+    fontFamily: BODY_FONT_FAMILY,
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: '500',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    paddingHorizontal: 8,
   },
-  primaryInner: {
-    paddingHorizontal: 18,
-    paddingVertical: 18,
+  verseSource: {
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 18,
+  },
+  heroCta: {
+    alignSelf: 'stretch',
+    minHeight: 48,
+    borderRadius: radius.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    paddingHorizontal: 16,
   },
-  primaryTitle: {
-    fontFamily: DISPLAY_FONT_FAMILY,
-    fontSize: 18,
-    lineHeight: 24,
+  heroCtaLabel: {
+    fontFamily: BODY_FONT_FAMILY,
+    fontSize: 14,
     fontWeight: '700',
     color: '#FFFFFF',
-    letterSpacing: -0.2,
   },
-  primaryCta: {
-    marginTop: 8,
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: '#FDE68A',
-    paddingHorizontal: 14,
-    paddingVertical: 11,
-    borderRadius: radius.md,
+  sheet: {
+    marginTop: -18,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 18,
+    paddingTop: 20,
+    paddingBottom: 28,
+    minHeight: 520,
   },
-  primaryCtaLabel: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#0F172A',
-  },
-  emptyBlock: {
+  continueCard: {
     borderWidth: 1,
-    borderRadius: radius['2xl'],
-    padding: 18,
-    gap: 4,
-    marginBottom: 28,
+    borderRadius: radius.xl,
+    padding: 14,
+    gap: 6,
+    marginBottom: 20,
   },
-  section: { marginBottom: 28, gap: 10 },
-  list: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  continueTitle: { fontSize: 15, lineHeight: 21 },
+  sheetHeading: {
+    fontFamily: DISPLAY_FONT_FAMILY,
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+    marginBottom: 12,
   },
-  listEmpty: { paddingVertical: 16 },
-  rule: { height: StyleSheet.hairlineWidth },
-  storyRow: {
+  grid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 14,
+    flexWrap: 'wrap',
+    gap: 10,
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  storyCopy: { flex: 1, minWidth: 0, gap: 2 },
-  storyTitle: { fontSize: 15, lineHeight: 20 },
-  shortcutChip: {
-    flex: 1,
+  tile: {
+    width: '48%',
+    flexGrow: 1,
+    minWidth: '46%',
     borderWidth: 1,
     borderRadius: radius.lg,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    gap: 2,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
-  pressed: { opacity: 0.78 },
+  tileWide: {
+    width: '100%',
+    minWidth: '100%',
+  },
+  tileIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tileCopy: { flex: 1, minWidth: 0, gap: 1 },
 });

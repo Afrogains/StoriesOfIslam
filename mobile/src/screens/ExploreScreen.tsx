@@ -10,9 +10,11 @@ import {
   SortAsc,
   X,
 } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
+import { takeExploreSection } from '../navigation/exploreIntent';
 import ProphetsRoster from '../components/ProphetsRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
@@ -91,6 +93,13 @@ export default function ExploreScreen() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const section = takeExploreSection();
+      if (section) setSelectedSection(section);
+    }, []),
+  );
 
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
