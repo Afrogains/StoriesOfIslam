@@ -1,10 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { BookOpen, Headphones } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import type { RootTabParamList } from '../../App';
 import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -65,9 +63,13 @@ function preferredMode(story: StoryItem): Exclude<StorySessionMode, null> {
  * Home — brand, one resume action, a short story list, and two clear paths
  * out to Explore / The Names. Browse and search stay on Explore.
  */
+type HomeTabs = {
+  navigate: (screen: 'Explore' | 'Names' | 'Library' | 'Home') => void;
+};
+
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
-  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+  const navigation = useNavigation<HomeTabs>();
   const { stories } = useCatalog();
   const { lastActive, refresh, markActive } = useLastActiveStory();
 
