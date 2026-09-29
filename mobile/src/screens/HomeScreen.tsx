@@ -1,7 +1,10 @@
-import { BookOpen, Headphones } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { BookOpen, ChevronRight, Headphones } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import type { RootTabParamList } from '../../App';
 import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -26,11 +29,11 @@ import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import {
   BODY_FONT_FAMILY,
+  DISPLAY_FONT_FAMILY,
   alpha,
   brandGradients,
   radius,
   sectionAccent,
-  shadow,
 } from '../theme/tokens';
 import type { StoryItem } from '../types/catalog';
 
@@ -54,86 +57,17 @@ function resolveResumeMode(
   return hasAudio ? 'listen' : 'read';
 }
 
-function SuggestionRow({
-  story,
-  onRead,
-  onListen,
-}: {
-  story: StoryItem;
-  onRead: () => void;
-  onListen: () => void;
-}) {
-  const { colors, isDark } = useTheme();
-  const meta = sectionsMeta[story.sectionSlug];
-  const accent = sectionAccent(story.sectionSlug, isDark);
-  const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
-
-  return (
-    <View
-      style={[
-        styles.suggestRow,
-        {
-          backgroundColor: colors.card,
-          borderColor: colors.border,
-        },
-      ]}
-    >
-      <View style={[styles.suggestAccent, { backgroundColor: accent.primary }]} />
-      <View style={styles.suggestCopy}>
-        <Caption color={accent.primary} numberOfLines={1}>
-          {meta.title}
-        </Caption>
-        <BodyStrong numberOfLines={1} style={styles.suggestTitle}>
-          {story.title}
-        </BodyStrong>
-        <Small color={colors.inkMuted} numberOfLines={1}>
-          {story.figureName}
-          {story.hasAudio ? ` · ${story.durationLabel}` : ''}
-        </Small>
-      </View>
-      <Row gap={6}>
-        <Pressable
-          onPress={onRead}
-          accessibilityRole="button"
-          accessibilityLabel={`Read ${story.title}`}
-          style={({ pressed }) => [
-            styles.miniCta,
-            {
-              borderColor: accent.primary,
-              backgroundColor: isDark ? alpha(accent.primary, 0.12) : accent.surface,
-              opacity: pressed ? 0.75 : 1,
-            },
-          ]}
-        >
-          <BookOpen size={13} color={accent.primary} />
-        </Pressable>
-        <Pressable
-          onPress={onListen}
-          disabled={!canListen}
-          accessibilityRole="button"
-          accessibilityLabel={`Listen to ${story.title}`}
-          style={({ pressed }) => [
-            styles.miniCta,
-            styles.miniCtaSolid,
-            {
-              backgroundColor: canListen ? accent.primary : colors.subtleBg,
-              opacity: !canListen ? 0.4 : pressed ? 0.75 : 1,
-            },
-          ]}
-        >
-          <Headphones size={13} color="#FFFFFF" />
-        </Pressable>
-      </Row>
-    </View>
-  );
+function preferredMode(story: StoryItem): Exclude<StorySessionMode, null> {
+  return story.hasAudio || Boolean(story.audioUrl) ? 'listen' : 'read';
 }
 
 /**
- * Home — one calm composition: greeting, resume, and four cross-category
- * suggestions. Browse/search live on Explore.
+ * Home — brand, one resume action, a short story list, and two clear paths
+ * out to Explore / The Names. Browse and search stay on Explore.
  */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
+  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
   const { stories } = useCatalog();
   const { lastActive, refresh, markActive } = useLastActiveStory();
 
@@ -178,10 +112,15 @@ export default function HomeScreen() {
       ? Math.min(1, audioMs / continueStory.durationMs)
       : 0;
 
+  const hasProgress = Boolean(
+    lastActive.storyId && continueStory && (audioMs > 0 || readY > 0 || lastActive.mode),
+  );
+
   const suggested = useMemo(
     () =>
       pickCrossCategorySuggestions(stories, {
         excludeId: continueStory?.id,
+        limit: 3,
       }),
     [stories, continueStory?.id],
   );
@@ -199,9 +138,7 @@ export default function HomeScreen() {
     setSessionMode(mode);
   };
 
-  const resumeSection = continueStory
-    ? sectionsMeta[continueStory.sectionSlug]?.title
-    : null;
+  const divider = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
@@ -211,7 +148,7 @@ export default function HomeScreen() {
             ? ['#0B3B32', '#0F172A', '#0F172A']
             : ['#D1FAE5', '#FCFBF7', '#FCFBF7']
         }
-        locations={[0, 0.42, 1]}
+        locations={[0, 0.38, 1]}
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       />
@@ -223,9 +160,11 @@ export default function HomeScreen() {
       >
         <Row justify="space-between" align="flex-start" style={styles.top}>
           <View style={styles.brand}>
-            <Overline color={colors.emerald}>Assalamu alaikum</Overline>
             <Text style={[styles.brandTitle, { color: colors.ink }]}>Stories of Islam</Text>
-            <ArabicInline color={colors.gold} style={styles.brandArabic}>
+            <Body color={colors.inkMuted} style={styles.tagline}>
+              Classical stories to read or listen — simply.
+            </Body>
+            <ArabicInline color={colors.emerald} style={styles.brandArabic}>
               السلام عليكم ورحمة الله
             </ArabicInline>
           </View>
@@ -233,98 +172,160 @@ export default function HomeScreen() {
         </Row>
 
         {continueStory ? (
-          <LinearGradient
-            colors={brandGradients.night[isDark ? 'dark' : 'light']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.resume, shadow('md', isDark)]}
+          <Pressable
+            onPress={openResume}
+            accessibilityRole="button"
+            accessibilityLabel={
+              hasProgress
+                ? resumeMode === 'listen'
+                  ? `Continue listening to ${continueStory.title}`
+                  : `Continue reading ${continueStory.title}`
+                : `Start ${continueStory.title}`
+            }
+            style={({ pressed }) => [styles.primaryBlock, pressed && styles.pressed]}
           >
-            <Row justify="space-between" align="center">
-              <Overline color="#FDE68A">Continue</Overline>
-              {resumeSection ? (
-                <Caption color="#94A3B8">{resumeSection}</Caption>
-              ) : null}
-            </Row>
-
-            <BodyStrong color="#FFFFFF" style={styles.resumeTitle} numberOfLines={2}>
-              {continueStory.title}
-            </BodyStrong>
-            <Caption color="#94A3B8" style={styles.resumeMeta} numberOfLines={1}>
-              {continueStory.figureName}
-              {resumeMode === 'listen'
-                ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
-                : readY > 0
-                  ? ' · reading bookmark'
+            <LinearGradient
+              colors={brandGradients.night[isDark ? 'dark' : 'light']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.primaryInner}
+            >
+              <Overline color="#FDE68A">{hasProgress ? 'Continue' : 'Start here'}</Overline>
+              <Text style={styles.primaryTitle} numberOfLines={2}>
+                {continueStory.title}
+              </Text>
+              <Caption color="#94A3B8" numberOfLines={1}>
+                {sectionsMeta[continueStory.sectionSlug]?.title}
+                {' · '}
+                {continueStory.figureName}
+                {resumeMode === 'listen' && hasProgress
+                  ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
                   : ''}
-            </Caption>
+              </Caption>
 
-            <ProgressBar
-              value={resumeMode === 'listen' ? audioProgress : readY > 0 ? 0.28 : 0}
-              gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
-              trackColor="rgba(255,255,255,0.14)"
-              height={3}
-            />
+              {hasProgress && resumeMode === 'listen' ? (
+                <ProgressBar
+                  value={audioProgress}
+                  gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
+                  trackColor="rgba(255,255,255,0.14)"
+                  height={3}
+                />
+              ) : null}
 
+              <View style={styles.primaryCta}>
+                {resumeMode === 'listen' ? (
+                  <Headphones size={15} color="#0F172A" />
+                ) : (
+                  <BookOpen size={15} color="#0F172A" />
+                )}
+                <Text style={styles.primaryCtaLabel}>
+                  {hasProgress
+                    ? resumeMode === 'listen'
+                      ? 'Continue listening'
+                      : 'Continue reading'
+                    : resumeMode === 'listen'
+                      ? 'Listen now'
+                      : 'Read now'}
+                </Text>
+              </View>
+            </LinearGradient>
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={() => navigation.navigate('Explore')}
+            accessibilityRole="button"
+            accessibilityLabel="Browse stories in Explore"
+            style={({ pressed }) => [
+              styles.emptyBlock,
+              { borderColor: colors.border, backgroundColor: alpha(colors.emerald, isDark ? 0.12 : 0.08) },
+              pressed && styles.pressed,
+            ]}
+          >
+            <BodyStrong color={colors.ink}>Browse stories</BodyStrong>
+            <Small color={colors.inkMuted}>Explore opens the full catalog.</Small>
+          </Pressable>
+        )}
+
+        <View style={styles.section}>
+          <Overline color={colors.inkSubtle}>More stories</Overline>
+          <View style={[styles.list, { borderColor: divider }]}>
+            {suggested.length === 0 ? (
+              <Caption color={colors.inkMuted} style={styles.listEmpty}>
+                No stories yet.
+              </Caption>
+            ) : (
+              suggested.map((story, index) => {
+                const accent = sectionAccent(story.sectionSlug, isDark);
+                const mode = preferredMode(story);
+                const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
+                return (
+                  <View key={story.id}>
+                    {index > 0 ? <View style={[styles.rule, { backgroundColor: divider }]} /> : null}
+                    <Pressable
+                      onPress={() => openStory(story, mode)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${mode === 'listen' ? 'Listen to' : 'Read'} ${story.title}`}
+                      style={({ pressed }) => [styles.storyRow, pressed && styles.pressed]}
+                    >
+                      <View style={[styles.dot, { backgroundColor: accent.primary }]} />
+                      <View style={styles.storyCopy}>
+                        <Caption color={accent.primary} numberOfLines={1}>
+                          {sectionsMeta[story.sectionSlug]?.title}
+                        </Caption>
+                        <BodyStrong numberOfLines={2} style={styles.storyTitle}>
+                          {story.title}
+                        </BodyStrong>
+                        <Small color={colors.inkMuted} numberOfLines={1}>
+                          {story.figureName}
+                          {story.hasAudio ? ` · ${story.durationLabel}` : ''}
+                        </Small>
+                      </View>
+                      {canListen ? (
+                        <Headphones size={16} color={accent.primary} />
+                      ) : (
+                        <BookOpen size={16} color={accent.primary} />
+                      )}
+                    </Pressable>
+                  </View>
+                );
+              })
+            )}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Overline color={colors.inkSubtle}>Go to</Overline>
+          <View style={styles.shortcuts}>
             <Pressable
-              onPress={openResume}
+              onPress={() => navigation.navigate('Explore')}
               accessibilityRole="button"
-              accessibilityLabel={
-                resumeMode === 'listen'
-                  ? `Resume listening to ${continueStory.title}`
-                  : `Resume reading ${continueStory.title}`
-              }
+              accessibilityLabel="Go to Explore"
               style={({ pressed }) => [
-                styles.resumeCta,
-                resumeMode === 'listen' ? styles.resumeListen : styles.resumeRead,
+                styles.shortcut,
+                { borderBottomColor: divider },
                 pressed && styles.pressed,
               ]}
             >
-              {resumeMode === 'listen' ? (
-                <Headphones size={14} color="#0F172A" />
-              ) : (
-                <BookOpen size={14} color="#FFFFFF" />
-              )}
-              <Text
-                style={
-                  resumeMode === 'listen' ? styles.resumeListenLabel : styles.resumeReadLabel
-                }
-              >
-                {resumeMode === 'listen' ? 'Resume Listening' : 'Resume Reading'}
-              </Text>
+              <View>
+                <BodyStrong color={colors.ink}>Explore</BodyStrong>
+                <Small color={colors.inkMuted}>Browse every story</Small>
+              </View>
+              <ChevronRight size={18} color={colors.inkSubtle} />
             </Pressable>
-          </LinearGradient>
-        ) : (
-          <View
-            style={[
-              styles.emptyResume,
-              { backgroundColor: colors.card, borderColor: colors.border },
-            ]}
-          >
-            <Body color={colors.inkMuted}>
-              Open a story from Explore — it will land here for quick resume.
-            </Body>
+            <Pressable
+              onPress={() => navigation.navigate('Names')}
+              accessibilityRole="button"
+              accessibilityLabel="Go to The Names"
+              style={({ pressed }) => [styles.shortcut, pressed && styles.pressed]}
+            >
+              <View>
+                <BodyStrong color={colors.ink}>The Names</BodyStrong>
+                <Small color={colors.inkMuted}>Asma’ul Husna</Small>
+              </View>
+              <ChevronRight size={18} color={colors.inkSubtle} />
+            </Pressable>
           </View>
-        )}
-
-        <Row justify="space-between" align="center" style={styles.suggestHead}>
-          <Overline>Today’s path</Overline>
-          <Caption color={colors.inkSubtle}>One from each category</Caption>
-        </Row>
-
-        {suggested.length === 0 ? (
-          <Caption color={colors.inkMuted}>No suggestions yet.</Caption>
-        ) : (
-          <View style={styles.suggestList}>
-            {suggested.map((story) => (
-              <SuggestionRow
-                key={story.id}
-                story={story}
-                onRead={() => openStory(story, 'read')}
-                onListen={() => openStory(story, 'listen')}
-              />
-            ))}
-          </View>
-        )}
+        </View>
       </ScrollView>
 
       <StorySessionModal
@@ -348,90 +349,95 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 120,
+    paddingHorizontal: 22,
+    paddingTop: 18,
+    paddingBottom: 140,
   },
-  top: { marginBottom: 18 },
+  top: { marginBottom: 22 },
   brand: { flex: 1, paddingRight: 12 },
   brandTitle: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 26,
+    fontFamily: DISPLAY_FONT_FAMILY,
+    fontSize: 30,
     fontWeight: '800',
-    letterSpacing: -0.4,
-    marginTop: 2,
+    letterSpacing: -0.7,
+    lineHeight: 36,
   },
-  brandArabic: { marginTop: 2, fontSize: 16, lineHeight: 26 },
-  resume: {
-    borderRadius: radius['2xl'],
-    padding: 16,
-    gap: 8,
-    marginBottom: 22,
-  },
-  resumeTitle: { fontSize: 16, lineHeight: 22 },
-  resumeMeta: { marginBottom: 4 },
-  resumeCta: {
+  tagline: {
     marginTop: 6,
+    fontSize: 14,
+    lineHeight: 20,
+    maxWidth: 280,
+  },
+  brandArabic: { marginTop: 8, fontSize: 17, lineHeight: 28 },
+  primaryBlock: {
+    borderRadius: radius['2xl'],
+    overflow: 'hidden',
+    marginBottom: 28,
+  },
+  primaryInner: {
+    paddingHorizontal: 18,
+    paddingVertical: 18,
+    gap: 8,
+  },
+  primaryTitle: {
+    fontFamily: DISPLAY_FONT_FAMILY,
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: -0.2,
+  },
+  primaryCta: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 7,
+    gap: 8,
+    backgroundColor: '#FDE68A',
+    paddingHorizontal: 14,
     paddingVertical: 11,
     borderRadius: radius.md,
   },
-  resumeRead: {
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-  },
-  resumeListen: { backgroundColor: '#FDE68A' },
-  resumeReadLabel: {
+  primaryCtaLabel: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#FFFFFF',
-  },
-  resumeListenLabel: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '800',
     color: '#0F172A',
   },
-  pressed: { opacity: 0.82 },
-  emptyResume: {
+  emptyBlock: {
     borderWidth: 1,
     borderRadius: radius['2xl'],
-    padding: 16,
-    marginBottom: 22,
+    padding: 18,
+    gap: 4,
+    marginBottom: 28,
   },
-  suggestHead: { marginBottom: 10 },
-  suggestList: { gap: 8 },
-  suggestRow: {
+  section: { marginBottom: 28, gap: 10 },
+  list: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  listEmpty: { paddingVertical: 16 },
+  rule: { height: StyleSheet.hairlineWidth },
+  storyRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderRadius: radius.lg,
-    paddingVertical: 10,
-    paddingRight: 10,
-    paddingLeft: 0,
-    overflow: 'hidden',
+    gap: 12,
+    paddingVertical: 14,
   },
-  suggestAccent: {
-    width: 3,
-    alignSelf: 'stretch',
-    borderTopRightRadius: 2,
-    borderBottomRightRadius: 2,
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
-  suggestCopy: { flex: 1, minWidth: 0, paddingLeft: 10, gap: 1 },
-  suggestTitle: { fontSize: 14 },
-  miniCta: {
-    width: 34,
-    height: 34,
-    borderRadius: radius.md,
-    borderWidth: 1,
+  storyCopy: { flex: 1, minWidth: 0, gap: 2 },
+  storyTitle: { fontSize: 15, lineHeight: 20 },
+  shortcuts: { gap: 0 },
+  shortcut: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  miniCtaSolid: { borderWidth: 0 },
+  pressed: { opacity: 0.78 },
 });
