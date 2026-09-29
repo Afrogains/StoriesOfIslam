@@ -344,7 +344,9 @@ export default function SynchronizedAudioReader({
               <View style={[styles.audioError, { backgroundColor: colors.cardAlt, borderColor: colors.border }]}>
                 <BookOpen size={15} color={accent.primary} />
                 <Caption color={colors.inkMuted} style={styles.audioErrorText}>
-                  Audio is being prepared for this account. You can read the full story below.
+                  {sectionSlug === 'qisas-al-anbiya'
+                    ? 'Narration track is being prepared. Cue text below is from the in-app Ibn Kathir Stories of the Prophets PDF — switch to Reading for the full chapter or open the source PDF.'
+                    : 'Audio is being prepared for this account. You can read the full story below.'}
                 </Caption>
               </View>
             ) : null}

@@ -1,4 +1,4 @@
-import { Bookmark, BookOpenCheck, Headphones, X } from 'lucide-react-native';
+import { Bookmark, BookOpenCheck, ExternalLink, Headphones, X } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
@@ -12,6 +12,7 @@ import { getProphetChapter } from '../data/prophetChapters';
 import { theProphets } from '../data/theProphets';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { useLibrary } from '../hooks/useLibrary';
+import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
 import type { StoryItem } from '../types/catalog';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
@@ -69,6 +70,17 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const [restoredY, setRestoredY] = useState(0);
   const saved = isSaved(story.id);
   const resolved = useMemo(() => resolveFullText(story), [story]);
+  const prophetSlug = useMemo(() => {
+    if (story.sectionSlug !== 'qisas-al-anbiya') return null;
+    return (
+      theProphets.find(
+        (item) =>
+          item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+          story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
+      )?.slug ?? null
+    );
+  }, [story.figureName, story.sectionSlug]);
+  const pdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
 
   useEffect(() => {
     void load().then((y) => {
@@ -206,6 +218,26 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           {story.sourcePageOrHadith ? (
             <Caption color={colors.inkSubtle}>Ref: {story.sourcePageOrHadith}</Caption>
           ) : null}
+          {pdfSpan ? (
+            <Pressable
+              onPress={() => void openIbnKathirPdf(pdfSpan.start)}
+              accessibilityRole="link"
+              accessibilityLabel="Open Ibn Kathir PDF at this chapter"
+              style={({ pressed }) => [
+                styles.pdfBtn,
+                {
+                  borderColor: accent.primary,
+                  backgroundColor: alpha(accent.primary, isDark ? 0.16 : 0.08),
+                  opacity: pressed ? 0.85 : 1,
+                },
+              ]}
+            >
+              <ExternalLink size={14} color={accent.primary} />
+              <Caption color={accent.primary} style={styles.pdfBtnLabel}>
+                Open Ibn Kathir PDF (p. {pdfSpan.start})
+              </Caption>
+            </Pressable>
+          ) : null}
           <Caption color={accent.primary} style={styles.grade}>
             Authenticity: {story.authenticityGrade}
           </Caption>
@@ -264,6 +296,18 @@ const styles = StyleSheet.create({
   },
   citationTitle: { fontSize: 16 },
   citationBody: { lineHeight: 22 },
+  pdfBtn: {
+    marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    alignSelf: 'flex-start',
+  },
+  pdfBtnLabel: { fontWeight: '800' },
   grade: { marginTop: 4, fontWeight: '800' },
   fab: {
     position: 'absolute',

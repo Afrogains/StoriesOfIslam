@@ -1,6 +1,7 @@
-import { BookOpen, ChevronLeft, Quote } from 'lucide-react-native';
+import { BookOpen, ChevronLeft, ExternalLink, Quote } from 'lucide-react-native';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import type { ProphetChapter } from '../data/prophetChapters';
+import { openIbnKathirPdf } from '../services/ibnKathirPdf';
 import { alpha, radius, shadow } from '../theme/tokens';
 import {
   ArabicTitle,
@@ -66,7 +67,8 @@ export default function ProphetStoryPage({
         <View style={styles.topMeta}>
           <Overline color={colors.emerald}>Stories of the Prophets</Overline>
           <Caption color={colors.inkMuted}>
-            Ibn Kathir · teaching paraphrase
+            Ibn Kathir · English PDF source
+            {chapter.pdfPageStart ? ` · p. ${chapter.pdfPageStart}` : ''}
           </Caption>
         </View>
         {onListen ? (
@@ -130,11 +132,27 @@ export default function ProphetStoryPage({
           ]}
         >
           <Quote size={16} color={colors.gold} />
-          <Body color={colors.inkMuted} style={styles.noteText}>
-            Full chapter account adapted for reading from Ibn Kathir’s Stories of
-            the Prophets. This is a teaching paraphrase of the narrative arc—not
-            a word-for-word reprint of the book.
-          </Body>
+          <View style={styles.noteCopy}>
+            <Body color={colors.inkMuted} style={styles.noteText}>
+              Text and listen cues for this prophet are taken from the in-app Ibn
+              Kathir Stories of the Prophets English PDF
+              {chapter.pdfPageStart && chapter.pdfPageEnd
+                ? ` (pages ${chapter.pdfPageStart}–${chapter.pdfPageEnd})`
+                : ''}
+              .
+            </Body>
+            <Pressable
+              onPress={() => void openIbnKathirPdf(chapter.pdfPageStart)}
+              accessibilityRole="link"
+              accessibilityLabel="Open Ibn Kathir PDF at this chapter"
+              style={({ pressed }) => [styles.pdfLink, pressed && { opacity: 0.8 }]}
+            >
+              <ExternalLink size={14} color={colors.emerald} />
+              <Caption color={colors.emerald} style={styles.pdfLinkLabel}>
+                Open source PDF
+              </Caption>
+            </Pressable>
+          </View>
         </View>
 
         {chapter.sections.map((section) => (
@@ -204,7 +222,10 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 22,
   },
-  noteText: { flex: 1, lineHeight: 21, fontSize: 13 },
+  noteCopy: { flex: 1, gap: 8 },
+  noteText: { lineHeight: 21, fontSize: 13 },
+  pdfLink: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  pdfLinkLabel: { fontWeight: '800' },
   section: { marginBottom: 26, gap: 10 },
   sectionHeading: { fontSize: 18, marginBottom: 2 },
   paragraph: { lineHeight: 26, fontSize: 16 },

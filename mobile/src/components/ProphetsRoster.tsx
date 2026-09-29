@@ -41,8 +41,8 @@ export default function ProphetsRoster({ onSelect, compact = false }: ProphetsRo
       </Row>
       <Small color={colors.inkMuted} style={styles.seriesNote}>
         {PROPHETS_SERIES.description} Tap a prophet’s name to open the full
-        chapter page{compact ? '' : ' (read or listen)'}. Muhammad ﷺ is covered
-        under Seerah & Shama’il.
+        chapter{compact ? '' : ' (read or listen)'} from the PDF. Muhammad ﷺ is
+        covered under Seerah & Shama’il.
       </Small>
 
       {!compact ? (

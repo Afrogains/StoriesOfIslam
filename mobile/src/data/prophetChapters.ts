@@ -1,5 +1,6 @@
 import type { StoryItem } from '../types/catalog';
-import { prophetChaptersData } from './prophetChaptersData';
+import { IBN_KATHIR_PDF } from './ibnKathirPdfIndex';
+import pdfChapters from './prophetChaptersFromPdf.json';
 
 export type ProphetChapterSection = {
   heading: string;
@@ -17,9 +18,15 @@ export type ProphetChapter = {
   sections: ProphetChapterSection[];
   durationMs: number;
   sourceCitation: string;
+  pdfPageStart?: number;
+  pdfPageEnd?: number;
 };
 
-const bySlug = prophetChaptersData as unknown as Record<string, ProphetChapter>;
+/**
+ * Canonical Prophets chapters — extracted from the bundled Ibn Kathir
+ * Stories of the Prophets English PDF (see public/sources/).
+ */
+const bySlug = pdfChapters as unknown as Record<string, ProphetChapter>;
 
 export function getProphetChapter(slug: string): ProphetChapter | undefined {
   return bySlug[slug];
@@ -54,18 +61,25 @@ function cuesFromSections(
     }
   }
 
-  const durationMs = Math.max(chapter.durationMs, chunks.length * 12_000);
-  const slice = Math.max(Math.floor(durationMs / chunks.length), 10_000);
+  // Cap cue count for very long chapters so the audio UI stays usable.
+  const maxChunks = 180;
+  const used =
+    chunks.length <= maxChunks
+      ? chunks
+      : chunks.filter((_, index) => index % Math.ceil(chunks.length / maxChunks) === 0);
 
-  return chunks.map((chunk, index) => ({
+  const durationMs = Math.max(chapter.durationMs, used.length * 8_000);
+  const slice = Math.max(Math.floor(durationMs / used.length), 6_000);
+
+  return used.map((chunk, index) => ({
     textEn: chunk.en,
     textAr: index === 0 ? chapter.titleAr : '',
     startMs: index * slice,
-    endMs: index === chunks.length - 1 ? durationMs : (index + 1) * slice,
+    endMs: index === used.length - 1 ? durationMs : (index + 1) * slice,
   }));
 }
 
-/** Build a catalog StoryItem from the Ibn Kathir chapter paraphrase for a prophet slug. */
+/** Build a catalog StoryItem from the Ibn Kathir PDF chapter for a prophet slug. */
 export function prophetChapterToStoryItem(
   slug: string,
   existing?: StoryItem | null,
@@ -77,6 +91,10 @@ export function prophetChapterToStoryItem(
   const minutes = Math.floor(durationMs / 60000);
   const seconds = Math.floor((durationMs % 60000) / 1000);
   const timedCues = cuesFromSections(chapter);
+  const pageLabel =
+    chapter.pdfPageStart && chapter.pdfPageEnd
+      ? `pp. ${chapter.pdfPageStart}–${chapter.pdfPageEnd}`
+      : `Chapter: ${chapter.nameEn}`;
 
   return {
     id: existing?.id ?? `prophet-chapter-${slug}`,
@@ -94,15 +112,15 @@ export function prophetChapterToStoryItem(
     durationMs,
     authenticityGrade: existing?.authenticityGrade ?? 'sahih',
     sourceCitation: chapter.sourceCitation,
-    sourceBook: 'Ibn Kathir — Stories of the Prophets (Qisas al-Anbiya)',
-    sourceVolume: 'English teaching edition',
-    sourcePageOrHadith: `Chapter: ${chapter.nameEn}`,
-    hasAudio: existing?.hasAudio ?? false,
+    sourceBook: `${IBN_KATHIR_PDF.author} — ${IBN_KATHIR_PDF.title}`,
+    sourceVolume: IBN_KATHIR_PDF.edition,
+    sourcePageOrHadith: pageLabel,
+    hasAudio: true,
     audioUrl: existing?.audioUrl ?? null,
     artworkUrl: existing?.artworkUrl ?? null,
     timedCues,
     isFavorite: existing?.isFavorite ?? false,
-    keyTakeaway: `Full teaching account of ${chapter.nameEn} from Ibn Kathir’s Stories of the Prophets.`,
+    keyTakeaway: `Full account of ${chapter.nameEn} from the in-app Ibn Kathir PDF (${pageLabel}).`,
   };
 }
 

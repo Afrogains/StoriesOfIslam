@@ -26,6 +26,7 @@
     "go-live:preflight": "bash scripts/go-live-preflight.sh",
     "go-live:local": "bash scripts/go-live.sh all-local",
     "go-live:hostafrica": "bash scripts/hostafrica-apply-on-server.sh",
+    "extract:ibn-kathir-pdf": "node scripts/extract-ibn-kathir-pdf.mjs",
     "assert:no-example-cdn": "bash scripts/assert-no-example-cdn.sh"
   },
   "engines": {

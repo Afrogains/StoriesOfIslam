@@ -17,9 +17,10 @@ export interface ProphetFigure {
 export const PROPHETS_SERIES = {
   title: 'Stories of the Prophets',
   author: 'Ibn Kathir',
-  credit: 'Ibn Kathir — Stories of the Prophets',
+  credit: 'Ibn Kathir — Stories of the Prophets (in-app PDF)',
   description:
-    'Chronological messengers of Allah as arranged in Ibn Kathir’s Qisas al-Anbiya, with brief summaries for learning.',
+    'Chronological messengers of Allah from the bundled English PDF of Ibn Kathir’s Qisas al-Anbiya. Read and listen both target that source edition.',
+  pdfPath: '/sources/ibn-kathir-stories-of-the-prophets.pdf',
 } as const;
 
 export const theProphets: ProphetFigure[] = [
