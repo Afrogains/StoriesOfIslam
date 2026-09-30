@@ -18,8 +18,15 @@ const usePreviewFixtures =
   process.env.EXPO_PUBLIC_ENVIRONMENT === 'preview' ||
   process.env.EXPO_PUBLIC_ENVIRONMENT === 'development';
 const previewStories: StoryItem[] = usePreviewFixtures
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro tree-shakes this fixture branch in production exports.
-  ? (require('./mockHome').allStandardStories as StoryItem[])
+  ? (() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro tree-shakes this fixture branch in production exports.
+      const base = require('./mockHome').allStandardStories as StoryItem[];
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { mergeSahabahChaptersIntoCatalog } = require('./sahabahChapters') as {
+        mergeSahabahChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+      };
+      return mergeSahabahChaptersIntoCatalog(base);
+    })()
   : [];
 
 interface CatalogContextValue {

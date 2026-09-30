@@ -35,8 +35,9 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     title: 'Sahabah',
     titleAr: 'الصحابة الكرام',
     subtitle: 'The Companions',
-    description: 'Inspiring accounts of devotion, courage, and loyalty from the noble companions.',
-    countLabel: 'Key Figures',
+    description:
+      'Educational biographies of the noble Companions from the in-app Companions of the Prophet English PDF — the source for both reading and listening.',
+    countLabel: 'Companions',
     accentColor: '#0284C7',
     bgTint: '#F0F9FF',
     badgeBg: '#E0F2FE',

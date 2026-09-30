@@ -17,6 +17,8 @@ export class CueNarrator {
   private cues: StoryCue[] = [];
   private index = 0;
   private rate = 1;
+  private pitch = 1;
+  private lang = 'en-US';
   private playing = false;
   private cancelled = false;
   private activeCancel: (() => void) | null = null;
@@ -34,6 +36,11 @@ export class CueNarrator {
 
   setRate(rate: number): void {
     this.rate = rate;
+  }
+
+  setVoice(options: { pitch?: number; lang?: string }): void {
+    if (options.pitch != null) this.pitch = options.pitch;
+    if (options.lang) this.lang = options.lang;
   }
 
   get isAvailable(): boolean {
@@ -95,7 +102,11 @@ export class CueNarrator {
       this.listeners.onCueIndex?.(this.index);
       this.listeners.onPositionMs?.(cue.startMs);
 
-      const { handle, done } = speakText(cue.text, { rate: this.rate, pitch: 1 });
+      const { handle, done } = speakText(cue.text, {
+        rate: this.rate,
+        pitch: this.pitch,
+        lang: this.lang,
+      });
       this.activeCancel = handle.cancel;
       const result = await done;
       this.activeCancel = null;

@@ -16,6 +16,7 @@ import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native
 import ScreenHeader from '../components/ScreenHeader';
 import { takeExploreIntent } from '../navigation/exploreIntent';
 import ProphetsRoster from '../components/ProphetsRoster';
+import SahabahRoster from '../components/SahabahRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -45,10 +46,16 @@ import {
   preferProphetCatalogStory,
   prophetChapterToStoryItem,
 } from '../data/prophetChapters';
-import { storiesForProphetSlug } from '../data/storyAdapters';
+import {
+  preferSahabahCatalogStory,
+  sahabahChapterToStoryItem,
+} from '../data/sahabahChapters';
+import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import type { ProphetFigure } from '../data/theProphets';
 import { theProphets } from '../data/theProphets';
+import type { SahabahFigure } from '../data/theSahabah';
+import { theSahabah } from '../data/theSahabah';
 
 type GradeFilter = 'all' | AuthenticityGrade;
 type SortKey = 'default' | 'duration' | 'title';
@@ -154,8 +161,21 @@ export default function ExploreScreen() {
     return prophetChapterToStoryItem(prophet.slug, preferred) ?? preferred ?? null;
   };
 
+  const resolveSahabahStory = (companion: SahabahFigure): StoryItem | null => {
+    const matches = storiesForSahabahSlug(stories, companion.slug, companion.nameEn);
+    const preferred = preferSahabahCatalogStory(matches, companion.nameEn);
+    return sahabahChapterToStoryItem(companion.slug, preferred) ?? preferred ?? null;
+  };
+
   const openProphetStories = (prophet: ProphetFigure) => {
     const story = resolveProphetStory(prophet);
+    if (!story) return;
+    setActiveStory(story);
+    setSessionMode('read');
+  };
+
+  const openSahabahStories = (companion: SahabahFigure) => {
+    const story = resolveSahabahStory(companion);
     if (!story) return;
     setActiveStory(story);
     setSessionMode('read');
@@ -172,6 +192,24 @@ export default function ExploreScreen() {
         ) ?? null;
       if (prophet) {
         const full = resolveProphetStory(prophet);
+        if (full) {
+          setActiveStory(full);
+          setSessionMode(mode);
+          return;
+        }
+      }
+    }
+    if (story.sectionSlug === 'sahabah') {
+      const companion =
+        theSahabah.find(
+          (item) =>
+            item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+            story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
+            item.nameEn.toLowerCase().includes(story.figureName.toLowerCase()) ||
+            story.id.includes(item.slug),
+        ) ?? null;
+      if (companion) {
+        const full = resolveSahabahStory(companion);
         if (full) {
           setActiveStory(full);
           setSessionMode(mode);
@@ -405,6 +443,10 @@ export default function ExploreScreen() {
 
         {selectedSection === 'qisas-al-anbiya' ? (
           <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
+
+        {selectedSection === 'sahabah' ? (
+          <SahabahRoster onSelect={openSahabahStories} />
         ) : null}
 
         {filteredStories.length === 0 ? (

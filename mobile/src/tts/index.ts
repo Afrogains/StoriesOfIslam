@@ -1,6 +1,6 @@
 /**
  * Client TTS package — merges browser narration with the cloud
- * VoiceSynthesisService lexicon so Prophets (and other text stories)
+ * VoiceSynthesisService lexicon so Prophets, Sahabah, and other text stories
  * remain listenable when no published MP3 exists yet.
  */
 export { applyLexicon, PRONUNCIATION_LEXICON } from './lexicon';
@@ -11,3 +11,10 @@ export {
   speakText,
   type SpeechEngineOptions,
 } from './webSpeechEngine';
+export {
+  SCHOLAR_NARRATOR,
+  STANDARD_NARRATOR,
+  effectiveSpeechRate,
+  narratorPresetForSection,
+  type ScholarNarratorPreset,
+} from './scholarNarrator';

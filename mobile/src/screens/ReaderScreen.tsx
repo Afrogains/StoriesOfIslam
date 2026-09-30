@@ -9,10 +9,13 @@ import {
   View,
 } from 'react-native';
 import { getProphetChapter } from '../data/prophetChapters';
+import { getSahabahChapter } from '../data/sahabahChapters';
 import { theProphets } from '../data/theProphets';
+import { theSahabah } from '../data/theSahabah';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { useLibrary } from '../hooks/useLibrary';
 import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
+import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import type { StoryItem } from '../types/catalog';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
@@ -35,20 +38,41 @@ type ReaderScreenProps = {
 };
 
 function resolveFullText(story: StoryItem): { sections: { heading?: string; body: string }[]; plain: string } {
-  const prophet = theProphets.find(
-    (item) =>
-      item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
-      story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
-  );
-  const chapter = prophet ? getProphetChapter(prophet.slug) : undefined;
-  if (chapter?.sections?.length) {
-    return {
-      sections: chapter.sections.map((section) => ({
-        heading: section.heading,
-        body: section.body,
-      })),
-      plain: chapter.contentEn,
-    };
+  if (story.sectionSlug === 'qisas-al-anbiya') {
+    const prophet = theProphets.find(
+      (item) =>
+        item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+        story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
+    );
+    const chapter = prophet ? getProphetChapter(prophet.slug) : undefined;
+    if (chapter?.sections?.length) {
+      return {
+        sections: chapter.sections.map((section) => ({
+          heading: section.heading,
+          body: section.body,
+        })),
+        plain: chapter.contentEn,
+      };
+    }
+  }
+
+  if (story.sectionSlug === 'sahabah') {
+    const companion = theSahabah.find(
+      (item) =>
+        item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+        story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
+        story.id.includes(item.slug),
+    );
+    const chapter = companion ? getSahabahChapter(companion.slug) : undefined;
+    if (chapter?.sections?.length) {
+      return {
+        sections: chapter.sections.map((section) => ({
+          heading: section.heading,
+          body: section.body,
+        })),
+        plain: chapter.contentEn,
+      };
+    }
   }
 
   const content = (story.content ?? story.summary ?? '').trim();
@@ -80,7 +104,20 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       )?.slug ?? null
     );
   }, [story.figureName, story.sectionSlug]);
-  const pdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
+  const sahabahSlug = useMemo(() => {
+    if (story.sectionSlug !== 'sahabah') return null;
+    return (
+      theSahabah.find(
+        (item) =>
+          item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+          story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
+          story.id.includes(item.slug),
+      )?.slug ?? null
+    );
+  }, [story.figureName, story.id, story.sectionSlug]);
+  const prophetPdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
+  const sahabahPdfSpan = sahabahSlug ? sahabahPdfSpanForSlug(sahabahSlug) : null;
+  const pdfSpan = prophetPdfSpan ?? sahabahPdfSpan;
 
   useEffect(() => {
     void load().then((y) => {
@@ -220,9 +257,17 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           ) : null}
           {pdfSpan ? (
             <Pressable
-              onPress={() => void openIbnKathirPdf(pdfSpan.start)}
+              onPress={() =>
+                void (prophetPdfSpan
+                  ? openIbnKathirPdf(pdfSpan.start)
+                  : openSahabahPdf(pdfSpan.start))
+              }
               accessibilityRole="link"
-              accessibilityLabel="Open Ibn Kathir PDF at this chapter"
+              accessibilityLabel={
+                prophetPdfSpan
+                  ? 'Open Ibn Kathir PDF at this chapter'
+                  : 'Open Sahaba biographies PDF at this chapter'
+              }
               style={({ pressed }) => [
                 styles.pdfBtn,
                 {
@@ -234,7 +279,9 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             >
               <ExternalLink size={14} color={accent.primary} />
               <Caption color={accent.primary} style={styles.pdfBtnLabel}>
-                Open Ibn Kathir PDF (p. {pdfSpan.start})
+                {prophetPdfSpan
+                  ? `Open Ibn Kathir PDF (p. ${pdfSpan.start})`
+                  : `Open Sahaba PDF (p. ${pdfSpan.start})`}
               </Caption>
             </Pressable>
           ) : null}

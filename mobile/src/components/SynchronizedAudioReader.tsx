@@ -39,7 +39,12 @@ import {
 } from '../types/reader';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { audioDownloads } from '../services/audioDownloads';
-import { CueNarrator, isClientTtsAvailable } from '../tts';
+import {
+  CueNarrator,
+  effectiveSpeechRate,
+  isClientTtsAvailable,
+  narratorPresetForSection,
+} from '../tts';
 import {
   alpha,
   brandGradients,
@@ -94,6 +99,7 @@ export default function SynchronizedAudioReader({
 
   const hasMp3 = Boolean(story.audioUrl);
   const ttsAvailable = !hasMp3 && isClientTtsAvailable() && story.cues.length > 0;
+  const narratorPreset = narratorPresetForSection(sectionSlug);
 
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [playing, setPlaying] = useState(false);
@@ -140,6 +146,8 @@ export default function SynchronizedAudioReader({
 
     const narrator = ttsRef.current;
     narrator.setCues(story.cues);
+    narrator.setVoice({ pitch: narratorPreset.pitch, lang: narratorPreset.lang });
+    narrator.setRate(effectiveSpeechRate(rate, narratorPreset));
     narrator.setListeners({
       onCueIndex: () => undefined,
       onPositionMs: (ms) => {
@@ -190,7 +198,16 @@ export default function SynchronizedAudioReader({
     };
     // rate is applied via a separate effect so changing speed does not remount narration.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- story.cues identity changes with story.id
-  }, [hasMp3, story.id, story.durationMs, ttsAvailable, loadProgress, saveProgress]);
+  }, [
+    hasMp3,
+    story.id,
+    story.durationMs,
+    ttsAvailable,
+    narratorPreset.pitch,
+    narratorPreset.lang,
+    loadProgress,
+    saveProgress,
+  ]);
 
   useEffect(() => {
     let alive = true;
@@ -252,8 +269,11 @@ export default function SynchronizedAudioReader({
   }, [hasMp3, rate, ready, player]);
 
   useEffect(() => {
-    if (!hasMp3) ttsRef.current.setRate(rate);
-  }, [hasMp3, rate]);
+    if (!hasMp3) {
+      ttsRef.current.setVoice({ pitch: narratorPreset.pitch, lang: narratorPreset.lang });
+      ttsRef.current.setRate(effectiveSpeechRate(rate, narratorPreset));
+    }
+  }, [hasMp3, rate, narratorPreset]);
 
   useEffect(() => {
     if (!expanded) return;
@@ -425,7 +445,9 @@ export default function SynchronizedAudioReader({
                 <Caption color={colors.inkMuted} style={styles.audioErrorText}>
                   {sectionSlug === 'qisas-al-anbiya'
                     ? 'Listening uses on-device speech from the in-app Ibn Kathir PDF text. Press play to hear each passage; open Reading or the source PDF for the full chapter layout.'
-                    : 'Listening uses on-device speech until a published audio track is ready. Press play to hear each passage.'}
+                    : sectionSlug === 'sahabah'
+                      ? 'Listening uses calm on-device speech from the in-app Companions biographies PDF. Press play to hear each passage; open Reading or the source PDF for the full biography.'
+                      : 'Listening uses on-device speech until a published audio track is ready. Press play to hear each passage.'}
                 </Caption>
               </View>
             ) : null}

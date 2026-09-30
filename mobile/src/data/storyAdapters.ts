@@ -98,3 +98,22 @@ export function storiesForProphetSlug(
     );
   });
 }
+
+/** Match a Sahabah roster entry to catalog stories for that companion. */
+export function storiesForSahabahSlug(
+  stories: StoryItem[],
+  slug: string,
+  nameEn: string,
+): StoryItem[] {
+  const normalized = nameEn.toLowerCase();
+  return stories.filter((story) => {
+    if (story.sectionSlug !== 'sahabah') return false;
+    const figure = story.figureName.toLowerCase();
+    return (
+      figure === normalized ||
+      figure.includes(normalized) ||
+      story.id.includes(slug) ||
+      story.title.toLowerCase().includes(normalized)
+    );
+  });
+}
