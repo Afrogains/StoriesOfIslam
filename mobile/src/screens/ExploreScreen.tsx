@@ -15,6 +15,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
 import { takeExploreIntent } from '../navigation/exploreIntent';
+import ExploreRandomPick from '../components/ExploreRandomPick';
 import ProphetsRoster from '../components/ProphetsRoster';
 import SahabahRoster from '../components/SahabahRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
@@ -376,6 +377,12 @@ export default function ExploreScreen() {
             </Row>
           </Card>
         ) : null}
+
+        <ExploreRandomPick
+          pool={filteredStories}
+          onRead={(story) => openStory(story, 'read')}
+          onListen={(story) => openStory(story, 'listen')}
+        />
 
         {showGroupedBrowse ? (
           <View style={styles.categoryGrid}>
