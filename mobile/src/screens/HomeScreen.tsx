@@ -83,8 +83,6 @@ type HomeTabs = {
   navigate: (screen: 'Explore' | 'Names' | 'Library' | 'Home') => void;
 };
 
-type Audience = 'standard' | 'kids';
-
 const sectionIcons: Record<SectionSlug, LucideIcon> = {
   'qisas-al-anbiya': BookOpen,
   'seerah-shamail': Sparkles,
@@ -103,7 +101,6 @@ export default function HomeScreen() {
   const { savedCount } = useLibrary();
   const { lastActive, refresh, markActive } = useLastActiveStory();
 
-  const [audience, setAudience] = useState<Audience>('standard');
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [query, setQuery] = useState('');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
@@ -244,40 +241,7 @@ export default function HomeScreen() {
               السلام عليكم ورحمة الله
             </ArabicInline>
           </View>
-          <Row gap={8} align="center">
-            <ModeToggle />
-            <View
-              style={[
-                styles.audience,
-                { backgroundColor: isDark ? colors.cardAlt : '#EEF2F0', borderColor: colors.border },
-              ]}
-            >
-              {(['standard', 'kids'] as const).map((mode) => {
-                const active = audience === mode;
-                return (
-                  <Pressable
-                    key={mode}
-                    onPress={() => setAudience(mode)}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: active }}
-                    style={[
-                      styles.audienceBtn,
-                      active && { backgroundColor: colors.emerald },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.audienceLabel,
-                        { color: active ? '#FFFFFF' : colors.inkMuted },
-                      ]}
-                    >
-                      {mode === 'standard' ? 'Standard' : 'Kids'}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Row>
+          <ModeToggle />
         </Row>
 
         <ScrollView
@@ -425,20 +389,6 @@ export default function HomeScreen() {
               </Caption>
             </Row>
           </Pressable>
-        ) : null}
-
-        {audience === 'kids' ? (
-          <View
-            style={[
-              styles.kidsNote,
-              { backgroundColor: alpha('#F97316', isDark ? 0.15 : 0.1), borderColor: alpha('#F97316', 0.25) },
-            ]}
-          >
-            <BodyStrong color={isDark ? '#FDBA74' : '#9A3412'}>Kids mode preview</BodyStrong>
-            <Small color={isDark ? '#FFEDD5' : '#9A3412'}>
-              A gentler Kids experience is coming. Standard stories stay available below.
-            </Small>
-          </View>
         ) : null}
 
         <Row justify="space-between" align="center" style={styles.sectionHead}>
@@ -598,23 +548,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
   },
   greetingAr: { marginTop: 2, fontSize: 15, lineHeight: 26 },
-  audience: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: radius.pill,
-    padding: 3,
-    gap: 2,
-  },
-  audienceBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: radius.pill,
-  },
-  audienceLabel: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 11,
-    fontWeight: '700',
-  },
   pills: { gap: 8, paddingBottom: 14 },
   featured: {
     borderRadius: radius['2xl'],
@@ -668,13 +601,6 @@ const styles = StyleSheet.create({
   },
   continueTitle: { fontSize: 15, lineHeight: 21 },
   continueAction: { marginTop: 2 },
-  kidsNote: {
-    borderWidth: 1,
-    borderRadius: radius.xl,
-    padding: 12,
-    gap: 4,
-    marginBottom: 14,
-  },
   sectionHead: { marginBottom: 10, marginTop: 4 },
   metricsGrid: {
     flexDirection: 'row',
