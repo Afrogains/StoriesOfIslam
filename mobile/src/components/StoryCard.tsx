@@ -5,9 +5,7 @@ import {
   Clock,
   Headphones,
   Library,
-  Play,
-  Sparkles,
-  Users,
+  User,
   type LucideIcon,
 } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -24,6 +22,7 @@ import {
   Divider,
   GradientButton,
   OutlineBadge,
+  OutlineButton,
   Row,
   Small,
   Title,
@@ -31,19 +30,21 @@ import {
 } from './ui';
 
 export const sectionIcons: Record<SectionSlug, LucideIcon> = {
-  'qisas-al-anbiya': BookOpen,
-  'seerah-shamail': Sparkles,
-  sahabah: Users,
+  'qisas-al-anbiya': User,
+  'seerah-shamail': BookOpen,
+  sahabah: User,
   gleanings: Library,
 };
 
 export default function StoryCard({
   story,
-  onPress,
+  onRead,
+  onListen,
   variant = 'full',
 }: {
   story: StoryItem;
-  onPress: () => void;
+  onRead: () => void;
+  onListen: () => void;
   /** `compact` drops the summary and key-wisdom block for dense lists. */
   variant?: 'full' | 'compact';
 }) {
@@ -52,6 +53,7 @@ export default function StoryCard({
   const meta = sectionsMeta[story.sectionSlug];
   const accent = sectionAccent(story.sectionSlug, isDark);
   const saved = isSaved(story.id);
+  const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
 
   return (
     <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
@@ -62,10 +64,7 @@ export default function StoryCard({
         </Row>
 
         <Pressable
-          onPress={(event) => {
-            event.stopPropagation();
-            toggleSaved(story.id);
-          }}
+          onPress={() => toggleSaved(story.id)}
           hitSlop={8}
           style={styles.bookmark}
           accessibilityRole="button"
@@ -91,7 +90,9 @@ export default function StoryCard({
 
       {variant === 'full' ? (
         <>
-          <Body style={styles.summary}>{story.summary}</Body>
+          <Body style={styles.summary} numberOfLines={3}>
+            {story.summary}
+          </Body>
 
           {story.keyTakeaway ? (
             <View
@@ -111,36 +112,45 @@ export default function StoryCard({
               </Small>
             </View>
           ) : null}
+
+          <Divider style={styles.divider} />
+
+          <Row justify="space-between" style={styles.metaFooter}>
+            <Row gap={5}>
+              <Clock size={12} color={colors.inkSubtle} />
+              <Caption>{story.durationLabel}</Caption>
+              <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
+              <Caption>{story.hasAudio ? 'Audio ready' : 'Text first'}</Caption>
+            </Row>
+          </Row>
         </>
       ) : (
-        <Body numberOfLines={2} style={styles.summary}>
-          {story.summary}
-        </Body>
+        <Caption color={colors.inkSubtle} style={styles.compactMeta}>
+          {story.durationLabel}
+          {story.hasAudio ? ' · audio' : ' · text'}
+        </Caption>
       )}
 
-      <Divider style={styles.divider} />
-
-      <Row justify="space-between">
-        <Row gap={5}>
-          {story.hasAudio ? (
-            <Headphones size={13} color={colors.inkSubtle} />
-          ) : (
-            <BookOpen size={13} color={colors.inkSubtle} />
-          )}
-          <Caption>{story.hasAudio ? `${story.durationLabel} audio` : 'Text only'}</Caption>
-          <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
-          <Clock size={12} color={colors.inkSubtle} />
-          <Caption>{story.durationLabel}</Caption>
-        </Row>
-
-        <GradientButton
-          label={story.hasAudio ? 'Listen' : 'Read'}
-          icon={story.hasAudio ? Play : BookOpen}
-          gradient={accent.accentGradient}
-          size="sm"
-          onPress={onPress}
-          accessibilityLabel={`${story.hasAudio ? 'Listen to' : 'Read'} ${story.title}`}
-        />
+      <Row gap={8} style={styles.ctaRow}>
+        <View style={styles.ctaFlex}>
+          <OutlineButton
+            label="Read"
+            icon={BookOpen}
+            onPress={onRead}
+            accessibilityLabel={`Read story: ${story.title}`}
+          />
+        </View>
+        <View style={styles.ctaFlex}>
+          <GradientButton
+            label="Listen"
+            icon={Headphones}
+            gradient={accent.accentGradient}
+            size="sm"
+            onPress={onListen}
+            disabled={!canListen}
+            accessibilityLabel={`Listen to: ${story.title}`}
+          />
+        </View>
       </Row>
     </Card>
   );
@@ -152,6 +162,7 @@ const styles = StyleSheet.create({
   arabic: { marginTop: 2 },
   figure: { marginTop: 4 },
   summary: { marginTop: 8 },
+  compactMeta: { marginTop: 6, marginBottom: 2 },
   wisdom: {
     marginTop: 14,
     padding: 12,
@@ -161,5 +172,8 @@ const styles = StyleSheet.create({
   wisdomLabel: { letterSpacing: 1, fontWeight: '800' },
   wisdomText: { marginTop: 3, fontWeight: '600' },
   divider: { marginTop: 16, marginBottom: 12 },
+  metaFooter: { marginBottom: 12 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
+  ctaRow: { marginTop: 8 },
+  ctaFlex: { flex: 1 },
 });

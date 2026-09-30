@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { Baby, Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
+import { Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -20,9 +20,8 @@ import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
 import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
 import ExploreScreen from './src/screens/ExploreScreen';
 import HomeScreen from './src/screens/HomeScreen';
-import KidsModeScreen from './src/screens/KidsModeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
-import TheNamesScreen from './src/screens/TheNamesScreen';
+import NamesScreen from './src/screens/NamesScreen';
 import {
   BODY_FONT_FAMILY,
   alpha,
@@ -39,7 +38,6 @@ export type RootTabParamList = {
   Explore: undefined;
   Names: undefined;
   Library: undefined;
-  Kids: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -54,13 +52,12 @@ const tabs = {
   Explore: { label: 'Explore', icon: Compass, accent: 'emerald' },
   Names: { label: 'The Names', icon: Sparkles, accent: 'gold' },
   Library: { label: 'Library', icon: Bookmark, accent: 'emerald' },
-  Kids: { label: 'Kids', icon: Baby, accent: 'sunset' },
 } as const;
 
 function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
-  const { isDark, isKids, setMode } = useAppMode();
+  const { isDark } = useAppMode();
   const { savedCount } = useLibrary();
-  const colors = getColors(isDark, isKids);
+  const colors = getColors(isDark);
   const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.8) : colors.inkSubtle;
 
   return (
@@ -76,11 +73,13 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const config = tabs[route.name as keyof typeof tabs];
         const active = state.index === index;
         const accent =
-          config.accent === 'sunset'
-            ? isDark ? '#FB923C' : '#EA580C'
-            : config.accent === 'gold'
-              ? isDark ? '#FBBF24' : '#B45309'
-              : isDark ? '#2DD4BF' : '#0F766E';
+          config.accent === 'gold'
+            ? isDark
+              ? '#FBBF24'
+              : '#B45309'
+            : isDark
+              ? '#34D399'
+              : '#064E3B';
         const Icon = config.icon;
         return (
           <Pressable
@@ -92,7 +91,6 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                 canPreventDefault: true,
               });
               if (!event.defaultPrevented) {
-                setMode(route.name === 'Kids' ? 'kids' : 'standard');
                 navigation.navigate(route.name, route.params);
               }
             }}
@@ -106,11 +104,9 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
               {active ? (
                 <LinearGradient
                   colors={
-                    config.accent === 'sunset'
-                      ? brandGradients.kidsSunset
-                      : config.accent === 'gold'
-                        ? brandGradients.gold[isDark ? 'dark' : 'light']
-                        : brandGradients.emerald[isDark ? 'dark' : 'light']
+                    config.accent === 'gold'
+                      ? brandGradients.gold[isDark ? 'dark' : 'light']
+                      : brandGradients.emerald[isDark ? 'dark' : 'light']
                   }
                   style={styles.activePill}
                 >
@@ -145,13 +141,12 @@ function AppNavigator() {
         Explore: 'explore',
         Names: 'names',
         Library: 'library',
-        Kids: 'kids',
       },
     },
   };
 
   return (
-    <View style={[styles.page, { backgroundColor: isDark ? '#02060C' : '#E9E3D6' }]}>
+    <View style={[styles.page, { backgroundColor: isDark ? '#0F172A' : '#FCFBF7' }]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <View style={styles.appSurface}>
         <NavigationContainer
@@ -166,9 +161,8 @@ function AppNavigator() {
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Explore" component={ExploreScreen} />
-            <Tab.Screen name="Names" component={TheNamesScreen} options={{ title: 'The Names' }} />
+            <Tab.Screen name="Names" component={NamesScreen} options={{ title: 'The Names' }} />
             <Tab.Screen name="Library" component={LibraryScreen} />
-            <Tab.Screen name="Kids" component={KidsModeScreen} />
           </Tab.Navigator>
         </NavigationContainer>
       </View>

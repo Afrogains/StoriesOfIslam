@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import type { RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
 import { requireAuth, requireRole } from '../auth/keycloak';
 import { query } from '../db/pool';
@@ -40,7 +41,7 @@ editorialRouter.post(
   requireRole('reviewer', 'admin'),
   asyncHandler(async (request, response) => {
     const assetId = UuidSchema.parse(request.params.assetId);
-    const asset = await query<{
+    const asset = await query<RowDataPacket & {
       object_key: string;
       timeline_object_key: string | null;
       story_id: string | null;
@@ -48,7 +49,7 @@ editorialRouter.post(
       duration_ms: number | null;
     }>(
       `SELECT object_key,timeline_object_key,story_id,mime_type,duration_ms
-       FROM media_assets WHERE id=$1 AND is_public=false`,
+       FROM media_assets WHERE id=? AND is_public=0`,
       [assetId],
     );
     const draft = asset.rows[0];
@@ -74,20 +75,17 @@ editorialRouter.post(
       promoted.bucket,
     );
     if (updated.storyId) {
+      const audioPayload = {
+        url: promoted.publicUrl,
+        mimeType: draft.mime_type,
+        durationSeconds: Math.round((draft.duration_ms ?? 0) / 1000),
+        checksum: promoted.checksumSha256,
+        objectKey: promoted.objectKey,
+        timelineUrl: timelineUrl ?? null,
+      };
       await query(
-        `UPDATE stories SET audio_url=$2,audio=jsonb_build_object(
-          'url',$2,'mimeType',$3,'durationSeconds',$4,'checksum',$5,
-          'objectKey',$6,'timelineUrl',$7
-        ) WHERE id=$1`,
-        [
-          updated.storyId,
-          promoted.publicUrl,
-          draft.mime_type,
-          Math.round((draft.duration_ms ?? 0) / 1000),
-          promoted.checksumSha256,
-          promoted.objectKey,
-          timelineUrl ?? null,
-        ],
+        `UPDATE stories SET audio_url=?,audio=? WHERE id=?`,
+        [promoted.publicUrl, JSON.stringify(audioPayload), updated.storyId],
       );
     }
     response.status(200).json({ data: { ...promoted, timelineUrl } });

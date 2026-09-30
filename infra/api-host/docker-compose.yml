@@ -1,5 +1,5 @@
-# Separately hosted Node API + worker. Connects to WhoGoHost PostgreSQL,
-# Keycloak, and MinIO over TLS. Do not co-locate with the VPS data plane.
+# Separately hosted Node API + worker. Connects to HostAfrica MySQL,
+# HostAfrica Keycloak, and MinIO over TLS. Do not co-locate with the VPS data plane.
 name: stories-api
 
 services:

@@ -15,8 +15,6 @@ export type SectionMeta = {
   badgeText: string;
   conceptTagline: string;
   iconName: string;
-  kidsTitle: string;
-  kidsSubtitle: string;
 };
 
 export type StoryItem = {
@@ -35,28 +33,14 @@ export type StoryItem = {
   durationMs: number;
   authenticityGrade: AuthenticityGrade;
   sourceCitation: string;
+  /** Optional structured citation fields for the Source & Citation footer. */
+  sourceBook?: string;
+  sourceVolume?: string;
+  sourcePageOrHadith?: string;
   hasAudio: boolean;
   audioUrl?: string | null;
   artworkUrl?: string | null;
   timedCues?: { startMs: number; endMs: number; textEn: string; textAr: string }[];
   isFavorite?: boolean;
   keyTakeaway?: string;
-};
-
-export type KidsStoryCard = {
-  id: string;
-  sectionSlug: SectionSlug;
-  title: string;
-  titleAr: string;
-  figureName: string;
-  summary: string;
-  lesson: string;
-  durationLabel: string;
-  badgeLabel: string;
-  tint: 'sunset' | 'teal' | 'sky' | 'coral' | 'yellow';
-  rewardStarCount: number;
-  durationMs?: number;
-  audioUrl?: string | null;
-  artworkUrl?: string | null;
-  timedCues?: { startMs: number; endMs: number; textEn: string; textAr: string }[];
 };

@@ -13,7 +13,6 @@ export const DISPLAY_FONT_FAMILY =
 export const BODY_FONT_FAMILY =
   Platform.OS === 'web' ? 'Inter, system-ui, sans-serif' : 'Inter';
 
-export type AppMode = 'standard' | 'kids';
 export type ColorScheme = 'light' | 'dark';
 export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah' | 'gleanings';
 
@@ -133,24 +132,15 @@ export const accentGradients: Record<SectionSlug, { light: readonly [string, str
   gleanings: { light: ['#EA580C', '#C2410C'], dark: ['#FB923C', '#EA580C'] },
 };
 
-export const kidsGradients: Record<SectionSlug, readonly [string, string]> = {
-  'qisas-al-anbiya': ['#F97316', '#FB7185'],
-  'seerah-shamail': ['#FBBF24', '#F59E0B'],
-  sahabah: ['#38BDF8', '#0284C7'],
-  gleanings: ['#0D9488', '#10B981'],
-};
-
 /** Shared app-level gradients keyed by intent rather than by section. */
 export const brandGradients = {
-  emerald: { light: ['#0F766E', '#115E59'] as const, dark: ['#2DD4BF', '#0F766E'] as const },
+  emerald: { light: ['#064E3B', '#047857'] as const, dark: ['#10B981', '#064E3B'] as const },
   gold: { light: ['#D97706', '#B45309'] as const, dark: ['#FBBF24', '#D97706'] as const },
   night: { light: ['#1C1917', '#0F172A', '#020617'] as const, dark: ['#121C19', '#0B1220', '#020617'] as const },
   verse: {
     light: ['#0F766E', '#115E59', '#042F2C'] as const,
     dark: ['#0D2D29', '#115E59', '#042F2C'] as const,
   },
-  kidsSunset: ['#EA580C', '#FB7185'] as const,
-  kidsGold: { light: ['#FEF08A', '#FDE047'] as const, dark: ['#3A1D00', '#2A1506'] as const },
 } as const;
 
 /**
@@ -195,8 +185,8 @@ export type ThemeColors = {
 };
 
 const lightColors: ThemeColors = {
-  paper: '#F8F5EC',
-  paperAlt: '#F1EDE1',
+  paper: '#FCFBF7',
+  paperAlt: '#F7F4EC',
   card: '#FFFFFF',
   cardAlt: '#FBF9F3',
   border: '#E2D9C8',
@@ -207,9 +197,9 @@ const lightColors: ThemeColors = {
   gold: '#B45309',
   goldSoft: '#FEF3C7',
   goldDark: '#78350F',
-  emerald: '#0F766E',
-  emeraldLight: '#CCFBF1',
-  emeraldBg: '#E6F4F1',
+  emerald: '#064E3B',
+  emeraldLight: '#D1FAE5',
+  emeraldBg: '#ECFDF5',
   azure: '#0284C7',
   azureLight: '#E0F2FE',
   azureBg: '#F0F9FF',
@@ -231,21 +221,21 @@ const lightColors: ThemeColors = {
 };
 
 const darkColors: ThemeColors = {
-  paper: '#090F0D',
-  paperAlt: '#0D1512',
-  card: '#121C19',
-  cardAlt: '#16221E',
-  border: '#23342E',
-  borderSoft: '#1A2723',
+  paper: '#0F172A',
+  paperAlt: '#0B1220',
+  card: '#11201B',
+  cardAlt: '#143028',
+  border: '#1E3A32',
+  borderSoft: '#172A24',
   ink: '#F8FAFC',
   inkMuted: '#CBD5E1',
   inkSubtle: '#94A3B8',
   gold: '#F59E0B',
   goldSoft: '#78350F',
   goldDark: '#FDE68A',
-  emerald: '#14B8A6',
-  emeraldLight: '#115E59',
-  emeraldBg: '#0D2D29',
+  emerald: '#10B981',
+  emeraldLight: '#064E3B',
+  emeraldBg: '#022C22',
   azure: '#38BDF8',
   azureLight: '#0369A1',
   azureBg: '#082F49',
@@ -259,90 +249,16 @@ const darkColors: ThemeColors = {
   yellow: '#FBBF24',
   purple: '#C084FC',
   mint: '#34D399',
-  navBg: '#0F1715',
-  navBorder: '#23342E',
-  subtleBg: '#1A2723',
-  trackBg: '#23342E',
+  navBg: '#0B1220',
+  navBorder: '#1E3A32',
+  subtleBg: '#143028',
+  trackBg: '#1E3A32',
   scrim: 'rgba(2, 6, 23, 0.72)',
-};
-
-const kidsLightColors: ThemeColors = {
-  paper: '#FFF8F0',
-  paperAlt: '#FFF1E3',
-  card: '#FFFFFF',
-  cardAlt: '#FFF7ED',
-  border: '#FED7AA',
-  borderSoft: '#FFEDD5',
-  ink: '#3B1808',
-  inkMuted: '#854D0E',
-  inkSubtle: '#A16207',
-  gold: '#D97706',
-  goldSoft: '#FEF3C7',
-  goldDark: '#78350F',
-  emerald: '#0D9488',
-  emeraldLight: '#CCFBF1',
-  emeraldBg: '#F0FDFA',
-  azure: '#0284C7',
-  azureLight: '#E0F2FE',
-  azureBg: '#F0F9FF',
-  terracotta: '#EA580C',
-  terracottaLight: '#FFEDD5',
-  terracottaBg: '#FFF7ED',
-  sunset: '#EA580C',
-  coral: '#E11D48',
-  teal: '#0D9488',
-  sky: '#0284C7',
-  yellow: '#D97706',
-  purple: '#9333EA',
-  mint: '#059669',
-  navBg: '#FFFFFF',
-  navBorder: '#FFEDD5',
-  subtleBg: '#FFF1E3',
-  trackBg: '#FFE4CC',
-  scrim: 'rgba(59, 24, 8, 0.5)',
-};
-
-const kidsDarkColors: ThemeColors = {
-  paper: '#1A0C02',
-  paperAlt: '#210E04',
-  card: '#2A1506',
-  cardAlt: '#331A08',
-  border: '#431D0A',
-  borderSoft: '#3A1808',
-  ink: '#FFEDD5',
-  inkMuted: '#FDBA74',
-  inkSubtle: '#FB923C',
-  gold: '#FBBF24',
-  goldSoft: '#78350F',
-  goldDark: '#FDE68A',
-  emerald: '#2DD4BF',
-  emeraldLight: '#115E59',
-  emeraldBg: '#0D2D29',
-  azure: '#38BDF8',
-  azureLight: '#0369A1',
-  azureBg: '#082F49',
-  terracotta: '#FB923C',
-  terracottaLight: '#9A3412',
-  terracottaBg: '#431407',
-  sunset: '#FB923C',
-  coral: '#FDA4AF',
-  teal: '#2DD4BF',
-  sky: '#38BDF8',
-  yellow: '#FBBF24',
-  purple: '#C084FC',
-  mint: '#34D399',
-  navBg: '#210E04',
-  navBorder: '#431D0A',
-  subtleBg: '#331A08',
-  trackBg: '#431D0A',
-  scrim: 'rgba(26, 12, 2, 0.72)',
 };
 
 export const palette = {
   light: lightColors,
   dark: darkColors,
-  kidsLight: kidsLightColors,
-  kidsDark: kidsDarkColors,
 
   standard: {
     paper: '#F8F5EC',
@@ -402,8 +318,8 @@ export const palette = {
         darkText: '#BAE6FD',
       },
       gleanings: {
-        name: 'Gleanings',
-        nameAr: 'قبسات',
+        name: 'Narratives & Successors',
+        nameAr: 'آثار وتابعون',
         primary: '#C2410C',
         secondary: '#9A3412',
         light: '#FFF7ED',
@@ -417,66 +333,9 @@ export const palette = {
       },
     },
   },
-
-  kids: {
-    cream: '#FFF8F0',
-    ink: '#3B1808',
-    card: '#FFFFFF',
-    border: '#FFEDD5',
-    sunset: '#F97316',
-    coral: '#FB7185',
-    teal: '#0D9488',
-    sky: '#0284C7',
-    butter: '#FEF08A',
-    yellow: '#EAB308',
-    purple: '#A855F7',
-    mint: '#10B981',
-
-    sections: {
-      'qisas-al-anbiya': {
-        title: "Prophets' Adventures",
-        titleAr: 'قصص الأنبياء',
-        primary: '#F97316',
-        bg: '#FFF3E8',
-        border: '#FFD8BE',
-        badgeBg: '#FFEDD5',
-        badgeText: '#C2410C',
-      },
-      'seerah-shamail': {
-        title: "Prophet's Kindness",
-        titleAr: 'السيرة النبوية',
-        primary: '#EAB308',
-        bg: '#FEFCE8',
-        border: '#FEF08A',
-        badgeBg: '#FEF9C3',
-        badgeText: '#854D0E',
-      },
-      sahabah: {
-        title: 'Brave Companions',
-        titleAr: 'أبطال الصحابة',
-        primary: '#0284C7',
-        bg: '#F0F9FF',
-        border: '#BAE6FD',
-        badgeBg: '#E0F2FE',
-        badgeText: '#0369A1',
-      },
-      gleanings: {
-        title: 'Gentle Wise Deeds',
-        titleAr: 'أخلاق وحكم',
-        primary: '#0D9488',
-        bg: '#F0FDF4',
-        border: '#BBF7D0',
-        badgeBg: '#DCFCE7',
-        badgeText: '#15803D',
-      },
-    },
-  },
 };
 
-export function getColors(isDark: boolean, isKids: boolean): ThemeColors {
-  if (isKids) {
-    return isDark ? kidsDarkColors : kidsLightColors;
-  }
+export function getColors(isDark: boolean): ThemeColors {
   return isDark ? darkColors : lightColors;
 }
 

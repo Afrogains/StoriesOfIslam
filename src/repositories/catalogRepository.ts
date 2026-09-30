@@ -1,4 +1,5 @@
-import { query } from '../db/pool';
+import type { RowDataPacket } from 'mysql2/promise';
+import { asBool, asJson, query } from '../db/pool';
 import type { StoryQuery } from '../contracts/api';
 
 export interface CatalogStory {
@@ -24,7 +25,7 @@ export interface CatalogStory {
   timedCues: unknown[];
 }
 
-interface StoryRow {
+interface StoryRow extends RowDataPacket {
   id: string;
   slug: string;
   section_slug: string;
@@ -40,14 +41,14 @@ interface StoryRow {
   authenticity_grade: string;
   audio_url: string | null;
   artwork_url: string | null;
-  audio: { durationSeconds?: number } | null;
-  timed_cues: unknown[];
+  audio: unknown;
+  timed_cues: unknown;
   source_citation: string;
-  total_count: string;
 }
 
 function mapStory(row: StoryRow): CatalogStory {
-  const durationMs = Math.round((row.audio?.durationSeconds ?? 0) * 1000);
+  const audio = asJson<{ durationSeconds?: number } | null>(row.audio, null);
+  const durationMs = Math.round((audio?.durationSeconds ?? 0) * 1000);
   const seconds = Math.floor(durationMs / 1000);
   return {
     id: row.id,
@@ -69,13 +70,13 @@ function mapStory(row: StoryRow): CatalogStory {
     hasAudio: Boolean(row.audio_url),
     audioUrl: row.audio_url,
     artworkUrl: row.artwork_url,
-    timedCues: row.timed_cues,
+    timedCues: asJson<unknown[]>(row.timed_cues, []),
   };
 }
 
 export const catalogRepository = {
   async listCategories() {
-    const result = await query<{
+    const result = await query<RowDataPacket & {
       id: string;
       slug: string;
       name_en: string;
@@ -98,11 +99,9 @@ export const catalogRepository = {
 
   async listFigures(category?: string) {
     const values: unknown[] = [];
-    const where = category
-      ? 'WHERE c.slug = $1'
-      : '';
+    const where = category ? 'WHERE c.slug = ?' : '';
     if (category) values.push(category);
-    const result = await query<{
+    const result = await query<RowDataPacket & {
       id: string;
       category_id: string;
       slug: string;
@@ -110,7 +109,7 @@ export const catalogRepository = {
       name_ar: string;
       honorific_en: string;
       honorific_ar: string;
-      is_key_figure: boolean;
+      is_key_figure: number | boolean;
       sort_order: number;
       bio_en: string;
       bio_ar: string;
@@ -127,7 +126,7 @@ export const catalogRepository = {
       slug: row.slug,
       name: { en: row.name_en, ar: row.name_ar },
       honorific: { en: row.honorific_en, ar: row.honorific_ar },
-      isKeyFigure: row.is_key_figure,
+      isKeyFigure: asBool(row.is_key_figure),
       sortOrder: row.sort_order,
       bio: { en: row.bio_en, ar: row.bio_ar },
     }));
@@ -136,44 +135,57 @@ export const catalogRepository = {
   async listStories(filters: StoryQuery) {
     const clauses = ["s.publication_status = 'published'"];
     const values: unknown[] = [];
-    const add = (value: unknown): string => {
-      values.push(value);
-      return `$${values.length}`;
-    };
-    if (filters.category) clauses.push(`c.slug = ${add(filters.category)}`);
-    if (filters.grade) clauses.push(`s.authenticity_grade = ${add(filters.grade)}`);
+    if (filters.category) {
+      clauses.push('c.slug = ?');
+      values.push(filters.category);
+    }
+    if (filters.grade) {
+      clauses.push('s.authenticity_grade = ?');
+      values.push(filters.grade);
+    }
     if (filters.hasAudio !== undefined) {
       clauses.push(filters.hasAudio ? 's.audio_url IS NOT NULL' : 's.audio_url IS NULL');
     }
     if (filters.search) {
-      const term = add(`%${filters.search}%`);
-      clauses.push(`(s.title_en ILIKE ${term} OR s.title_ar ILIKE ${term}
-        OR s.summary_en ILIKE ${term} OR f.name_en ILIKE ${term})`);
+      const term = `%${filters.search}%`;
+      clauses.push(
+        '(s.title_en LIKE ? OR s.title_ar LIKE ? OR s.summary_en LIKE ? OR f.name_en LIKE ?)',
+      );
+      values.push(term, term, term, term);
     }
+
+    const countResult = await query<RowDataPacket & { total: number }>(
+      `SELECT COUNT(*) AS total
+       FROM stories s
+       JOIN categories c ON c.id=s.category_id
+       LEFT JOIN figures f ON f.id=s.figure_id
+       WHERE ${clauses.join(' AND ')}`,
+      values,
+    );
+    const total = Number(countResult.rows[0]?.total ?? 0);
+
     const offset = (filters.page - 1) * filters.pageSize;
-    const limitParam = add(filters.pageSize);
-    const offsetParam = add(offset);
+    const pageValues = [...values, filters.pageSize, offset];
     const result = await query<StoryRow>(
       `SELECT s.id,s.slug,c.slug AS section_slug,s.title_en,s.title_ar,
         f.name_en AS figure_name_en,f.name_ar AS figure_name_ar,
         f.honorific_en,f.honorific_ar,s.summary_en,s.content_en,s.content_ar,
         s.authenticity_grade,s.audio_url,s.artwork_url,s.audio,s.timed_cues,
-        COALESCE((SELECT string_agg(sc.source_title, '; ' ORDER BY sc.sort_order)
-          FROM story_citations sc WHERE sc.story_id=s.id),'') AS source_citation,
-        count(*) OVER() AS total_count
+        COALESCE((SELECT GROUP_CONCAT(sc.source_title ORDER BY sc.sort_order SEPARATOR '; ')
+          FROM story_citations sc WHERE sc.story_id=s.id),'') AS source_citation
        FROM stories s
        JOIN categories c ON c.id=s.category_id
        LEFT JOIN figures f ON f.id=s.figure_id
        WHERE ${clauses.join(' AND ')}
        ORDER BY s.published_at DESC,s.title_en
-       LIMIT ${limitParam} OFFSET ${offsetParam}`,
-      values,
+       LIMIT ? OFFSET ?`,
+      pageValues,
     );
     return {
       items: result.rows.map(mapStory),
       page: filters.page,
       pageSize: filters.pageSize,
-      total: Number(result.rows[0]?.total_count ?? 0),
+      total,
     };
   },
 
@@ -183,15 +195,14 @@ export const catalogRepository = {
         f.name_en AS figure_name_en,f.name_ar AS figure_name_ar,
         f.honorific_en,f.honorific_ar,s.summary_en,s.content_en,s.content_ar,
         s.authenticity_grade,s.audio_url,s.artwork_url,s.audio,s.timed_cues,
-        COALESCE((SELECT string_agg(sc.source_title, '; ' ORDER BY sc.sort_order)
-          FROM story_citations sc WHERE sc.story_id=s.id),'') AS source_citation,
-        '1' AS total_count
+        COALESCE((SELECT GROUP_CONCAT(sc.source_title ORDER BY sc.sort_order SEPARATOR '; ')
+          FROM story_citations sc WHERE sc.story_id=s.id),'') AS source_citation
        FROM stories s
        JOIN categories c ON c.id=s.category_id
        LEFT JOIN figures f ON f.id=s.figure_id
-       WHERE s.publication_status='published' AND (s.id::text=$1 OR s.slug=$1)
+       WHERE s.publication_status='published' AND (s.id=? OR s.slug=?)
        LIMIT 1`,
-      [idOrSlug],
+      [idOrSlug, idOrSlug],
     );
     return result.rows[0] ? mapStory(result.rows[0]) : null;
   },

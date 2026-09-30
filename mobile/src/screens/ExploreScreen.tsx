@@ -1,25 +1,32 @@
 import {
   ArrowDownWideNarrow,
+  ArrowRight,
   CheckCircle2,
-  Clock,
   Filter,
   Headphones,
   Search,
   SearchX,
   SlidersHorizontal,
   SortAsc,
-  Sparkles,
   X,
 } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import ScreenHeader from '../components/ScreenHeader';
+import { takeExploreIntent } from '../navigation/exploreIntent';
+import ExploreRandomPick from '../components/ExploreRandomPick';
+import ProphetsRoster from '../components/ProphetsRoster';
+import SahabahRoster from '../components/SahabahRoster';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
-import SynchronizedAudioReader from '../components/SynchronizedAudioReader';
+import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
+  Body,
   Caption,
   Card,
   EmptyState,
+  Heading,
+  IconBubble,
   Overline,
   Pill,
   Row,
@@ -27,6 +34,7 @@ import {
   Small,
   useTheme,
 } from '../components/ui';
+import { SECTION_ORDER, groupStoriesBySection } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
 import type {
   AuthenticityGrade,
@@ -35,8 +43,20 @@ import type {
   StoryItem,
 } from '../types/catalog';
 import { useCatalog } from '../data/CatalogProvider';
-import { toReaderStory } from '../data/storyAdapters';
+import {
+  preferProphetCatalogStory,
+  prophetChapterToStoryItem,
+} from '../data/prophetChapters';
+import {
+  preferSahabahCatalogStory,
+  sahabahChapterToStoryItem,
+} from '../data/sahabahChapters';
+import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
+import type { ProphetFigure } from '../data/theProphets';
+import { theProphets } from '../data/theProphets';
+import type { SahabahFigure } from '../data/theSahabah';
+import { theSahabah } from '../data/theSahabah';
 
 type GradeFilter = 'all' | AuthenticityGrade;
 type SortKey = 'default' | 'duration' | 'title';
@@ -60,6 +80,15 @@ const sorts: { id: SortKey; label: string }[] = [
   { id: 'title', label: 'A → Z' },
 ];
 
+const PREVIEW_PER_SECTION = 2;
+
+function sortStories(list: StoryItem[], sortBy: SortKey): StoryItem[] {
+  if (sortBy === 'duration') return [...list].sort((a, b) => b.durationMs - a.durationMs);
+  if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title));
+  return list;
+}
+
+/** Explore: browse by category first; drill into a section for the full shelf. */
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
   const { stories } = useCatalog();
@@ -71,12 +100,29 @@ export default function ExploreScreen() {
   const [sortBy, setSortBy] = useState<SortKey>('default');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
+  const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const intent = takeExploreIntent();
+      if (!intent) return;
+      if (intent.section) setSelectedSection(intent.section);
+      if (typeof intent.query === 'string') setQuery(intent.query);
+    }, []),
+  );
 
   const emeraldGradient = brandGradients.emerald[isDark ? 'dark' : 'light'];
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
 
   const activeFilterCount =
     (mediaFilter === 'all' ? 0 : 1) + (gradeFilter === 'all' ? 0 : 1) + (sortBy === 'default' ? 0 : 1);
+
+  const sectionCounts = useMemo(() => {
+    const counts = {} as Record<SectionSlug, number>;
+    for (const slug of SECTION_ORDER) counts[slug] = 0;
+    for (const story of stories) counts[story.sectionSlug] += 1;
+    return counts;
+  }, [stories]);
 
   const filteredStories = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -97,15 +143,84 @@ export default function ExploreScreen() {
       );
     });
 
-    if (sortBy === 'duration') return [...list].sort((a, b) => b.durationMs - a.durationMs);
-    if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title));
-    return list;
+    return sortStories(list, sortBy);
   }, [stories, selectedSection, mediaFilter, gradeFilter, query, sortBy]);
 
-  const audioCount = filteredStories.filter((story) => story.hasAudio).length;
-  const totalMinutes = Math.round(
-    filteredStories.reduce((sum, story) => sum + story.durationMs, 0) / 60000,
+  const grouped = useMemo(
+    () => groupStoriesBySection(filteredStories),
+    [filteredStories],
   );
+
+  const searching = query.trim().length > 0;
+  const showGroupedBrowse = selectedSection === 'all' && !searching;
+  const audioCount = filteredStories.filter((story) => story.hasAudio).length;
+  const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
+
+  const resolveProphetStory = (prophet: ProphetFigure): StoryItem | null => {
+    const matches = storiesForProphetSlug(stories, prophet.slug, prophet.nameEn);
+    const preferred = preferProphetCatalogStory(matches, prophet.nameEn);
+    return prophetChapterToStoryItem(prophet.slug, preferred) ?? preferred ?? null;
+  };
+
+  const resolveSahabahStory = (companion: SahabahFigure): StoryItem | null => {
+    const matches = storiesForSahabahSlug(stories, companion.slug, companion.nameEn);
+    const preferred = preferSahabahCatalogStory(matches, companion.nameEn);
+    return sahabahChapterToStoryItem(companion.slug, preferred) ?? preferred ?? null;
+  };
+
+  const openProphetStories = (prophet: ProphetFigure) => {
+    const story = resolveProphetStory(prophet);
+    if (!story) return;
+    setActiveStory(story);
+    setSessionMode('read');
+  };
+
+  const openSahabahStories = (companion: SahabahFigure) => {
+    const story = resolveSahabahStory(companion);
+    if (!story) return;
+    setActiveStory(story);
+    setSessionMode('read');
+  };
+
+  const openStory = (story: StoryItem, mode: Exclude<StorySessionMode, null>) => {
+    if (story.sectionSlug === 'qisas-al-anbiya') {
+      const prophet =
+        theProphets.find(
+          (item) =>
+            item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+            story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
+            item.nameEn.toLowerCase().includes(story.figureName.toLowerCase()),
+        ) ?? null;
+      if (prophet) {
+        const full = resolveProphetStory(prophet);
+        if (full) {
+          setActiveStory(full);
+          setSessionMode(mode);
+          return;
+        }
+      }
+    }
+    if (story.sectionSlug === 'sahabah') {
+      const companion =
+        theSahabah.find(
+          (item) =>
+            item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
+            story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
+            item.nameEn.toLowerCase().includes(story.figureName.toLowerCase()) ||
+            story.id.includes(item.slug),
+        ) ?? null;
+      if (companion) {
+        const full = resolveSahabahStory(companion);
+        if (full) {
+          setActiveStory(full);
+          setSessionMode(mode);
+          return;
+        }
+      }
+    }
+    setActiveStory(story);
+    setSessionMode(mode);
+  };
 
   const resetAll = () => {
     setQuery('');
@@ -123,14 +238,8 @@ export default function ExploreScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <ScreenHeader
-          eyebrow="Explore collection"
-          title="All stories"
-          arabic="جميع القصص"
-          subtitle="Authentic accounts drawn from classical sources"
-        />
+        <ScreenHeader eyebrow="Explore" title="Categories" arabic="التصنيفات" />
 
-        {/* Category pills */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -138,15 +247,15 @@ export default function ExploreScreen() {
           contentContainerStyle={styles.pillsContent}
         >
           <Pill
-            label="All categories"
+            label={`All · ${stories.length}`}
             selected={selectedSection === 'all'}
             onPress={() => setSelectedSection('all')}
             gradient={emeraldGradient}
           />
-          {(Object.keys(sectionsMeta) as SectionSlug[]).map((slug) => (
+          {SECTION_ORDER.map((slug) => (
             <Pill
               key={slug}
-              label={sectionsMeta[slug].title}
+              label={`${sectionsMeta[slug].title} · ${sectionCounts[slug]}`}
               icon={sectionIcons[slug]}
               selected={selectedSection === slug}
               onPress={() => setSelectedSection(slug)}
@@ -155,7 +264,6 @@ export default function ExploreScreen() {
           ))}
         </ScrollView>
 
-        {/* Search */}
         <View
           style={[
             styles.search,
@@ -167,7 +275,11 @@ export default function ExploreScreen() {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Search title, figure, or citation…"
+            placeholder={
+              selectedSection === 'all'
+                ? 'Search across all categories…'
+                : `Search in ${sectionsMeta[selectedSection].title}…`
+            }
             placeholderTextColor={colors.inkSubtle}
             style={[styles.searchInput, { color: colors.ink }]}
             accessibilityLabel="Search the collection"
@@ -194,23 +306,13 @@ export default function ExploreScreen() {
           </Pressable>
         </View>
 
-        {/* Result summary strip */}
-        <Row gap={14} style={styles.summaryRow}>
-          <Row gap={5}>
-            <Sparkles size={12} color={colors.gold} />
-            <Caption>{filteredStories.length} results</Caption>
-          </Row>
-          <Row gap={5}>
-            <Headphones size={12} color={colors.emerald} />
-            <Caption>{audioCount} with audio</Caption>
-          </Row>
-          <Row gap={5}>
-            <Clock size={12} color={colors.inkSubtle} />
-            <Caption>{totalMinutes} min total</Caption>
-          </Row>
-        </Row>
+        <Caption color={colors.inkMuted} style={styles.summaryRow}>
+          {showGroupedBrowse
+            ? `${SECTION_ORDER.length} categories · ${stories.length} stories`
+            : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
+          {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
+        </Caption>
 
-        {/* Filter panel */}
         {filtersOpen ? (
           <Card style={styles.filterPanel} padding={16}>
             <Row justify="space-between" style={styles.filterHead}>
@@ -276,10 +378,83 @@ export default function ExploreScreen() {
           </Card>
         ) : null}
 
-        <SectionHeading
-          label={selectedSection === 'all' ? 'Catalog' : sectionsMeta[selectedSection].title}
-          trailing={sortBy === 'default' ? 'Recommended order' : sorts.find((s) => s.id === sortBy)?.label}
+        <ExploreRandomPick
+          pool={filteredStories}
+          onRead={(story) => openStory(story, 'read')}
+          onListen={(story) => openStory(story, 'listen')}
         />
+
+        {showGroupedBrowse ? (
+          <View style={styles.categoryGrid}>
+            {SECTION_ORDER.map((slug) => {
+              const meta = sectionsMeta[slug];
+              const accent = sectionAccent(slug, isDark);
+              const count = sectionCounts[slug];
+              return (
+                <Card
+                  key={slug}
+                  style={styles.categoryCard}
+                  padding={14}
+                  accent={accent.primary}
+                  onPress={() => setSelectedSection(slug)}
+                  accessibilityLabel={`${meta.title}: ${count} stories`}
+                >
+                  <Row justify="space-between" align="flex-start">
+                    <IconBubble
+                      icon={sectionIcons[slug]}
+                      color={accent.primary}
+                      background={isDark ? colors.cardAlt : accent.surface}
+                      size={34}
+                    />
+                    <Caption color={accent.primary}>{count}</Caption>
+                  </Row>
+                  <Heading style={styles.categoryTitle} numberOfLines={1}>
+                    {meta.title}
+                  </Heading>
+                  <Small color={colors.inkMuted} numberOfLines={2} style={styles.categorySubtitle}>
+                    {meta.subtitle}
+                  </Small>
+                  <Row justify="space-between" style={styles.categoryFooter}>
+                    <Caption color={accent.primary}>Open category</Caption>
+                    <ArrowRight size={13} color={accent.primary} />
+                  </Row>
+                </Card>
+              );
+            })}
+          </View>
+        ) : null}
+
+        {activeMeta ? (
+          <Card
+            style={styles.sectionIntro}
+            padding={14}
+            accent={sectionAccent(selectedSection as SectionSlug, isDark).primary}
+          >
+            <Overline color={sectionAccent(selectedSection as SectionSlug, isDark).primary}>
+              {activeMeta.conceptTagline}
+            </Overline>
+            <Heading style={styles.sectionIntroTitle}>{activeMeta.title}</Heading>
+            <Body color={colors.inkMuted} numberOfLines={2} style={styles.sectionIntroBody}>
+              {activeMeta.description}
+            </Body>
+            <Pressable
+              onPress={() => setSelectedSection('all')}
+              accessibilityRole="button"
+              accessibilityLabel="Back to all categories"
+              style={styles.backLink}
+            >
+              <Caption color={colors.gold}>← All categories</Caption>
+            </Pressable>
+          </Card>
+        ) : null}
+
+        {selectedSection === 'qisas-al-anbiya' ? (
+          <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
+
+        {selectedSection === 'sahabah' ? (
+          <SahabahRoster onSelect={openSahabahStories} />
+        ) : null}
 
         {filteredStories.length === 0 ? (
           <EmptyState
@@ -290,34 +465,74 @@ export default function ExploreScreen() {
             onAction={resetAll}
             gradient={emeraldGradient}
           />
+        ) : showGroupedBrowse ? (
+          <View style={styles.grouped}>
+            {grouped.map(({ slug, stories: sectionStories }) => {
+              const meta = sectionsMeta[slug];
+              const preview = sectionStories.slice(0, PREVIEW_PER_SECTION);
+              return (
+                <View key={slug} style={styles.groupBlock}>
+                  <SectionHeading
+                    label={meta.title}
+                    trailing={`${sectionStories.length} ${meta.countLabel.toLowerCase()}`}
+                  />
+                  <View style={styles.list}>
+                    {preview.map((story) => (
+                      <StoryCard
+                        key={story.id}
+                        story={story}
+                        variant="compact"
+                        onRead={() => openStory(story, 'read')}
+                        onListen={() => openStory(story, 'listen')}
+                      />
+                    ))}
+                  </View>
+                  {sectionStories.length > PREVIEW_PER_SECTION ? (
+                    <Pressable
+                      onPress={() => setSelectedSection(slug)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`View all ${meta.title}`}
+                      style={styles.viewAll}
+                    >
+                      <Caption color={sectionAccent(slug, isDark).primary}>
+                        View all {sectionStories.length} in {meta.title}
+                      </Caption>
+                      <ArrowRight size={13} color={sectionAccent(slug, isDark).primary} />
+                    </Pressable>
+                  ) : null}
+                </View>
+              );
+            })}
+          </View>
         ) : (
           <View style={styles.list}>
+            <SectionHeading
+              label={searching ? 'Search results' : activeMeta?.title ?? 'Catalog'}
+              trailing={
+                sortBy === 'default' ? 'Recommended' : sorts.find((s) => s.id === sortBy)?.label
+              }
+            />
             {filteredStories.map((story) => (
-              <StoryCard key={story.id} story={story} onPress={() => setActiveStory(story)} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                variant="compact"
+                onRead={() => openStory(story, 'read')}
+                onListen={() => openStory(story, 'listen')}
+              />
             ))}
-
-            <Small align="center" style={styles.listEnd}>
-              You’ve reached the end of the catalog · {filteredStories.length} stories
-            </Small>
           </View>
         )}
       </ScrollView>
 
-      <Modal
-        visible={activeStory !== null}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setActiveStory(null)}
-      >
-        {activeStory ? (
-          <SynchronizedAudioReader
-            story={toReaderStory(activeStory)}
-            sectionSlug={activeStory.sectionSlug}
-            initiallyExpanded
-            onClose={() => setActiveStory(null)}
-          />
-        ) : null}
-      </Modal>
+      <StorySessionModal
+        story={activeStory}
+        mode={sessionMode}
+        onChangeMode={(mode) => {
+          setSessionMode(mode);
+          if (!mode) setActiveStory(null);
+        }}
+      />
     </View>
   );
 }
@@ -325,9 +540,9 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 130 },
+  content: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 120 },
 
-  pills: { marginBottom: 16, overflow: 'visible' },
+  pills: { marginBottom: 12, overflow: 'visible' },
   pillsContent: { gap: 8, paddingRight: 4 },
 
   search: {
@@ -355,14 +570,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  summaryRow: { marginTop: 12, marginBottom: 16, flexWrap: 'wrap' },
+  summaryRow: { marginTop: 10, marginBottom: 12 },
 
-  filterPanel: { marginBottom: 20 },
+  filterPanel: { marginBottom: 14 },
   filterHead: { marginBottom: 14 },
   filterGroupLabel: { marginBottom: 8 },
   filterGroup: { marginBottom: 16, flexWrap: 'wrap' },
   filterGroupLast: { flexWrap: 'wrap' },
 
-  list: { gap: 14 },
-  listEnd: { marginTop: 10, paddingVertical: 8 },
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 10,
+    marginBottom: 18,
+  },
+  categoryCard: { width: '47.8%' },
+  categoryTitle: { marginTop: 10 },
+  categorySubtitle: { marginTop: 3, minHeight: 32 },
+  categoryFooter: { marginTop: 10 },
+
+  sectionIntro: { marginBottom: 14, gap: 4 },
+  sectionIntroTitle: { marginTop: 4 },
+  sectionIntroBody: { marginTop: 4 },
+  backLink: { marginTop: 8, alignSelf: 'flex-start' },
+
+  grouped: { gap: 8 },
+  groupBlock: { marginBottom: 12 },
+  list: { gap: 10 },
+  viewAll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 10,
+    alignSelf: 'flex-start',
+  },
 });

@@ -1,0 +1,41 @@
+# Local MySQL for the Stories of Islam API (HostAfrica-compatible).
+# Production app data lives on HostAfrica MySQL `afroclov_StoriesOfIslam`.
+# HostAfrica PostgreSQL remains only for Keycloak.
+name: stories-mysql
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: afroclov_StoriesOfIslam
+      MYSQL_USER: stories_app
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-local-only-mysql-password-32chars}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local-only-mysql-root-password-32}
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "-ustories_app",
+          "-p${MYSQL_PASSWORD:-local-only-mysql-password-32chars}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  mysql-data:

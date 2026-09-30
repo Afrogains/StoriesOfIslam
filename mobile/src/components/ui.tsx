@@ -35,9 +35,9 @@ function webDataSet(data: Record<string, string>) {
 
 /** Single entry point for theme state — every component below reads from this. */
 export function useTheme() {
-  const { isDark, isKids, mode } = useAppMode();
-  const colors = getColors(isDark, isKids);
-  return { colors, isDark, isKids, mode };
+  const { isDark } = useAppMode();
+  const colors = getColors(isDark);
+  return { colors, isDark };
 }
 
 /* ---------------------------------------------------------------- typography */
@@ -220,7 +220,7 @@ export function Pill({
   onPress: () => void;
   icon?: IconType;
   gradient: readonly [string, string, ...string[]];
-  /** Kids mode uses thicker borders and heavier weight. */
+  /** Emphasized chip styling for dense filter rows. */
   bold?: boolean;
 }) {
   const { colors } = useTheme();
@@ -337,6 +337,53 @@ export function GradientButton({
           {label}
         </Text>
       </LinearGradient>
+    </Pressable>
+  );
+}
+
+/** Outlined text/icon CTA used alongside GradientButton (e.g. Read Story). */
+export function OutlineButton({
+  label,
+  onPress,
+  icon: Icon,
+  accessibilityLabel,
+  disabled,
+}: {
+  label: string;
+  onPress?: () => void;
+  icon?: IconType;
+  accessibilityLabel?: string;
+  disabled?: boolean;
+}) {
+  const { colors, isDark } = useTheme();
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityState={{ disabled }}
+      style={({ pressed }) => [
+        styles.outlineButton,
+        {
+          borderColor: colors.border,
+          backgroundColor: isDark ? colors.cardAlt : colors.card,
+        },
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+      ]}
+    >
+      {Icon ? <Icon size={14} color={colors.emerald} /> : null}
+      <Text
+        style={{
+          fontFamily: BODY_FONT_FAMILY,
+          fontSize: 12,
+          fontWeight: '800',
+          color: colors.ink,
+        }}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -586,6 +633,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 7,
     borderRadius: radius.pill,
+  },
+  outlineButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    minHeight: 40,
   },
   sectionHeading: {
     flexDirection: 'row',

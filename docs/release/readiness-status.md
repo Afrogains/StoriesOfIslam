@@ -1,34 +1,37 @@
-# Production readiness status (cloud agent)
+# Production readiness status
 
-## WhoGoHost
+## Done in this branch (automated)
 
-Validated locally with `docker-compose.yml` + `docker-compose.host.yml`:
+- HostAfrica MySQL app DB (`mysql2`, migrations, seed) — CI + local verified
+- Platform renamed to `infra/hostafrica/` (no WhoGoHost leftovers)
+- Go-live tooling: `scripts/go-live.sh`, preflight, MySQL backup/restore drills
+- Local staging drill achieved in agent:
+  - MySQL `afroclov_StoriesOfIslam` migrated/seeded (4 categories, 43 figures, 33 stories)
+  - Keycloak realm discovery via Nginx TLS (`https://auth.local.test`)
+  - API `/health/ready` green (database, queue, storage, keycloak, ffmpeg, providers)
+  - Catalog/figures endpoints serving from MySQL; favorites require auth
+- Unit/typecheck/build gates green
 
-- PostgreSQL 17 healthy with `stories_app` ownership and least-privilege
-  `stories_runtime` / `stories_worker` roles applied
-- Keycloak 26 imports `stories-of-islam` realm; HTTPS issuer advertised behind
-  Nginx TLS (`https://auth.local.test/realms/stories-of-islam`)
-- MinIO public download / private isolation policies verified
-- Encrypted `age` PostgreSQL dump restored into isolated
-  `stories_restore_drill` (see `/opt/cursor/artifacts/whogohost-restore-drill.txt`)
+## Still requires your HostAfrica / store credentials
 
-Production still requires a customer WhoGoHost VPS, ACME certificates, off-site
-rclone/MinIO replication, and operator SSH/firewall hardening via
-`scripts/harden-host.sh`.
+These cannot be completed without secrets and accounts you control:
 
-## Delivery
+1. **HostAfrica cPanel MySQL** — real `DB_*` (not local test password)
+2. **HostAfrica VPS** — public DNS, ACME TLS, real MinIO (quay.io MinIO pulls are blocked in some agent networks; VPS should pull fine)
+3. **Provider keys** — production OpenAI / ElevenLabs (not placeholders)
+4. **Content publish** — seed stories remain `draft` until scholarly review + real audio
+5. **Legal contacts** — replace `*@storiesofislam.example` with monitored mailboxes
+6. **EAS / Apple / Google** — `EXPO_TOKEN` + store credentials for signed betas
+7. **Product-owner sign-off** on `docs/release/launch-checklist.md`
 
-- CI validates code, migrations, container build, Compose configs, and secrets
-- Release workflow packages API image, Expo web export, deploy webhook, optional
-  EAS native builds
-- Monitoring alert rules and observability runbook committed
-- `scripts/eas-beta.sh` is ready; signed betas are blocked only on `EXPO_TOKEN`
-  and store credentials (see `/opt/cursor/artifacts/eas-beta-status.txt`)
+## Exact next command for you
 
-## Launch
+```bash
+# After filling /etc/stories/api.env from infra/api-host/.env.example:
+./scripts/go-live.sh preflight /etc/stories/api.env
+./scripts/go-live.sh migrate
+./scripts/go-live.sh seed
+# Then provision infra/hostafrica on the VPS and deploy infra/api-host
+```
 
-- Staging acceptance, beta matrix, rollback, and evidence templates are in
-  `docs/release/` and `scripts/`
-- Store metadata draft and legal HTML pages are present
-- Remaining human gates: live VPS credentials, EAS/Apple/Google accounts,
-  scholarly sign-off, and store form submission
+See `docs/release/go-live-runbook.md`.
