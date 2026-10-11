@@ -1,5 +1,6 @@
 import type { StoryItem } from '../types/catalog';
 import type { ReaderStory, StoryCue } from '../types/reader';
+import { toParagraphs } from './text';
 
 function isPlaceholderAudio(url?: string | null): boolean {
   if (!url) return true;
@@ -11,7 +12,8 @@ function cuesFromFullText(
   contentAr: string,
   durationMs: number,
 ): StoryCue[] {
-  const enParts = contentEn
+  const enParts = toParagraphs(contentEn)
+    .join('\n')
     .split(/(?<=[.!?۔])\s+|\n+/)
     .map((part) => part.trim())
     .filter(Boolean);

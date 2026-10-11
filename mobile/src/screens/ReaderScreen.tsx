@@ -17,6 +17,8 @@ import { useLibrary } from '../hooks/useLibrary';
 import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
 import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import type { StoryItem } from '../types/catalog';
+import { toParagraphs } from '../data/text';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
   ArabicTitle,
@@ -76,16 +78,13 @@ function resolveFullText(story: StoryItem): { sections: { heading?: string; body
   }
 
   const content = (story.content ?? story.summary ?? '').trim();
-  const paragraphs = content
-    .split(/\n\n+/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((body) => ({ body }));
+  const paragraphs = toParagraphs(content).map((body) => ({ body }));
   return { sections: paragraphs.length ? paragraphs : [{ body: content }], plain: content };
 }
 
 export default function ReaderScreen({ story, onClose, onSwitchToListening }: ReaderScreenProps) {
   const { colors, isDark } = useTheme();
+  const { topInset, bottomInset } = useMobileLayout();
   const accent = sectionAccent(story.sectionSlug, isDark);
   const { isSaved, toggleSaved } = useLibrary();
   const { load, save } = useReadingBookmark(story.id);
@@ -155,6 +154,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           {
             backgroundColor: isDark ? colors.card : '#FCFBF7',
             borderBottomColor: colors.border,
+            paddingTop: topInset + 10,
           },
         ]}
       >
@@ -208,7 +208,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: bottomInset + 96 }]}
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
         scrollEventThrottle={200}
@@ -226,9 +226,9 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         {resolved.sections.map((section, index) => (
           <View key={`${section.heading ?? 'p'}-${index}`} style={styles.section}>
             {section.heading ? <Heading style={styles.sectionHeading}>{section.heading}</Heading> : null}
-            {section.body.split(/\n+/).filter(Boolean).map((paragraph) => (
-              <Body key={paragraph.slice(0, 40)} style={styles.paragraph}>
-                {paragraph.trim()}
+            {toParagraphs(section.body).map((paragraph, pIndex) => (
+              <Body key={`${pIndex}-${paragraph.slice(0, 24)}`} style={styles.paragraph}>
+                {paragraph}
               </Body>
             ))}
           </View>
@@ -295,7 +295,11 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         onPress={onSwitchToListening}
         accessibilityRole="button"
         accessibilityLabel="Switch to listening mode"
-        style={[styles.fab, { backgroundColor: accent.primary }, shadow('lg', isDark)]}
+        style={[
+          styles.fab,
+          { backgroundColor: accent.primary, bottom: bottomInset + 14 },
+          shadow('lg', isDark),
+        ]}
       >
         <Headphones size={18} color="#FFFFFF" />
         <Caption color="#FFFFFF" style={styles.fabLabel}>

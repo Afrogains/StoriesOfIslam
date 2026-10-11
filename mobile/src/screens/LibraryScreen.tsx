@@ -22,6 +22,7 @@ import { useLibrary } from '../hooks/useLibrary';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, sectionAccent } from '../theme/tokens';
 import { apiRequest } from '../services/api';
+import { APP_BUILD_LABEL } from '../config';
 
 /** Lean library: slim account strip, filters, compact saved list. */
 export default function LibraryScreen() {
@@ -190,6 +191,10 @@ export default function LibraryScreen() {
             )}
           </>
         )}
+
+        <Caption color={colors.inkSubtle} style={styles.buildLabel}>
+          Stories of Islam {APP_BUILD_LABEL}
+        </Caption>
       </ScrollView>
 
       <StorySessionModal
@@ -215,4 +220,5 @@ const styles = StyleSheet.create({
   filters: { marginBottom: 14 },
   filtersContent: { gap: 8, paddingRight: 8 },
   list: { gap: 10 },
+  buildLabel: { marginTop: 24, textAlign: 'center' },
 });

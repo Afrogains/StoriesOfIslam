@@ -1,6 +1,7 @@
 import type { StoryItem } from '../types/catalog';
 import { IBN_KATHIR_PDF } from './ibnKathirPdfIndex';
 import pdfChapters from './prophetChaptersFromPdf.json';
+import { toParagraphs } from './text';
 
 export type ProphetChapterSection = {
   heading: string;
@@ -42,10 +43,7 @@ function cuesFromSections(
   const chunks: { en: string }[] = [];
   for (const section of chapter.sections) {
     chunks.push({ en: section.heading });
-    const paras = section.body
-      .split(/\n+/)
-      .map((p) => p.trim())
-      .filter(Boolean);
+    const paras = toParagraphs(section.body);
     for (const para of paras) {
       const sentences = para
         .split(/(?<=[.!?])\s+/)

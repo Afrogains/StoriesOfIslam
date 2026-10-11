@@ -1,6 +1,7 @@
 import { BookOpen, ChevronLeft, ExternalLink, Quote } from 'lucide-react-native';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import type { ProphetChapter } from '../data/prophetChapters';
+import { toParagraphs } from '../data/text';
 import { openIbnKathirPdf } from '../services/ibnKathirPdf';
 import { alpha, radius, shadow } from '../theme/tokens';
 import {
@@ -158,9 +159,9 @@ export default function ProphetStoryPage({
         {chapter.sections.map((section) => (
           <View key={section.heading} style={styles.section}>
             <Heading style={styles.sectionHeading}>{section.heading}</Heading>
-            {section.body.split(/\n+/).filter(Boolean).map((paragraph) => (
-              <Body key={paragraph.slice(0, 48)} style={styles.paragraph}>
-                {paragraph.trim()}
+            {toParagraphs(section.body).map((paragraph, pIndex) => (
+              <Body key={`${pIndex}-${paragraph.slice(0, 24)}`} style={styles.paragraph}>
+                {paragraph}
               </Body>
             ))}
           </View>

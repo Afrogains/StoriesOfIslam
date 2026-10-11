@@ -26,6 +26,8 @@ export default function StorySessionModal({ story, mode, onChangeMode }: StorySe
       visible
       animationType="slide"
       presentationStyle="fullScreen"
+      statusBarTranslucent
+      navigationBarTranslucent
       onRequestClose={() => onChangeMode(null)}
     >
       {mode === 'read' ? (

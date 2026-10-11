@@ -55,6 +55,8 @@ export function useMobileLayout() {
   return {
     insets,
     topInset,
+    /** Bottom system inset (gesture bar / 3-button nav) with a safe floor. */
+    bottomInset: tabBarPadBottom,
     topPad,
     tabBarPadTop: LAYOUT.tabBarPadTop,
     tabBarPadBottom,

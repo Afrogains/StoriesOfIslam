@@ -1,9 +1,9 @@
 import { BookOpen, Headphones } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import type { DivineName } from '../data/theNames';
 import { audioForName } from '../data/theNamesAudio';
-import { BODY_FONT_FAMILY, alpha, brandGradients, radius, shadow } from '../theme/tokens';
+import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 import NamesAudioPlayer from './NamesAudioPlayer';
 import {
   ArabicInline,
@@ -48,45 +48,44 @@ export default function BottomStickyCard({
         end={{ x: 1, y: 1 }}
         style={styles.deck}
       >
-        <Row justify="space-between" align="center" gap={8}>
+        <Row align="center" gap={10}>
           <View style={styles.copy}>
-            <Overline color="#FDE68A">
+            <Overline color="#FDE68A" numberOfLines={1}>
               {name.number}/99 · {name.transliteration}
             </Overline>
             <BodyStrong color="#FFFFFF" numberOfLines={1} style={styles.meaning}>
               {name.meaning}
             </BodyStrong>
           </View>
-          <ArabicInline color="#FDE68A" style={styles.arabic}>
+          <ArabicInline color="#FDE68A" style={styles.arabic} numberOfLines={1}>
             {name.arabic}
           </ArabicInline>
-        </Row>
 
-        <Row gap={8} style={styles.ctaRow}>
           <Pressable
             onPress={onListen}
             accessibilityRole="button"
+            accessibilityState={{ selected: mode === 'listen' }}
             accessibilityLabel={`Listen to ${name.transliteration}`}
+            hitSlop={4}
             style={({ pressed }) => [
-              styles.cta,
+              styles.iconCta,
               {
                 backgroundColor: mode === 'listen' ? '#FDE68A' : alpha('#FDE68A', 0.16),
               },
               pressed && styles.pressed,
             ]}
           >
-            <Headphones size={13} color={mode === 'listen' ? '#0F172A' : '#FDE68A'} />
-            <Text style={[styles.ctaLabel, { color: mode === 'listen' ? '#0F172A' : '#FDE68A' }]}>
-              Listen
-            </Text>
+            <Headphones size={17} color={mode === 'listen' ? '#0F172A' : '#FDE68A'} />
           </Pressable>
 
           <Pressable
             onPress={onReadNarrations}
             accessibilityRole="button"
+            accessibilityState={{ selected: mode === 'read' }}
             accessibilityLabel={`Read narrations for ${name.transliteration}`}
+            hitSlop={4}
             style={({ pressed }) => [
-              styles.cta,
+              styles.iconCta,
               {
                 borderWidth: 1,
                 borderColor: mode === 'read' ? '#6EE7B7' : 'rgba(255,255,255,0.2)',
@@ -96,10 +95,7 @@ export default function BottomStickyCard({
               pressed && styles.pressed,
             ]}
           >
-            <BookOpen size={13} color={mode === 'read' ? '#6EE7B7' : '#E2E8F0'} />
-            <Text style={[styles.ctaLabel, { color: mode === 'read' ? '#6EE7B7' : '#E2E8F0' }]}>
-              Narrations
-            </Text>
+            <BookOpen size={17} color={mode === 'read' ? '#6EE7B7' : '#E2E8F0'} />
           </Pressable>
         </Row>
 
@@ -130,30 +126,22 @@ const styles = StyleSheet.create({
     zIndex: 40,
   },
   deck: {
-    borderRadius: radius['2xl'],
-    paddingHorizontal: 14,
-    paddingTop: 12,
-    paddingBottom: 12,
+    borderRadius: radius.xl,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: 'rgba(253,230,138,0.2)',
   },
-  copy: { flex: 1, minWidth: 0, paddingRight: 8 },
-  meaning: { marginTop: 2, fontSize: 14, lineHeight: 20 },
-  arabic: { fontSize: 22, lineHeight: 32, flexShrink: 0 },
-  ctaRow: { marginTop: 10 },
-  cta: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
+  copy: { flex: 1, minWidth: 0 },
+  meaning: { marginTop: 1, fontSize: 14, lineHeight: 19 },
+  arabic: { fontSize: 20, lineHeight: 30, flexShrink: 0, maxWidth: 110 },
+  iconCta: {
+    width: 42,
     height: 42,
     borderRadius: radius.pill,
-  },
-  ctaLabel: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 13,
-    fontWeight: '800',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   pressed: { opacity: 0.82 },
   expand: { marginTop: 8 },

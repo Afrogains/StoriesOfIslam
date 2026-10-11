@@ -1,3 +1,4 @@
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import {
   setAudioModeAsync,
   useAudioPlayer,
@@ -88,6 +89,7 @@ export default function SynchronizedAudioReader({
   onClose,
 }: SynchronizedAudioReaderProps) {
   const { colors, isDark } = useTheme();
+  const { topInset, bottomInset } = useMobileLayout();
 
   const scrollRef = useRef<ScrollView>(null);
   const cueY = useRef<number[]>([]);
@@ -339,7 +341,7 @@ export default function SynchronizedAudioReader({
             colors={accent.gradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.header}
+            style={[styles.header, { paddingTop: topInset + 12 }]}
           >
             <Row justify="space-between" align="flex-start">
               <Badge
@@ -482,7 +484,7 @@ export default function SynchronizedAudioReader({
         colors={brandGradients.night[isDark ? 'dark' : 'light']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={[styles.mini, shadow('lg', isDark)]}
+        style={[styles.mini, { paddingBottom: bottomInset + 8 }, shadow('lg', isDark)]}
         accessibilityLabel="Mini player"
       >
         <PlayButton

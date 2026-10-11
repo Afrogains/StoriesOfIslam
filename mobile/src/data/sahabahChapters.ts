@@ -1,6 +1,7 @@
 import type { StoryItem } from '../types/catalog';
 import { SAHABAH_PDF } from './sahabahPdfIndex';
 import pdfChapters from './sahabahChaptersFromPdf.json';
+import { toParagraphs } from './text';
 
 export type SahabahChapterSection = {
   heading: string;
@@ -40,10 +41,7 @@ function cuesFromSections(
   const chunks: { en: string }[] = [];
   for (const section of chapter.sections) {
     chunks.push({ en: section.heading });
-    const paras = section.body
-      .split(/\n+/)
-      .map((p) => p.trim())
-      .filter(Boolean);
+    const paras = toParagraphs(section.body);
     for (const para of paras) {
       const sentences = para
         .split(/(?<=[.!?])\s+/)

@@ -39,6 +39,11 @@ export default function NamesScreen() {
   const audioCount = namesWithAudioCount();
 
   const filtered = useMemo(() => findName(query), [query]);
+  // Pad odd counts so the last tile keeps half width instead of stretching.
+  const gridData = useMemo<(DivineName | null)[]>(
+    () => (filtered.length % 2 ? [...filtered, null] : filtered),
+    [filtered],
+  );
 
   const selectName = (item: DivineName) => {
     setSelected(item);
@@ -87,16 +92,19 @@ export default function NamesScreen() {
       </View>
 
       <FlatList
-        data={filtered}
-        keyExtractor={(item) => String(item.number)}
+        data={gridData}
+        keyExtractor={(item, index) => (item ? String(item.number) : `spacer-${index}`)}
         numColumns={2}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.listContent, { paddingHorizontal: padX }]}
         // numColumns + contentContainerStyle paddingBottom is unreliable on web;
         // a footer spacer guarantees tiles can scroll clear of the sticky deck.
-        ListFooterComponent={<View style={{ height: namesListPadBottom }} />}
+        ListFooterComponent={
+          <View style={{ height: deckMode === 'idle' ? stickyBottom + 96 : namesListPadBottom }} />
+        }
         renderItem={({ item }) => {
+          if (!item) return <View style={styles.spacerTile} />;
           const active = item.number === selected.number;
           const hasAudio = Boolean(nameAudioByNumber[item.number]);
           return (
@@ -236,6 +244,7 @@ const styles = StyleSheet.create({
   },
   numberText: { fontSize: 11, lineHeight: 14 },
   audioSpacer: { width: 12, height: 12 },
+  spacerTile: { flex: 1 },
   tileArabic: { fontSize: 18, lineHeight: 28, textAlign: 'right' },
   tileName: { marginTop: 2, fontSize: 13, lineHeight: 18 },
   tileMeaning: { lineHeight: 16 },
