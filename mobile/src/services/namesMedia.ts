@@ -64,12 +64,12 @@ function durationLabel(seconds: number | null): string {
   return `${minutes}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
-/** Prefer reviewed audio; fall back to the bundled Muslim Central episode. */
+/** Stream the reviewed class from Muslim Central; fall back to the bundled episode. */
 export function episodeForName(
   approved: ApprovedNameMedia | undefined,
   bundled: NameAudioEpisode | null,
 ): NameAudioEpisode | null {
-  const audioUrl = approved?.audioUrl ?? approved?.podcastAudioUrl;
+  const audioUrl = approved?.podcastAudioUrl ?? approved?.audioUrl;
   if (!approved || !audioUrl) return bundled;
   return {
     nameNumber: approved.nameNumber,

@@ -22,7 +22,8 @@ const NamesMediaDraftSchema = z
   .refine((body) => body.descriptionDraft || body.transcript, 'Provide descriptionDraft or transcript');
 const NamesMediaApprovalSchema = z.object({
   description: z.string().trim().min(40).max(8000),
-  includeAudio: z.boolean().default(true),
+  /** Publish the stored audio copy; by default Listen streams from the podcast source. */
+  includeAudio: z.boolean().default(false),
   confirmOverwrite: z.boolean().default(false),
 });
 const NamesMediaRejectSchema = z.object({ confirmOverwrite: z.boolean().default(false) });

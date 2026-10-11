@@ -38,7 +38,8 @@ Options:
   --retries=N                  Attempts per network step (default 3)
   --segment-seconds=N          Speech-to-text chunk length (default 600)
   --map=VIDEO_ID:1,2           Manually map a video to Name numbers (repeatable)
-  --skip-audio                 Do not download/store podcast audio
+  --store-audio                Also keep a private copy of the podcast audio in object storage
+                               (default: Listen streams directly from Muslim Central)
   --skip-transcript            Do not fetch captions or run speech-to-text
   --only-incomplete            Skip videos whose transcripts are already complete
   --confirm-overwrite-approved Refresh drafts on approved records (approved text stays live until re-approved)
@@ -53,7 +54,7 @@ interface Options {
   retries: number;
   segmentSeconds: number;
   overrides: Record<string, number[]>;
-  skipAudio: boolean;
+  storeAudio: boolean;
   skipTranscript: boolean;
   onlyIncomplete: boolean;
   confirmOverwriteApproved: boolean;
@@ -67,7 +68,7 @@ interface ItemReport {
   nameNumbers: number[];
   podcastTitle: string | null;
   rows: Array<{ nameNumber: number; action: 'created' | 'updated' | 'would_create_or_update' }>;
-  audio: 'stored' | 'reused' | 'skipped' | 'no_source' | 'failed' | 'planned';
+  audio: 'stored' | 'reused' | 'streamed' | 'no_source' | 'failed' | 'planned';
   transcript: TranscriptStatus | 'skipped' | 'skipped_approved' | 'planned';
   transcriptSource: TranscriptSource | null;
 }
@@ -96,7 +97,7 @@ export function parseOptions(argv: string[]): Options | null {
       retries: { type: 'string' },
       'segment-seconds': { type: 'string' },
       map: { type: 'string', multiple: true },
-      'skip-audio': { type: 'boolean', default: false },
+      'store-audio': { type: 'boolean', default: false },
       'skip-transcript': { type: 'boolean', default: false },
       'only-incomplete': { type: 'boolean', default: false },
       'confirm-overwrite-approved': { type: 'boolean', default: false },
@@ -122,7 +123,7 @@ export function parseOptions(argv: string[]): Options | null {
     retries: positiveInt(values.retries, 3, 10),
     segmentSeconds: positiveInt(values['segment-seconds'], 600, 1400),
     overrides,
-    skipAudio: values['skip-audio'] ?? false,
+    storeAudio: values['store-audio'] ?? false,
     skipTranscript: values['skip-transcript'] ?? false,
     onlyIncomplete: values['only-incomplete'] ?? false,
     confirmOverwriteApproved: values['confirm-overwrite-approved'] ?? false,
@@ -213,7 +214,7 @@ async function main(): Promise<void> {
         nameNumbers: match.nameNumbers,
         podcastTitle: match.podcast?.title ?? null,
         rows: match.nameNumbers.map((nameNumber) => ({ nameNumber, action: 'would_create_or_update' })),
-        audio: options.skipAudio ? 'skipped' : match.podcast ? 'planned' : 'no_source',
+        audio: !match.podcast ? 'no_source' : options.storeAudio ? 'planned' : 'streamed',
         transcript: options.skipTranscript ? 'skipped' : 'planned',
         transcriptSource: null,
       });
@@ -240,7 +241,7 @@ async function main(): Promise<void> {
             nameNumbers: match.nameNumbers,
             podcastTitle: match.podcast?.title ?? null,
             rows: [],
-            audio: 'skipped',
+            audio: 'streamed',
             transcript: 'skipped',
             transcriptSource: null,
           };
@@ -284,39 +285,38 @@ async function main(): Promise<void> {
           };
 
           try {
-            if (!options.skipAudio) {
-              if (!match.podcast) item.audio = 'no_source';
-              else if (rows.every((row) => row.audio_asset_id)) item.audio = 'reused';
-              else {
-                try {
-                  const objectKey = `names/drafts/${videoId}.mp3`;
-                  let assetId = await namesMediaRepository.findDraftAssetByKey(env.S3_PRIVATE_BUCKET, objectKey);
-                  if (assetId) item.audio = 'reused';
-                  else {
-                    await ensureLocalAudio();
-                    const stored = await withRetry('audio upload', options.retries, () =>
-                      objectStorageService.uploadFile({
-                        filePath: audioPath,
-                        objectKey,
-                        mimeType: 'audio/mpeg',
-                        public: false,
-                        metadata: { source: 'muslimcentral', videoId },
-                      }));
-                    assetId = await namesMediaRepository.insertDraftAsset({
-                      bucket: stored.bucket,
-                      objectKey: stored.objectKey,
+            if (!match.podcast) item.audio = 'no_source';
+            else if (!options.storeAudio) item.audio = 'streamed';
+            else if (rows.every((row) => row.audio_asset_id)) item.audio = 'reused';
+            else {
+              try {
+                const objectKey = `names/drafts/${videoId}.mp3`;
+                let assetId = await namesMediaRepository.findDraftAssetByKey(env.S3_PRIVATE_BUCKET, objectKey);
+                if (assetId) item.audio = 'reused';
+                else {
+                  await ensureLocalAudio();
+                  const stored = await withRetry('audio upload', options.retries, () =>
+                    objectStorageService.uploadFile({
+                      filePath: audioPath,
+                      objectKey,
                       mimeType: 'audio/mpeg',
-                      sizeBytes: stored.sizeBytes,
-                      checksumSha256: stored.checksumSha256,
-                      durationMs: match.podcast.durationSeconds ? match.podcast.durationSeconds * 1000 : null,
-                    });
-                    item.audio = 'stored';
-                  }
-                  await namesMediaRepository.attachAudio(videoId, assetId);
-                } catch (error) {
-                  item.audio = 'failed';
-                  await fail('audio', error);
+                      public: false,
+                      metadata: { source: 'muslimcentral', videoId },
+                    }));
+                  assetId = await namesMediaRepository.insertDraftAsset({
+                    bucket: stored.bucket,
+                    objectKey: stored.objectKey,
+                    mimeType: 'audio/mpeg',
+                    sizeBytes: stored.sizeBytes,
+                    checksumSha256: stored.checksumSha256,
+                    durationMs: match.podcast.durationSeconds ? match.podcast.durationSeconds * 1000 : null,
+                  });
+                  item.audio = 'stored';
                 }
+                await namesMediaRepository.attachAudio(videoId, assetId);
+              } catch (error) {
+                item.audio = 'failed';
+                await fail('audio', error);
               }
             }
 
