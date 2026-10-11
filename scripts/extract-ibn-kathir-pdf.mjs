@@ -42,8 +42,7 @@ const HEADING_TO_SLUG = [
   [/^\s*Prophet\s+Zakariyah/i, 'zakariyah', 'Zakariyah', 'زكريا'],
   [/^\s*Prophet\s+Yahya/i, 'yahya', 'Yahya', 'يحيى'],
   [/^\s*Prophet\s+Isa\b/i, 'isa', 'Isa', 'عيسى'],
-  // Boundary only — Muhammad ﷺ lives under Seerah in the app, not Qisas.
-  [/^\s*Prophet\s+Muhammad\b/i, '__muhammad_boundary__', 'Muhammad', 'محمد'],
+  [/^\s*Prophet\s+Muhammad\b/i, 'muhammad', 'Muhammad', 'محمد'],
 ];
 
 function cleanPage(text) {

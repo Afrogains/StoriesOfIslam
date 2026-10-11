@@ -159,7 +159,7 @@ export const ibnKathirPdfPages: Record<string, IbnKathirPdfSpan> = {
     "end": 187,
     "nameEn": "Isa"
   },
-  "__muhammad_boundary__": {
+  "muhammad": {
     "start": 188,
     "end": 227,
     "nameEn": "Muhammad"

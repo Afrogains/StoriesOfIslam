@@ -683,11 +683,11 @@
         "en": "peace and blessings of Allah be upon him",
         "ar": "صلى الله عليه وسلم"
       },
-      "isKeyFigure": false,
-      "sortOrder": 1,
+      "isKeyFigure": true,
+      "sortOrder": 30,
       "bio": {
-        "en": "The Messenger of Allah, seal of the prophets.",
-        "ar": "رسول الله وخاتم النبيين."
+        "en": "The Messenger of Allah ﷺ, Seal of the Prophets, whose life is recounted in Ibn Kathir’s Stories of the Prophets and in the Seerah.",
+        "ar": "رسول الله ﷺ خاتم النبيين، تُذكر سيرته في قصص الأنبياء لابن كثير وفي كتب السيرة."
       },
       "createdAt": "2026-09-03T00:00:00.000Z",
       "updatedAt": "2026-09-03T00:00:00.000Z"

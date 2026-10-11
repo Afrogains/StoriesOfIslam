@@ -19,7 +19,7 @@ export const PROPHETS_SERIES = {
   author: 'Ibn Kathir',
   credit: 'Ibn Kathir — Stories of the Prophets (in-app PDF)',
   description:
-    'Chronological messengers of Allah from the bundled English PDF of Ibn Kathir’s Qisas al-Anbiya. Read and listen both target that source edition.',
+    'Chronological messengers of Allah from the bundled English PDF of Ibn Kathir’s Qisas al-Anbiya, including Prophet Muhammad ﷺ. Read and listen both target that source edition.',
   pdfPath: '/sources/ibn-kathir-stories-of-the-prophets.pdf',
 } as const;
 
@@ -287,6 +287,16 @@ export const theProphets: ProphetFigure[] = [
     honorificEn: 'peace be upon him',
     honorificAr: 'عليه السلام',
     summaryEn: 'Son of Maryam, created by Allah’s word; a messenger with clear signs.',
+  },
+  {
+    sortOrder: 30,
+    slug: 'muhammad',
+    nameEn: 'Muhammad',
+    nameAr: 'محمد',
+    honorificEn: 'peace and blessings of Allah be upon him',
+    honorificAr: 'صلى الله عليه وسلم',
+    summaryEn:
+      'The Seal of the Prophets: born in Makkah, given the Quran, and sent as a mercy to the worlds.',
   },
 ];
 

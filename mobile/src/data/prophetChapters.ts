@@ -1,6 +1,7 @@
 import type { StoryItem } from '../types/catalog';
 import { IBN_KATHIR_PDF } from './ibnKathirPdfIndex';
 import pdfChapters from './prophetChaptersFromPdf.json';
+import { prophetBySlug } from './theProphets';
 import { toParagraphs } from './text';
 
 export type ProphetChapterSection = {
@@ -30,11 +31,15 @@ export type ProphetChapter = {
 const bySlug = pdfChapters as unknown as Record<string, ProphetChapter>;
 
 export function getProphetChapter(slug: string): ProphetChapter | undefined {
-  return bySlug[slug];
+  if (slug.startsWith('__')) return undefined;
+  return (
+    bySlug[slug] ??
+    (slug === 'muhammad' ? (bySlug as Record<string, ProphetChapter>).__muhammad_boundary__ : undefined)
+  );
 }
 
 export function listProphetChapterSlugs(): string[] {
-  return Object.keys(bySlug);
+  return Object.keys(bySlug).filter((slug) => !slug.startsWith('__'));
 }
 
 function cuesFromSections(
@@ -89,6 +94,7 @@ export function prophetChapterToStoryItem(
   const minutes = Math.floor(durationMs / 60000);
   const seconds = Math.floor((durationMs % 60000) / 1000);
   const timedCues = cuesFromSections(chapter);
+  const figure = prophetBySlug(slug);
   const pageLabel =
     chapter.pdfPageStart && chapter.pdfPageEnd
       ? `pp. ${chapter.pdfPageStart}–${chapter.pdfPageEnd}`
@@ -101,9 +107,9 @@ export function prophetChapterToStoryItem(
     titleAr: chapter.titleAr,
     figureName: chapter.nameEn,
     figureNameAr: chapter.nameAr,
-    honorific: existing?.honorific ?? 'peace be upon him',
-    honorificAr: existing?.honorificAr ?? 'عليه السلام',
-    summary: chapter.summaryEn,
+    honorific: existing?.honorific ?? figure?.honorificEn ?? 'peace be upon him',
+    honorificAr: existing?.honorificAr ?? figure?.honorificAr ?? 'عليه السلام',
+    summary: figure?.summaryEn ?? chapter.summaryEn,
     content: chapter.contentEn,
     contentAr: existing?.contentAr,
     durationLabel: `${minutes}:${seconds.toString().padStart(2, '0')}`,
@@ -145,4 +151,16 @@ export function preferProphetCatalogStory(
     );
   });
   return exact ?? matches[0];
+}
+
+export function buildProphetCatalogStories(): StoryItem[] {
+  return listProphetChapterSlugs()
+    .map((slug) => prophetChapterToStoryItem(slug))
+    .filter((story): story is StoryItem => Boolean(story));
+}
+
+/** Replace thin prophet fixtures with the full Ibn Kathir chapters, including Muhammad ﷺ. */
+export function mergeProphetChaptersIntoCatalog(stories: StoryItem[]): StoryItem[] {
+  const withoutThinQisas = stories.filter((story) => story.sectionSlug !== 'qisas-al-anbiya');
+  return [...withoutThinQisas, ...buildProphetCatalogStories()];
 }
