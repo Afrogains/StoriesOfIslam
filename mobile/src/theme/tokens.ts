@@ -98,7 +98,9 @@ export function shadow(level: 'sm' | 'md' | 'lg', isDark: boolean) {
     shadowOffset: { width: 0, height: config.height },
     shadowOpacity: opacity[level],
     shadowRadius: config.radius,
-    elevation: config.elevation,
+    // Android elevation paints a dark slab through translucent card fills;
+    // small-level surfaces already carry borders, so skip it there.
+    elevation: Platform.OS === 'android' && level === 'sm' ? 0 : config.elevation,
   };
 }
 

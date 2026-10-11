@@ -26,4 +26,4 @@ export const appConfig = {
 } as const;
 
 /** Shown in Library so testers can confirm which build is installed. */
-export const APP_BUILD_LABEL = 'v1.1.0 · build 3';
+export const APP_BUILD_LABEL = 'v1.1.1 · build 4';

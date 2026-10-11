@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Uthmanic Hafs script — the official KFGQPC mushaf typeface, used for all Quranic
    and Arabic narration text. Naskh is the fallback while the woff2 streams in. */
 @font-face {
