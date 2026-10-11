@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 14,
+    marginBottom: 12,
     gap: 10,
   },
   text: { flex: 1, minWidth: 0, paddingRight: 4 },

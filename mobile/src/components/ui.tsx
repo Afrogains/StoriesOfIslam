@@ -297,10 +297,11 @@ export function GradientButton({
   disabled?: boolean;
 }) {
   const { isDark } = useTheme();
+  /** Fixed heights keep Read/Listen pairs level across platforms. */
   const metrics = {
-    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12, minHeight: 36 },
-    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15, minHeight: 44 },
-    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17, minHeight: 50 },
+    sm: { height: 40, paddingHorizontal: 14, fontSize: 12, iconSize: 13 },
+    md: { height: 44, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
+    lg: { height: 50, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
   }[size];
 
   return (
@@ -309,7 +310,12 @@ export function GradientButton({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      style={({ pressed }) => [pressed && styles.pressed, disabled && styles.disabled, style]}
+      style={({ pressed }) => [
+        styles.buttonPressable,
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+        style,
+      ]}
     >
       <LinearGradient
         colors={gradient}
@@ -318,9 +324,8 @@ export function GradientButton({
         style={[
           styles.gradientButton,
           {
-            paddingVertical: metrics.paddingVertical,
+            height: metrics.height,
             paddingHorizontal: metrics.paddingHorizontal,
-            minHeight: metrics.minHeight,
           },
           shadow('sm', isDark),
         ]}
@@ -350,6 +355,7 @@ export function OutlineButton({
   accessibilityLabel,
   disabled,
   size = 'md',
+  style,
 }: {
   label: string;
   onPress?: () => void;
@@ -358,12 +364,13 @@ export function OutlineButton({
   disabled?: boolean;
   /** Match GradientButton heights when paired in a row. */
   size?: 'sm' | 'md' | 'lg';
+  style?: StyleProp<ViewStyle>;
 }) {
   const { colors, isDark } = useTheme();
   const metrics = {
-    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12, minHeight: 36 },
-    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15, minHeight: 44 },
-    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17, minHeight: 50 },
+    sm: { height: 40, paddingHorizontal: 14, fontSize: 12, iconSize: 13 },
+    md: { height: 44, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
+    lg: { height: 50, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
   }[size];
 
   return (
@@ -374,16 +381,17 @@ export function OutlineButton({
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ disabled }}
       style={({ pressed }) => [
+        styles.buttonPressable,
         styles.outlineButton,
         {
           borderColor: colors.border,
           backgroundColor: isDark ? colors.cardAlt : colors.card,
-          paddingVertical: metrics.paddingVertical,
+          height: metrics.height,
           paddingHorizontal: metrics.paddingHorizontal,
-          minHeight: metrics.minHeight,
         },
         pressed && styles.pressed,
         disabled && styles.disabled,
+        style,
       ]}
     >
       {Icon ? <Icon size={metrics.iconSize} color={colors.emerald} strokeWidth={2.25} /> : null}
@@ -621,6 +629,10 @@ export type { IconType, ThemeColors };
 const styles = StyleSheet.create({
   pressed: { opacity: 0.72, transform: [{ scale: 0.98 }] },
   disabled: { opacity: 0.5 },
+  buttonPressable: {
+    width: '100%',
+    alignSelf: 'stretch',
+  },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -641,6 +653,7 @@ const styles = StyleSheet.create({
   },
   pillBold: { borderWidth: 2, paddingVertical: 9 },
   gradientButton: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -652,7 +665,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-    borderRadius: radius.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
   },
   sectionHeading: {

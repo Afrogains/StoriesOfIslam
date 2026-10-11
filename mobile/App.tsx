@@ -13,7 +13,10 @@ import { StatusBar } from 'expo-status-bar';
 import { Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
 import { AuthProvider } from './src/auth/AuthProvider';
 import { CatalogProvider } from './src/data/CatalogProvider';
 import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
@@ -58,7 +61,7 @@ const tabs = {
 function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { isDark } = useAppMode();
   const { savedCount } = useLibrary();
-  const { tabBarPadBottom } = useMobileLayout();
+  const { tabBarPadTop, tabBarPadBottom } = useMobileLayout();
   const colors = getColors(isDark);
   const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.85) : colors.inkSubtle;
 
@@ -69,6 +72,7 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         {
           backgroundColor: colors.navBg,
           borderTopColor: colors.navBorder,
+          paddingTop: tabBarPadTop,
           paddingBottom: tabBarPadBottom,
         },
         shadow('lg', isDark),
@@ -197,7 +201,7 @@ export default function App() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <CatalogProvider>
@@ -227,42 +231,42 @@ const styles = StyleSheet.create({
   },
   navBar: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingTop: 8,
-    paddingHorizontal: 6,
+    alignItems: 'center',
+    paddingHorizontal: 4,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 48,
-    gap: 4,
+    minHeight: 52,
+    gap: 3,
+    paddingHorizontal: 2,
   },
   navItemPressed: { opacity: 0.65 },
   iconSlot: {
-    width: 40,
-    height: 30,
+    width: 44,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inactiveIcon: {
-    width: 30,
-    height: 30,
+    width: 28,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
   activePill: {
-    width: 40,
-    height: 30,
+    width: 44,
+    height: 28,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badge: {
     position: 'absolute',
-    top: -2,
-    right: 2,
+    top: -3,
+    right: 0,
     minWidth: 16,
     height: 16,
     paddingHorizontal: 3,
@@ -280,6 +284,7 @@ const styles = StyleSheet.create({
   navLabel: {
     fontFamily: BODY_FONT_FAMILY,
     fontSize: 11,
+    lineHeight: 14,
     fontWeight: '700',
     letterSpacing: 0.1,
   },

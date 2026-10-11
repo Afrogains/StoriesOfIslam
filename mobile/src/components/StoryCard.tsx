@@ -131,7 +131,7 @@ export default function StoryCard({
         </Caption>
       )}
 
-      <Row gap={8} style={styles.ctaRow} align="stretch">
+      <Row gap={8} style={styles.ctaRow} align="center">
         <View style={styles.ctaFlex}>
           <OutlineButton
             label="Read"
@@ -175,6 +175,6 @@ const styles = StyleSheet.create({
   divider: { marginTop: 14, marginBottom: 10 },
   metaFooter: { marginBottom: 10 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
-  ctaRow: { marginTop: 10 },
+  ctaRow: { marginTop: 12 },
   ctaFlex: { flex: 1, minWidth: 0 },
 });

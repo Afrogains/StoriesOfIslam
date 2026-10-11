@@ -125,8 +125,8 @@ export default function BottomStickyCard({
 const styles = StyleSheet.create({
   anchor: {
     position: 'absolute',
-    left: 12,
-    right: 12,
+    left: 16,
+    right: 16,
     zIndex: 40,
   },
   deck: {
@@ -137,9 +137,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(253,230,138,0.2)',
   },
-  copy: { flex: 1, minWidth: 0 },
-  meaning: { marginTop: 2, fontSize: 14 },
-  arabic: { fontSize: 22, lineHeight: 32 },
+  copy: { flex: 1, minWidth: 0, paddingRight: 8 },
+  meaning: { marginTop: 2, fontSize: 14, lineHeight: 20 },
+  arabic: { fontSize: 22, lineHeight: 32, flexShrink: 0 },
   ctaRow: { marginTop: 10 },
   cta: {
     flex: 1,
@@ -147,9 +147,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    minHeight: 42,
-    paddingVertical: 10,
-    borderRadius: radius.md,
+    height: 42,
+    borderRadius: radius.pill,
   },
   ctaLabel: {
     fontFamily: BODY_FONT_FAMILY,

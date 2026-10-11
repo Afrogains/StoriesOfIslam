@@ -92,7 +92,7 @@ function sortStories(list: StoryItem[], sortBy: SortKey): StoryItem[] {
 /** Explore: browse by category first; drill into a section for the full shelf. */
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, scrollPadBottom } = useMobileLayout();
+  const { padX, screenContent } = useMobileLayout();
   const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
@@ -236,10 +236,7 @@ export default function ExploreScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
-        ]}
+        contentContainerStyle={[styles.content, screenContent]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -248,8 +245,8 @@ export default function ExploreScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.pills}
-          contentContainerStyle={styles.pillsContent}
+          style={[styles.pills, { marginHorizontal: -padX }]}
+          contentContainerStyle={[styles.pillsContent, { paddingHorizontal: padX }]}
         >
           <Pill
             label={`All · ${stories.length}`}
@@ -546,7 +543,7 @@ const styles = StyleSheet.create({
   content: {},
 
   pills: { marginBottom: 12, overflow: 'visible' },
-  pillsContent: { gap: 8, paddingRight: 4 },
+  pillsContent: { gap: 8, paddingRight: 8 },
 
   search: {
     flexDirection: 'row',
@@ -576,7 +573,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
 
-  summaryRow: { marginTop: 12, marginBottom: 14 },
+  summaryRow: { marginTop: 10, marginBottom: 12 },
 
   filterPanel: { marginBottom: 14 },
   filterHead: { marginBottom: 14 },

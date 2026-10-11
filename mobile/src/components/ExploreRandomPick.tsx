@@ -118,7 +118,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
         {canListen ? ' · audio ready' : ' · text first'}
       </Caption>
 
-      <Row gap={8} style={styles.ctaRow} align="stretch">
+      <Row gap={8} style={styles.ctaRow} align="center">
         <View style={styles.ctaFlex}>
           <OutlineButton
             label="Read"
@@ -171,5 +171,5 @@ const styles = StyleSheet.create({
   summary: { marginTop: 6, lineHeight: 20 },
   meta: { marginTop: 4 },
   ctaRow: { marginTop: 12 },
-  ctaFlex: { flex: 1 },
+  ctaFlex: { flex: 1, minWidth: 0 },
 });

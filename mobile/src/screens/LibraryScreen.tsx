@@ -26,7 +26,7 @@ import { apiRequest } from '../services/api';
 /** Lean library: slim account strip, filters, compact saved list. */
 export default function LibraryScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, scrollPadBottom } = useMobileLayout();
+  const { padX, screenContent } = useMobileLayout();
   const { savedStories, savedCount } = useLibrary();
   const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
@@ -75,10 +75,7 @@ export default function LibraryScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
-        ]}
+        contentContainerStyle={[styles.content, screenContent]}
         showsVerticalScrollIndicator={false}
       >
         <ScreenHeader eyebrow="Your collection" title="Library" arabic="مكتبتي" />
@@ -92,7 +89,7 @@ export default function LibraryScreen() {
               {savedCount} saved {savedCount === 1 ? 'story' : 'stories'}
             </Caption>
           </View>
-          <Row gap={8} style={styles.accountActions}>
+          <Row gap={8} style={styles.accountActions} align="stretch">
             {authenticated ? (
               <>
                 <View style={styles.accountAction}>
@@ -132,8 +129,8 @@ export default function LibraryScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            style={styles.filters}
-            contentContainerStyle={styles.filtersContent}
+            style={[styles.filters, { marginHorizontal: -padX }]}
+            contentContainerStyle={[styles.filtersContent, { paddingHorizontal: padX }]}
           >
             <Pill
               label="Everything"
@@ -216,6 +213,6 @@ const styles = StyleSheet.create({
   accountActions: { flexWrap: 'wrap' },
   accountAction: { flexGrow: 1, minWidth: 120 },
   filters: { marginBottom: 14 },
-  filtersContent: { gap: 8, paddingRight: 4 },
+  filtersContent: { gap: 8, paddingRight: 8 },
   list: { gap: 10 },
 });

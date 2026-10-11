@@ -45,6 +45,9 @@ export default function NamesScreen() {
     setDeckMode('idle');
   };
 
+  const badgeLabel =
+    filtered.length === 99 ? `${audioCount} audio` : `${filtered.length} found`;
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <View style={[styles.topBar, { paddingTop: topPad, paddingHorizontal: padX }]}>
@@ -73,9 +76,11 @@ export default function NamesScreen() {
               styles.audioCount,
               { backgroundColor: isDark ? colors.cardAlt : colors.subtleBg },
             ]}
+            accessibilityLabel={badgeLabel}
           >
-            <Caption color={colors.inkMuted}>
-              {filtered.length === 99 ? `${audioCount} audio` : `${filtered.length}`}
+            <Headphones size={11} color={colors.inkMuted} />
+            <Caption color={colors.inkMuted} style={styles.audioCountText}>
+              {filtered.length === 99 ? String(audioCount) : String(filtered.length)}
             </Caption>
           </View>
         </View>
@@ -89,7 +94,7 @@ export default function NamesScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.listContent,
-          { paddingHorizontal: padX - 4, paddingBottom: namesListPadBottom },
+          { paddingHorizontal: padX, paddingBottom: namesListPadBottom },
         ]}
         renderItem={({ item }) => {
           const active = item.number === selected.number;
@@ -119,19 +124,30 @@ export default function NamesScreen() {
                   colors={active ? goldGradient : [colors.cardAlt, colors.cardAlt]}
                   style={styles.numberPill}
                 >
-                  <BodyStrong color={active ? '#FFFFFF' : colors.inkMuted} style={styles.numberText}>
+                  <BodyStrong
+                    color={active ? '#FFFFFF' : colors.inkMuted}
+                    style={styles.numberText}
+                  >
                     {item.number}
                   </BodyStrong>
                 </LinearGradient>
-                {hasAudio ? <Headphones size={12} color={active ? colors.gold : colors.inkSubtle} /> : null}
+                {hasAudio ? (
+                  <Headphones size={12} color={active ? colors.gold : colors.inkSubtle} />
+                ) : (
+                  <View style={styles.audioSpacer} />
+                )}
               </View>
-              <ArabicInline color={colors.gold} style={styles.tileArabic} numberOfLines={1}>
+              <ArabicInline
+                color={colors.gold}
+                style={styles.tileArabic}
+                numberOfLines={1}
+              >
                 {item.arabic}
               </ArabicInline>
               <BodyStrong numberOfLines={1} style={styles.tileName}>
                 {item.transliteration}
               </BodyStrong>
-              <Small color={colors.inkMuted} numberOfLines={1}>
+              <Small color={colors.inkMuted} numberOfLines={1} style={styles.tileMeaning}>
                 {item.meaning}
               </Small>
             </Pressable>
@@ -156,6 +172,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   topBar: {
     gap: 10,
+    paddingBottom: 6,
   },
   searchBox: {
     flexDirection: 'row',
@@ -166,7 +183,6 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 8,
     minHeight: 46,
-    marginBottom: 4,
   },
   searchInput: {
     flex: 1,
@@ -177,11 +193,15 @@ const styles = StyleSheet.create({
     ...(({ outlineStyle: 'none' } as unknown) as object),
   },
   audioCount: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: radius.pill,
     flexShrink: 0,
   },
+  audioCountText: { fontSize: 11, lineHeight: 14, fontWeight: '700' },
   listContent: {
     gap: 8,
     paddingTop: 4,
@@ -193,15 +213,18 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderRadius: radius.lg,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     gap: 2,
-    minHeight: 100,
+    minHeight: 108,
   },
   tileTop: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 4,
+    minHeight: 28,
   },
   numberPill: {
     width: 28,
@@ -210,7 +233,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  numberText: { fontSize: 11 },
+  numberText: { fontSize: 11, lineHeight: 14 },
+  audioSpacer: { width: 12, height: 12 },
   tileArabic: { fontSize: 18, lineHeight: 28, textAlign: 'right' },
-  tileName: { marginTop: 2, fontSize: 13 },
+  tileName: { marginTop: 2, fontSize: 13, lineHeight: 18 },
+  tileMeaning: { lineHeight: 16 },
 });

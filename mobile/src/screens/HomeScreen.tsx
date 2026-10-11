@@ -95,7 +95,7 @@ const sectionIcons: Record<SectionSlug, LucideIcon> = {
  */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, scrollPadBottom } = useMobileLayout();
+  const { padX, screenContent } = useMobileLayout();
   const navigation = useNavigation<HomeTabs>();
   const { stories } = useCatalog();
   const { savedCount } = useLibrary();
@@ -226,16 +226,15 @@ export default function HomeScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
-        ]}
+        contentContainerStyle={[styles.content, screenContent]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         <Row justify="space-between" align="center" style={styles.header}>
           <View style={styles.brandBlock}>
-            <Text style={[styles.brand, { color: colors.ink }]}>Stories of Islam</Text>
+            <Text style={[styles.brand, { color: colors.ink }]} numberOfLines={1}>
+              Stories of Islam
+            </Text>
             <ArabicInline color={colors.emerald} style={styles.greetingAr} align="left">
               السلام عليكم ورحمة الله
             </ArabicInline>
@@ -246,7 +245,8 @@ export default function HomeScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.pills}
+          style={{ marginHorizontal: -padX }}
+          contentContainerStyle={[styles.pills, { paddingHorizontal: padX }]}
         >
           <Pill
             label="All"
@@ -499,11 +499,12 @@ const styles = StyleSheet.create({
   brand: {
     fontFamily: DISPLAY_FONT_FAMILY,
     fontSize: 22,
+    lineHeight: 28,
     fontWeight: '800',
     letterSpacing: -0.3,
   },
   greetingAr: { marginTop: 2, fontSize: 14, lineHeight: 26 },
-  pills: { gap: 8, paddingBottom: 12, paddingRight: 4 },
+  pills: { gap: 8, paddingBottom: 12, paddingRight: 8 },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -513,13 +514,15 @@ const styles = StyleSheet.create({
     paddingLeft: 14,
     paddingRight: 6,
     minHeight: 48,
-    marginBottom: 12,
+    marginBottom: 14,
   },
   searchInput: {
     flex: 1,
+    minWidth: 0,
     fontFamily: BODY_FONT_FAMILY,
     fontSize: 14,
     paddingVertical: 10,
+    ...(({ outlineStyle: 'none' } as unknown) as object),
   },
   searchGo: {
     width: 36,
@@ -573,9 +576,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   metricCard: {
-    width: '48%',
     flexGrow: 1,
-    flexBasis: '47%',
+    flexBasis: '46%',
+    maxWidth: '48%',
     borderWidth: 1,
     borderRadius: radius.xl,
     paddingVertical: 12,
@@ -583,6 +586,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    minWidth: 0,
   },
   metricIcon: {
     width: 34,
