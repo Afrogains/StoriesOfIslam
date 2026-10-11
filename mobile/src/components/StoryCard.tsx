@@ -131,11 +131,12 @@ export default function StoryCard({
         </Caption>
       )}
 
-      <Row gap={8} style={styles.ctaRow}>
+      <Row gap={8} style={styles.ctaRow} align="stretch">
         <View style={styles.ctaFlex}>
           <OutlineButton
             label="Read"
             icon={BookOpen}
+            size="sm"
             onPress={onRead}
             accessibilityLabel={`Read story: ${story.title}`}
           />

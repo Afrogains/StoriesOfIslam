@@ -118,11 +118,12 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
         {canListen ? ' · audio ready' : ' · text first'}
       </Caption>
 
-      <Row gap={8} style={styles.ctaRow}>
+      <Row gap={8} style={styles.ctaRow} align="stretch">
         <View style={styles.ctaFlex}>
           <OutlineButton
             label="Read"
             icon={BookOpen}
+            size="sm"
             onPress={() => onRead(pick)}
             accessibilityLabel={`Read story: ${pick.title}`}
           />

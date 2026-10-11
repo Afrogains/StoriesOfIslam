@@ -31,7 +31,7 @@ import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, scrollPadBottom, stickyBottom } = useMobileLayout();
+  const { topPad, padX, stickyBottom, namesListPadBottom } = useMobileLayout();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
@@ -68,9 +68,16 @@ export default function NamesScreen() {
             accessibilityLabel="Search the 99 names"
             style={[styles.searchInput, { color: colors.ink }]}
           />
-          <Caption color={colors.inkSubtle}>
-            {filtered.length === 99 ? `${audioCount} audio` : `${filtered.length}`}
-          </Caption>
+          <View
+            style={[
+              styles.audioCount,
+              { backgroundColor: isDark ? colors.cardAlt : colors.subtleBg },
+            ]}
+          >
+            <Caption color={colors.inkMuted}>
+              {filtered.length === 99 ? `${audioCount} audio` : `${filtered.length}`}
+            </Caption>
+          </View>
         </View>
       </View>
 
@@ -82,7 +89,7 @@ export default function NamesScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.listContent,
-          { paddingHorizontal: padX - 4, paddingBottom: scrollPadBottom + 90 },
+          { paddingHorizontal: padX - 4, paddingBottom: namesListPadBottom },
         ]}
         renderItem={({ item }) => {
           const active = item.number === selected.number;
@@ -156,16 +163,24 @@ const styles = StyleSheet.create({
     gap: 8,
     borderWidth: 1,
     borderRadius: radius.lg,
-    paddingHorizontal: 12,
-    minHeight: 44,
+    paddingLeft: 12,
+    paddingRight: 8,
+    minHeight: 46,
     marginBottom: 4,
   },
   searchInput: {
     flex: 1,
+    minWidth: 0,
     fontSize: 14,
     fontWeight: '500',
     paddingVertical: 8,
     ...(({ outlineStyle: 'none' } as unknown) as object),
+  },
+  audioCount: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: radius.pill,
+    flexShrink: 0,
   },
   listContent: {
     gap: 8,

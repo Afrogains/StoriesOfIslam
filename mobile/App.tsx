@@ -116,11 +116,11 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                   }
                   style={styles.activePill}
                 >
-                  <Icon size={20} color="#FFFFFF" strokeWidth={2.25} />
+                  <Icon size={18} color="#FFFFFF" strokeWidth={2.25} />
                 </LinearGradient>
               ) : (
                 <View style={styles.inactiveIcon}>
-                  <Icon size={22} color={inactiveColor} strokeWidth={2} />
+                  <Icon size={20} color={inactiveColor} strokeWidth={2} />
                 </View>
               )}
               {route.name === 'Library' && savedCount > 0 ? (
@@ -241,20 +241,20 @@ const styles = StyleSheet.create({
   },
   navItemPressed: { opacity: 0.65 },
   iconSlot: {
-    width: 48,
-    height: 32,
+    width: 40,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inactiveIcon: {
-    width: 32,
-    height: 32,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   activePill: {
-    width: 48,
-    height: 32,
+    width: 40,
+    height: 30,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',

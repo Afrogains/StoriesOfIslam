@@ -298,9 +298,9 @@ export function GradientButton({
 }) {
   const { isDark } = useTheme();
   const metrics = {
-    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12 },
-    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
-    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
+    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12, minHeight: 36 },
+    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15, minHeight: 44 },
+    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17, minHeight: 50 },
   }[size];
 
   return (
@@ -320,6 +320,7 @@ export function GradientButton({
           {
             paddingVertical: metrics.paddingVertical,
             paddingHorizontal: metrics.paddingHorizontal,
+            minHeight: metrics.minHeight,
           },
           shadow('sm', isDark),
         ]}
@@ -348,14 +349,23 @@ export function OutlineButton({
   icon: Icon,
   accessibilityLabel,
   disabled,
+  size = 'md',
 }: {
   label: string;
   onPress?: () => void;
   icon?: IconType;
   accessibilityLabel?: string;
   disabled?: boolean;
+  /** Match GradientButton heights when paired in a row. */
+  size?: 'sm' | 'md' | 'lg';
 }) {
   const { colors, isDark } = useTheme();
+  const metrics = {
+    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12, minHeight: 36 },
+    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15, minHeight: 44 },
+    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17, minHeight: 50 },
+  }[size];
+
   return (
     <Pressable
       onPress={onPress}
@@ -368,16 +378,19 @@ export function OutlineButton({
         {
           borderColor: colors.border,
           backgroundColor: isDark ? colors.cardAlt : colors.card,
+          paddingVertical: metrics.paddingVertical,
+          paddingHorizontal: metrics.paddingHorizontal,
+          minHeight: metrics.minHeight,
         },
         pressed && styles.pressed,
         disabled && styles.disabled,
       ]}
     >
-      {Icon ? <Icon size={14} color={colors.emerald} /> : null}
+      {Icon ? <Icon size={metrics.iconSize} color={colors.emerald} strokeWidth={2.25} /> : null}
       <Text
         style={{
           fontFamily: BODY_FONT_FAMILY,
-          fontSize: 12,
+          fontSize: metrics.fontSize,
           fontWeight: '800',
           color: colors.ink,
         }}
@@ -641,9 +654,6 @@ const styles = StyleSheet.create({
     gap: 7,
     borderRadius: radius.md,
     borderWidth: 1,
-    paddingVertical: 9,
-    paddingHorizontal: 12,
-    minHeight: 40,
   },
   sectionHeading: {
     flexDirection: 'row',

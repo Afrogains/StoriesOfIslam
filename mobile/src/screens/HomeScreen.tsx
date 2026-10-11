@@ -380,15 +380,15 @@ export default function HomeScreen() {
               gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
               height={4}
             />
-            <Row gap={6} style={styles.continueAction}>
+            <Row gap={7} style={styles.continueAction} align="center">
               {resumeMode === 'listen' ? (
-                <Headphones size={14} color={colors.emerald} />
+                <Headphones size={16} color={colors.emerald} strokeWidth={2.25} />
               ) : (
-                <BookOpen size={14} color={colors.emerald} />
+                <BookOpen size={16} color={colors.emerald} strokeWidth={2.25} />
               )}
-              <Caption color={colors.emerald}>
+              <BodyStrong color={colors.emerald} style={styles.continueActionLabel}>
                 {resumeMode === 'listen' ? 'Resume audio' : 'Resume reading'}
-              </Caption>
+              </BodyStrong>
             </Row>
           </Pressable>
         ) : null}
@@ -563,8 +563,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   continueTitle: { fontSize: 15, lineHeight: 21 },
-  continueAction: { marginTop: 2 },
-  sectionHead: { marginBottom: 10, marginTop: 6 },
+  continueAction: { marginTop: 6 },
+  continueActionLabel: { fontSize: 13, lineHeight: 18 },
+  sectionHead: { marginBottom: 10, marginTop: 8 },
   metricsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

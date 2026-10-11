@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 9,
     paddingLeft: 14,
-    paddingRight: 6,
+    paddingRight: 8,
     paddingVertical: 6,
     borderRadius: radius.lg,
     borderWidth: 1,
@@ -561,6 +561,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
+    minWidth: 0,
     paddingVertical: 8,
     fontSize: 14,
     fontWeight: '500',
@@ -572,9 +573,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
 
-  summaryRow: { marginTop: 10, marginBottom: 12 },
+  summaryRow: { marginTop: 12, marginBottom: 14 },
 
   filterPanel: { marginBottom: 14 },
   filterHead: { marginBottom: 14 },
