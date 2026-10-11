@@ -75,8 +75,8 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
       <Row justify="space-between" align="center" style={styles.head}>
         <View style={styles.headCopy}>
           <Overline color={colors.emerald}>Discover</Overline>
-          <Small color={colors.inkMuted} style={styles.headHint}>
-            A brief overview — jump straight into reading or listening.
+          <Small color={colors.inkMuted} style={styles.headHint} numberOfLines={2}>
+            Tap Another for a new story — then Read or Listen.
           </Small>
         </View>
         <Pressable
@@ -92,7 +92,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
             },
           ]}
         >
-          <Shuffle size={14} color={accent.primary} />
+          <Shuffle size={16} color={accent.primary} strokeWidth={2.25} />
           <Caption color={accent.primary} style={styles.shuffleLabel}>
             Another
           </Caption>
@@ -146,26 +146,27 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
 const styles = StyleSheet.create({
   wrap: {
     borderWidth: 1,
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     padding: 14,
     marginBottom: 14,
     gap: 4,
   },
-  head: { marginBottom: 8 },
-  headCopy: { flex: 1, paddingRight: 10, gap: 2 },
+  head: { marginBottom: 8, alignItems: 'flex-start' },
+  headCopy: { flex: 1, minWidth: 0, paddingRight: 8, gap: 2 },
   headHint: { lineHeight: 17 },
   shuffleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: radius.md,
     borderWidth: 1,
+    flexShrink: 0,
   },
   shuffleLabel: { fontWeight: '700' },
   badges: { marginBottom: 6, flexWrap: 'wrap' },
-  title: { marginTop: 2 },
+  title: { marginTop: 2, fontSize: 18, lineHeight: 24 },
   summary: { marginTop: 6, lineHeight: 20 },
   meta: { marginTop: 4 },
   ctaRow: { marginTop: 12 },

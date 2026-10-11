@@ -2,13 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import {
   ArrowRight,
   BookOpen,
-  Clock3,
   Flame,
   FolderOpen,
   Headphones,
   Library as LibraryIcon,
   Search,
-  SlidersHorizontal,
   Sparkles,
   Users,
 } from 'lucide-react-native';
@@ -45,6 +43,7 @@ import {
   type LastActiveMode,
 } from '../hooks/useLastActiveStory';
 import { useLibrary } from '../hooks/useLibrary';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { requestExplore } from '../navigation/exploreIntent';
@@ -96,6 +95,7 @@ const sectionIcons: Record<SectionSlug, LucideIcon> = {
  */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
+  const { topPad, padX, scrollPadBottom } = useMobileLayout();
   const navigation = useNavigation<HomeTabs>();
   const { stories } = useCatalog();
   const { savedCount } = useLibrary();
@@ -189,35 +189,31 @@ export default function HomeScreen() {
   const metrics = [
     {
       key: 'stories',
-      label: 'Published Stories',
+      label: 'Stories',
       value: String(stories.length),
-      tag: 'TOTAL',
-      icon: Headphones,
+      icon: BookOpen,
       tint: colors.emerald,
     },
     {
-      key: 'streak',
-      label: 'Day Streak',
-      value: lastActive.at ? '4' : '0',
-      tag: 'STREAK',
-      icon: Flame,
-      tint: '#EA580C',
+      key: 'audio',
+      label: 'With audio',
+      value: String(audioCount),
+      icon: Headphones,
+      tint: colors.azure,
     },
     {
       key: 'saved',
-      label: 'Saved Stories',
+      label: 'Saved',
       value: String(savedCount),
-      tag: 'TOTAL',
       icon: FolderOpen,
       tint: colors.gold,
     },
     {
-      key: 'audio',
-      label: 'Audio Stories',
-      value: String(audioCount),
-      tag: 'TOTAL',
-      icon: Clock3,
-      tint: colors.azure,
+      key: 'streak',
+      label: 'Day streak',
+      value: lastActive.at ? '4' : '0',
+      icon: Flame,
+      tint: '#EA580C',
     },
   ] as const;
 
@@ -230,14 +226,17 @@ export default function HomeScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <Row justify="space-between" align="flex-start" style={styles.header}>
+        <Row justify="space-between" align="center" style={styles.header}>
           <View style={styles.brandBlock}>
             <Text style={[styles.brand, { color: colors.ink }]}>Stories of Islam</Text>
-            <ArabicInline color={colors.emerald} style={styles.greetingAr}>
+            <ArabicInline color={colors.emerald} style={styles.greetingAr} align="left">
               السلام عليكم ورحمة الله
             </ArabicInline>
           </View>
@@ -250,7 +249,7 @@ export default function HomeScreen() {
           contentContainerStyle={styles.pills}
         >
           <Pill
-            label="All sections"
+            label="All"
             selected={sectionFilter === 'all'}
             onPress={() => setSectionFilter('all')}
             gradient={emerald}
@@ -272,6 +271,38 @@ export default function HomeScreen() {
           })}
         </ScrollView>
 
+        <View
+          style={[
+            styles.searchBar,
+            {
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+            },
+            shadow('sm', isDark),
+          ]}
+        >
+          <Search size={18} color={colors.inkSubtle} />
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            onSubmitEditing={submitSearch}
+            placeholder="Search stories or figures…"
+            placeholderTextColor={colors.inkSubtle}
+            returnKeyType="search"
+            style={[styles.searchInput, { color: colors.ink }]}
+            accessibilityLabel="Search stories"
+          />
+          <Pressable
+            onPress={submitSearch}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Search in Explore"
+            style={[styles.searchGo, { backgroundColor: colors.emerald }]}
+          >
+            <ArrowRight size={16} color="#FFFFFF" />
+          </Pressable>
+        </View>
+
         <Pressable
           onPress={openFeatured}
           accessibilityRole="button"
@@ -289,51 +320,22 @@ export default function HomeScreen() {
             style={[styles.featured, shadow('md', isDark)]}
           >
             <Row justify="space-between" align="center">
-              <Overline color="rgba(255,255,255,0.75)">Featured reflection</Overline>
+              <Overline color="rgba(255,255,255,0.75)">Featured</Overline>
               <View style={styles.sahihBadge}>
                 <Caption color="#ECFDF5">SAHIH</Caption>
               </View>
             </Row>
-            <ArabicInline color="#FFFFFF" style={styles.featuredAr} align="center">
+            <ArabicInline color="#FFFFFF" style={styles.featuredAr} align="center" numberOfLines={2}>
               {featuredReflection.textAr}
             </ArabicInline>
-            <Text style={styles.featuredEn}>{featuredReflection.textEn}</Text>
-            <Caption color="rgba(255,255,255,0.65)" style={styles.featuredSource}>
+            <Text style={styles.featuredEn} numberOfLines={3}>
+              {featuredReflection.textEn}
+            </Text>
+            <Caption color="rgba(255,255,255,0.65)" style={styles.featuredSource} numberOfLines={1}>
               {featuredReflection.source}
             </Caption>
           </LinearGradient>
         </Pressable>
-
-        <View
-          style={[
-            styles.searchBar,
-            {
-              backgroundColor: colors.card,
-              borderColor: colors.border,
-            },
-            shadow('sm', isDark),
-          ]}
-        >
-          <Search size={16} color={colors.inkSubtle} />
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            onSubmitEditing={submitSearch}
-            placeholder="Search stories, figures, sources..."
-            placeholderTextColor={colors.inkSubtle}
-            returnKeyType="search"
-            style={[styles.searchInput, { color: colors.ink }]}
-            accessibilityLabel="Search stories"
-          />
-          <Pressable
-            onPress={submitSearch}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel="Open search filters in Explore"
-          >
-            <SlidersHorizontal size={16} color={colors.inkSubtle} />
-          </Pressable>
-        </View>
 
         {continueStory ? (
           <Pressable
@@ -410,19 +412,20 @@ export default function HomeScreen() {
                   shadow('sm', isDark),
                 ]}
               >
-                <Row justify="space-between" align="center">
-                  <View
-                    style={[
-                      styles.metricIcon,
-                      { backgroundColor: alpha(metric.tint, isDark ? 0.2 : 0.12) },
-                    ]}
-                  >
-                    <Icon size={15} color={metric.tint} />
-                  </View>
-                  <Caption color={colors.inkSubtle}>{metric.tag}</Caption>
-                </Row>
-                <Text style={[styles.metricValue, { color: colors.ink }]}>{metric.value}</Text>
-                <Small color={colors.inkMuted}>{metric.label}</Small>
+                <View
+                  style={[
+                    styles.metricIcon,
+                    { backgroundColor: alpha(metric.tint, isDark ? 0.2 : 0.12) },
+                  ]}
+                >
+                  <Icon size={16} color={metric.tint} strokeWidth={2.25} />
+                </View>
+                <View style={styles.metricCopy}>
+                  <Text style={[styles.metricValue, { color: colors.ink }]}>{metric.value}</Text>
+                  <Small color={colors.inkMuted} numberOfLines={1}>
+                    {metric.label}
+                  </Small>
+                </View>
               </View>
             );
           })}
@@ -432,7 +435,7 @@ export default function HomeScreen() {
           <Overline>Browse sections</Overline>
           <Caption color={colors.inkSubtle}>{browseSections.length} collections</Caption>
         </Row>
-        <View style={styles.sectionsGrid}>
+        <View style={styles.sectionsList}>
           {browseSections.map((slug) => {
             const meta = sectionsMeta[slug];
             const accent = sectionAccent(slug, isDark);
@@ -445,7 +448,7 @@ export default function HomeScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={`Open ${meta.title}`}
                 style={({ pressed }) => [
-                  styles.sectionCard,
+                  styles.sectionRow,
                   {
                     backgroundColor: colors.card,
                     borderColor: colors.border,
@@ -454,64 +457,20 @@ export default function HomeScreen() {
                   shadow('sm', isDark),
                 ]}
               >
-                <Row justify="space-between" align="flex-start">
-                  <View
-                    style={[
-                      styles.sectionIcon,
-                      { backgroundColor: accent.surface },
-                    ]}
-                  >
-                    <Icon size={18} color={accent.primary} />
-                  </View>
-                  <ArabicInline color={accent.primary} style={styles.sectionAr}>
-                    {meta.titleAr}
-                  </ArabicInline>
-                </Row>
-                <BodyStrong style={styles.sectionTitle}>{meta.title}</BodyStrong>
-                <Small color={colors.inkMuted} numberOfLines={1}>
-                  {meta.subtitle}
-                </Small>
-                <Row justify="space-between" align="center" style={styles.sectionFooter}>
-                  <Caption color={colors.inkSubtle}>
-                    {count} {count === 1 ? 'Story' : 'Stories'}
-                  </Caption>
-                  <ArrowRight size={14} color={accent.primary} />
-                </Row>
+                <View style={[styles.sectionIcon, { backgroundColor: accent.surface }]}>
+                  <Icon size={20} color={accent.primary} strokeWidth={2.25} />
+                </View>
+                <View style={styles.sectionCopy}>
+                  <BodyStrong numberOfLines={1}>{meta.title}</BodyStrong>
+                  <Small color={colors.inkMuted} numberOfLines={1}>
+                    {meta.subtitle} · {count} {count === 1 ? 'story' : 'stories'}
+                  </Small>
+                </View>
+                <ArrowRight size={18} color={accent.primary} />
               </Pressable>
             );
           })}
         </View>
-
-        <Row gap={10} style={styles.quickLinks}>
-          <Pressable
-            onPress={() => navigation.navigate('Names')}
-            style={({ pressed }) => [
-              styles.quickLink,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.border,
-                opacity: pressed ? 0.88 : 1,
-              },
-            ]}
-          >
-            <Sparkles size={16} color={colors.gold} />
-            <BodyStrong>The Names</BodyStrong>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate('Library')}
-            style={({ pressed }) => [
-              styles.quickLink,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.border,
-                opacity: pressed ? 0.88 : 1,
-              },
-            ]}
-          >
-            <FolderOpen size={16} color={colors.emerald} />
-            <BodyStrong>Library</BodyStrong>
-          </Pressable>
-        </Row>
       </ScrollView>
 
       <StorySessionModal
@@ -534,26 +493,46 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: {
-    paddingHorizontal: 18,
-    paddingTop: 14,
-    paddingBottom: 130,
-  },
-  header: { marginBottom: 14 },
-  brandBlock: { flex: 1, paddingRight: 10 },
+  content: { gap: 0 },
+  header: { marginBottom: 12 },
+  brandBlock: { flex: 1, minWidth: 0, paddingRight: 8 },
   brand: {
     fontFamily: DISPLAY_FONT_FAMILY,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
-    letterSpacing: -0.4,
+    letterSpacing: -0.3,
   },
-  greetingAr: { marginTop: 2, fontSize: 15, lineHeight: 26 },
-  pills: { gap: 8, paddingBottom: 14 },
+  greetingAr: { marginTop: 2, fontSize: 14, lineHeight: 26 },
+  pills: { gap: 8, paddingBottom: 12, paddingRight: 4 },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderRadius: radius.xl,
+    paddingLeft: 14,
+    paddingRight: 6,
+    minHeight: 48,
+    marginBottom: 12,
+  },
+  searchInput: {
+    flex: 1,
+    fontFamily: BODY_FONT_FAMILY,
+    fontSize: 14,
+    paddingVertical: 10,
+  },
+  searchGo: {
+    width: 36,
+    height: 36,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   featured: {
     borderRadius: radius['2xl'],
-    padding: 18,
-    gap: 10,
-    marginBottom: 14,
+    padding: 14,
+    gap: 8,
+    marginBottom: 12,
   },
   sahihBadge: {
     backgroundColor: 'rgba(255,255,255,0.14)',
@@ -562,109 +541,79 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   featuredAr: {
-    fontSize: 20,
-    lineHeight: 38,
+    fontSize: 18,
+    lineHeight: 34,
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: 2,
   },
   featuredEn: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: 13,
+    lineHeight: 19,
     fontWeight: '500',
     color: '#FFFFFF',
     textAlign: 'center',
   },
   featuredSource: { textAlign: 'center' },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderRadius: radius.xl,
-    paddingHorizontal: 14,
-    minHeight: 48,
-    marginBottom: 14,
-  },
-  searchInput: {
-    flex: 1,
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 14,
-    paddingVertical: 10,
-  },
   continueCard: {
     borderWidth: 1,
     borderRadius: radius.xl,
     padding: 14,
     gap: 6,
-    marginBottom: 14,
+    marginBottom: 12,
   },
   continueTitle: { fontSize: 15, lineHeight: 21 },
   continueAction: { marginTop: 2 },
-  sectionHead: { marginBottom: 10, marginTop: 4 },
+  sectionHead: { marginBottom: 10, marginTop: 6 },
   metricsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 18,
+    gap: 8,
+    marginBottom: 16,
   },
   metricCard: {
     width: '48%',
     flexGrow: 1,
-    minWidth: '46%',
+    flexBasis: '47%',
     borderWidth: 1,
     borderRadius: radius.xl,
-    padding: 12,
-    gap: 6,
-  },
-  metricIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  metricValue: {
-    fontFamily: DISPLAY_FONT_FAMILY,
-    fontSize: 26,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
-  sectionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 14,
-  },
-  sectionCard: {
-    width: '48%',
-    flexGrow: 1,
-    minWidth: '46%',
-    borderWidth: 1,
-    borderRadius: radius.xl,
-    padding: 14,
-    gap: 4,
-  },
-  sectionIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sectionAr: { fontSize: 13, lineHeight: 24, maxWidth: 90 },
-  sectionTitle: { marginTop: 6, fontSize: 15 },
-  sectionFooter: { marginTop: 10 },
-  quickLinks: { marginBottom: 8 },
-  quickLink: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: radius.xl,
-    paddingVertical: 14,
+    paddingVertical: 12,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
+  metricIcon: {
+    width: 34,
+    height: 34,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  metricCopy: { flex: 1, minWidth: 0, gap: 1 },
+  metricValue: {
+    fontFamily: DISPLAY_FONT_FAMILY,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.4,
+  },
+  sectionsList: { gap: 8, marginBottom: 8 },
+  sectionRow: {
+    borderWidth: 1,
+    borderRadius: radius.xl,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sectionCopy: { flex: 1, minWidth: 0, gap: 2 },
   pressed: { opacity: 0.92 },
 });

@@ -157,23 +157,23 @@ export default function StoryCard({
 }
 
 const styles = StyleSheet.create({
-  metaRow: { marginBottom: 12 },
-  bookmark: { padding: 2 },
+  metaRow: { marginBottom: 10 },
+  bookmark: { padding: 4, marginTop: -2 },
   arabic: { marginTop: 2 },
   figure: { marginTop: 4 },
   summary: { marginTop: 8 },
   compactMeta: { marginTop: 6, marginBottom: 2 },
   wisdom: {
-    marginTop: 14,
+    marginTop: 12,
     padding: 12,
     borderRadius: radius.md,
     borderLeftWidth: 3,
   },
   wisdomLabel: { letterSpacing: 1, fontWeight: '800' },
   wisdomText: { marginTop: 3, fontWeight: '600' },
-  divider: { marginTop: 16, marginBottom: 12 },
-  metaFooter: { marginBottom: 12 },
+  divider: { marginTop: 14, marginBottom: 10 },
+  metaFooter: { marginBottom: 10 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
-  ctaRow: { marginTop: 8 },
-  ctaFlex: { flex: 1 },
+  ctaRow: { marginTop: 10 },
+  ctaFlex: { flex: 1, minWidth: 0 },
 });

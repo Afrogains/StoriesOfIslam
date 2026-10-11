@@ -22,6 +22,8 @@ export type BottomStickyCardProps = {
   mode: BottomStickyDeckMode;
   onListen: () => void;
   onReadNarrations: () => void;
+  /** Distance from the bottom of the screen content (above the tab bar). */
+  bottomOffset?: number;
 };
 
 /** Compact floating deck above the tab bar for the selected Name. */
@@ -30,12 +32,16 @@ export default function BottomStickyCard({
   mode,
   onListen,
   onReadNarrations,
+  bottomOffset = 10,
 }: BottomStickyCardProps) {
   const { isDark } = useTheme();
   const episode = audioForName(name.number);
 
   return (
-    <View pointerEvents="box-none" style={[styles.anchor, shadow('lg', isDark)]}>
+    <View
+      pointerEvents="box-none"
+      style={[styles.anchor, { bottom: bottomOffset }, shadow('lg', isDark)]}
+    >
       <LinearGradient
         colors={brandGradients.night[isDark ? 'dark' : 'light']}
         start={{ x: 0, y: 0 }}
@@ -119,16 +125,15 @@ export default function BottomStickyCard({
 const styles = StyleSheet.create({
   anchor: {
     position: 'absolute',
-    left: 10,
-    right: 10,
-    bottom: 8,
+    left: 12,
+    right: 12,
     zIndex: 40,
   },
   deck: {
     borderRadius: radius['2xl'],
-    paddingHorizontal: 12,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: 14,
+    paddingTop: 12,
+    paddingBottom: 12,
     borderWidth: 1,
     borderColor: 'rgba(253,230,138,0.2)',
   },
@@ -141,13 +146,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
-    paddingVertical: 9,
+    gap: 6,
+    minHeight: 42,
+    paddingVertical: 10,
     borderRadius: radius.md,
   },
   ctaLabel: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '800',
   },
   pressed: { opacity: 0.82 },

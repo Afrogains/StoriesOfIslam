@@ -25,11 +25,13 @@ import {
   type DivineName,
 } from '../data/theNames';
 import { nameAudioByNumber, namesWithAudioCount } from '../data/theNamesAudio';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
   const { colors, isDark } = useTheme();
+  const { topPad, padX, scrollPadBottom, stickyBottom } = useMobileLayout();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
@@ -45,7 +47,7 @@ export default function NamesScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, { paddingTop: topPad, paddingHorizontal: padX }]}>
         <ScreenHeader
           eyebrow="Asma’ul Husna"
           title="The Names"
@@ -57,7 +59,7 @@ export default function NamesScreen() {
             { backgroundColor: colors.card, borderColor: colors.border },
           ]}
         >
-          <Search size={15} color={colors.inkSubtle} />
+          <Search size={16} color={colors.inkSubtle} />
           <TextInput
             value={query}
             onChangeText={setQuery}
@@ -78,7 +80,10 @@ export default function NamesScreen() {
         numColumns={2}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[
+          styles.listContent,
+          { paddingHorizontal: padX - 4, paddingBottom: scrollPadBottom + 90 },
+        ]}
         renderItem={({ item }) => {
           const active = item.number === selected.number;
           const hasAudio = Boolean(nameAudioByNumber[item.number]);
@@ -130,6 +135,7 @@ export default function NamesScreen() {
       <BottomStickyCard
         name={selected}
         mode={deckMode}
+        bottomOffset={stickyBottom}
         onListen={() => setDeckMode((prev) => (prev === 'listen' ? 'idle' : 'listen'))}
         onReadNarrations={() =>
           setDeckMode((prev) => (prev === 'read' ? 'idle' : 'read'))
@@ -142,8 +148,6 @@ export default function NamesScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   topBar: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
     gap: 10,
   },
   searchBox: {
@@ -153,24 +157,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.lg,
     paddingHorizontal: 12,
-    paddingVertical: 7,
-    marginBottom: 6,
+    minHeight: 44,
+    marginBottom: 4,
   },
   searchInput: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '500',
-    paddingVertical: 2,
+    paddingVertical: 8,
     ...(({ outlineStyle: 'none' } as unknown) as object),
   },
   listContent: {
-    paddingHorizontal: 12,
-    paddingBottom: 200,
     gap: 8,
+    paddingTop: 4,
   },
   row: {
     gap: 8,
-    paddingHorizontal: 4,
   },
   nameTile: {
     flex: 1,
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     padding: 10,
     gap: 2,
-    minHeight: 96,
+    minHeight: 100,
   },
   tileTop: {
     flexDirection: 'row',
@@ -187,13 +189,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   numberPill: {
-    width: 26,
-    height: 26,
+    width: 28,
+    height: 28,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
   numberText: { fontSize: 11 },
-  tileArabic: { fontSize: 18, lineHeight: 26, textAlign: 'right' },
-  tileName: { marginTop: 2 },
+  tileArabic: { fontSize: 18, lineHeight: 28, textAlign: 'right' },
+  tileName: { marginTop: 2, fontSize: 13 },
 });

@@ -52,6 +52,7 @@ import {
   sahabahChapterToStoryItem,
 } from '../data/sahabahChapters';
 import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import type { ProphetFigure } from '../data/theProphets';
 import { theProphets } from '../data/theProphets';
@@ -91,6 +92,7 @@ function sortStories(list: StoryItem[], sortBy: SortKey): StoryItem[] {
 /** Explore: browse by category first; drill into a section for the full shelf. */
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
+  const { topPad, padX, scrollPadBottom } = useMobileLayout();
   const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
@@ -234,7 +236,10 @@ export default function ExploreScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -394,29 +399,27 @@ export default function ExploreScreen() {
                 <Card
                   key={slug}
                   style={styles.categoryCard}
-                  padding={14}
+                  padding={12}
                   accent={accent.primary}
                   onPress={() => setSelectedSection(slug)}
                   accessibilityLabel={`${meta.title}: ${count} stories`}
                 >
-                  <Row justify="space-between" align="flex-start">
+                  <Row gap={12} align="center">
                     <IconBubble
                       icon={sectionIcons[slug]}
                       color={accent.primary}
                       background={isDark ? colors.cardAlt : accent.surface}
-                      size={34}
+                      size={40}
                     />
-                    <Caption color={accent.primary}>{count}</Caption>
-                  </Row>
-                  <Heading style={styles.categoryTitle} numberOfLines={1}>
-                    {meta.title}
-                  </Heading>
-                  <Small color={colors.inkMuted} numberOfLines={2} style={styles.categorySubtitle}>
-                    {meta.subtitle}
-                  </Small>
-                  <Row justify="space-between" style={styles.categoryFooter}>
-                    <Caption color={accent.primary}>Open category</Caption>
-                    <ArrowRight size={13} color={accent.primary} />
+                    <View style={styles.categoryCopy}>
+                      <Heading style={styles.categoryTitle} numberOfLines={1}>
+                        {meta.title}
+                      </Heading>
+                      <Small color={colors.inkMuted} numberOfLines={1} style={styles.categorySubtitle}>
+                        {meta.subtitle} · {count} {meta.countLabel.toLowerCase()}
+                      </Small>
+                    </View>
+                    <ArrowRight size={18} color={accent.primary} />
                   </Row>
                 </Card>
               );
@@ -540,7 +543,7 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 120 },
+  content: {},
 
   pills: { marginBottom: 12, overflow: 'visible' },
   pillsContent: { gap: 8, paddingRight: 4 },
@@ -554,18 +557,19 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: radius.lg,
     borderWidth: 1,
+    minHeight: 48,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 7,
-    fontSize: 13,
+    paddingVertical: 8,
+    fontSize: 14,
     fontWeight: '500',
     ...(({ outlineStyle: 'none' } as unknown) as object),
   },
   filterToggle: {
-    width: 32,
-    height: 32,
-    borderRadius: radius.sm,
+    width: 36,
+    height: 36,
+    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -579,16 +583,13 @@ const styles = StyleSheet.create({
   filterGroupLast: { flexWrap: 'wrap' },
 
   categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: 10,
-    marginBottom: 18,
+    gap: 8,
+    marginBottom: 16,
   },
-  categoryCard: { width: '47.8%' },
-  categoryTitle: { marginTop: 10 },
-  categorySubtitle: { marginTop: 3, minHeight: 32 },
-  categoryFooter: { marginTop: 10 },
+  categoryCard: { width: '100%' },
+  categoryCopy: { flex: 1, minWidth: 0, gap: 2 },
+  categoryTitle: { fontSize: 16, lineHeight: 22 },
+  categorySubtitle: { marginTop: 0 },
 
   sectionIntro: { marginBottom: 14, gap: 4 },
   sectionIntroTitle: { marginTop: 4 },

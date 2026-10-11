@@ -324,7 +324,7 @@ export function GradientButton({
           shadow('sm', isDark),
         ]}
       >
-        {Icon ? <Icon size={metrics.iconSize} color={textColor} fill={textColor} /> : null}
+        {Icon ? <Icon size={metrics.iconSize} color={textColor} strokeWidth={2.25} /> : null}
         <Text
           style={{
             fontFamily: BODY_FONT_FAMILY,
@@ -433,7 +433,7 @@ export function PlayButton({
           shadow('md', isDark),
         ]}
       >
-        <Icon size={size * 0.44} color="#FFFFFF" fill="#FFFFFF" />
+        <Icon size={size * 0.44} color="#FFFFFF" />
       </LinearGradient>
     </Pressable>
   );

@@ -19,12 +19,14 @@ import {
 import { sectionsMeta } from '../data/catalogMeta';
 import type { SectionSlug, StoryItem } from '../types/catalog';
 import { useLibrary } from '../hooks/useLibrary';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, sectionAccent } from '../theme/tokens';
 import { apiRequest } from '../services/api';
 
 /** Lean library: slim account strip, filters, compact saved list. */
 export default function LibraryScreen() {
   const { colors, isDark } = useTheme();
+  const { topPad, padX, scrollPadBottom } = useMobileLayout();
   const { savedStories, savedCount } = useLibrary();
   const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
@@ -73,12 +75,15 @@ export default function LibraryScreen() {
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: topPad, paddingHorizontal: padX, paddingBottom: scrollPadBottom },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <ScreenHeader eyebrow="Your collection" title="Library" arabic="مكتبتي" />
 
-        <Row justify="space-between" align="center" style={styles.accountRow}>
+        <View style={styles.accountRow}>
           <View style={styles.accountCopy}>
             <BodyStrong numberOfLines={1}>
               {authenticated ? 'Synced across devices' : 'Sign in to sync'}
@@ -87,35 +92,41 @@ export default function LibraryScreen() {
               {savedCount} saved {savedCount === 1 ? 'story' : 'stories'}
             </Caption>
           </View>
-          <Row gap={8}>
+          <Row gap={8} style={styles.accountActions}>
             {authenticated ? (
               <>
-                <GradientButton
-                  label="Sign out"
-                  icon={LogOut}
-                  size="sm"
-                  gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
-                  onPress={() => void signOut()}
-                />
-                <GradientButton
-                  label="Delete"
-                  icon={Trash2}
-                  size="sm"
-                  gradient={['#DC2626', '#7F1D1D']}
-                  onPress={deleteAccount}
-                />
+                <View style={styles.accountAction}>
+                  <GradientButton
+                    label="Sign out"
+                    icon={LogOut}
+                    size="sm"
+                    gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+                    onPress={() => void signOut()}
+                  />
+                </View>
+                <View style={styles.accountAction}>
+                  <GradientButton
+                    label="Delete"
+                    icon={Trash2}
+                    size="sm"
+                    gradient={['#DC2626', '#7F1D1D']}
+                    onPress={deleteAccount}
+                  />
+                </View>
               </>
             ) : (
-              <GradientButton
-                label="Sign in"
-                icon={LogIn}
-                size="sm"
-                gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
-                onPress={() => void signIn()}
-              />
+              <View style={styles.accountAction}>
+                <GradientButton
+                  label="Sign in"
+                  icon={LogIn}
+                  size="sm"
+                  gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+                  onPress={() => void signIn()}
+                />
+              </View>
             )}
           </Row>
-        </Row>
+        </View>
 
         {savedCount > 0 ? (
           <ScrollView
@@ -199,9 +210,11 @@ export default function LibraryScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 120 },
+  content: {},
   accountRow: { marginBottom: 14, gap: 10 },
-  accountCopy: { flex: 1, gap: 2 },
+  accountCopy: { gap: 2 },
+  accountActions: { flexWrap: 'wrap' },
+  accountAction: { flexGrow: 1, minWidth: 120 },
   filters: { marginBottom: 14 },
   filtersContent: { gap: 8, paddingRight: 4 },
   list: { gap: 10 },

@@ -18,6 +18,7 @@ import { AuthProvider } from './src/auth/AuthProvider';
 import { CatalogProvider } from './src/data/CatalogProvider';
 import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
 import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
+import { useMobileLayout } from './src/hooks/useMobileLayout';
 import ExploreScreen from './src/screens/ExploreScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
@@ -50,21 +51,26 @@ const queryClient = new QueryClient({
 const tabs = {
   Home: { label: 'Home', icon: Home, accent: 'emerald' },
   Explore: { label: 'Explore', icon: Compass, accent: 'emerald' },
-  Names: { label: 'The Names', icon: Sparkles, accent: 'gold' },
+  Names: { label: 'Names', icon: Sparkles, accent: 'gold' },
   Library: { label: 'Library', icon: Bookmark, accent: 'emerald' },
 } as const;
 
 function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { isDark } = useAppMode();
   const { savedCount } = useLibrary();
+  const { tabBarPadBottom } = useMobileLayout();
   const colors = getColors(isDark);
-  const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.8) : colors.inkSubtle;
+  const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.85) : colors.inkSubtle;
 
   return (
     <View
       style={[
         styles.navBar,
-        { backgroundColor: colors.navBg, borderTopColor: colors.navBorder },
+        {
+          backgroundColor: colors.navBg,
+          borderTopColor: colors.navBorder,
+          paddingBottom: tabBarPadBottom,
+        },
         shadow('lg', isDark),
       ]}
       accessibilityRole="tablist"
@@ -110,10 +116,12 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                   }
                   style={styles.activePill}
                 >
-                  <Icon size={18} color="#FFFFFF" />
+                  <Icon size={20} color="#FFFFFF" strokeWidth={2.25} />
                 </LinearGradient>
               ) : (
-                <Icon size={19} color={inactiveColor} />
+                <View style={styles.inactiveIcon}>
+                  <Icon size={22} color={inactiveColor} strokeWidth={2} />
+                </View>
               )}
               {route.name === 'Library' && savedCount > 0 ? (
                 <View style={[styles.badge, { backgroundColor: colors.gold, borderColor: colors.navBg }]}>
@@ -121,7 +129,10 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                 </View>
               ) : null}
             </View>
-            <Text style={[styles.navLabel, { color: active ? accent : inactiveColor }]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.navLabel, { color: active ? accent : inactiveColor }]}
+            >
               {config.label}
             </Text>
           </Pressable>
@@ -216,33 +227,44 @@ const styles = StyleSheet.create({
   },
   navBar: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 9,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
+    alignItems: 'flex-start',
+    paddingTop: 8,
+    paddingHorizontal: 6,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 2,
-    gap: 3,
+    minHeight: 48,
+    gap: 4,
   },
   navItemPressed: { opacity: 0.65 },
-  iconSlot: { height: 30, justifyContent: 'center', alignItems: 'center' },
+  iconSlot: {
+    width: 48,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inactiveIcon: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   activePill: {
-    width: 42,
-    height: 28,
+    width: 48,
+    height: 32,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badge: {
     position: 'absolute',
-    top: -1,
-    right: -6,
-    minWidth: 15,
-    height: 15,
+    top: -2,
+    right: 2,
+    minWidth: 16,
+    height: 16,
     paddingHorizontal: 3,
     borderRadius: radius.pill,
     borderWidth: 1.5,
@@ -257,8 +279,8 @@ const styles = StyleSheet.create({
   },
   navLabel: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 0.2,
+    letterSpacing: 0.1,
   },
 });

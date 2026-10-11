@@ -30,12 +30,13 @@ export default function ModeToggle() {
 
 const styles = StyleSheet.create({
   themeSwitch: {
-    width: 40,
-    height: 40,
+    width: 42,
+    height: 42,
     borderRadius: radius.pill,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   pressed: { opacity: 0.82 },
 });
