@@ -24,9 +24,15 @@ import {
   findName,
   type DivineName,
 } from '../data/theNames';
-import { nameAudioByNumber, namesWithAudioCount } from '../data/theNamesAudio';
+import { nameAudioByNumber } from '../data/theNamesAudio';
 import { useMobileLayout } from '../hooks/useMobileLayout';
+import { useApprovedNamesMedia, type ApprovedNameMedia } from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
+
+function nameHasAudio(number: number, approved: Record<number, ApprovedNameMedia>): boolean {
+  const media = approved[number];
+  return Boolean(nameAudioByNumber[number] || media?.audioUrl || media?.podcastAudioUrl);
+}
 
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
@@ -36,7 +42,12 @@ export default function NamesScreen() {
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
-  const audioCount = namesWithAudioCount();
+  const namesMedia = useApprovedNamesMedia();
+  const hasAudioFor = (number: number) => nameHasAudio(number, namesMedia.byNumber);
+  const audioCount = useMemo(
+    () => divineNames.filter((name) => nameHasAudio(name.number, namesMedia.byNumber)).length,
+    [namesMedia.byNumber],
+  );
 
   const filtered = useMemo(() => findName(query), [query]);
   // Pad odd counts so the last tile keeps half width instead of stretching.
@@ -106,7 +117,7 @@ export default function NamesScreen() {
         renderItem={({ item }) => {
           if (!item) return <View style={styles.spacerTile} />;
           const active = item.number === selected.number;
-          const hasAudio = Boolean(nameAudioByNumber[item.number]);
+          const hasAudio = hasAudioFor(item.number);
           return (
             <Pressable
               onPress={() => selectName(item)}
@@ -167,6 +178,8 @@ export default function NamesScreen() {
         name={selected}
         mode={deckMode}
         bottomOffset={stickyBottom}
+        approved={namesMedia.byNumber[selected.number]}
+        mediaStatus={namesMedia.status}
         onListen={() => setDeckMode((prev) => (prev === 'listen' ? 'idle' : 'listen'))}
         onReadNarrations={() =>
           setDeckMode((prev) => (prev === 'read' ? 'idle' : 'read'))

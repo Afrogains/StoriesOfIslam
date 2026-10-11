@@ -1,8 +1,14 @@
-import { BookOpen, Headphones } from 'lucide-react-native';
+import { BookOpen, Headphones, PlayCircle } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, StyleSheet, View } from 'react-native';
-import type { DivineName } from '../data/theNames';
+import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { THE_NAMES_SERIES, type DivineName } from '../data/theNames';
+import { toParagraphs } from '../data/text';
 import { audioForName } from '../data/theNamesAudio';
+import {
+  episodeForName,
+  type ApprovedNameMedia,
+  type NamesMediaStatus,
+} from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 import NamesAudioPlayer from './NamesAudioPlayer';
 import {
@@ -24,6 +30,9 @@ export type BottomStickyCardProps = {
   onReadNarrations: () => void;
   /** Distance from the bottom of the screen content (above the tab bar). */
   bottomOffset?: number;
+  /** Reviewer-approved lesson media for this Name, if any. */
+  approved?: ApprovedNameMedia;
+  mediaStatus?: NamesMediaStatus;
 };
 
 /** Compact floating deck above the tab bar for the selected Name. */
@@ -33,9 +42,14 @@ export default function BottomStickyCard({
   onListen,
   onReadNarrations,
   bottomOffset = 10,
+  approved,
+  mediaStatus = 'unavailable',
 }: BottomStickyCardProps) {
   const { isDark } = useTheme();
-  const episode = audioForName(name.number);
+  const episode = episodeForName(approved, audioForName(name.number));
+  const watchClass = approved
+    ? () => void Linking.openURL(approved.watchUrl).catch(() => undefined)
+    : null;
 
   return (
     <View
@@ -101,20 +115,85 @@ export default function BottomStickyCard({
 
         {mode === 'listen' ? (
           <View style={styles.expand}>
-            <NamesAudioPlayer name={name} episode={episode} />
+            {episode ? (
+              <NamesAudioPlayer name={name} episode={episode} />
+            ) : mediaStatus === 'loading' ? (
+              <View style={styles.narrationPanel}>
+                <Caption color="#CBD5E1">Checking for reviewed audio…</Caption>
+              </View>
+            ) : (
+              <NamesAudioPlayer name={name} episode={null} />
+            )}
+            {watchClass && !episode ? (
+              <WatchClassLink onPress={watchClass} classNumber={approved?.classNumber ?? null} />
+            ) : null}
           </View>
         ) : null}
 
         {mode === 'read' ? (
           <View style={styles.narrationPanel}>
-            <Caption color="#FDE68A">Significance</Caption>
-            <Body color="#E2E8F0" style={styles.narrationBody} numberOfLines={4}>
-              {name.reflection}
-            </Body>
+            {approved ? (
+              <>
+                <Caption color="#FDE68A">
+                  Reviewed lesson notes
+                  {approved.classNumber != null ? ` · Class ${approved.classNumber}` : ''}
+                </Caption>
+                <ScrollView
+                  style={styles.notesScroll}
+                  nestedScrollEnabled
+                  showsVerticalScrollIndicator={false}
+                >
+                  {toParagraphs(approved.description).map((paragraph, index) => (
+                    <Body key={index} color="#E2E8F0" style={styles.notesParagraph}>
+                      {paragraph}
+                    </Body>
+                  ))}
+                </ScrollView>
+                <Caption color="#94A3B8" numberOfLines={1}>
+                  From {THE_NAMES_SERIES.credit}
+                </Caption>
+                {watchClass ? (
+                  <WatchClassLink onPress={watchClass} classNumber={approved.classNumber} />
+                ) : null}
+              </>
+            ) : (
+              <>
+                <Caption color="#FDE68A">Significance</Caption>
+                <Body color="#E2E8F0" style={styles.narrationBody} numberOfLines={4}>
+                  {name.reflection}
+                </Body>
+                {mediaStatus === 'loading' ? (
+                  <Caption color="#94A3B8">Checking for reviewed lesson notes…</Caption>
+                ) : null}
+              </>
+            )}
           </View>
         ) : null}
       </LinearGradient>
     </View>
+  );
+}
+
+function WatchClassLink({
+  onPress,
+  classNumber,
+}: {
+  onPress: () => void;
+  classNumber: number | null;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="link"
+      accessibilityLabel={`Watch class ${classNumber ?? ''} on YouTube`}
+      hitSlop={6}
+      style={({ pressed }) => [styles.watchLink, pressed && styles.pressed]}
+    >
+      <PlayCircle size={14} color="#FDE68A" />
+      <Caption color="#FDE68A">
+        Watch {classNumber != null ? `class ${classNumber}` : 'the class'} on YouTube
+      </Caption>
+    </Pressable>
   );
 }
 
@@ -155,4 +234,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(15,23,42,0.4)',
   },
   narrationBody: { lineHeight: 19 },
+  notesScroll: { maxHeight: 200 },
+  notesParagraph: { lineHeight: 20, marginBottom: 8 },
+  watchLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 6,
+    alignSelf: 'flex-start',
+  },
 });
