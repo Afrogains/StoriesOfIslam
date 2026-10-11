@@ -39,7 +39,7 @@ export function getProphetChapter(slug: string): ProphetChapter | undefined {
 }
 
 export function listProphetChapterSlugs(): string[] {
-  return Object.keys(bySlug).filter((slug) => !slug.startsWith('__'));
+  return Object.keys(bySlug).filter((slug) => !slug.startsWith('__') && slug !== 'muhammad');
 }
 
 function cuesFromSections(
@@ -159,7 +159,7 @@ export function buildProphetCatalogStories(): StoryItem[] {
     .filter((story): story is StoryItem => Boolean(story));
 }
 
-/** Replace thin prophet fixtures with the full Ibn Kathir chapters, including Muhammad ﷺ. */
+/** Replace thin prophet fixtures with the full Ibn Kathir chapters (Muhammad ﷺ is under Seerah). */
 export function mergeProphetChaptersIntoCatalog(stories: StoryItem[]): StoryItem[] {
   const withoutThinQisas = stories.filter((story) => story.sectionSlug !== 'qisas-al-anbiya');
   return [...withoutThinQisas, ...buildProphetCatalogStories()];

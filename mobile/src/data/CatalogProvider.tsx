@@ -28,7 +28,12 @@ const previewStories: StoryItem[] = usePreviewFixtures
       const { mergeProphetChaptersIntoCatalog } = require('./prophetChapters') as {
         mergeProphetChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
       };
-      return mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base));
+      const { mergeSeerahChaptersIntoCatalog } = require('./seerahParts') as {
+        mergeSeerahChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+      };
+      return mergeSeerahChaptersIntoCatalog(
+        mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base)),
+      );
     })()
   : [];
 

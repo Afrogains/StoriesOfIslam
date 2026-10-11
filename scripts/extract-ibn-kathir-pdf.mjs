@@ -42,6 +42,7 @@ const HEADING_TO_SLUG = [
   [/^\s*Prophet\s+Zakariyah/i, 'zakariyah', 'Zakariyah', 'زكريا'],
   [/^\s*Prophet\s+Yahya/i, 'yahya', 'Yahya', 'يحيى'],
   [/^\s*Prophet\s+Isa\b/i, 'isa', 'Isa', 'عيسى'],
+  // Extracted for Seerah grouping — not listed in the Qisas roster.
   [/^\s*Prophet\s+Muhammad\b/i, 'muhammad', 'Muhammad', 'محمد'],
 ];
 

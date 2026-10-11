@@ -18,6 +18,7 @@ import { takeExploreIntent } from '../navigation/exploreIntent';
 import ExploreRandomPick from '../components/ExploreRandomPick';
 import ProphetsRoster from '../components/ProphetsRoster';
 import SahabahRoster from '../components/SahabahRoster';
+import SeerahPath from '../components/SeerahPath';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -51,6 +52,7 @@ import {
   preferSahabahCatalogStory,
   sahabahChapterToStoryItem,
 } from '../data/sahabahChapters';
+import { seerahPartToStoryItem } from '../data/seerahParts';
 import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
@@ -450,6 +452,17 @@ export default function ExploreScreen() {
 
         {selectedSection === 'qisas-al-anbiya' ? (
           <ProphetsRoster onSelect={openProphetStories} />
+        ) : null}
+
+        {selectedSection === 'seerah-shamail' ? (
+          <SeerahPath
+            onSelect={(slug) => {
+              const story = seerahPartToStoryItem(slug);
+              if (!story) return;
+              setActiveStory(story);
+              setSessionMode('read');
+            }}
+          />
         ) : null}
 
         {selectedSection === 'sahabah' ? (

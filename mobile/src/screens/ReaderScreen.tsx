@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { getProphetChapter } from '../data/prophetChapters';
 import { getSahabahChapter } from '../data/sahabahChapters';
+import { getSeerahPart } from '../data/seerahParts';
 import { theProphets } from '../data/theProphets';
 import { theSahabah } from '../data/theSahabah';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
@@ -54,6 +55,19 @@ function resolveFullText(story: StoryItem): { sections: { heading?: string; body
           body: section.body,
         })),
         plain: chapter.contentEn,
+      };
+    }
+  }
+
+  if (story.sectionSlug === 'seerah-shamail') {
+    const part = getSeerahPart(story.id);
+    if (part?.sections?.length) {
+      return {
+        sections: part.sections.map((section) => ({
+          heading: section.heading,
+          body: section.body,
+        })),
+        plain: part.contentEn,
       };
     }
   }
@@ -115,8 +129,13 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
     );
   }, [story.figureName, story.id, story.sectionSlug]);
   const prophetPdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
+  const seerahPdfSpan =
+    story.sectionSlug === 'seerah-shamail' && getSeerahPart(story.id)
+      ? pdfSpanForSlug('muhammad')
+      : null;
   const sahabahPdfSpan = sahabahSlug ? sahabahPdfSpanForSlug(sahabahSlug) : null;
-  const pdfSpan = prophetPdfSpan ?? sahabahPdfSpan;
+  const ibnKathirSpan = prophetPdfSpan ?? seerahPdfSpan;
+  const pdfSpan = ibnKathirSpan ?? sahabahPdfSpan;
 
   useEffect(() => {
     void load().then((y) => {
@@ -258,13 +277,13 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           {pdfSpan ? (
             <Pressable
               onPress={() =>
-                void (prophetPdfSpan
+                void (ibnKathirSpan
                   ? openIbnKathirPdf(pdfSpan.start)
                   : openSahabahPdf(pdfSpan.start))
               }
               accessibilityRole="link"
               accessibilityLabel={
-                prophetPdfSpan
+                ibnKathirSpan
                   ? 'Open Ibn Kathir PDF at this chapter'
                   : 'Open Sahaba biographies PDF at this chapter'
               }
@@ -279,7 +298,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             >
               <ExternalLink size={14} color={accent.primary} />
               <Caption color={accent.primary} style={styles.pdfBtnLabel}>
-                {prophetPdfSpan
+                {ibnKathirSpan
                   ? `Open Ibn Kathir PDF (p. ${pdfSpan.start})`
                   : `Open Sahaba PDF (p. ${pdfSpan.start})`}
               </Caption>
