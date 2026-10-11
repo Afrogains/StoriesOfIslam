@@ -196,7 +196,7 @@ export const namesMediaRepository = {
     return result.rows.flatMap((row) => {
       if (seen.has(row.name_number)) return [];
       seen.add(row.name_number);
-      return [toApproved(row, row.approved_audio_url ?? row.asset_public_url, row.duration_ms)];
+      return [toApproved(row, row.approved_audio_url, row.duration_ms)];
     });
   },
 
