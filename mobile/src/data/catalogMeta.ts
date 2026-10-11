@@ -22,7 +22,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     titleAr: 'السيرة والشمائل',
     subtitle: 'Life & Noble Character',
     description:
-      'The life of Prophet Muhammad ﷺ in seven Seerah parts, plus short Shama’il on his noble character.',
+      'Seven chronological Seerah parts, twelve short teaching stories from his life, and brief Shama’il on his noble character.',
     countLabel: 'Stories',
     accentColor: '#D97706',
     bgTint: '#FEF8E8',

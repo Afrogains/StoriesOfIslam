@@ -11,12 +11,14 @@ import {
 import { getProphetChapter } from '../data/prophetChapters';
 import { getSahabahChapter } from '../data/sahabahChapters';
 import { getSeerahPart } from '../data/seerahParts';
+import { getShortStory } from '../data/shortStoriesFromTheLife';
 import { theProphets } from '../data/theProphets';
 import { theSahabah } from '../data/theSahabah';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { useLibrary } from '../hooks/useLibrary';
 import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
 import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
+import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
 import type { StoryItem } from '../types/catalog';
 import { toParagraphs } from '../data/text';
 import { useMobileLayout } from '../hooks/useMobileLayout';
@@ -68,6 +70,16 @@ function resolveFullText(story: StoryItem): { sections: { heading?: string; body
           body: section.body,
         })),
         plain: part.contentEn,
+      };
+    }
+    const shortStory = getShortStory(story.id);
+    if (shortStory?.sections?.length) {
+      return {
+        sections: shortStory.sections.map((section) => ({
+          heading: section.heading,
+          body: section.body,
+        })),
+        plain: shortStory.contentEn,
       };
     }
   }
@@ -133,9 +145,11 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
     story.sectionSlug === 'seerah-shamail' && getSeerahPart(story.id)
       ? pdfSpanForSlug('muhammad')
       : null;
+  const shortStoryPdfSpan =
+    story.sectionSlug === 'seerah-shamail' ? shortStoryPdfSpanForSlug(story.id) : null;
   const sahabahPdfSpan = sahabahSlug ? sahabahPdfSpanForSlug(sahabahSlug) : null;
   const ibnKathirSpan = prophetPdfSpan ?? seerahPdfSpan;
-  const pdfSpan = ibnKathirSpan ?? sahabahPdfSpan;
+  const pdfSpan = ibnKathirSpan ?? shortStoryPdfSpan ?? sahabahPdfSpan;
 
   useEffect(() => {
     void load().then((y) => {
@@ -279,13 +293,17 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
               onPress={() =>
                 void (ibnKathirSpan
                   ? openIbnKathirPdf(pdfSpan.start)
-                  : openSahabahPdf(pdfSpan.start))
+                  : shortStoryPdfSpan
+                    ? openShortStoriesPdf(pdfSpan.start)
+                    : openSahabahPdf(pdfSpan.start))
               }
               accessibilityRole="link"
               accessibilityLabel={
                 ibnKathirSpan
                   ? 'Open Ibn Kathir PDF at this chapter'
-                  : 'Open Sahaba biographies PDF at this chapter'
+                  : shortStoryPdfSpan
+                    ? 'Open short stories PDF at this chapter'
+                    : 'Open Sahaba biographies PDF at this chapter'
               }
               style={({ pressed }) => [
                 styles.pdfBtn,
@@ -300,7 +318,9 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
               <Caption color={accent.primary} style={styles.pdfBtnLabel}>
                 {ibnKathirSpan
                   ? `Open Ibn Kathir PDF (p. ${pdfSpan.start})`
-                  : `Open Sahaba PDF (p. ${pdfSpan.start})`}
+                  : shortStoryPdfSpan
+                    ? `Open short stories PDF (p. ${pdfSpan.start})`
+                    : `Open Sahaba PDF (p. ${pdfSpan.start})`}
               </Caption>
             </Pressable>
           ) : null}

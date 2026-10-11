@@ -19,6 +19,7 @@ import ExploreRandomPick from '../components/ExploreRandomPick';
 import ProphetsRoster from '../components/ProphetsRoster';
 import SahabahRoster from '../components/SahabahRoster';
 import SeerahPath from '../components/SeerahPath';
+import ShortStoriesPath from '../components/ShortStoriesPath';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -53,6 +54,10 @@ import {
   sahabahChapterToStoryItem,
 } from '../data/sahabahChapters';
 import { seerahPartToStoryItem } from '../data/seerahParts';
+import {
+  isShortStoryFromTheLife,
+  shortStoryToStoryItem,
+} from '../data/shortStoriesFromTheLife';
 import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
@@ -133,6 +138,13 @@ export default function ExploreScreen() {
 
     const list = stories.filter((story) => {
       if (selectedSection !== 'all' && story.sectionSlug !== selectedSection) return false;
+      if (
+        selectedSection === 'seerah-shamail' &&
+        !needle &&
+        isShortStoryFromTheLife(story.id)
+      ) {
+        return false;
+      }
       if (mediaFilter === 'audio' && !story.hasAudio) return false;
       if (mediaFilter === 'text' && story.hasAudio) return false;
       if (gradeFilter !== 'all' && story.authenticityGrade !== gradeFilter) return false;
@@ -313,7 +325,9 @@ export default function ExploreScreen() {
         <Caption color={colors.inkMuted} style={styles.summaryRow}>
           {showGroupedBrowse
             ? `${SECTION_ORDER.length} categories · ${stories.length} stories`
-            : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
+            : selectedSection === 'seerah-shamail' && !searching
+              ? `${sectionCounts['seerah-shamail']} stories · 7 Seerah parts · 12 short stories`
+              : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
           {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
         </Caption>
 
@@ -455,14 +469,24 @@ export default function ExploreScreen() {
         ) : null}
 
         {selectedSection === 'seerah-shamail' ? (
-          <SeerahPath
-            onSelect={(slug) => {
-              const story = seerahPartToStoryItem(slug);
-              if (!story) return;
-              setActiveStory(story);
-              setSessionMode('read');
-            }}
-          />
+          <>
+            <SeerahPath
+              onSelect={(slug) => {
+                const story = seerahPartToStoryItem(slug);
+                if (!story) return;
+                setActiveStory(story);
+                setSessionMode('read');
+              }}
+            />
+            <ShortStoriesPath
+              onSelect={(slug) => {
+                const story = shortStoryToStoryItem(slug);
+                if (!story) return;
+                setActiveStory(story);
+                setSessionMode('read');
+              }}
+            />
+          </>
         ) : null}
 
         {selectedSection === 'sahabah' ? (
