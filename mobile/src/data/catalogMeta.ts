@@ -22,7 +22,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     titleAr: 'السيرة والشمائل',
     subtitle: 'Life & Noble Character',
     description:
-      'Seven chronological Seerah parts, twelve short teaching stories from his life, and brief Shama’il on his noble character.',
+      'His life in one timeline: Ibn Kathir’s Seerah with the short teaching stories placed where they happened.',
     countLabel: 'Stories',
     accentColor: '#D97706',
     bgTint: '#FEF8E8',

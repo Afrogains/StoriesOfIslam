@@ -19,7 +19,6 @@ import ExploreRandomPick from '../components/ExploreRandomPick';
 import ProphetsRoster from '../components/ProphetsRoster';
 import SahabahRoster from '../components/SahabahRoster';
 import SeerahPath from '../components/SeerahPath';
-import ShortStoriesPath from '../components/ShortStoriesPath';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -53,11 +52,7 @@ import {
   preferSahabahCatalogStory,
   sahabahChapterToStoryItem,
 } from '../data/sahabahChapters';
-import { seerahPartToStoryItem } from '../data/seerahParts';
-import {
-  isShortStoryFromTheLife,
-  shortStoryToStoryItem,
-} from '../data/shortStoriesFromTheLife';
+import { isSeerahTimelineStory, resolveSeerahTimelineStory } from '../data/seerahTimeline';
 import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
@@ -141,7 +136,7 @@ export default function ExploreScreen() {
       if (
         selectedSection === 'seerah-shamail' &&
         !needle &&
-        isShortStoryFromTheLife(story.id)
+        isSeerahTimelineStory(story.id)
       ) {
         return false;
       }
@@ -326,7 +321,7 @@ export default function ExploreScreen() {
           {showGroupedBrowse
             ? `${SECTION_ORDER.length} categories · ${stories.length} stories`
             : selectedSection === 'seerah-shamail' && !searching
-              ? `${sectionCounts['seerah-shamail']} stories · 7 Seerah parts · 12 short stories`
+              ? `${sectionCounts['seerah-shamail']} stories · one chronological timeline`
               : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
           {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
         </Caption>
@@ -396,11 +391,13 @@ export default function ExploreScreen() {
           </Card>
         ) : null}
 
-        <ExploreRandomPick
-          pool={filteredStories}
-          onRead={(story) => openStory(story, 'read')}
-          onListen={(story) => openStory(story, 'listen')}
-        />
+        {selectedSection === 'seerah-shamail' && !searching ? null : (
+          <ExploreRandomPick
+            pool={filteredStories}
+            onRead={(story) => openStory(story, 'read')}
+            onListen={(story) => openStory(story, 'listen')}
+          />
+        )}
 
         {showGroupedBrowse ? (
           <View style={styles.categoryGrid}>
@@ -440,7 +437,7 @@ export default function ExploreScreen() {
           </View>
         ) : null}
 
-        {activeMeta ? (
+        {activeMeta && !(selectedSection === 'seerah-shamail' && !searching) ? (
           <Card
             style={styles.sectionIntro}
             padding={14}
@@ -469,31 +466,21 @@ export default function ExploreScreen() {
         ) : null}
 
         {selectedSection === 'seerah-shamail' ? (
-          <>
-            <SeerahPath
-              onSelect={(slug) => {
-                const story = seerahPartToStoryItem(slug);
-                if (!story) return;
-                setActiveStory(story);
-                setSessionMode('read');
-              }}
-            />
-            <ShortStoriesPath
-              onSelect={(slug) => {
-                const story = shortStoryToStoryItem(slug);
-                if (!story) return;
-                setActiveStory(story);
-                setSessionMode('read');
-              }}
-            />
-          </>
+          <SeerahPath
+            onSelect={(slug) => {
+              const story = resolveSeerahTimelineStory(slug);
+              if (!story) return;
+              setActiveStory(story);
+              setSessionMode('read');
+            }}
+          />
         ) : null}
 
         {selectedSection === 'sahabah' ? (
           <SahabahRoster onSelect={openSahabahStories} />
         ) : null}
 
-        {filteredStories.length === 0 ? (
+        {filteredStories.length === 0 && !(selectedSection === 'seerah-shamail' && !searching) ? (
           <EmptyState
             icon={SearchX}
             title="Nothing found"
@@ -502,7 +489,7 @@ export default function ExploreScreen() {
             onAction={resetAll}
             gradient={emeraldGradient}
           />
-        ) : showGroupedBrowse ? (
+        ) : selectedSection === 'seerah-shamail' && !searching ? null : showGroupedBrowse ? (
           <View style={styles.grouped}>
             {grouped.map(({ slug, stories: sectionStories }) => {
               const meta = sectionsMeta[slug];
