@@ -18,6 +18,8 @@
     "db:migrate:prod": "node dist/cli/migrate.js",
     "db:seed": "tsx src/cli/seed.ts",
     "db:seed:prod": "node dist/cli/seed.js",
+    "names:import": "tsx src/cli/importNamesPlaylist.ts",
+    "names:import:prod": "node dist/cli/importNamesPlaylist.js",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm --prefix mobile run check",
     "platform:local": "bash scripts/bringup-local-hostafrica.sh",
     "platform:validate": "bash infra/hostafrica/scripts/validate-stack.sh",

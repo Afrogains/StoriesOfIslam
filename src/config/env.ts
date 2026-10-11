@@ -50,6 +50,13 @@ const EnvSchema = z
     ELEVENLABS_VOICE_HOST_B: z.string().optional(),
     GOOGLE_TTS_API_KEY: z.string().optional(),
     FFMPEG_PATH: z.string().default('ffmpeg'),
+    OPENAI_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
+    OPENAI_TRANSCRIBE_MODEL: z.string().default('gpt-4o-mini-transcribe'),
+    YOUTUBE_API_KEY: z.string().optional(),
+    YTDLP_PATH: z.string().default('yt-dlp'),
+    YTDLP_COOKIES_FILE: z.string().optional(),
+    NAMES_PLAYLIST_ID: z.string().default('PL7esqAGrtKP39ZXoni6rO-zDvDx5zH2p8'),
+    NAMES_PODCAST_FEED_URL: z.string().url().default('https://rss.muslimcentral.com/mikaeel-smith.rss'),
 
     WORKER_POLL_INTERVAL_MS: z.coerce.number().int().min(250).default(2000),
     WORKER_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(10).default(3),
