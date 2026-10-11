@@ -57,7 +57,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
       credentials: false,
       maxAge: 86_400,
       origin(origin, callback) {
-        if (!origin || allowedOrigins.has(origin)) callback(null, true);
+        if (!origin || allowedOrigins.has('*') || allowedOrigins.has(origin)) callback(null, true);
         else callback(new HttpError(403, 'origin_forbidden', 'Origin is not allowed'));
       },
     }),

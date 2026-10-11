@@ -153,6 +153,24 @@ describe('names import CLI safety', () => {
     expect(message).toContain('key=[REDACTED]');
   });
 
+  it('builds a reviewer-facing description from curated meaning, not a transcript', async () => {
+    const { approvedDescription } = await import('../cli/approveNamesMedia');
+    const text = approvedDescription(
+      {
+        number: 5,
+        arabic: '',
+        transliteration: 'As-Salam',
+        meaning: 'The Source of Peace',
+        reflection: 'True safety and peace come from Him.',
+      },
+      12,
+    );
+    expect(text).toContain('As-Salam — The Source of Peace');
+    expect(text).toContain('Class 12');
+    expect(text).not.toMatch(/transcript|segment/i);
+    expect(text.length).toBeGreaterThan(40);
+  });
+
   it('parses dry-run, filters and manual maps', () => {
     const options = parseOptions(['--dry-run', '--names=5,16', '--map=TVQiCs2E5nQ:1,2', '--batch-size=2'])!;
     expect(options).toMatchObject({ dryRun: true, batchSize: 2, overrides: { TVQiCs2E5nQ: [1, 2] } });
