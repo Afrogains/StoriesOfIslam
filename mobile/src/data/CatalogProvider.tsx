@@ -55,11 +55,21 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     setRefreshing(true);
     try {
       const response = await apiRequest<StoryResponse>('/v1/stories?pageSize=50');
-      setStories(response.data);
+      // Preview/dev APKs keep the richer local catalog when the API feed is sparse
+      // (e.g. unpublished drafts), so Sahabah/Discover depth remains testable.
+      const remote = response.data ?? [];
+      const next =
+        usePreviewFixtures && previewStories.length > remote.length ? previewStories : remote;
+      setStories(next);
       setError(null);
-      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(response.data));
+      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(next));
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Unable to load stories');
+      if (usePreviewFixtures && previewStories.length) {
+        setStories(previewStories);
+        setError(null);
+      } else {
+        setError(requestError instanceof Error ? requestError.message : 'Unable to load stories');
+      }
     } finally {
       setRefreshing(false);
       setLoading(false);
@@ -72,6 +82,10 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     });
     void AsyncStorage.getItem(CACHE_KEY)
       .then((cached) => {
+        if (usePreviewFixtures && previewStories.length) {
+          setStories(previewStories);
+          return;
+        }
         if (cached) setStories(JSON.parse(cached) as StoryItem[]);
         else if (previewStories.length) setStories(previewStories);
       })

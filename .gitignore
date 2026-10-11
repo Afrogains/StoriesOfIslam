@@ -19,6 +19,11 @@ mobile/web-build/
 mobile/.expo/
 mobile/.env*
 !mobile/.env.example
+mobile/android/
+mobile/ios/
+*.apk
+*.aab
+*.keystore
 infra/hostafrica/tls/
 infra/hostafrica/.secrets/
 *.mp3
