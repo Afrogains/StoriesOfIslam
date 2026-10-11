@@ -92,10 +92,10 @@ export default function NamesScreen() {
         numColumns={2}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingHorizontal: padX, paddingBottom: namesListPadBottom },
-        ]}
+        contentContainerStyle={[styles.listContent, { paddingHorizontal: padX }]}
+        // numColumns + contentContainerStyle paddingBottom is unreliable on web;
+        // a footer spacer guarantees tiles can scroll clear of the sticky deck.
+        ListFooterComponent={<View style={{ height: namesListPadBottom }} />}
         renderItem={({ item }) => {
           const active = item.number === selected.number;
           const hasAudio = Boolean(nameAudioByNumber[item.number]);
@@ -181,30 +181,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.lg,
     paddingLeft: 12,
-    paddingRight: 8,
-    minHeight: 46,
+    paddingRight: 6,
+    minHeight: 48,
   },
   searchInput: {
     flex: 1,
     minWidth: 0,
     fontSize: 14,
     fontWeight: '500',
-    paddingVertical: 8,
+    paddingVertical: 10,
     ...(({ outlineStyle: 'none' } as unknown) as object),
   },
   audioCount: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 9,
+    height: 32,
     borderRadius: radius.pill,
     flexShrink: 0,
   },
   audioCountText: { fontSize: 11, lineHeight: 14, fontWeight: '700' },
   listContent: {
     gap: 8,
-    paddingTop: 4,
+    paddingTop: 6,
   },
   row: {
     gap: 8,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     gap: 2,
-    minHeight: 108,
+    minHeight: 112,
   },
   tileTop: {
     flexDirection: 'row',

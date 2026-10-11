@@ -12,26 +12,30 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
  */
 export const LAYOUT = {
   screenPadX: 16,
-  screenPadTop: 10,
+  screenPadTop: 12,
   /** Extra space after the last scroll item above the tab bar. */
-  contentPadBottom: 32,
-  tabBarPadTop: 6,
+  contentPadBottom: 48,
+  tabBarPadTop: 8,
   tabBarContentHeight: 52,
   /** Floor when the OS reports a tiny/zero bottom inset (common on Android). */
-  minBottomInset: 14,
+  minBottomInset: 18,
   /**
    * Floor when safe-area top is 0 (Android before layout, Expo web). Prefer the
    * real status-bar height on Android when available.
    */
   minTopInset:
-    Platform.OS === 'android' ? Math.max(StatusBar.currentHeight ?? 24, 24) : 20,
+    Platform.OS === 'android'
+      ? Math.max(StatusBar.currentHeight ?? 28, 28)
+      : Platform.OS === 'web'
+        ? 28
+        : 20,
   /** Gap between the Names sticky deck and the top edge of the tab bar. */
-  stickyDeckGap: 10,
+  stickyDeckGap: 12,
   /**
    * Idle deck ≈ 118px; listen mode expands with the player. Pad for the expanded
    * chrome so the last name tiles remain reachable.
    */
-  namesDeckClearance: 220,
+  namesDeckClearance: 260,
 } as const;
 
 export function useMobileLayout() {
