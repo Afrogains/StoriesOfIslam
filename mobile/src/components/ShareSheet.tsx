@@ -82,7 +82,8 @@ export default function ShareSheet({ visible, payload, onClose }: ShareSheetProp
         setStatus(result.hint);
         return;
       }
-      if (channel !== 'more') onClose();
+      if (channel === 'more') onClose();
+      else setStatus(`Opened ${channel === 'x' ? 'X' : channel}`);
     },
     [onClose, payload],
   );

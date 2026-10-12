@@ -146,9 +146,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 92,
+    top: 72,
     alignItems: 'center',
-    zIndex: 80,
+    zIndex: 200,
   },
   toast: {
     backgroundColor: '#064E3B',

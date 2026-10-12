@@ -164,8 +164,15 @@ export default function HighlightableText({
     : undefined;
 
   return (
-    <View>
-      <Pressable onLongPress={onLongPress} onPress={onPress} delayLongPress={380}>
+    <View style={highlightMode ? styles.modeRow : undefined}>
+      <Pressable
+        onLongPress={onLongPress}
+        onPress={onPress}
+        delayLongPress={380}
+        style={styles.passage}
+        accessibilityRole="button"
+        accessibilityLabel={highlightMode ? 'Save this paragraph to Highlights' : undefined}
+      >
         <Text
           selectable
           style={[
@@ -173,7 +180,6 @@ export default function HighlightableText({
             { color: colors.ink, backgroundColor: wash, borderRadius: radius.sm },
             style,
           ]}
-          accessibilityRole="text"
         >
           {marked.map((part, index) => (
             <Text
@@ -191,6 +197,21 @@ export default function HighlightableText({
           ))}
         </Text>
       </Pressable>
+      {highlightMode ? (
+        <Pressable
+          onPress={() => save(text)}
+          accessibilityRole="button"
+          accessibilityLabel="Save this paragraph to Highlights"
+          hitSlop={8}
+          style={({ pressed }) => [
+            styles.markBtn,
+            { borderColor: colors.gold, backgroundColor: alpha(colors.gold, 0.12) },
+            pressed && styles.pressed,
+          ]}
+        >
+          <Highlighter size={14} color={colors.gold} />
+        </Pressable>
+      ) : null}
 
       {toolbar ? (
         <View
@@ -246,6 +267,21 @@ export default function HighlightableText({
 }
 
 const styles = StyleSheet.create({
+  modeRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  passage: { flex: 1, minWidth: 0 },
+  markBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
   body: {
     fontFamily: BODY_FONT_FAMILY,
     fontSize: 16,
