@@ -20,7 +20,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import FeaturedHadithCard from '../components/FeaturedHadithCard';
 import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
@@ -37,7 +37,6 @@ import {
 import { useCatalog } from '../data/CatalogProvider';
 import { SECTION_ORDER } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
-import { featuredReflection } from '../data/mockHome';
 import {
   useLastActiveStory,
   type LastActiveMode,
@@ -90,7 +89,7 @@ const sectionIcons: Record<SectionSlug, LucideIcon> = {
 };
 
 /**
- * Home — cream catalog layout: brand, section pills, featured reflection,
+ * Home — cream catalog layout: brand, section pills, daily featured hadith,
  * search, continue, progress, and browse-section cards.
  */
 export default function HomeScreen() {
@@ -154,27 +153,11 @@ export default function HomeScreen() {
     [stories],
   );
 
-  const featuredStory = useMemo(
-    () => stories.find((story) => story.id === featuredReflection.storyId) ?? null,
-    [stories],
-  );
-
   const openResume = () => {
     if (!continueStory) return;
     void markActive(continueStory.id, resumeMode);
     setActiveStory(continueStory);
     setSessionMode(resumeMode);
-  };
-
-  const openFeatured = () => {
-    if (!featuredStory) {
-      goExplore('qisas-al-anbiya');
-      return;
-    }
-    const mode = featuredStory.hasAudio ? 'listen' : 'read';
-    void markActive(featuredStory.id, mode);
-    setActiveStory(featuredStory);
-    setSessionMode(mode);
   };
 
   const goExplore = (section: SectionSlug | 'all' = 'all', search = '') => {
@@ -303,39 +286,7 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        <Pressable
-          onPress={openFeatured}
-          accessibilityRole="button"
-          accessibilityLabel="Open featured reflection"
-          style={({ pressed }) => [pressed && styles.pressed]}
-        >
-          <LinearGradient
-            colors={
-              isDark
-                ? ['#0B3B32', '#064E3B', '#022C22']
-                : ['#0B3B32', '#064E3B', '#04332A']
-            }
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.featured, shadow('md', isDark)]}
-          >
-            <Row justify="space-between" align="center">
-              <Overline color="rgba(255,255,255,0.75)">Featured</Overline>
-              <View style={styles.sahihBadge}>
-                <Caption color="#ECFDF5">SAHIH</Caption>
-              </View>
-            </Row>
-            <ArabicInline color="#FFFFFF" style={styles.featuredAr} align="center" numberOfLines={2}>
-              {featuredReflection.textAr}
-            </ArabicInline>
-            <Text style={styles.featuredEn} numberOfLines={3}>
-              {featuredReflection.textEn}
-            </Text>
-            <Caption color="rgba(255,255,255,0.65)" style={styles.featuredSource} numberOfLines={1}>
-              {featuredReflection.source}
-            </Caption>
-          </LinearGradient>
-        </Pressable>
+        <FeaturedHadithCard />
 
         {continueStory ? (
           <Pressable
@@ -531,33 +482,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  featured: {
-    borderRadius: radius['2xl'],
-    padding: 14,
-    gap: 8,
-    marginBottom: 12,
-  },
-  sahihBadge: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
-    borderRadius: radius.pill,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  featuredAr: {
-    fontSize: 18,
-    lineHeight: 34,
-    textAlign: 'center',
-    marginTop: 2,
-  },
-  featuredEn: {
-    fontFamily: BODY_FONT_FAMILY,
-    fontSize: 13,
-    lineHeight: 19,
-    fontWeight: '500',
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  featuredSource: { textAlign: 'center' },
   continueCard: {
     borderWidth: 1,
     borderRadius: radius.xl,
