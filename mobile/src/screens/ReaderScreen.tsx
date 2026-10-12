@@ -1,4 +1,4 @@
-import { Bookmark, BookOpenCheck, ExternalLink, Headphones, X } from 'lucide-react-native';
+import { Bookmark, BookOpenCheck, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
@@ -15,7 +15,10 @@ import { getShortStory } from '../data/shortStoriesFromTheLife';
 import { theProphets } from '../data/theProphets';
 import { theSahabah } from '../data/theSahabah';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
+import HighlightableText from '../components/HighlightableText';
+import { useShareSheet } from '../components/ShareSheet';
 import { useLibrary } from '../hooks/useLibrary';
+import { formatStoryShare } from '../services/share';
 import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
 import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
@@ -113,10 +116,12 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const { topInset, bottomInset } = useMobileLayout();
   const accent = sectionAccent(story.sectionSlug, isDark);
   const { isSaved, toggleSaved } = useLibrary();
+  const { openShare } = useShareSheet();
   const { load, save } = useReadingBookmark(story.id);
   const scrollRef = useRef<ScrollView>(null);
   const [bookmarked, setBookmarked] = useState(false);
   const [restoredY, setRestoredY] = useState(0);
+  const [highlightMode, setHighlightMode] = useState(false);
   const saved = isSaved(story.id);
   const resolved = useMemo(() => resolveFullText(story), [story]);
   const prophetSlug = useMemo(() => {
@@ -228,6 +233,31 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         </Pressable>
 
         <Pressable
+          onPress={() => openShare(formatStoryShare(story))}
+          accessibilityRole="button"
+          accessibilityLabel={`Share ${story.title}`}
+          style={[styles.iconBtn, { borderColor: colors.border, backgroundColor: colors.card }]}
+        >
+          <Share2 size={17} color={colors.ink} />
+        </Pressable>
+
+        <Pressable
+          onPress={() => setHighlightMode((on) => !on)}
+          accessibilityRole="button"
+          accessibilityState={{ selected: highlightMode }}
+          accessibilityLabel={highlightMode ? 'Turn off highlight mode' : 'Highlight passages'}
+          style={[
+            styles.iconBtn,
+            {
+              borderColor: highlightMode ? colors.gold : colors.border,
+              backgroundColor: highlightMode ? alpha(colors.gold, 0.16) : colors.card,
+            },
+          ]}
+        >
+          <Highlighter size={17} color={highlightMode ? colors.gold : colors.ink} />
+        </Pressable>
+
+        <Pressable
           onPress={() => toggleSaved(story.id)}
           accessibilityRole="button"
           accessibilityState={{ selected: saved }}
@@ -255,14 +285,30 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           <Badge label={story.authenticityGrade} color={accent.badgeText} background={accent.badgeBg} />
           <Caption color={colors.inkSubtle}>{story.durationLabel} read</Caption>
         </Row>
+        {highlightMode ? (
+          <Caption color={colors.gold} style={styles.highlightHint}>
+            Tap a paragraph to save it in Library → Highlights. Long-press still works too.
+          </Caption>
+        ) : (
+          <Caption color={colors.inkSubtle} style={styles.highlightHint}>
+            Select or long-press a passage to highlight or share it.
+          </Caption>
+        )}
 
         {resolved.sections.map((section, index) => (
           <View key={`${section.heading ?? 'p'}-${index}`} style={styles.section}>
             {section.heading ? <Heading style={styles.sectionHeading}>{section.heading}</Heading> : null}
             {toParagraphs(section.body).map((paragraph, pIndex) => (
-              <Body key={`${pIndex}-${paragraph.slice(0, 24)}`} style={styles.paragraph}>
-                {paragraph}
-              </Body>
+              <HighlightableText
+                key={`${pIndex}-${paragraph.slice(0, 24)}`}
+                text={paragraph}
+                kind="story"
+                sourceLabel={`${story.title} · ${story.figureName}`}
+                storyId={story.id}
+                storyTitle={story.title}
+                highlightMode={highlightMode}
+                style={styles.paragraph}
+              />
             ))}
           </View>
         ))}
@@ -360,7 +406,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     borderBottomWidth: 1,
   },
-  headerMeta: { flex: 1, gap: 2 },
+  headerMeta: { flex: 1, minWidth: 0, gap: 2 },
   iconBtn: {
     width: 36,
     height: 36,
@@ -373,7 +419,8 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 120 },
   title: { marginBottom: 4 },
   figure: { marginTop: 6 },
-  badges: { marginTop: 10, marginBottom: 18 },
+  badges: { marginTop: 10, marginBottom: 8 },
+  highlightHint: { marginBottom: 14 },
   section: { marginBottom: 22, gap: 10 },
   sectionHeading: { fontSize: 18 },
   paragraph: { fontSize: 16, lineHeight: 27 },

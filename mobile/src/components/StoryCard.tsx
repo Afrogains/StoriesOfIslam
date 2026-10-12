@@ -5,13 +5,16 @@ import {
   Clock,
   Headphones,
   Library,
+  Share2,
   User,
   type LucideIcon,
 } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { sectionsMeta } from '../data/catalogMeta';
 import type { SectionSlug, StoryItem } from '../types/catalog';
+import { useShareSheet } from './ShareSheet';
 import { useLibrary } from '../hooks/useLibrary';
+import { formatStoryShare } from '../services/share';
 import { alpha, radius, sectionAccent } from '../theme/tokens';
 import {
   ArabicTitle,
@@ -50,6 +53,7 @@ export default function StoryCard({
 }) {
   const { colors, isDark } = useTheme();
   const { isSaved, toggleSaved } = useLibrary();
+  const { openShare } = useShareSheet();
   const meta = sectionsMeta[story.sectionSlug];
   const accent = sectionAccent(story.sectionSlug, isDark);
   const saved = isSaved(story.id);
@@ -63,20 +67,31 @@ export default function StoryCard({
           <OutlineBadge label={story.authenticityGrade} color={accent.primary} icon={CheckCircle2} />
         </Row>
 
-        <Pressable
-          onPress={() => toggleSaved(story.id)}
-          hitSlop={8}
-          style={styles.bookmark}
-          accessibilityRole="button"
-          accessibilityState={{ selected: saved }}
-          accessibilityLabel={saved ? `Remove ${story.title} from library` : `Save ${story.title} to library`}
-        >
-          <Bookmark
-            size={18}
-            color={saved ? colors.gold : colors.inkSubtle}
-            fill={saved ? colors.gold : 'transparent'}
-          />
-        </Pressable>
+        <Row gap={4} align="center">
+          <Pressable
+            onPress={() => openShare(formatStoryShare(story))}
+            hitSlop={8}
+            style={styles.bookmark}
+            accessibilityRole="button"
+            accessibilityLabel={`Share ${story.title}`}
+          >
+            <Share2 size={17} color={colors.inkSubtle} />
+          </Pressable>
+          <Pressable
+            onPress={() => toggleSaved(story.id)}
+            hitSlop={8}
+            style={styles.bookmark}
+            accessibilityRole="button"
+            accessibilityState={{ selected: saved }}
+            accessibilityLabel={saved ? `Remove ${story.title} from library` : `Save ${story.title} to library`}
+          >
+            <Bookmark
+              size={18}
+              color={saved ? colors.gold : colors.inkSubtle}
+              fill={saved ? colors.gold : 'transparent'}
+            />
+          </Pressable>
+        </Row>
       </Row>
 
       <Title numberOfLines={2}>{story.title}</Title>

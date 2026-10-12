@@ -1,6 +1,6 @@
-import { BookmarkX, LogIn, LogOut, Trash2 } from 'lucide-react-native';
+import { BookmarkX, Highlighter, LogIn, LogOut, Quote, Share2, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useAuth } from '../auth/AuthProvider';
 import ScreenHeader from '../components/ScreenHeader';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
@@ -16,11 +16,15 @@ import {
   Small,
   useTheme,
 } from '../components/ui';
+import { useCatalog } from '../data/CatalogProvider';
 import { sectionsMeta } from '../data/catalogMeta';
 import type { SectionSlug, StoryItem } from '../types/catalog';
+import { useShareSheet } from '../components/ShareSheet';
+import { useHighlights } from '../hooks/useHighlights';
 import { useLibrary } from '../hooks/useLibrary';
+import { formatHighlightShare } from '../services/share';
 import { useMobileLayout } from '../hooks/useMobileLayout';
-import { brandGradients, sectionAccent } from '../theme/tokens';
+import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import { apiRequest } from '../services/api';
 import { APP_BUILD_LABEL } from '../config';
 
@@ -28,7 +32,11 @@ import { APP_BUILD_LABEL } from '../config';
 export default function LibraryScreen() {
   const { colors, isDark } = useTheme();
   const { padX, screenContent } = useMobileLayout();
+  const { stories } = useCatalog();
   const { savedStories, savedCount } = useLibrary();
+  const { highlights, highlightCount, removeHighlight } = useHighlights();
+  const { openShare } = useShareSheet();
+  const [shelf, setShelf] = useState<'stories' | 'highlights'>('stories');
   const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
@@ -87,7 +95,8 @@ export default function LibraryScreen() {
               {authenticated ? 'Synced across devices' : 'Sign in to sync'}
             </BodyStrong>
             <Caption color={colors.inkMuted}>
-              {savedCount} saved {savedCount === 1 ? 'story' : 'stories'}
+              {savedCount} {savedCount === 1 ? 'story' : 'stories'} · {highlightCount}{' '}
+              {highlightCount === 1 ? 'highlight' : 'highlights'}
             </Caption>
           </View>
           <Row gap={8} style={styles.accountActions} align="stretch">
@@ -126,69 +135,180 @@ export default function LibraryScreen() {
           </Row>
         </View>
 
-        {savedCount > 0 ? (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={[styles.filters, { marginHorizontal: -padX }]}
-            contentContainerStyle={[styles.filtersContent, { paddingHorizontal: padX }]}
-          >
+        <Row gap={8} style={styles.shelfRow}>
+          <View style={styles.shelfChip}>
             <Pill
-              label="Everything"
-              selected={sectionFilter === 'all'}
-              onPress={() => setSectionFilter('all')}
+              label={`Stories · ${savedCount}`}
+              selected={shelf === 'stories'}
+              onPress={() => setShelf('stories')}
               gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
             />
-            {perSection.map(({ slug }) => (
-              <Pill
-                key={slug}
-                label={sectionsMeta[slug].title}
-                icon={sectionIcons[slug]}
-                selected={sectionFilter === slug}
-                onPress={() => setSectionFilter(slug)}
-                gradient={sectionAccent(slug, isDark).accentGradient}
-              />
-            ))}
-          </ScrollView>
-        ) : null}
+          </View>
+          <View style={styles.shelfChip}>
+            <Pill
+              label={`Highlights · ${highlightCount}`}
+              selected={shelf === 'highlights'}
+              onPress={() => setShelf('highlights')}
+              icon={Highlighter}
+              gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
+            />
+          </View>
+        </Row>
 
-        {savedCount === 0 ? (
+        {shelf === 'stories' ? (
+          <>
+            {savedCount > 0 ? (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={[styles.filters, { marginHorizontal: -padX }]}
+                contentContainerStyle={[styles.filtersContent, { paddingHorizontal: padX }]}
+              >
+                <Pill
+                  label="Everything"
+                  selected={sectionFilter === 'all'}
+                  onPress={() => setSectionFilter('all')}
+                  gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+                />
+                {perSection.map(({ slug }) => (
+                  <Pill
+                    key={slug}
+                    label={sectionsMeta[slug].title}
+                    icon={sectionIcons[slug]}
+                    selected={sectionFilter === slug}
+                    onPress={() => setSectionFilter(slug)}
+                    gradient={sectionAccent(slug, isDark).accentGradient}
+                  />
+                ))}
+              </ScrollView>
+            ) : null}
+
+            {savedCount === 0 ? (
+              <EmptyState
+                icon={BookmarkX}
+                title="Nothing saved yet"
+                description="Tap the bookmark on any story to keep it here."
+                gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+              />
+            ) : (
+              <>
+                <SectionHeading
+                  label={sectionFilter === 'all' ? 'Saved' : sectionsMeta[sectionFilter].title}
+                  trailing={`${visible.length}`}
+                />
+
+                {visible.length === 0 ? (
+                  <Small align="center" color={colors.inkMuted}>
+                    Nothing in this section yet.
+                  </Small>
+                ) : (
+                  <View style={styles.list}>
+                    {visible.map((story) => (
+                      <StoryCard
+                        key={story.id}
+                        story={story}
+                        variant="compact"
+                        onRead={() => {
+                          setActiveStory(story);
+                          setSessionMode('read');
+                        }}
+                        onListen={() => {
+                          setActiveStory(story);
+                          setSessionMode('listen');
+                        }}
+                      />
+                    ))}
+                  </View>
+                )}
+              </>
+            )}
+          </>
+        ) : highlightCount === 0 ? (
           <EmptyState
-            icon={BookmarkX}
-            title="Nothing saved yet"
-            description="Tap the bookmark on any story to keep it here."
-            gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
+            icon={Quote}
+            title="No highlights yet"
+            description="Select or long-press a passage in a story, or save the hadith of the day from Home."
+            gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
           />
         ) : (
           <>
-            <SectionHeading
-              label={sectionFilter === 'all' ? 'Saved' : sectionsMeta[sectionFilter].title}
-              trailing={`${visible.length}`}
-            />
-
-            {visible.length === 0 ? (
-              <Small align="center" color={colors.inkMuted}>
-                Nothing in this section yet.
-              </Small>
-            ) : (
-              <View style={styles.list}>
-                {visible.map((story) => (
-                  <StoryCard
-                    key={story.id}
-                    story={story}
-                    variant="compact"
-                    onRead={() => {
-                      setActiveStory(story);
-                      setSessionMode('read');
-                    }}
-                    onListen={() => {
-                      setActiveStory(story);
-                      setSessionMode('listen');
-                    }}
+            <SectionHeading label="Highlights" trailing={`${highlightCount}`} />
+            <View style={styles.list}>
+              {highlights.map((item) => (
+                <View
+                  key={item.id}
+                  style={[
+                    styles.highlightCard,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                    shadow('sm', isDark),
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.highlightBar,
+                      { backgroundColor: item.kind === 'hadith' ? colors.emerald : colors.gold },
+                    ]}
                   />
-                ))}
-              </View>
-            )}
+                  <Caption color={colors.gold}>{item.kind === 'hadith' ? 'Hadith' : item.kind === 'name' ? 'Name' : 'Story'}</Caption>
+                  <BodyStrong style={styles.highlightQuote}>{item.text}</BodyStrong>
+                  <Small color={colors.inkMuted}>{item.sourceLabel}</Small>
+                  <Row gap={8} style={styles.highlightActions} align="center">
+                    <Pressable
+                      onPress={() => openShare(formatHighlightShare(item))}
+                      accessibilityRole="button"
+                      accessibilityLabel="Share this highlight"
+                      style={({ pressed }) => [
+                        styles.highlightBtn,
+                        {
+                          borderColor: colors.border,
+                          backgroundColor: isDark ? colors.cardAlt : alpha(colors.gold, 0.08),
+                        },
+                        pressed && styles.pressed,
+                      ]}
+                    >
+                      <Share2 size={14} color={colors.ink} />
+                      <Caption color={colors.ink}>Share</Caption>
+                    </Pressable>
+                    {item.storyId ? (
+                      <Pressable
+                        onPress={() => {
+                          const story = stories.find((entry) => entry.id === item.storyId) ?? null;
+                          if (story) {
+                            setActiveStory(story);
+                            setSessionMode('read');
+                          }
+                        }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open the source story"
+                        style={({ pressed }) => [
+                          styles.highlightBtn,
+                          { borderColor: colors.border, backgroundColor: colors.cardAlt },
+                          pressed && styles.pressed,
+                        ]}
+                      >
+                        <Caption color={colors.inkMuted}>Open</Caption>
+                      </Pressable>
+                    ) : null}
+                    <Pressable
+                      onPress={() => removeHighlight(item.id)}
+                      accessibilityRole="button"
+                      accessibilityLabel="Remove this highlight"
+                      style={({ pressed }) => [
+                        styles.highlightBtn,
+                        { borderColor: colors.border },
+                        pressed && styles.pressed,
+                      ]}
+                    >
+                      <Trash2 size={14} color={colors.coral} />
+                      <Caption color={colors.coral}>Remove</Caption>
+                    </Pressable>
+                  </Row>
+                </View>
+              ))}
+            </View>
           </>
         )}
 
@@ -219,6 +339,35 @@ const styles = StyleSheet.create({
   accountAction: { flexGrow: 1, minWidth: 120 },
   filters: { marginBottom: 14 },
   filtersContent: { gap: 8, paddingRight: 8 },
+  shelfRow: { marginBottom: 12, flexWrap: 'wrap' },
+  shelfChip: { flexGrow: 0 },
   list: { gap: 10 },
+  highlightCard: {
+    borderWidth: 1,
+    borderRadius: radius.xl,
+    padding: 14,
+    paddingLeft: 16,
+    gap: 6,
+    overflow: 'hidden',
+  },
+  highlightBar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+  },
+  highlightQuote: { fontSize: 15, lineHeight: 22 },
+  highlightActions: { marginTop: 8, flexWrap: 'wrap' },
+  highlightBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  pressed: { opacity: 0.88 },
   buildLabel: { marginTop: 24, textAlign: 'center' },
 });

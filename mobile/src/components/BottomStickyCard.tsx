@@ -1,4 +1,4 @@
-import { BookOpen, Headphones, PlayCircle } from 'lucide-react-native';
+import { BookOpen, Headphones, PlayCircle, Share2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { THE_NAMES_SERIES, type DivineName } from '../data/theNames';
@@ -10,7 +10,9 @@ import {
   type NamesMediaStatus,
 } from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
+import { formatNameShare } from '../services/share';
 import NamesAudioPlayer from './NamesAudioPlayer';
+import { useShareSheet } from './ShareSheet';
 import {
   ArabicInline,
   Body,
@@ -46,6 +48,7 @@ export default function BottomStickyCard({
   mediaStatus = 'unavailable',
 }: BottomStickyCardProps) {
   const { isDark } = useTheme();
+  const { openShare } = useShareSheet();
   const episode = episodeForName(approved, audioForName(name.number));
   const watchClass = approved
     ? () => void Linking.openURL(approved.watchUrl).catch(() => undefined)
@@ -74,6 +77,20 @@ export default function BottomStickyCard({
           <ArabicInline color="#FDE68A" style={styles.arabic} numberOfLines={1}>
             {name.arabic}
           </ArabicInline>
+
+          <Pressable
+            onPress={() => openShare(formatNameShare(name))}
+            accessibilityRole="button"
+            accessibilityLabel={`Share ${name.transliteration}`}
+            hitSlop={4}
+            style={({ pressed }) => [
+              styles.iconCta,
+              { backgroundColor: 'rgba(255,255,255,0.08)' },
+              pressed && styles.pressed,
+            ]}
+          >
+            <Share2 size={16} color="#E2E8F0" />
+          </Pressable>
 
           <Pressable
             onPress={onListen}

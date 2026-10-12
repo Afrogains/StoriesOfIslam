@@ -20,6 +20,8 @@ import {
 import { AuthProvider } from './src/auth/AuthProvider';
 import { CatalogProvider } from './src/data/CatalogProvider';
 import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
+import { ShareHostProvider } from './src/components/ShareSheet';
+import { HighlightsProvider, useHighlights } from './src/hooks/useHighlights';
 import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
 import { useMobileLayout } from './src/hooks/useMobileLayout';
 import ExploreScreen from './src/screens/ExploreScreen';
@@ -61,6 +63,8 @@ const tabs = {
 function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { isDark } = useAppMode();
   const { savedCount } = useLibrary();
+  const { highlightCount } = useHighlights();
+  const libraryBadge = savedCount + highlightCount;
   const { tabBarPadTop, tabBarPadBottom } = useMobileLayout();
   const colors = getColors(isDark);
   const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.85) : colors.inkSubtle;
@@ -127,9 +131,9 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                   <Icon size={20} color={inactiveColor} strokeWidth={2} />
                 </View>
               )}
-              {route.name === 'Library' && savedCount > 0 ? (
+              {route.name === 'Library' && libraryBadge > 0 ? (
                 <View style={[styles.badge, { backgroundColor: colors.gold, borderColor: colors.navBg }]}>
-                  <Text style={styles.badgeText}>{savedCount > 9 ? '9+' : savedCount}</Text>
+                  <Text style={styles.badgeText}>{libraryBadge > 9 ? '9+' : libraryBadge}</Text>
                 </View>
               ) : null}
             </View>
@@ -207,7 +211,11 @@ export default function App() {
           <CatalogProvider>
             <AppModeProvider>
               <LibraryProvider>
-                <AppNavigator />
+                <HighlightsProvider>
+                  <ShareHostProvider>
+                    <AppNavigator />
+                  </ShareHostProvider>
+                </HighlightsProvider>
               </LibraryProvider>
             </AppModeProvider>
           </CatalogProvider>

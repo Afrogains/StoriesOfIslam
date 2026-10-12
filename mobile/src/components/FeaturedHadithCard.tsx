@@ -1,4 +1,4 @@
-import { BookOpen, ChevronDown, ChevronUp } from 'lucide-react-native';
+import { BookOpen, ChevronDown, ChevronUp, Highlighter, Share2 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,7 +11,10 @@ import {
   NAWAWI_FORTY,
   type NawawiHadith,
 } from '../data/nawawiForty';
+import { useHighlights } from '../hooks/useHighlights';
 import { openNawawiPdf } from '../services/nawawiPdf';
+import { formatHadithShare } from '../services/share';
+import { useShareSheet } from './ShareSheet';
 import {
   ARABIC_FONT_FAMILY,
   BODY_FONT_FAMILY,
@@ -29,6 +32,8 @@ const COLLAPSED_EN_LINES = 3;
  */
 export default function FeaturedHadithCard() {
   const { isDark } = useTheme();
+  const { openShare } = useShareSheet();
+  const { addHighlight } = useHighlights();
   const [now, setNow] = useState(() => Date.now());
   const [expanded, setExpanded] = useState(false);
 
@@ -58,6 +63,19 @@ export default function FeaturedHadithCard() {
 
   const openPdf = () => {
     void openNawawiPdf(hadith.pdfPage);
+  };
+
+  const shareHadith = () => {
+    openShare(formatHadithShare(hadith));
+  };
+
+  const saveHadith = () => {
+    addHighlight({
+      text: `${hadith.textEn}\n\n${hadith.textAr}`,
+      kind: 'hadith',
+      sourceLabel: `${NAWAWI_COLLECTION.title} · Hadith ${hadith.n} · ${hadith.subject}`,
+      storyTitle: `Hadith ${hadith.n}`,
+    });
   };
 
   return (
@@ -140,16 +158,38 @@ export default function FeaturedHadithCard() {
             <Caption color="rgba(255,255,255,0.55)">New hadith each day</Caption>
           )}
 
-          <Pressable
-            onPress={openPdf}
-            hitSlop={8}
-            accessibilityRole="link"
-            accessibilityLabel={`Open commentary PDF for hadith ${hadith.n}`}
-            style={({ pressed }) => [styles.footerBtn, pressed && styles.pressed]}
-          >
-            <BookOpen size={14} color="rgba(253, 230, 138, 0.95)" strokeWidth={2.25} />
-            <Caption color="rgba(253, 230, 138, 0.95)">Commentary</Caption>
-          </Pressable>
+          <Row gap={12} align="center">
+            <Pressable
+              onPress={saveHadith}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={`Save hadith ${hadith.n} to Highlights`}
+              style={({ pressed }) => [styles.footerBtn, pressed && styles.pressed]}
+            >
+              <Highlighter size={14} color="rgba(253, 230, 138, 0.95)" strokeWidth={2.25} />
+              <Caption color="rgba(253, 230, 138, 0.95)">Save</Caption>
+            </Pressable>
+            <Pressable
+              onPress={shareHadith}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={`Share hadith ${hadith.n}`}
+              style={({ pressed }) => [styles.footerBtn, pressed && styles.pressed]}
+            >
+              <Share2 size={14} color="rgba(253, 230, 138, 0.95)" strokeWidth={2.25} />
+              <Caption color="rgba(253, 230, 138, 0.95)">Share</Caption>
+            </Pressable>
+            <Pressable
+              onPress={openPdf}
+              hitSlop={8}
+              accessibilityRole="link"
+              accessibilityLabel={`Open commentary PDF for hadith ${hadith.n}`}
+              style={({ pressed }) => [styles.footerBtn, pressed && styles.pressed]}
+            >
+              <BookOpen size={14} color="rgba(253, 230, 138, 0.95)" strokeWidth={2.25} />
+              <Caption color="rgba(253, 230, 138, 0.95)">Commentary</Caption>
+            </Pressable>
+          </Row>
         </Row>
       </LinearGradient>
     </View>
@@ -218,6 +258,8 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: 'rgba(255,255,255,0.12)',
+    flexWrap: 'wrap',
+    gap: 8,
   },
   footerBtn: {
     flexDirection: 'row',
