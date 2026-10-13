@@ -98,7 +98,7 @@ export default function FeaturedHadithCard() {
           style={({ pressed }) => [pressed && styles.pressed]}
         >
           <Row justify="space-between" align="center">
-            <Overline color="rgba(255,255,255,0.75)">Today's hadith</Overline>
+            <Overline color="rgba(255,255,255,0.75)">{`Today's hadith`}</Overline>
             <View style={styles.badges}>
               <View style={styles.numberBadge}>
                 <Caption color="#ECFDF5">

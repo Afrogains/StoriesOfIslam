@@ -27,7 +27,6 @@ function timelineGroups(): { era: QuranStoryEra; slugs: string[] }[] {
 /** Nineteen Quranic narratives in Ibn Kathir’s book order, grouped by era. */
 export default function QuranStoriesPath({ onSelect }: QuranStoriesPathProps) {
   const { colors, isDark } = useTheme();
-  let index = 0;
 
   return (
     <Card style={styles.card} padding={14}>
@@ -47,8 +46,7 @@ export default function QuranStoriesPath({ onSelect }: QuranStoriesPathProps) {
               </Row>
               {group.slugs.map((slug) => {
                 const chapter = getQuranStory(slug);
-                index += 1;
-                const number = index;
+                const number = chapter?.sortOrder ?? 0;
                 return (
                   <Pressable
                     key={slug}
