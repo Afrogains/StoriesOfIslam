@@ -17,6 +17,7 @@ import ScreenHeader from '../components/ScreenHeader';
 import { takeExploreIntent } from '../navigation/exploreIntent';
 import ExploreRandomPick from '../components/ExploreRandomPick';
 import ProphetsRoster from '../components/ProphetsRoster';
+import QuranStoriesPath from '../components/QuranStoriesPath';
 import SahabahRoster from '../components/SahabahRoster';
 import SeerahPath from '../components/SeerahPath';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
@@ -52,6 +53,7 @@ import {
   preferSahabahCatalogStory,
   sahabahChapterToStoryItem,
 } from '../data/sahabahChapters';
+import { quranStoryToStoryItem } from '../data/quranStories';
 import { isSeerahTimelineStory, resolveSeerahTimelineStory } from '../data/seerahTimeline';
 import { storiesForProphetSlug, storiesForSahabahSlug } from '../data/storyAdapters';
 import { useMobileLayout } from '../hooks/useMobileLayout';
@@ -140,6 +142,9 @@ export default function ExploreScreen() {
       ) {
         return false;
       }
+      if (selectedSection === 'qisas-al-quran' && !needle) {
+        return false;
+      }
       if (mediaFilter === 'audio' && !story.hasAudio) return false;
       if (mediaFilter === 'text' && story.hasAudio) return false;
       if (gradeFilter !== 'all' && story.authenticityGrade !== gradeFilter) return false;
@@ -163,6 +168,8 @@ export default function ExploreScreen() {
   );
 
   const searching = query.trim().length > 0;
+  const showPathShelf =
+    !searching && (selectedSection === 'seerah-shamail' || selectedSection === 'qisas-al-quran');
   const showGroupedBrowse = selectedSection === 'all' && !searching;
   const audioCount = filteredStories.filter((story) => story.hasAudio).length;
   const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
@@ -322,6 +329,8 @@ export default function ExploreScreen() {
             ? `${SECTION_ORDER.length} categories · ${stories.length} stories`
             : selectedSection === 'seerah-shamail' && !searching
               ? `${sectionCounts['seerah-shamail']} stories · one chronological timeline`
+              : selectedSection === 'qisas-al-quran' && !searching
+                ? `${sectionCounts['qisas-al-quran']} stories · Ibn Kathir’s Quranic narratives`
               : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
           {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
         </Caption>
@@ -391,7 +400,7 @@ export default function ExploreScreen() {
           </Card>
         ) : null}
 
-        {selectedSection === 'seerah-shamail' && !searching ? null : (
+        {showPathShelf ? null : (
           <ExploreRandomPick
             pool={filteredStories}
             onRead={(story) => openStory(story, 'read')}
@@ -437,7 +446,7 @@ export default function ExploreScreen() {
           </View>
         ) : null}
 
-        {activeMeta && !(selectedSection === 'seerah-shamail' && !searching) ? (
+        {activeMeta && !showPathShelf ? (
           <Card
             style={styles.sectionIntro}
             padding={14}
@@ -465,6 +474,17 @@ export default function ExploreScreen() {
           <ProphetsRoster onSelect={openProphetStories} />
         ) : null}
 
+        {selectedSection === 'qisas-al-quran' ? (
+          <QuranStoriesPath
+            onSelect={(slug) => {
+              const story = quranStoryToStoryItem(slug);
+              if (!story) return;
+              setActiveStory(story);
+              setSessionMode('read');
+            }}
+          />
+        ) : null}
+
         {selectedSection === 'seerah-shamail' ? (
           <SeerahPath
             onSelect={(slug) => {
@@ -480,7 +500,7 @@ export default function ExploreScreen() {
           <SahabahRoster onSelect={openSahabahStories} />
         ) : null}
 
-        {filteredStories.length === 0 && !(selectedSection === 'seerah-shamail' && !searching) ? (
+        {filteredStories.length === 0 && !showPathShelf ? (
           <EmptyState
             icon={SearchX}
             title="Nothing found"
@@ -489,7 +509,7 @@ export default function ExploreScreen() {
             onAction={resetAll}
             gradient={emeraldGradient}
           />
-        ) : selectedSection === 'seerah-shamail' && !searching ? null : showGroupedBrowse ? (
+        ) : showPathShelf ? null : showGroupedBrowse ? (
           <View style={styles.grouped}>
             {grouped.map(({ slug, stories: sectionStories }) => {
               const meta = sectionsMeta[slug];

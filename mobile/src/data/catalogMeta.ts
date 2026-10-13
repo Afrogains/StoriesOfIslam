@@ -16,6 +16,21 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     conceptTagline: 'Prophetic Guidance & Firm Faith',
     iconName: 'User',
   },
+  'qisas-al-quran': {
+    id: 'qisas-al-quran',
+    title: 'Stories of the Quran',
+    titleAr: 'قصص القرآن',
+    subtitle: 'Qisas al-Quran',
+    description:
+      'Nineteen Quranic narratives from the in-app Ibn Kathir Stories of the Quran English PDF — the periocopes the Book itself tells, beside the full prophet biographies.',
+    countLabel: 'Stories',
+    accentColor: '#6D28D9',
+    bgTint: '#F5F3FF',
+    badgeBg: '#EDE9FE',
+    badgeText: '#5B21B6',
+    conceptTagline: 'Quranic Signs, Trials & Counsel',
+    iconName: 'BookMarked',
+  },
   'seerah-shamail': {
     id: 'seerah-shamail',
     title: 'Seerah & Shama’il',

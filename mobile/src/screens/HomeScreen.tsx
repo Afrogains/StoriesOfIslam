@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import {
   ArrowRight,
+  BookMarked,
   BookOpen,
   Flame,
   FolderOpen,
@@ -83,6 +84,7 @@ type HomeTabs = {
 
 const sectionIcons: Record<SectionSlug, LucideIcon> = {
   'qisas-al-anbiya': BookOpen,
+  'qisas-al-quran': BookMarked,
   'seerah-shamail': Sparkles,
   sahabah: Users,
   gleanings: LibraryIcon,

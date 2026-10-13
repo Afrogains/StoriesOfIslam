@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { getProphetChapter } from '../data/prophetChapters';
+import { getQuranStory } from '../data/quranStories';
 import { getSahabahChapter } from '../data/sahabahChapters';
 import { getSeerahPart } from '../data/seerahParts';
 import { getShortStory } from '../data/shortStoriesFromTheLife';
@@ -20,6 +21,7 @@ import { useShareSheet } from '../components/ShareSheet';
 import { useLibrary } from '../hooks/useLibrary';
 import { formatStoryShare } from '../services/share';
 import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
+import { openQuranStoriesPdf, quranStoryPdfSpanForSlug } from '../services/quranStoriesPdf';
 import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
 import type { StoryItem } from '../types/catalog';
@@ -53,6 +55,19 @@ function resolveFullText(story: StoryItem): { sections: { heading?: string; body
         story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
     );
     const chapter = prophet ? getProphetChapter(prophet.slug) : undefined;
+    if (chapter?.sections?.length) {
+      return {
+        sections: chapter.sections.map((section) => ({
+          heading: section.heading,
+          body: section.body,
+        })),
+        plain: chapter.contentEn,
+      };
+    }
+  }
+
+  if (story.sectionSlug === 'qisas-al-quran') {
+    const chapter = getQuranStory(story.id);
     if (chapter?.sections?.length) {
       return {
         sections: chapter.sections.map((section) => ({
@@ -153,8 +168,10 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const shortStoryPdfSpan =
     story.sectionSlug === 'seerah-shamail' ? shortStoryPdfSpanForSlug(story.id) : null;
   const sahabahPdfSpan = sahabahSlug ? sahabahPdfSpanForSlug(sahabahSlug) : null;
+  const quranPdfSpan =
+    story.sectionSlug === 'qisas-al-quran' ? quranStoryPdfSpanForSlug(story.id) : null;
   const ibnKathirSpan = prophetPdfSpan ?? seerahPdfSpan;
-  const pdfSpan = ibnKathirSpan ?? shortStoryPdfSpan ?? sahabahPdfSpan;
+  const pdfSpan = ibnKathirSpan ?? shortStoryPdfSpan ?? sahabahPdfSpan ?? quranPdfSpan;
 
   useEffect(() => {
     void load().then((y) => {
@@ -339,17 +356,21 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
               onPress={() =>
                 void (ibnKathirSpan
                   ? openIbnKathirPdf(pdfSpan.start)
-                  : shortStoryPdfSpan
-                    ? openShortStoriesPdf(pdfSpan.start)
-                    : openSahabahPdf(pdfSpan.start))
+                  : quranPdfSpan
+                    ? openQuranStoriesPdf(pdfSpan.start)
+                    : shortStoryPdfSpan
+                      ? openShortStoriesPdf(pdfSpan.start)
+                      : openSahabahPdf(pdfSpan.start))
               }
               accessibilityRole="link"
               accessibilityLabel={
                 ibnKathirSpan
                   ? 'Open Ibn Kathir PDF at this chapter'
-                  : shortStoryPdfSpan
-                    ? 'Open short stories PDF at this chapter'
-                    : 'Open Sahaba biographies PDF at this chapter'
+                  : quranPdfSpan
+                    ? 'Open Stories of the Quran PDF at this chapter'
+                    : shortStoryPdfSpan
+                      ? 'Open short stories PDF at this chapter'
+                      : 'Open Sahaba biographies PDF at this chapter'
               }
               style={({ pressed }) => [
                 styles.pdfBtn,
@@ -364,9 +385,11 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
               <Caption color={accent.primary} style={styles.pdfBtnLabel}>
                 {ibnKathirSpan
                   ? `Open Ibn Kathir PDF (p. ${pdfSpan.start})`
-                  : shortStoryPdfSpan
-                    ? `Open short stories PDF (p. ${pdfSpan.start})`
-                    : `Open Sahaba PDF (p. ${pdfSpan.start})`}
+                  : quranPdfSpan
+                    ? `Open Stories of the Quran PDF (p. ${pdfSpan.start})`
+                    : shortStoryPdfSpan
+                      ? `Open short stories PDF (p. ${pdfSpan.start})`
+                      : `Open Sahaba PDF (p. ${pdfSpan.start})`}
               </Caption>
             </Pressable>
           ) : null}

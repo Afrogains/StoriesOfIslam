@@ -14,7 +14,12 @@ export const BODY_FONT_FAMILY =
   Platform.OS === 'web' ? 'Inter, system-ui, sans-serif' : 'Inter';
 
 export type ColorScheme = 'light' | 'dark';
-export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah' | 'gleanings';
+export type SectionSlug =
+  | 'qisas-al-anbiya'
+  | 'qisas-al-quran'
+  | 'seerah-shamail'
+  | 'sahabah'
+  | 'gleanings';
 
 /**
  * Typography scale. Arabic sizes are deliberately larger than their Latin
@@ -112,6 +117,10 @@ export const sectionGradients: Record<
     light: ['#0F766E', '#115E59', '#042F2C'],
     dark: ['#14B8A6', '#0F766E', '#0D2D29'],
   },
+  'qisas-al-quran': {
+    light: ['#5B21B6', '#4C1D95', '#2E1065'],
+    dark: ['#A78BFA', '#7C3AED', '#2E1065'],
+  },
   'seerah-shamail': {
     light: ['#D97706', '#B45309', '#78350F'],
     dark: ['#F59E0B', '#D97706', '#3A1D00'],
@@ -129,6 +138,7 @@ export const sectionGradients: Record<
 /** Two-stop gradients for compact surfaces: pills, buttons, avatars. */
 export const accentGradients: Record<SectionSlug, { light: readonly [string, string]; dark: readonly [string, string] }> = {
   'qisas-al-anbiya': { light: ['#0F766E', '#115E59'], dark: ['#2DD4BF', '#0F766E'] },
+  'qisas-al-quran': { light: ['#6D28D9', '#5B21B6'], dark: ['#C4B5FD', '#7C3AED'] },
   'seerah-shamail': { light: ['#D97706', '#B45309'], dark: ['#FBBF24', '#D97706'] },
   sahabah: { light: ['#0284C7', '#0369A1'], dark: ['#38BDF8', '#0284C7'] },
   gleanings: { light: ['#EA580C', '#C2410C'], dark: ['#FB923C', '#EA580C'] },
@@ -290,6 +300,20 @@ export const palette = {
         darkPrimary: '#14B8A6',
         darkLight: '#0D2D29',
         darkText: '#5EEAD4',
+      },
+      'qisas-al-quran': {
+        name: 'Stories of the Quran',
+        nameAr: 'قصص القرآن',
+        primary: '#6D28D9',
+        secondary: '#5B21B6',
+        light: '#F5F3FF',
+        border: '#DDD6FE',
+        text: '#4C1D95',
+        badgeBg: '#EDE9FE',
+        badgeText: '#5B21B6',
+        darkPrimary: '#C4B5FD',
+        darkLight: '#2E1065',
+        darkText: '#DDD6FE',
       },
       'seerah-shamail': {
         name: "Seerah & Shama'il",

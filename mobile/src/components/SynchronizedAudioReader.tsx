@@ -447,6 +447,8 @@ export default function SynchronizedAudioReader({
                 <Caption color={colors.inkMuted} style={styles.audioErrorText}>
                   {sectionSlug === 'qisas-al-anbiya'
                     ? 'Listening uses on-device speech from the in-app Ibn Kathir PDF text. Press play to hear each passage; open Reading or the source PDF for the full chapter layout.'
+                    : sectionSlug === 'qisas-al-quran'
+                      ? 'Listening uses on-device speech from Ibn Kathir’s Stories of the Quran. Press play to hear each passage; open Reading or the source PDF for the full chapter.'
                     : sectionSlug === 'sahabah'
                       ? 'Listening uses calm on-device speech from the in-app Companions biographies PDF. Press play to hear each passage; open Reading or the source PDF for the full biography.'
                       : 'Listening uses on-device speech until a published audio track is ready. Press play to hear each passage.'}

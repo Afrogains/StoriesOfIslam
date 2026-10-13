@@ -1,4 +1,5 @@
 import {
+  BookMarked,
   BookOpen,
   Bookmark,
   CheckCircle2,
@@ -34,6 +35,7 @@ import {
 
 export const sectionIcons: Record<SectionSlug, LucideIcon> = {
   'qisas-al-anbiya': User,
+  'qisas-al-quran': BookMarked,
   'seerah-shamail': BookOpen,
   sahabah: User,
   gleanings: Library,

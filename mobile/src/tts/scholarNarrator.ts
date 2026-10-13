@@ -29,7 +29,11 @@ export const STANDARD_NARRATOR: ScholarNarratorPreset = {
 
 /** Prefer the calm scholar preset for Prophets and Sahabah PDF listens. */
 export function narratorPresetForSection(sectionSlug?: SectionSlug): ScholarNarratorPreset {
-  if (sectionSlug === 'sahabah' || sectionSlug === 'qisas-al-anbiya') {
+  if (
+    sectionSlug === 'sahabah' ||
+    sectionSlug === 'qisas-al-anbiya' ||
+    sectionSlug === 'qisas-al-quran'
+  ) {
     return SCHOLAR_NARRATOR;
   }
   return STANDARD_NARRATOR;
