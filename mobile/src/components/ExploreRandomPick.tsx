@@ -2,6 +2,7 @@ import { BookOpen, Headphones, Shuffle } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { sectionsMeta } from '../data/catalogMeta';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL, LISTEN_META_LABEL } from '../data/listenIncoming';
 import type { StoryItem } from '../types/catalog';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
@@ -33,7 +34,7 @@ type ExploreRandomPickProps = {
 };
 
 /**
- * Brief random story overview for Explore — Read / Listen without searching.
+ * Brief random story overview for Explore — Read now; Listen is incoming.
  */
 export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRandomPickProps) {
   const { colors, isDark } = useTheme();
@@ -54,8 +55,6 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
 
   const meta = sectionsMeta[pick.sectionSlug];
   const accent = sectionAccent(pick.sectionSlug, isDark);
-  const canListen = Boolean(pick.hasAudio || pick.audioUrl || pick.content);
-
   const reshuffle = () => {
     setPick((current) => pickRandom(pool, current?.id));
   };
@@ -76,7 +75,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
         <View style={styles.headCopy}>
           <Overline color={colors.emerald}>Discover</Overline>
           <Small color={colors.inkMuted} style={styles.headHint} numberOfLines={2}>
-            Tap Another for a new story — then Read or Listen.
+            Tap Another for a new story, then Read. Listening is incoming.
           </Small>
         </View>
         <Pressable
@@ -115,7 +114,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
       </Body>
       <Caption color={colors.inkSubtle} style={styles.meta}>
         {pick.durationLabel}
-        {canListen ? ' · audio ready' : ' · text first'}
+        {` · ${LISTEN_META_LABEL.toLowerCase()}`}
       </Caption>
 
       <Row gap={8} style={styles.ctaRow} align="center">
@@ -130,13 +129,12 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
         </View>
         <View style={styles.ctaFlex}>
           <GradientButton
-            label="Listen"
+            label={LISTEN_CTA_LABEL}
             icon={Headphones}
             gradient={accent.accentGradient}
             size="sm"
             onPress={() => onListen(pick)}
-            disabled={!canListen}
-            accessibilityLabel={`Listen to: ${pick.title}`}
+            accessibilityLabel={LISTEN_CTA_A11Y}
           />
         </View>
       </Row>

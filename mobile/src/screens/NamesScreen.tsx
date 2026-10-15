@@ -1,4 +1,4 @@
-import { Headphones, Search } from 'lucide-react-native';
+import { AlertTriangle, Headphones, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import {
   FlatList,
@@ -14,25 +14,23 @@ import BottomStickyCard, {
 import ScreenHeader from '../components/ScreenHeader';
 import {
   ArabicInline,
+  Body,
   BodyStrong,
   Caption,
+  Overline,
   Small,
   useTheme,
 } from '../components/ui';
 import {
+  THE_NAMES_SERIES,
   divineNames,
   findName,
   type DivineName,
 } from '../data/theNames';
-import { nameAudioByNumber } from '../data/theNamesAudio';
+import { LISTEN_CTA_LABEL } from '../data/listenIncoming';
 import { useMobileLayout } from '../hooks/useMobileLayout';
-import { useApprovedNamesMedia, type ApprovedNameMedia } from '../services/namesMedia';
+import { useApprovedNamesMedia } from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
-
-function nameHasAudio(number: number, approved: Record<number, ApprovedNameMedia>): boolean {
-  const media = approved[number];
-  return Boolean(nameAudioByNumber[number] || media?.audioUrl || media?.podcastAudioUrl);
-}
 
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
@@ -43,11 +41,6 @@ export default function NamesScreen() {
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
   const namesMedia = useApprovedNamesMedia();
-  const hasAudioFor = (number: number) => nameHasAudio(number, namesMedia.byNumber);
-  const audioCount = useMemo(
-    () => divineNames.filter((name) => nameHasAudio(name.number, namesMedia.byNumber)).length,
-    [namesMedia.byNumber],
-  );
 
   const filtered = useMemo(() => findName(query), [query]);
   // Pad odd counts so the last tile keeps half width instead of stretching.
@@ -62,7 +55,7 @@ export default function NamesScreen() {
   };
 
   const badgeLabel =
-    filtered.length === 99 ? `${audioCount} audio` : `${filtered.length} found`;
+    filtered.length === 99 ? `Listen ${LISTEN_CTA_LABEL.toLowerCase()}` : `${filtered.length} found`;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
@@ -71,6 +64,7 @@ export default function NamesScreen() {
           eyebrow="Asma’ul Husna"
           title="The Names"
           arabic="الأسماء الحسنى"
+          subtitle="Study notes only — read the disclaimer below."
         />
         <View
           style={[
@@ -96,7 +90,7 @@ export default function NamesScreen() {
           >
             <Headphones size={11} color={colors.inkMuted} />
             <Caption color={colors.inkMuted} style={styles.audioCountText}>
-              {filtered.length === 99 ? String(audioCount) : String(filtered.length)}
+              {filtered.length === 99 ? LISTEN_CTA_LABEL : String(filtered.length)}
             </Caption>
           </View>
         </View>
@@ -111,13 +105,13 @@ export default function NamesScreen() {
         contentContainerStyle={[styles.listContent, { paddingHorizontal: padX }]}
         // numColumns + contentContainerStyle paddingBottom is unreliable on web;
         // a footer spacer guarantees tiles can scroll clear of the sticky deck.
+        ListHeaderComponent={<NamesDisclaimer />}
         ListFooterComponent={
           <View style={{ height: deckMode === 'idle' ? stickyBottom + 96 : namesListPadBottom }} />
         }
         renderItem={({ item }) => {
           if (!item) return <View style={styles.spacerTile} />;
           const active = item.number === selected.number;
-          const hasAudio = hasAudioFor(item.number);
           return (
             <Pressable
               onPress={() => selectName(item)}
@@ -150,11 +144,7 @@ export default function NamesScreen() {
                     {item.number}
                   </BodyStrong>
                 </LinearGradient>
-                {hasAudio ? (
-                  <Headphones size={12} color={active ? colors.gold : colors.inkSubtle} />
-                ) : (
-                  <View style={styles.audioSpacer} />
-                )}
+                <View style={styles.audioSpacer} />
               </View>
               <ArabicInline
                 color={colors.gold}
@@ -185,6 +175,37 @@ export default function NamesScreen() {
           setDeckMode((prev) => (prev === 'read' ? 'idle' : 'read'))
         }
       />
+    </View>
+  );
+}
+
+function NamesDisclaimer() {
+  const { colors, isDark } = useTheme();
+
+  return (
+    <View
+      style={[
+        styles.disclaimer,
+        {
+          backgroundColor: isDark ? alpha(colors.gold, 0.16) : colors.goldSoft,
+          borderColor: colors.gold,
+        },
+      ]}
+      accessibilityRole="summary"
+      accessibilityLabel={`${THE_NAMES_SERIES.disclaimerTitle}. ${THE_NAMES_SERIES.disclaimerLead} ${THE_NAMES_SERIES.disclaimerParagraphs.join(' ')}`}
+    >
+      <View style={styles.disclaimerHead}>
+        <AlertTriangle size={16} color={colors.gold} />
+        <Overline color={colors.gold}>{THE_NAMES_SERIES.disclaimerTitle}</Overline>
+      </View>
+      <BodyStrong color={colors.ink} style={styles.disclaimerLead}>
+        {THE_NAMES_SERIES.disclaimerLead}
+      </BodyStrong>
+      {THE_NAMES_SERIES.disclaimerParagraphs.map((paragraph) => (
+        <Body key={paragraph.slice(0, 32)} color={colors.ink} style={styles.disclaimerBody}>
+          {paragraph}
+        </Body>
+      ))}
     </View>
   );
 }
@@ -261,4 +282,18 @@ const styles = StyleSheet.create({
   tileArabic: { fontSize: 18, lineHeight: 28, textAlign: 'right' },
   tileName: { marginTop: 2, fontSize: 13, lineHeight: 18 },
   tileMeaning: { lineHeight: 16 },
+  disclaimer: {
+    borderWidth: 1.5,
+    borderRadius: radius.lg,
+    padding: 12,
+    gap: 8,
+    marginBottom: 10,
+  },
+  disclaimerHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  disclaimerLead: { fontSize: 13, lineHeight: 19 },
+  disclaimerBody: { fontSize: 13, lineHeight: 20 },
 });

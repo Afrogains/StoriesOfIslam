@@ -38,7 +38,7 @@ export default function SeerahPath({ onSelect }: SeerahPathProps) {
     <Card style={styles.card} padding={14}>
       <Overline color={colors.gold}>One life, in order</Overline>
       <Small color={colors.inkMuted} style={styles.note}>
-        Ibn Kathir’s Seerah and the short teaching stories in one timeline. Tap to read or listen.
+        Ibn Kathir’s Seerah and the short teaching stories in one timeline. Tap to read — listening is incoming.
       </Small>
       <View style={styles.rail}>
         {timelineGroups().map((group) => {

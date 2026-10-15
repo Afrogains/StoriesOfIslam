@@ -12,6 +12,7 @@ import {
 } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { sectionsMeta } from '../data/catalogMeta';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL, LISTEN_META_LABEL } from '../data/listenIncoming';
 import type { SectionSlug, StoryItem } from '../types/catalog';
 import { useShareSheet } from './ShareSheet';
 import { useLibrary } from '../hooks/useLibrary';
@@ -59,7 +60,6 @@ export default function StoryCard({
   const meta = sectionsMeta[story.sectionSlug];
   const accent = sectionAccent(story.sectionSlug, isDark);
   const saved = isSaved(story.id);
-  const canListen = Boolean(story.hasAudio || story.audioUrl || story.content);
 
   return (
     <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
@@ -137,14 +137,14 @@ export default function StoryCard({
               <Clock size={12} color={colors.inkSubtle} />
               <Caption>{story.durationLabel}</Caption>
               <View style={[styles.dot, { backgroundColor: alpha(colors.inkSubtle, 0.5) }]} />
-              <Caption>{story.hasAudio ? 'Audio ready' : 'Text first'}</Caption>
+              <Caption>{LISTEN_META_LABEL}</Caption>
             </Row>
           </Row>
         </>
       ) : (
         <Caption color={colors.inkSubtle} style={styles.compactMeta}>
           {story.durationLabel}
-          {story.hasAudio ? ' · audio' : ' · text'}
+          {` · ${LISTEN_META_LABEL.toLowerCase()}`}
         </Caption>
       )}
 
@@ -160,13 +160,12 @@ export default function StoryCard({
         </View>
         <View style={styles.ctaFlex}>
           <GradientButton
-            label="Listen"
+            label={LISTEN_CTA_LABEL}
             icon={Headphones}
             gradient={accent.accentGradient}
             size="sm"
             onPress={onListen}
-            disabled={!canListen}
-            accessibilityLabel={`Listen to: ${story.title}`}
+            accessibilityLabel={LISTEN_CTA_A11Y}
           />
         </View>
       </Row>

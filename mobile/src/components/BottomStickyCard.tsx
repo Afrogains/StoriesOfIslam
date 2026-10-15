@@ -2,16 +2,15 @@ import { BookOpen, Headphones, PlayCircle, Share2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { THE_NAMES_SERIES, type DivineName } from '../data/theNames';
+import { LISTEN_CTA_A11Y } from '../data/listenIncoming';
 import { toParagraphs } from '../data/text';
-import { audioForName } from '../data/theNamesAudio';
 import {
-  episodeForName,
   type ApprovedNameMedia,
   type NamesMediaStatus,
 } from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
 import { formatNameShare } from '../services/share';
-import NamesAudioPlayer from './NamesAudioPlayer';
+import ListenIncomingNotice from './ListenIncomingNotice';
 import { useShareSheet } from './ShareSheet';
 import {
   ArabicInline,
@@ -49,7 +48,6 @@ export default function BottomStickyCard({
 }: BottomStickyCardProps) {
   const { isDark } = useTheme();
   const { openShare } = useShareSheet();
-  const episode = episodeForName(approved, audioForName(name.number));
   const watchClass = approved
     ? () => void Linking.openURL(approved.watchUrl).catch(() => undefined)
     : null;
@@ -96,7 +94,7 @@ export default function BottomStickyCard({
             onPress={onListen}
             accessibilityRole="button"
             accessibilityState={{ selected: mode === 'listen' }}
-            accessibilityLabel={`Listen to ${name.transliteration}`}
+            accessibilityLabel={LISTEN_CTA_A11Y}
             hitSlop={4}
             style={({ pressed }) => [
               styles.iconCta,
@@ -132,18 +130,7 @@ export default function BottomStickyCard({
 
         {mode === 'listen' ? (
           <View style={styles.expand}>
-            {episode ? (
-              <NamesAudioPlayer name={name} episode={episode} />
-            ) : mediaStatus === 'loading' ? (
-              <View style={styles.narrationPanel}>
-                <Caption color="#CBD5E1">Checking for reviewed audio…</Caption>
-              </View>
-            ) : (
-              <NamesAudioPlayer name={name} episode={null} />
-            )}
-            {watchClass && !episode ? (
-              <WatchClassLink onPress={watchClass} classNumber={approved?.classNumber ?? null} />
-            ) : null}
+            <ListenIncomingNotice tone="dark" />
           </View>
         ) : null}
 

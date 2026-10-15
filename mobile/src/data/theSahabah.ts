@@ -19,7 +19,7 @@ export const SAHABAH_SERIES = {
   author: SAHABAH_PDF.author,
   credit: 'Companions of the Prophet — in-app PDF',
   description:
-    'Educational biographies of the noble Companions from the bundled English PDF. Read and listen both target that source edition.',
+    'Educational biographies of the noble Companions from the bundled English PDF. Reading uses that source edition; listening is incoming.',
   pdfPath: SAHABAH_PDF.publicPath,
 } as const;
 

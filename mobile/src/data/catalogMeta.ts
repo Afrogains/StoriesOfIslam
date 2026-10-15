@@ -7,7 +7,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     titleAr: 'قصص الأنبياء',
     subtitle: 'Qisas al-Anbiya',
     description:
-      'Timeless accounts of the messengers of Allah from the in-app Ibn Kathir Stories of the Prophets English PDF — the source for both reading and listening.',
+      'Timeless accounts of the messengers of Allah from the in-app Ibn Kathir Stories of the Prophets English PDF — available to read now; listening is incoming.',
     countLabel: 'Stories',
     accentColor: '#0F766E',
     bgTint: '#E6F4F1',
@@ -52,7 +52,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     titleAr: 'الصحابة الكرام',
     subtitle: 'The Companions',
     description:
-      'Educational biographies of the noble Companions from the in-app Companions of the Prophet English PDF — the source for both reading and listening.',
+      'Educational biographies of the noble Companions from the in-app Companions of the Prophet English PDF — available to read now; listening is incoming.',
     countLabel: 'Companions',
     accentColor: '#0284C7',
     bgTint: '#F0F9FF',

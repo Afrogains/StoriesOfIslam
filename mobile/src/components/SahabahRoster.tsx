@@ -41,7 +41,7 @@ export default function SahabahRoster({ onSelect, compact = false }: SahabahRost
       </Row>
       <Small color={colors.inkMuted} style={styles.seriesNote}>
         {SAHABAH_SERIES.description} Tap a companion’s name to open the full
-        biography{compact ? '' : ' (read or listen)'} from the PDF.
+        biography{compact ? '' : ' (read now; listen incoming)'} from the PDF.
       </Small>
 
       {!compact ? (

@@ -24,6 +24,7 @@ import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
 import { openQuranStoriesPdf, quranStoryPdfSpanForSlug } from '../services/quranStoriesPdf';
 import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL } from '../data/listenIncoming';
 import type { StoryItem } from '../types/catalog';
 import { toParagraphs } from '../data/text';
 import { useMobileLayout } from '../hooks/useMobileLayout';
@@ -402,16 +403,16 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       <Pressable
         onPress={onSwitchToListening}
         accessibilityRole="button"
-        accessibilityLabel="Switch to listening mode"
+        accessibilityLabel={LISTEN_CTA_A11Y}
         style={[
           styles.fab,
-          { backgroundColor: accent.primary, bottom: bottomInset + 14 },
+          { backgroundColor: colors.inkSubtle, bottom: bottomInset + 14 },
           shadow('lg', isDark),
         ]}
       >
         <Headphones size={18} color="#FFFFFF" />
         <Caption color="#FFFFFF" style={styles.fabLabel}>
-          Switch to Listening Mode
+          Listen · {LISTEN_CTA_LABEL}
         </Caption>
       </Pressable>
     </View>

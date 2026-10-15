@@ -1,5 +1,6 @@
 import { BookOpen, ChevronLeft, ExternalLink, Quote } from 'lucide-react-native';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL } from '../data/listenIncoming';
 import type { ProphetChapter } from '../data/prophetChapters';
 import { toParagraphs } from '../data/text';
 import { openIbnKathirPdf } from '../services/ibnKathirPdf';
@@ -34,7 +35,6 @@ export default function ProphetStoryPage({
   honorificEn = 'peace be upon him',
   honorificAr = 'عليه السلام',
   onClose,
-  onListen,
 }: ProphetStoryPageProps) {
   const { colors, isDark } = useTheme();
   const minutes = Math.max(1, Math.round(chapter.durationMs / 60000));
@@ -72,26 +72,23 @@ export default function ProphetStoryPage({
             {chapter.pdfPageStart ? ` · p. ${chapter.pdfPageStart}` : ''}
           </Caption>
         </View>
-        {onListen ? (
-          <Pressable
-            onPress={onListen}
-            accessibilityRole="button"
-            accessibilityLabel={`Listen to ${chapter.nameEn}`}
-            style={({ pressed }) => [
-              styles.listenBtn,
-              {
-                backgroundColor: colors.emerald,
-                opacity: pressed ? 0.9 : 1,
-              },
-            ]}
-          >
-            <Caption color="#FFFFFF" style={styles.listenLabel}>
-              Listen
-            </Caption>
-          </Pressable>
-        ) : (
-          <View style={styles.listenSpacer} />
-        )}
+        <Pressable
+          disabled
+          accessibilityRole="button"
+          accessibilityState={{ disabled: true }}
+          accessibilityLabel={LISTEN_CTA_A11Y}
+          style={[
+            styles.listenBtn,
+            {
+              backgroundColor: colors.inkSubtle,
+              opacity: 0.72,
+            },
+          ]}
+        >
+          <Caption color="#FFFFFF" style={styles.listenLabel}>
+            {LISTEN_CTA_LABEL}
+          </Caption>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -135,7 +132,7 @@ export default function ProphetStoryPage({
           <Quote size={16} color={colors.gold} />
           <View style={styles.noteCopy}>
             <Body color={colors.inkMuted} style={styles.noteText}>
-              Text and listen cues for this prophet are taken from the in-app Ibn
+              Text for this prophet is taken from the in-app Ibn
               Kathir Stories of the Prophets English PDF
               {chapter.pdfPageStart && chapter.pdfPageEnd
                 ? ` (pages ${chapter.pdfPageStart}–${chapter.pdfPageEnd})`

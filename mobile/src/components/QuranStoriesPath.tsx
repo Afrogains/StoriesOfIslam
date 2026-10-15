@@ -33,7 +33,7 @@ export default function QuranStoriesPath({ onSelect }: QuranStoriesPathProps) {
       <Overline color={colors.purple}>Nineteen stories from the Quran</Overline>
       <Small color={colors.inkMuted} style={styles.note}>
         Ibn Kathir’s Stories of the Quran — the narratives the Book itself tells, in the
-        order of the bundled English edition. Tap to read or listen.
+        order of the bundled English edition. Tap to read — listening is incoming.
       </Small>
       <View style={styles.rail}>
         {timelineGroups().map((group) => {

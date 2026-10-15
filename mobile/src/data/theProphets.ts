@@ -19,7 +19,7 @@ export const PROPHETS_SERIES = {
   author: 'Ibn Kathir',
   credit: 'Ibn Kathir — Stories of the Prophets (in-app PDF)',
   description:
-    'Chronological messengers of Allah from the bundled English PDF of Ibn Kathir’s Qisas al-Anbiya. Read and listen both target that source edition.',
+    'Chronological messengers of Allah from the bundled English PDF of Ibn Kathir’s Qisas al-Anbiya. Reading uses that source edition; listening is incoming.',
   pdfPath: '/sources/ibn-kathir-stories-of-the-prophets.pdf',
 } as const;
 

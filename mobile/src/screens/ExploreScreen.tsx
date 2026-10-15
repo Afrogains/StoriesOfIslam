@@ -75,7 +75,7 @@ const grades: { id: GradeFilter; label: string }[] = [
 
 const formats: { id: MediaFilter; label: string }[] = [
   { id: 'all', label: 'Any format' },
-  { id: 'audio', label: 'With audio' },
+  { id: 'audio', label: 'Incoming' },
   { id: 'text', label: 'Text only' },
 ];
 
@@ -145,7 +145,7 @@ export default function ExploreScreen() {
       if (selectedSection === 'qisas-al-quran' && !needle) {
         return false;
       }
-      if (mediaFilter === 'audio' && !story.hasAudio) return false;
+      if (mediaFilter === 'audio') return false;
       if (mediaFilter === 'text' && story.hasAudio) return false;
       if (gradeFilter !== 'all' && story.authenticityGrade !== gradeFilter) return false;
       if (!needle) return true;
@@ -171,7 +171,6 @@ export default function ExploreScreen() {
   const showPathShelf =
     !searching && (selectedSection === 'seerah-shamail' || selectedSection === 'qisas-al-quran');
   const showGroupedBrowse = selectedSection === 'all' && !searching;
-  const audioCount = filteredStories.filter((story) => story.hasAudio).length;
   const activeMeta = selectedSection !== 'all' ? sectionsMeta[selectedSection] : null;
 
   const resolveProphetStory = (prophet: ProphetFigure): StoryItem | null => {
@@ -331,7 +330,7 @@ export default function ExploreScreen() {
               ? `${sectionCounts['seerah-shamail']} stories · one chronological timeline`
               : selectedSection === 'qisas-al-quran' && !searching
                 ? `${sectionCounts['qisas-al-quran']} stories · Ibn Kathir’s Quranic narratives`
-              : `${filteredStories.length} stories${audioCount ? ` · ${audioCount} with audio` : ''}`}
+              : `${filteredStories.length} stories · listen incoming`}
           {activeFilterCount ? ` · ${activeFilterCount} filters` : ''}
         </Caption>
 
@@ -367,7 +366,7 @@ export default function ExploreScreen() {
 
             <Row gap={6} style={styles.filterGroupLabel}>
               <Headphones size={12} color={colors.inkSubtle} />
-              <Caption>Media format</Caption>
+              <Caption>Media format · listen incoming</Caption>
             </Row>
             <Row gap={7} style={styles.filterGroup}>
               {formats.map((format) => (
@@ -502,9 +501,13 @@ export default function ExploreScreen() {
 
         {filteredStories.length === 0 && !showPathShelf ? (
           <EmptyState
-            icon={SearchX}
-            title="Nothing found"
-            description="No story matches this combination of search and filters."
+            icon={mediaFilter === 'audio' ? Headphones : SearchX}
+            title={mediaFilter === 'audio' ? 'Listening is incoming' : 'Nothing found'}
+            description={
+              mediaFilter === 'audio'
+                ? 'Spoken playback is a future feature. Reset filters and read stories now.'
+                : 'No story matches this combination of search and filters.'
+            }
             actionLabel="Reset everything"
             onAction={resetAll}
             gradient={emeraldGradient}

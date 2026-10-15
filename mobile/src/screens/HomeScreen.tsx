@@ -38,13 +38,9 @@ import {
 import { useCatalog } from '../data/CatalogProvider';
 import { SECTION_ORDER } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
-import {
-  useLastActiveStory,
-  type LastActiveMode,
-} from '../hooks/useLastActiveStory';
+import { useLastActiveStory } from '../hooks/useLastActiveStory';
 import { useLibrary } from '../hooks/useLibrary';
 import { useMobileLayout } from '../hooks/useMobileLayout';
-import { usePlaybackProgress } from '../hooks/usePlaybackProgress';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { requestExplore } from '../navigation/exploreIntent';
 import {
@@ -57,26 +53,6 @@ import {
   shadow,
 } from '../theme/tokens';
 import type { SectionSlug, StoryItem } from '../types/catalog';
-
-function formatClock(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
-
-function resolveResumeMode(
-  stored: LastActiveMode | null,
-  audioMs: number,
-  readY: number,
-  hasAudio: boolean,
-): Exclude<StorySessionMode, null> {
-  if (stored === 'read' || stored === 'listen') return stored;
-  if (audioMs > 0 && readY <= 0) return 'listen';
-  if (readY > 0 && audioMs <= 0) return 'read';
-  if (audioMs > 0 && readY > 0) return audioMs >= 5_000 ? 'listen' : 'read';
-  return hasAudio ? 'listen' : 'read';
-}
 
 type HomeTabs = {
   navigate: (screen: 'Explore' | 'Names' | 'Library' | 'Home') => void;
@@ -115,9 +91,7 @@ export default function HomeScreen() {
   }, [stories, lastActive.storyId]);
 
   const storyId = continueStory?.id ?? '';
-  const { load: loadAudioProgress } = usePlaybackProgress(storyId || 'none');
   const { load: loadReadBookmark } = useReadingBookmark(storyId || 'none');
-  const [audioMs, setAudioMs] = useState(0);
   const [readY, setReadY] = useState(0);
 
   useEffect(() => {
@@ -126,22 +100,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!continueStory) {
-      setAudioMs(0);
       setReadY(0);
       return;
     }
-    void loadAudioProgress().then(setAudioMs);
     void loadReadBookmark().then(setReadY);
-  }, [continueStory, loadAudioProgress, loadReadBookmark]);
-
-  const resumeMode = continueStory
-    ? resolveResumeMode(lastActive.mode, audioMs, readY, continueStory.hasAudio)
-    : 'listen';
-
-  const audioProgress =
-    continueStory && continueStory.durationMs > 0
-      ? Math.min(1, audioMs / continueStory.durationMs)
-      : 0;
+  }, [continueStory, loadReadBookmark]);
 
   const sectionCounts = useMemo(() => {
     const counts = {} as Record<SectionSlug, number>;
@@ -150,16 +113,11 @@ export default function HomeScreen() {
     return counts;
   }, [stories]);
 
-  const audioCount = useMemo(
-    () => stories.filter((story) => story.hasAudio || story.audioUrl).length,
-    [stories],
-  );
-
   const openResume = () => {
     if (!continueStory) return;
-    void markActive(continueStory.id, resumeMode);
+    void markActive(continueStory.id, 'read');
     setActiveStory(continueStory);
-    setSessionMode(resumeMode);
+    setSessionMode('read');
   };
 
   const goExplore = (section: SectionSlug | 'all' = 'all', search = '') => {
@@ -181,8 +139,8 @@ export default function HomeScreen() {
     },
     {
       key: 'audio',
-      label: 'With audio',
-      value: String(audioCount),
+      label: 'Listen',
+      value: 'Incoming',
       icon: Headphones,
       tint: colors.azure,
     },
@@ -294,11 +252,7 @@ export default function HomeScreen() {
           <Pressable
             onPress={openResume}
             accessibilityRole="button"
-            accessibilityLabel={
-              resumeMode === 'listen'
-                ? `Continue listening to ${continueStory.title}`
-                : `Continue reading ${continueStory.title}`
-            }
+            accessibilityLabel={`Continue reading ${continueStory.title}`}
             style={({ pressed }) => [
               styles.continueCard,
               {
@@ -310,9 +264,7 @@ export default function HomeScreen() {
             ]}
           >
             <Row justify="space-between" align="center">
-              <Overline color={colors.emerald}>
-                {resumeMode === 'listen' ? 'Continue listening' : 'Continue reading'}
-              </Overline>
+              <Overline color={colors.emerald}>Continue reading</Overline>
               <Caption color={colors.inkSubtle}>
                 {sectionsMeta[continueStory.sectionSlug]?.title}
               </Caption>
@@ -322,25 +274,17 @@ export default function HomeScreen() {
             </BodyStrong>
             <Small color={colors.inkMuted} numberOfLines={1}>
               {continueStory.figureName}
-              {resumeMode === 'listen'
-                ? ` · ${formatClock(audioMs)} / ${continueStory.durationLabel}`
-                : readY > 0
-                  ? ' · bookmark saved'
-                  : ''}
+              {readY > 0 ? ' · bookmark saved' : ''}
             </Small>
             <ProgressBar
-              value={resumeMode === 'listen' ? audioProgress : readY > 0 ? 0.3 : 0.1}
+              value={readY > 0 ? 0.3 : 0.1}
               gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
               height={4}
             />
             <Row gap={7} style={styles.continueAction} align="center">
-              {resumeMode === 'listen' ? (
-                <Headphones size={16} color={colors.emerald} strokeWidth={2.25} />
-              ) : (
-                <BookOpen size={16} color={colors.emerald} strokeWidth={2.25} />
-              )}
+              <BookOpen size={16} color={colors.emerald} strokeWidth={2.25} />
               <BodyStrong color={colors.emerald} style={styles.continueActionLabel}>
-                {resumeMode === 'listen' ? 'Resume audio' : 'Resume reading'}
+                Resume reading
               </BodyStrong>
             </Row>
           </Pressable>
