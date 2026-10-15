@@ -80,7 +80,7 @@ export default function StoryCard({
             <Share2 size={17} color={colors.inkSubtle} />
           </Pressable>
           <Pressable
-            onPress={() => toggleSaved(story.id)}
+            onPress={() => toggleSaved(story.id, story)}
             hitSlop={8}
             style={styles.bookmark}
             accessibilityRole="button"

@@ -1,4 +1,4 @@
-import { Bookmark, BookOpenCheck, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
+import { Bookmark, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
@@ -36,6 +36,7 @@ import {
   Caption,
   Display,
   Heading,
+  OutlineButton,
   Overline,
   Row,
   Title,
@@ -135,7 +136,6 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const { openShare } = useShareSheet();
   const { load, save } = useReadingBookmark(story.id);
   const scrollRef = useRef<ScrollView>(null);
-  const [bookmarked, setBookmarked] = useState(false);
   const [restoredY, setRestoredY] = useState(0);
   const [highlightMode, setHighlightMode] = useState(false);
   const saved = isSaved(story.id);
@@ -177,7 +177,6 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   useEffect(() => {
     void load().then((y) => {
       setRestoredY(y);
-      setBookmarked(y > 0);
     });
   }, [load]);
 
@@ -190,16 +189,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   }, [restoredY, resolved.plain]);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!bookmarked) return;
     void save(event.nativeEvent.contentOffset.y);
-  };
-
-  const toggleBookmark = () => {
-    setBookmarked((prev) => {
-      const next = !prev;
-      if (!next) void save(0);
-      return next;
-    });
   };
 
   return (
@@ -231,26 +221,6 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         </View>
 
         <Pressable
-          onPress={toggleBookmark}
-          accessibilityRole="button"
-          accessibilityState={{ selected: bookmarked }}
-          accessibilityLabel={bookmarked ? 'Clear reading bookmark' : 'Bookmark reading position'}
-          style={[
-            styles.iconBtn,
-            {
-              borderColor: bookmarked ? colors.gold : colors.border,
-              backgroundColor: bookmarked ? alpha(colors.gold, 0.14) : colors.card,
-            },
-          ]}
-        >
-          <Bookmark
-            size={18}
-            color={bookmarked ? colors.gold : colors.ink}
-            fill={bookmarked ? colors.gold : 'transparent'}
-          />
-        </Pressable>
-
-        <Pressable
           onPress={() => openShare(formatStoryShare(story))}
           accessibilityRole="button"
           accessibilityLabel={`Share ${story.title}`}
@@ -263,7 +233,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           onPress={() => setHighlightMode((on) => !on)}
           accessibilityRole="button"
           accessibilityState={{ selected: highlightMode }}
-          accessibilityLabel={highlightMode ? 'Turn off highlight mode' : 'Highlight passages'}
+          accessibilityLabel={highlightMode ? 'Turn off highlight mode' : 'Highlight a passage'}
           style={[
             styles.iconBtn,
             {
@@ -276,13 +246,23 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         </Pressable>
 
         <Pressable
-          onPress={() => toggleSaved(story.id)}
+          onPress={() => toggleSaved(story.id, story)}
           accessibilityRole="button"
           accessibilityState={{ selected: saved }}
-          accessibilityLabel={saved ? 'Remove from library' : 'Save to library'}
-          style={[styles.iconBtn, { borderColor: colors.border, backgroundColor: colors.card }]}
+          accessibilityLabel={saved ? 'Remove story from library' : 'Save whole story to library'}
+          style={[
+            styles.iconBtn,
+            {
+              borderColor: saved ? colors.gold : colors.border,
+              backgroundColor: saved ? alpha(colors.gold, 0.14) : colors.card,
+            },
+          ]}
         >
-          <BookOpenCheck size={18} color={saved ? colors.emerald : colors.ink} />
+          <Bookmark
+            size={18}
+            color={saved ? colors.gold : colors.ink}
+            fill={saved ? colors.gold : 'transparent'}
+          />
         </Pressable>
       </View>
 
@@ -303,13 +283,21 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           <Badge label={story.authenticityGrade} color={accent.badgeText} background={accent.badgeBg} />
           <Caption color={colors.inkSubtle}>{story.durationLabel} read</Caption>
         </Row>
+        <OutlineButton
+          label={saved ? 'Saved to Library' : 'Save story'}
+          icon={Bookmark}
+          size="sm"
+          onPress={() => toggleSaved(story.id, story)}
+          accessibilityLabel={saved ? 'Remove story from library' : 'Save whole story to library'}
+          style={styles.saveStoryBtn}
+        />
         {highlightMode ? (
           <Caption color={colors.gold} style={styles.highlightHint}>
-            Tap a paragraph to save it in Library → Highlights. Long-press still works too.
+            Tap a paragraph to save that passage under Library → Highlights. Use Save story for the whole story.
           </Caption>
         ) : (
           <Caption color={colors.inkSubtle} style={styles.highlightHint}>
-            Select or long-press a passage to highlight or share it.
+            Save story keeps the whole piece in Library. Select or long-press a passage to keep a highlight.
           </Caption>
         )}
 
@@ -444,6 +432,7 @@ const styles = StyleSheet.create({
   title: { marginBottom: 4 },
   figure: { marginTop: 6 },
   badges: { marginTop: 10, marginBottom: 8 },
+  saveStoryBtn: { alignSelf: 'flex-start', marginBottom: 12 },
   highlightHint: { marginBottom: 14 },
   section: { marginBottom: 22, gap: 10 },
   sectionHeading: { fontSize: 18 },

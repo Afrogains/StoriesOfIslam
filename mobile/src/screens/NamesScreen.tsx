@@ -27,10 +27,15 @@ import {
   findName,
   type DivineName,
 } from '../data/theNames';
-import { LISTEN_CTA_LABEL } from '../data/listenIncoming';
+import { nameAudioByNumber } from '../data/theNamesAudio';
 import { useMobileLayout } from '../hooks/useMobileLayout';
-import { useApprovedNamesMedia } from '../services/namesMedia';
+import { useApprovedNamesMedia, type ApprovedNameMedia } from '../services/namesMedia';
 import { alpha, brandGradients, radius, shadow } from '../theme/tokens';
+
+function nameHasAudio(number: number, approved: Record<number, ApprovedNameMedia>): boolean {
+  const media = approved[number];
+  return Boolean(nameAudioByNumber[number] || media?.audioUrl || media?.podcastAudioUrl);
+}
 
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
@@ -41,6 +46,11 @@ export default function NamesScreen() {
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
   const namesMedia = useApprovedNamesMedia();
+  const hasAudioFor = (number: number) => nameHasAudio(number, namesMedia.byNumber);
+  const audioCount = useMemo(
+    () => divineNames.filter((name) => nameHasAudio(name.number, namesMedia.byNumber)).length,
+    [namesMedia.byNumber],
+  );
 
   const filtered = useMemo(() => findName(query), [query]);
   // Pad odd counts so the last tile keeps half width instead of stretching.
@@ -55,7 +65,7 @@ export default function NamesScreen() {
   };
 
   const badgeLabel =
-    filtered.length === 99 ? `Listen ${LISTEN_CTA_LABEL.toLowerCase()}` : `${filtered.length} found`;
+    filtered.length === 99 ? `${audioCount} audio` : `${filtered.length} found`;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
@@ -90,7 +100,7 @@ export default function NamesScreen() {
           >
             <Headphones size={11} color={colors.inkMuted} />
             <Caption color={colors.inkMuted} style={styles.audioCountText}>
-              {filtered.length === 99 ? LISTEN_CTA_LABEL : String(filtered.length)}
+              {filtered.length === 99 ? String(audioCount) : String(filtered.length)}
             </Caption>
           </View>
         </View>
@@ -112,6 +122,7 @@ export default function NamesScreen() {
         renderItem={({ item }) => {
           if (!item) return <View style={styles.spacerTile} />;
           const active = item.number === selected.number;
+          const hasAudio = hasAudioFor(item.number);
           return (
             <Pressable
               onPress={() => selectName(item)}
@@ -144,7 +155,11 @@ export default function NamesScreen() {
                     {item.number}
                   </BodyStrong>
                 </LinearGradient>
-                <View style={styles.audioSpacer} />
+                {hasAudio ? (
+                  <Headphones size={12} color={active ? colors.gold : colors.inkSubtle} />
+                ) : (
+                  <View style={styles.audioSpacer} />
+                )}
               </View>
               <ArabicInline
                 color={colors.gold}

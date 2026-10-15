@@ -1,9 +1,10 @@
-import { BookOpen, Headphones, Shuffle } from 'lucide-react-native';
+import { BookOpen, Bookmark, Headphones, Shuffle } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { sectionsMeta } from '../data/catalogMeta';
 import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL, LISTEN_META_LABEL } from '../data/listenIncoming';
 import type { StoryItem } from '../types/catalog';
+import { useLibrary } from '../hooks/useLibrary';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
   Badge,
@@ -38,6 +39,7 @@ type ExploreRandomPickProps = {
  */
 export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRandomPickProps) {
   const { colors, isDark } = useTheme();
+  const { isSaved, toggleSaved } = useLibrary();
   const [pick, setPick] = useState<StoryItem | null>(() => pickRandom(pool));
   const lastPoolKey = useRef('');
 
@@ -103,9 +105,27 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
         <OutlineBadge label={pick.authenticityGrade} color={accent.primary} />
       </Row>
 
-      <Title numberOfLines={2} style={styles.title}>
-        {pick.title}
-      </Title>
+      <Row justify="space-between" align="flex-start" gap={8}>
+        <Title numberOfLines={2} style={[styles.title, styles.titleFlex]}>
+          {pick.title}
+        </Title>
+        <Pressable
+          onPress={() => toggleSaved(pick.id, pick)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isSaved(pick.id) }}
+          accessibilityLabel={
+            isSaved(pick.id) ? `Remove ${pick.title} from library` : `Save ${pick.title} to library`
+          }
+          style={styles.saveBtn}
+        >
+          <Bookmark
+            size={20}
+            color={isSaved(pick.id) ? colors.gold : colors.inkSubtle}
+            fill={isSaved(pick.id) ? colors.gold : 'transparent'}
+          />
+        </Pressable>
+      </Row>
       <Caption color={colors.inkMuted}>
         {pick.figureName} · {pick.honorific}
       </Caption>
@@ -166,6 +186,8 @@ const styles = StyleSheet.create({
   shuffleLabel: { fontWeight: '700' },
   badges: { marginBottom: 6, flexWrap: 'wrap' },
   title: { marginTop: 2, fontSize: 18, lineHeight: 24 },
+  titleFlex: { flex: 1, minWidth: 0 },
+  saveBtn: { padding: 4, marginTop: 2 },
   summary: { marginTop: 6, lineHeight: 20 },
   meta: { marginTop: 4 },
   ctaRow: { marginTop: 12 },

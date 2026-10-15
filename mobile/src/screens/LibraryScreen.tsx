@@ -1,5 +1,5 @@
 import { BookmarkX, Highlighter, LogIn, LogOut, Quote, Share2, Trash2 } from 'lucide-react-native';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useAuth } from '../auth/AuthProvider';
 import ScreenHeader from '../components/ScreenHeader';
@@ -37,16 +37,10 @@ export default function LibraryScreen() {
   const { highlights, highlightCount, removeHighlight } = useHighlights();
   const { openShare } = useShareSheet();
   const [shelf, setShelf] = useState<'stories' | 'highlights'>('stories');
-  const [shelfTouched, setShelfTouched] = useState(false);
   const { authenticated, signIn, signOut, getAccessToken } = useAuth();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
-
-  useEffect(() => {
-    if (shelfTouched) return;
-    if (highlightCount > 0 && savedCount === 0) setShelf('highlights');
-  }, [highlightCount, savedCount, shelfTouched]);
 
   const visible = useMemo(
     () =>
@@ -146,10 +140,7 @@ export default function LibraryScreen() {
             <Pill
               label={`Stories · ${savedCount}`}
               selected={shelf === 'stories'}
-              onPress={() => {
-                setShelfTouched(true);
-                setShelf('stories');
-              }}
+              onPress={() => setShelf('stories')}
               gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
             />
           </View>
@@ -157,10 +148,7 @@ export default function LibraryScreen() {
             <Pill
               label={`Highlights · ${highlightCount}`}
               selected={shelf === 'highlights'}
-              onPress={() => {
-                setShelfTouched(true);
-                setShelf('highlights');
-              }}
+              onPress={() => setShelf('highlights')}
               icon={Highlighter}
               gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
             />
@@ -199,7 +187,7 @@ export default function LibraryScreen() {
               <EmptyState
                 icon={BookmarkX}
                 title="Nothing saved yet"
-                description="Tap the bookmark on any story to keep it here."
+                description="Tap the bookmark on a story card, or Save story in the reader, to keep the whole story here. Highlights are for passages only."
                 gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
               />
             ) : (
