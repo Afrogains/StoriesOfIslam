@@ -14,7 +14,7 @@ export const LAYOUT = {
   screenPadX: 16,
   screenPadTop: 12,
   /** Extra space after the last scroll item above the tab bar. */
-  contentPadBottom: 48,
+  contentPadBottom: 72,
   tabBarPadTop: 8,
   tabBarContentHeight: 52,
   /** Floor when the OS reports a tiny/zero bottom inset (common on Android). */
@@ -30,12 +30,16 @@ export const LAYOUT = {
         ? 28
         : 20,
   /** Gap between the Names sticky deck and the top edge of the tab bar. */
-  stickyDeckGap: 12,
+  stickyDeckGap: 20,
+  /** Idle Names deck height plus breathing room. */
+  namesIdleClearance: 148,
   /**
-   * Idle deck ≈ 118px; listen mode expands with the player. Pad for the expanded
-   * chrome so the last name tiles remain reachable.
+   * Listen/read mode expands with the player or notes. Pad so the last name
+   * tiles remain reachable above the overlay.
    */
-  namesDeckClearance: 260,
+  namesDeckClearance: 304,
+  /** Extra trailing inset so horizontal pill rows can scroll fully into view. */
+  pillEndPad: 28,
 } as const;
 
 export function useMobileLayout() {
@@ -51,6 +55,7 @@ export function useMobileLayout() {
   const scrollPadBottom = LAYOUT.contentPadBottom;
   const stickyBottom = LAYOUT.stickyDeckGap;
   const namesListPadBottom = LAYOUT.namesDeckClearance + stickyBottom;
+  const namesListPadBottomIdle = LAYOUT.namesIdleClearance + stickyBottom;
 
   return {
     insets,
@@ -65,6 +70,8 @@ export function useMobileLayout() {
     padX: LAYOUT.screenPadX,
     stickyBottom,
     namesListPadBottom,
+    namesListPadBottomIdle,
+    pillEndPad: LAYOUT.pillEndPad,
     /** Shared ScrollView / FlatList content insets for standard tabs. */
     screenContent: {
       paddingTop: topPad,

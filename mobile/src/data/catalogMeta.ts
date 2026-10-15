@@ -4,6 +4,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
   'qisas-al-anbiya': {
     id: 'qisas-al-anbiya',
     title: 'Prophets',
+    shortTitle: 'Prophets',
     titleAr: 'قصص الأنبياء',
     subtitle: 'Qisas al-Anbiya',
     description:
@@ -19,6 +20,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
   'qisas-al-quran': {
     id: 'qisas-al-quran',
     title: 'Stories of the Quran',
+    shortTitle: 'Quran',
     titleAr: 'قصص القرآن',
     subtitle: 'Qisas al-Quran',
     description:
@@ -34,6 +36,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
   'seerah-shamail': {
     id: 'seerah-shamail',
     title: 'Seerah & Shama’il',
+    shortTitle: 'Seerah',
     titleAr: 'السيرة والشمائل',
     subtitle: 'Life & Noble Character',
     description:
@@ -49,6 +52,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
   sahabah: {
     id: 'sahabah',
     title: 'Sahabah',
+    shortTitle: 'Sahabah',
     titleAr: 'الصحابة الكرام',
     subtitle: 'The Companions',
     description:
@@ -64,6 +68,7 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
   gleanings: {
     id: 'gleanings',
     title: 'Narratives & Successors',
+    shortTitle: 'Successors',
     titleAr: 'آثار وتابعون',
     subtitle: 'Athar wa Tabi’un',
     description:

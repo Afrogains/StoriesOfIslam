@@ -34,6 +34,7 @@ import {
   radius,
   shadow,
 } from '../theme/tokens';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { Body, Caption, Overline, Small, Title, useTheme } from './ui';
 
 type Channel = {
@@ -63,6 +64,7 @@ type ShareSheetProps = {
 
 export default function ShareSheet({ visible, payload, onClose }: ShareSheetProps) {
   const { colors, isDark } = useTheme();
+  const { bottomInset } = useMobileLayout();
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
@@ -97,7 +99,10 @@ export default function ShareSheet({ visible, payload, onClose }: ShareSheetProp
       statusBarTranslucent
     >
       <Pressable
-        style={[styles.scrim, { backgroundColor: colors.scrim }]}
+        style={[
+          styles.scrim,
+          { backgroundColor: colors.scrim, paddingBottom: Math.max(bottomInset, 18) },
+        ]}
         onPress={onClose}
         accessibilityRole="button"
         accessibilityLabel="Dismiss share sheet"
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
   scrim: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingBottom: 18,
   },
   sheet: {

@@ -31,7 +31,7 @@ import { APP_BUILD_LABEL } from '../config';
 /** Lean library: slim account strip, filters, compact saved list. */
 export default function LibraryScreen() {
   const { colors, isDark } = useTheme();
-  const { padX, screenContent } = useMobileLayout();
+  const { padX, pillEndPad, screenContent } = useMobileLayout();
   const { stories } = useCatalog();
   const { savedStories, savedCount } = useLibrary();
   const { highlights, highlightCount, removeHighlight } = useHighlights();
@@ -162,7 +162,10 @@ export default function LibraryScreen() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 style={[styles.filters, { marginHorizontal: -padX }]}
-                contentContainerStyle={[styles.filtersContent, { paddingHorizontal: padX }]}
+                contentContainerStyle={[
+                  styles.filtersContent,
+                  { paddingLeft: padX, paddingRight: padX + pillEndPad },
+                ]}
               >
                 <Pill
                   label="Everything"
@@ -333,20 +336,20 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
   content: {},
-  accountRow: { marginBottom: 14, gap: 10 },
+  accountRow: { marginBottom: 16, gap: 12 },
   accountCopy: { gap: 2 },
   accountActions: { flexWrap: 'wrap' },
-  accountAction: { flexGrow: 1, minWidth: 120 },
+  accountAction: { flexGrow: 0, minWidth: 132 },
   filters: { marginBottom: 14 },
-  filtersContent: { gap: 8, paddingRight: 8 },
-  shelfRow: { marginBottom: 12, flexWrap: 'wrap' },
+  filtersContent: { gap: 8, alignItems: 'center' },
+  shelfRow: { marginBottom: 14, flexWrap: 'wrap' },
   shelfChip: { flexGrow: 0 },
   list: { gap: 10 },
   highlightCard: {
     borderWidth: 1,
     borderRadius: radius.xl,
     padding: 14,
-    paddingLeft: 16,
+    paddingLeft: 18,
     gap: 6,
     overflow: 'hidden',
   },

@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   navBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   navItem: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 52,
-    gap: 3,
+    gap: 4,
     paddingHorizontal: 2,
   },
   navItemPressed: { opacity: 0.65 },

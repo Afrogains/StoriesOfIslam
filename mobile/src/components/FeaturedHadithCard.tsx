@@ -97,8 +97,10 @@ export default function FeaturedHadithCard() {
           accessibilityLabel={featuredLabel(hadith, expanded, long)}
           style={({ pressed }) => [pressed && styles.pressed]}
         >
-          <Row justify="space-between" align="center">
-            <Overline color="rgba(255,255,255,0.75)">{`Today's hadith`}</Overline>
+          <Row justify="space-between" align="center" style={styles.head}>
+            <Overline color="rgba(255,255,255,0.75)" style={styles.headLabel}>
+              {`Today's hadith`}
+            </Overline>
             <View style={styles.badges}>
               <View style={styles.numberBadge}>
                 <Caption color="#ECFDF5">
@@ -158,7 +160,7 @@ export default function FeaturedHadithCard() {
             <Caption color="rgba(255,255,255,0.55)">New hadith each day</Caption>
           )}
 
-          <Row gap={12} align="center">
+          <Row gap={10} align="center" style={styles.footerActions}>
             <Pressable
               onPress={saveHadith}
               hitSlop={8}
@@ -214,13 +216,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   gradient: {
-    padding: 14,
+    padding: 16,
     gap: 8,
   },
+  head: { gap: 8, flexWrap: 'wrap' },
+  headLabel: { flexShrink: 1 },
   badges: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flexShrink: 0,
   },
   numberBadge: {
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -246,26 +251,31 @@ const styles = StyleSheet.create({
   },
   english: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: 14,
+    lineHeight: 21,
     fontWeight: '500',
     color: '#FFFFFF',
     textAlign: 'center',
   },
   source: { textAlign: 'center' },
   footer: {
-    marginTop: 2,
-    paddingTop: 8,
+    marginTop: 4,
+    paddingTop: 10,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: 'rgba(255,255,255,0.12)',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 10,
+    rowGap: 8,
+  },
+  footerActions: {
+    flexWrap: 'wrap',
+    marginLeft: 'auto',
   },
   footerBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    paddingVertical: 2,
+    paddingVertical: 4,
   },
   pressed: { opacity: 0.88 },
 });

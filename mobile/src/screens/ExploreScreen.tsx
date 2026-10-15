@@ -96,7 +96,7 @@ function sortStories(list: StoryItem[], sortBy: SortKey): StoryItem[] {
 /** Explore: browse by category first; drill into a section for the full shelf. */
 export default function ExploreScreen() {
   const { colors, isDark } = useTheme();
-  const { padX, screenContent } = useMobileLayout();
+  const { padX, pillEndPad, screenContent } = useMobileLayout();
   const { stories } = useCatalog();
 
   const [selectedSection, setSelectedSection] = useState<SectionSlug | 'all'>('all');
@@ -261,7 +261,10 @@ export default function ExploreScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={[styles.pills, { marginHorizontal: -padX }]}
-          contentContainerStyle={[styles.pillsContent, { paddingHorizontal: padX }]}
+          contentContainerStyle={[
+            styles.pillsContent,
+            { paddingLeft: padX, paddingRight: padX + pillEndPad },
+          ]}
         >
           <Pill
             label={`All · ${stories.length}`}
@@ -272,7 +275,7 @@ export default function ExploreScreen() {
           {SECTION_ORDER.map((slug) => (
             <Pill
               key={slug}
-              label={`${sectionsMeta[slug].title} · ${sectionCounts[slug]}`}
+              label={`${sectionsMeta[slug].shortTitle} · ${sectionCounts[slug]}`}
               icon={sectionIcons[slug]}
               selected={selectedSection === slug}
               onPress={() => setSelectedSection(slug)}
@@ -589,8 +592,8 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   content: {},
 
-  pills: { marginBottom: 12, overflow: 'visible' },
-  pillsContent: { gap: 8, paddingRight: 8 },
+  pills: { marginBottom: 14, overflow: 'visible' },
+  pillsContent: { gap: 8, alignItems: 'center' },
 
   search: {
     flexDirection: 'row',
@@ -629,7 +632,7 @@ const styles = StyleSheet.create({
   filterGroupLast: { flexWrap: 'wrap' },
 
   categoryGrid: {
-    gap: 8,
+    gap: 10,
     marginBottom: 16,
   },
   categoryCard: { width: '100%' },
@@ -644,7 +647,7 @@ const styles = StyleSheet.create({
 
   grouped: { gap: 8 },
   groupBlock: { marginBottom: 12 },
-  list: { gap: 10 },
+  list: { gap: 12 },
   viewAll: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
   panel: {
     borderWidth: 1,
     borderRadius: radius.lg,
-    padding: 10,
-    gap: 4,
+    padding: 12,
+    gap: 6,
   },
   title: { fontWeight: '800', marginTop: 2 },
   body: { lineHeight: 19 },

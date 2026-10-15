@@ -63,8 +63,8 @@ export default function StoryCard({
 
   return (
     <Card accent={accent.primary} accessibilityLabel={`${story.title}. ${story.summary}`}>
-      <Row justify="space-between" style={styles.metaRow}>
-        <Row gap={6}>
+      <Row justify="space-between" style={styles.metaRow} align="flex-start">
+        <Row gap={6} style={styles.metaBadges}>
           <Badge label={meta.title} color={accent.badgeText} background={accent.badgeBg} />
           <OutlineBadge label={story.authenticityGrade} color={accent.primary} icon={CheckCircle2} />
         </Row>
@@ -156,6 +156,7 @@ export default function StoryCard({
             size="sm"
             onPress={onRead}
             accessibilityLabel={`Read story: ${story.title}`}
+            style={styles.ctaFill}
           />
         </View>
         <View style={styles.ctaFlex}>
@@ -166,6 +167,7 @@ export default function StoryCard({
             size="sm"
             onPress={onListen}
             accessibilityLabel={LISTEN_CTA_A11Y}
+            style={styles.ctaFill}
           />
         </View>
       </Row>
@@ -174,7 +176,8 @@ export default function StoryCard({
 }
 
 const styles = StyleSheet.create({
-  metaRow: { marginBottom: 10 },
+  metaRow: { marginBottom: 10, gap: 8 },
+  metaBadges: { flex: 1, minWidth: 0, flexWrap: 'wrap' },
   bookmark: { padding: 4, marginTop: -2 },
   arabic: { marginTop: 2 },
   figure: { marginTop: 4 },
@@ -191,6 +194,7 @@ const styles = StyleSheet.create({
   divider: { marginTop: 14, marginBottom: 10 },
   metaFooter: { marginBottom: 10 },
   dot: { width: 3, height: 3, borderRadius: 2, marginHorizontal: 2 },
-  ctaRow: { marginTop: 12 },
+  ctaRow: { marginTop: 12, alignItems: 'stretch' },
   ctaFlex: { flex: 1, minWidth: 0 },
+  ctaFill: { width: '100%' },
 });

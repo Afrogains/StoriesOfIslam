@@ -300,7 +300,8 @@ const styles = StyleSheet.create({
   toolbarRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    flexWrap: 'wrap',
+    gap: 12,
   },
   toolbarBtn: {
     flexDirection: 'row',

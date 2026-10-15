@@ -72,7 +72,7 @@ const sectionIcons: Record<SectionSlug, LucideIcon> = {
  */
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
-  const { padX, screenContent } = useMobileLayout();
+  const { padX, pillEndPad, screenContent } = useMobileLayout();
   const navigation = useNavigation<HomeTabs>();
   const { stories } = useCatalog();
   const { savedCount } = useLibrary();
@@ -140,7 +140,7 @@ export default function HomeScreen() {
     {
       key: 'audio',
       label: 'Listen',
-      value: 'Incoming',
+      value: 'Soon',
       icon: Headphones,
       tint: colors.azure,
     },
@@ -189,7 +189,10 @@ export default function HomeScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={{ marginHorizontal: -padX }}
-          contentContainerStyle={[styles.pills, { paddingHorizontal: padX }]}
+          contentContainerStyle={[
+            styles.pills,
+            { paddingLeft: padX, paddingRight: padX + pillEndPad },
+          ]}
         >
           <Pill
             label="All"
@@ -203,7 +206,7 @@ export default function HomeScreen() {
             return (
               <Pill
                 key={slug}
-                label={sectionsMeta[slug].title}
+                label={sectionsMeta[slug].shortTitle}
                 selected={sectionFilter === slug}
                 onPress={() => setSectionFilter(slug)}
                 icon={Icon}
@@ -318,7 +321,9 @@ export default function HomeScreen() {
                   <Icon size={16} color={metric.tint} strokeWidth={2.25} />
                 </View>
                 <View style={styles.metricCopy}>
-                  <Text style={[styles.metricValue, { color: colors.ink }]}>{metric.value}</Text>
+                  <Text style={[styles.metricValue, { color: colors.ink }]} numberOfLines={1}>
+                    {metric.value}
+                  </Text>
                   <Small color={colors.inkMuted} numberOfLines={1}>
                     {metric.label}
                   </Small>
@@ -391,7 +396,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   scroll: { flex: 1 },
   content: { gap: 0 },
-  header: { marginBottom: 12 },
+  header: { marginBottom: 14 },
   brandBlock: { flex: 1, minWidth: 0, paddingRight: 8 },
   brand: {
     fontFamily: DISPLAY_FONT_FAMILY,
@@ -401,7 +406,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   greetingAr: { marginTop: 2, fontSize: 14, lineHeight: 26 },
-  pills: { gap: 8, paddingBottom: 12, paddingRight: 8 },
+  pills: { gap: 8, paddingBottom: 14 },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -431,9 +436,9 @@ const styles = StyleSheet.create({
   continueCard: {
     borderWidth: 1,
     borderRadius: radius.xl,
-    padding: 14,
-    gap: 6,
-    marginBottom: 12,
+    padding: 16,
+    gap: 8,
+    marginBottom: 14,
   },
   continueTitle: { fontSize: 15, lineHeight: 21 },
   continueAction: { marginTop: 6 },
@@ -447,8 +452,8 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     flexGrow: 1,
-    flexBasis: '46%',
-    maxWidth: '48%',
+    flexBasis: '47%',
+    maxWidth: '48.5%',
     borderWidth: 1,
     borderRadius: radius.xl,
     paddingVertical: 12,
@@ -469,10 +474,11 @@ const styles = StyleSheet.create({
   metricValue: {
     fontFamily: DISPLAY_FONT_FAMILY,
     fontSize: 20,
+    lineHeight: 24,
     fontWeight: '800',
     letterSpacing: -0.4,
   },
-  sectionsList: { gap: 8, marginBottom: 8 },
+  sectionsList: { gap: 8, marginBottom: 4 },
   sectionRow: {
     borderWidth: 1,
     borderRadius: radius.xl,

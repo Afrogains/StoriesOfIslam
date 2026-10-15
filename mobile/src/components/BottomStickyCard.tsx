@@ -70,26 +70,28 @@ export default function BottomStickyCard({
             <Overline color="#FDE68A" numberOfLines={1}>
               {name.number}/99 · {name.transliteration}
             </Overline>
-            <BodyStrong color="#FFFFFF" numberOfLines={1} style={styles.meaning}>
+            <BodyStrong color="#FFFFFF" numberOfLines={2} style={styles.meaning}>
               {name.meaning}
             </BodyStrong>
           </View>
           <ArabicInline color="#FDE68A" style={styles.arabic} numberOfLines={1}>
             {name.arabic}
           </ArabicInline>
+        </Row>
 
+        <Row justify="flex-end" align="center" gap={8} style={styles.actions}>
           <Pressable
             onPress={() => openShare(formatNameShare(name))}
             accessibilityRole="button"
             accessibilityLabel={`Share ${name.transliteration}`}
-            hitSlop={4}
+            hitSlop={6}
             style={({ pressed }) => [
               styles.iconCta,
               { backgroundColor: 'rgba(255,255,255,0.08)' },
               pressed && styles.pressed,
             ]}
           >
-            <Share2 size={16} color="#E2E8F0" />
+            <Share2 size={15} color="#E2E8F0" />
           </Pressable>
 
           <Pressable
@@ -97,7 +99,7 @@ export default function BottomStickyCard({
             accessibilityRole="button"
             accessibilityState={{ selected: mode === 'listen' }}
             accessibilityLabel={`Listen to ${name.transliteration}`}
-            hitSlop={4}
+            hitSlop={6}
             style={({ pressed }) => [
               styles.iconCta,
               {
@@ -106,7 +108,7 @@ export default function BottomStickyCard({
               pressed && styles.pressed,
             ]}
           >
-            <Headphones size={17} color={mode === 'listen' ? '#0F172A' : '#FDE68A'} />
+            <Headphones size={16} color={mode === 'listen' ? '#0F172A' : '#FDE68A'} />
           </Pressable>
 
           <Pressable
@@ -114,7 +116,7 @@ export default function BottomStickyCard({
             accessibilityRole="button"
             accessibilityState={{ selected: mode === 'read' }}
             accessibilityLabel={`Read narrations for ${name.transliteration}`}
-            hitSlop={4}
+            hitSlop={6}
             style={({ pressed }) => [
               styles.iconCta,
               {
@@ -126,7 +128,7 @@ export default function BottomStickyCard({
               pressed && styles.pressed,
             ]}
           >
-            <BookOpen size={17} color={mode === 'read' ? '#6EE7B7' : '#E2E8F0'} />
+            <BookOpen size={16} color={mode === 'read' ? '#6EE7B7' : '#E2E8F0'} />
           </Pressable>
         </Row>
 
@@ -223,17 +225,19 @@ const styles = StyleSheet.create({
   },
   deck: {
     borderRadius: radius.xl,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     borderWidth: 1,
     borderColor: 'rgba(253,230,138,0.2)',
+    gap: 10,
   },
   copy: { flex: 1, minWidth: 0 },
-  meaning: { marginTop: 1, fontSize: 14, lineHeight: 19 },
-  arabic: { fontSize: 20, lineHeight: 30, flexShrink: 0, maxWidth: 110 },
+  meaning: { marginTop: 2, fontSize: 14, lineHeight: 20 },
+  arabic: { fontSize: 22, lineHeight: 32, flexShrink: 0, maxWidth: 120 },
+  actions: { marginTop: 0 },
   iconCta: {
-    width: 42,
-    height: 42,
+    width: 36,
+    height: 36,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',

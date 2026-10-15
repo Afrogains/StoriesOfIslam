@@ -7,6 +7,7 @@ import {
 } from '../data/listenIncoming';
 import type { StoryItem } from '../types/catalog';
 import { sectionsMeta } from '../data/catalogMeta';
+import { useMobileLayout } from '../hooks/useMobileLayout';
 import { radius, sectionAccent } from '../theme/tokens';
 import {
   BodyStrong,
@@ -30,6 +31,7 @@ export default function ListenIncomingScreen({
   onRead,
 }: ListenIncomingScreenProps) {
   const { colors, isDark } = useTheme();
+  const { topInset } = useMobileLayout();
   const accent = sectionAccent(story.sectionSlug, isDark);
   const meta = sectionsMeta[story.sectionSlug];
 
@@ -41,6 +43,7 @@ export default function ListenIncomingScreen({
           {
             backgroundColor: isDark ? colors.card : '#F7F3EA',
             borderBottomColor: colors.border,
+            paddingTop: topInset + 10,
           },
         ]}
       >
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 12,
     borderBottomWidth: 1,
@@ -112,10 +115,10 @@ const styles = StyleSheet.create({
   },
   body: {
     paddingHorizontal: 20,
-    paddingTop: 24,
-    gap: 10,
+    paddingTop: 28,
+    gap: 12,
   },
   title: { marginTop: 2 },
   figure: { marginBottom: 8 },
-  readBtn: { marginTop: 8 },
+  readBtn: { marginTop: 8, width: '100%' },
 });

@@ -57,8 +57,8 @@ export default function SahabahRoster({ onSelect, compact = false }: SahabahRost
             },
           ]}
         >
-          <Row justify="space-between" align="center">
-            <BodyStrong>
+          <Row justify="space-between" align="center" gap={10}>
+            <BodyStrong style={styles.detailName} numberOfLines={1}>
               {selected.sortOrder}. {selected.nameEn}
             </BodyStrong>
             <ArabicInline color={colors.emerald} style={styles.detailArabic}>
@@ -123,10 +123,11 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 4,
   },
-  detailArabic: { fontSize: 20, lineHeight: 30 },
+  detailName: { flex: 1, minWidth: 0 },
+  detailArabic: { fontSize: 20, lineHeight: 30, flexShrink: 0 },
   summary: { marginTop: 4, lineHeight: 20 },
   openHint: { marginTop: 8, fontWeight: '700' },
-  chipRow: { gap: 8, paddingVertical: 2 },
+  chipRow: { gap: 8, paddingVertical: 2, paddingRight: 12 },
   chip: {
     borderWidth: 1,
     borderRadius: radius.md,
@@ -135,6 +136,7 @@ const styles = StyleSheet.create({
     minWidth: 96,
     maxWidth: 140,
     gap: 2,
+    flexShrink: 0,
   },
   chipName: { fontSize: 13 },
 });

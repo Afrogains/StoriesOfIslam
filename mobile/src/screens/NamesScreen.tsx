@@ -1,4 +1,4 @@
-import { AlertTriangle, Headphones, Search } from 'lucide-react-native';
+import { AlertTriangle, ChevronDown, ChevronUp, Headphones, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import {
   FlatList,
@@ -40,7 +40,8 @@ function nameHasAudio(number: number, approved: Record<number, ApprovedNameMedia
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, stickyBottom, namesListPadBottom } = useMobileLayout();
+  const { topPad, padX, stickyBottom, namesListPadBottom, namesListPadBottomIdle } =
+    useMobileLayout();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
@@ -117,7 +118,7 @@ export default function NamesScreen() {
         // a footer spacer guarantees tiles can scroll clear of the sticky deck.
         ListHeaderComponent={<NamesDisclaimer />}
         ListFooterComponent={
-          <View style={{ height: deckMode === 'idle' ? stickyBottom + 96 : namesListPadBottom }} />
+          <View style={{ height: deckMode === 'idle' ? namesListPadBottomIdle : namesListPadBottom }} />
         }
         renderItem={({ item }) => {
           if (!item) return <View style={styles.spacerTile} />;
@@ -196,9 +197,18 @@ export default function NamesScreen() {
 
 function NamesDisclaimer() {
   const { colors, isDark } = useTheme();
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <View
+    <Pressable
+      onPress={() => setExpanded((open) => !open)}
+      accessibilityRole="button"
+      accessibilityState={{ expanded }}
+      accessibilityLabel={
+        expanded
+          ? `${THE_NAMES_SERIES.disclaimerTitle}. ${THE_NAMES_SERIES.disclaimerLead} ${THE_NAMES_SERIES.disclaimerParagraphs.join(' ')}`
+          : `${THE_NAMES_SERIES.disclaimerTitle}. ${THE_NAMES_SERIES.disclaimerLead} Double tap to read the full disclaimer.`
+      }
       style={[
         styles.disclaimer,
         {
@@ -206,22 +216,33 @@ function NamesDisclaimer() {
           borderColor: colors.gold,
         },
       ]}
-      accessibilityRole="summary"
-      accessibilityLabel={`${THE_NAMES_SERIES.disclaimerTitle}. ${THE_NAMES_SERIES.disclaimerLead} ${THE_NAMES_SERIES.disclaimerParagraphs.join(' ')}`}
     >
       <View style={styles.disclaimerHead}>
         <AlertTriangle size={16} color={colors.gold} />
-        <Overline color={colors.gold}>{THE_NAMES_SERIES.disclaimerTitle}</Overline>
+        <Overline color={colors.gold} style={styles.disclaimerTitle}>
+          {THE_NAMES_SERIES.disclaimerTitle}
+        </Overline>
+        {expanded ? (
+          <ChevronUp size={16} color={colors.gold} />
+        ) : (
+          <ChevronDown size={16} color={colors.gold} />
+        )}
       </View>
       <BodyStrong color={colors.ink} style={styles.disclaimerLead}>
         {THE_NAMES_SERIES.disclaimerLead}
       </BodyStrong>
-      {THE_NAMES_SERIES.disclaimerParagraphs.map((paragraph) => (
-        <Body key={paragraph.slice(0, 32)} color={colors.ink} style={styles.disclaimerBody}>
-          {paragraph}
-        </Body>
-      ))}
-    </View>
+      {expanded
+        ? THE_NAMES_SERIES.disclaimerParagraphs.map((paragraph) => (
+            <Body key={paragraph.slice(0, 32)} color={colors.ink} style={styles.disclaimerBody}>
+              {paragraph}
+            </Body>
+          ))
+        : (
+          <Caption color={colors.gold} style={styles.disclaimerToggle}>
+            Read full disclaimer
+          </Caption>
+        )}
+    </Pressable>
   );
 }
 
@@ -229,7 +250,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   topBar: {
     gap: 10,
-    paddingBottom: 6,
+    paddingBottom: 8,
   },
   searchBox: {
     flexDirection: 'row',
@@ -301,7 +322,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: radius.lg,
     padding: 12,
-    gap: 8,
+    gap: 6,
     marginBottom: 10,
   },
   disclaimerHead: {
@@ -309,6 +330,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  disclaimerTitle: { flex: 1, minWidth: 0 },
   disclaimerLead: { fontSize: 13, lineHeight: 19 },
   disclaimerBody: { fontSize: 13, lineHeight: 20 },
+  disclaimerToggle: { fontWeight: '700', marginTop: 2 },
 });

@@ -206,7 +206,7 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
           playing={playing}
           onPress={togglePlay}
           gradient={goldGradient}
-          size={48}
+          size={44}
           icons={{ play: Play, pause: Pause }}
           disabled={!ready}
           accessibilityLabel={
@@ -261,8 +261,8 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
           disabled={!ready}
           colors={colors}
         />
-        <Caption color={colors.inkSubtle} style={styles.bgHint}>
-          Continues when the app is minimized
+        <Caption color={colors.inkSubtle} style={styles.bgHint} numberOfLines={1}>
+          Plays in the background
         </Caption>
       </Row>
     </View>
@@ -309,8 +309,8 @@ const styles = StyleSheet.create({
   shell: {
     borderWidth: 1,
     borderRadius: radius.md,
-    padding: 14,
-    gap: 12,
+    padding: 10,
+    gap: 8,
   },
   iconWrap: {
     width: 34,

@@ -269,7 +269,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
-        contentContainerStyle={[styles.content, { paddingBottom: bottomInset + 96 }]}
+        contentContainerStyle={[styles.content, { paddingBottom: bottomInset + 32 }]}
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
         scrollEventThrottle={200}
@@ -283,14 +283,34 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           <Badge label={story.authenticityGrade} color={accent.badgeText} background={accent.badgeBg} />
           <Caption color={colors.inkSubtle}>{story.durationLabel} read</Caption>
         </Row>
-        <OutlineButton
-          label={saved ? 'Saved to Library' : 'Save story'}
-          icon={Bookmark}
-          size="sm"
-          onPress={() => toggleSaved(story.id, story)}
-          accessibilityLabel={saved ? 'Remove story from library' : 'Save whole story to library'}
-          style={styles.saveStoryBtn}
-        />
+        <Row gap={8} style={styles.readerActions} align="center">
+          <OutlineButton
+            label={saved ? 'Saved to Library' : 'Save story'}
+            icon={Bookmark}
+            size="sm"
+            onPress={() => toggleSaved(story.id, story)}
+            accessibilityLabel={saved ? 'Remove story from library' : 'Save whole story to library'}
+            style={styles.saveStoryBtn}
+          />
+          <Pressable
+            onPress={onSwitchToListening}
+            accessibilityRole="button"
+            accessibilityLabel={LISTEN_CTA_A11Y}
+            style={({ pressed }) => [
+              styles.listenChip,
+              {
+                borderColor: colors.border,
+                backgroundColor: isDark ? colors.cardAlt : colors.subtleBg,
+                opacity: pressed ? 0.86 : 1,
+              },
+            ]}
+          >
+            <Headphones size={14} color={colors.inkMuted} strokeWidth={2.25} />
+            <Caption color={colors.ink} style={styles.listenChipLabel}>
+              Listen · {LISTEN_CTA_LABEL}
+            </Caption>
+          </Pressable>
+        </Row>
         {highlightMode ? (
           <Caption color={colors.gold} style={styles.highlightHint}>
             Tap a paragraph to save that passage under Library → Highlights. Use Save story for the whole story.
@@ -388,21 +408,6 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         </View>
       </ScrollView>
 
-      <Pressable
-        onPress={onSwitchToListening}
-        accessibilityRole="button"
-        accessibilityLabel={LISTEN_CTA_A11Y}
-        style={[
-          styles.fab,
-          { backgroundColor: colors.inkSubtle, bottom: bottomInset + 14 },
-          shadow('lg', isDark),
-        ]}
-      >
-        <Headphones size={18} color="#FFFFFF" />
-        <Caption color="#FFFFFF" style={styles.fabLabel}>
-          Listen · {LISTEN_CTA_LABEL}
-        </Caption>
-      </Pressable>
     </View>
   );
 }
@@ -413,26 +418,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 12,
     borderBottomWidth: 1,
   },
   headerMeta: { flex: 1, minWidth: 0, gap: 2 },
   iconBtn: {
-    width: 36,
-    height: 36,
+    width: 38,
+    height: 38,
     borderRadius: radius.pill,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 120 },
+  content: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 128 },
   title: { marginBottom: 4 },
   figure: { marginTop: 6 },
   badges: { marginTop: 10, marginBottom: 8 },
-  saveStoryBtn: { alignSelf: 'flex-start', marginBottom: 12 },
+  readerActions: { marginBottom: 12, flexWrap: 'wrap' },
+  saveStoryBtn: { alignSelf: 'flex-start', width: undefined },
+  listenChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    height: 40,
+    paddingHorizontal: 14,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    alignSelf: 'flex-start',
+  },
+  listenChipLabel: { fontWeight: '800' },
   highlightHint: { marginBottom: 14 },
   section: { marginBottom: 22, gap: 10 },
   sectionHeading: { fontSize: 18 },
@@ -459,16 +476,4 @@ const styles = StyleSheet.create({
   },
   pdfBtnLabel: { fontWeight: '800' },
   grade: { marginTop: 4, fontWeight: '800' },
-  fab: {
-    position: 'absolute',
-    right: 18,
-    bottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: radius.pill,
-  },
-  fabLabel: { fontWeight: '800' },
 });

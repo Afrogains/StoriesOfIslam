@@ -30,8 +30,8 @@ export default function ModeToggle() {
 
 const styles = StyleSheet.create({
   themeSwitch: {
-    width: 42,
-    height: 42,
+    width: 40,
+    height: 40,
     borderRadius: radius.pill,
     borderWidth: 1,
     alignItems: 'center',

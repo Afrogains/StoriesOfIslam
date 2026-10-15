@@ -10,6 +10,8 @@ export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
 export type SectionMeta = {
   id: SectionSlug;
   title: string;
+  /** Compact label for filter pills; full `title` stays on cards and headers. */
+  shortTitle: string;
   titleAr: string;
   subtitle: string;
   description: string;

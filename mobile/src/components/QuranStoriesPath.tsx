@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     gap: 10,
     borderWidth: 1,
     borderRadius: radius.md,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   num: {
     width: 24,
@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   numText: { fontSize: 12 },
-  copy: { flex: 1, gap: 2 },
+  copy: { flex: 1, minWidth: 0, gap: 2 },
   title: { fontSize: 14 },
 });

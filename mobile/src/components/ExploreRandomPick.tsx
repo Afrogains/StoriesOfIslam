@@ -145,6 +145,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
             size="sm"
             onPress={() => onRead(pick)}
             accessibilityLabel={`Read story: ${pick.title}`}
+            style={styles.ctaFill}
           />
         </View>
         <View style={styles.ctaFlex}>
@@ -155,6 +156,7 @@ export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRan
             size="sm"
             onPress={() => onListen(pick)}
             accessibilityLabel={LISTEN_CTA_A11Y}
+            style={styles.ctaFill}
           />
         </View>
       </Row>
@@ -166,11 +168,11 @@ const styles = StyleSheet.create({
   wrap: {
     borderWidth: 1,
     borderRadius: radius.xl,
-    padding: 14,
-    marginBottom: 14,
-    gap: 4,
+    padding: 16,
+    marginBottom: 16,
+    gap: 6,
   },
-  head: { marginBottom: 8, alignItems: 'flex-start' },
+  head: { marginBottom: 8, alignItems: 'flex-start', gap: 10 },
   headCopy: { flex: 1, minWidth: 0, paddingRight: 8, gap: 2 },
   headHint: { lineHeight: 17 },
   shuffleBtn: {
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 9,
     borderRadius: radius.md,
     borderWidth: 1,
     flexShrink: 0,
@@ -190,6 +192,7 @@ const styles = StyleSheet.create({
   saveBtn: { padding: 4, marginTop: 2 },
   summary: { marginTop: 6, lineHeight: 20 },
   meta: { marginTop: 4 },
-  ctaRow: { marginTop: 12 },
+  ctaRow: { marginTop: 12, alignItems: 'stretch' },
   ctaFlex: { flex: 1, minWidth: 0 },
+  ctaFill: { width: '100%' },
 });

@@ -247,7 +247,7 @@ export function Pill({
       onPress={onPress}
       accessibilityRole="tab"
       accessibilityState={{ selected }}
-      style={({ pressed }) => [pressed && styles.pressed]}
+      style={({ pressed }) => [styles.pillPressable, pressed && styles.pressed]}
     >
       {selected ? (
         <LinearGradient
@@ -596,7 +596,13 @@ export function EmptyState({
       <Heading style={{ marginTop: 14, textAlign: 'center' }}>{title}</Heading>
       <Small style={{ marginTop: 6, textAlign: 'center' }}>{description}</Small>
       {actionLabel && onAction ? (
-        <GradientButton label={actionLabel} onPress={onAction} gradient={gradient} size="sm" style={{ marginTop: 16 }} />
+        <GradientButton
+          label={actionLabel}
+          onPress={onAction}
+          gradient={gradient}
+          size="sm"
+          style={{ marginTop: 16, width: '100%', maxWidth: 280 }}
+        />
       ) : null}
     </Card>
   );
@@ -630,8 +636,10 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.72, transform: [{ scale: 0.98 }] },
   disabled: { opacity: 0.5 },
   buttonPressable: {
-    width: '100%',
     alignSelf: 'stretch',
+  },
+  pillPressable: {
+    flexShrink: 0,
   },
   badge: {
     flexDirection: 'row',
@@ -646,12 +654,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: radius.pill,
     borderWidth: 1,
+    flexShrink: 0,
   },
-  pillBold: { borderWidth: 2, paddingVertical: 9 },
+  pillBold: { borderWidth: 1.5, paddingVertical: 8 },
   gradientButton: {
     width: '100%',
     flexDirection: 'row',
@@ -672,6 +681,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 12,
     marginBottom: 10,
   },
   emptyState: { alignItems: 'center', marginVertical: 24 },

@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     gap: 10,
     borderWidth: 1,
     borderRadius: radius.md,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   num: {
     width: 24,
