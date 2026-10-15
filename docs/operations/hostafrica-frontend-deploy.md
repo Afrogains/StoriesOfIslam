@@ -16,7 +16,8 @@ bash scripts/package-web-frontend.sh
 This writes `deploy/storiesofislam-web-frontend.zip` with:
 
 - `EXPO_PUBLIC_API_URL=https://storiesoflislam.afroclovers.com.ng`
-- `EXPO_PUBLIC_ENVIRONMENT=preview`
+- `EXPO_PUBLIC_ENVIRONMENT=production`
+- Bundled in-app catalog (API overlay only if it returns a richer published feed)
 - SPA `.htaccess` and legal HTML from `mobile/public/`
 
 Expo 57 inlines `EXPO_PUBLIC_*` from a `.env` file (the packaging script creates one). Shell-only exports are not enough.
@@ -61,4 +62,4 @@ PUBLIC_HTML="$HOME/public_html" bash -c '
 - `https://storiesoflislam.afroclovers.com.ng/health/live` returns JSON ok.
 - DNS: the `storiesoflislam` subdomain must resolve (cPanel subdomain / A record) before the API URL works.
 
-Login/auth needs Keycloak later; catalog may use preview fixtures until the API catalog returns published stories.
+Login/auth needs Keycloak later. The production site serves the in-app catalog even when the API host does not resolve.

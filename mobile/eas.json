@@ -34,13 +34,15 @@
     "production": {
       "channel": "production",
       "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_API_URL": "${EXPO_PUBLIC_API_URL}",
-        "EXPO_PUBLIC_KEYCLOAK_ISSUER": "${EXPO_PUBLIC_KEYCLOAK_ISSUER}",
-        "EXPO_PUBLIC_KEYCLOAK_MOBILE_CLIENT_ID": "${EXPO_PUBLIC_KEYCLOAK_MOBILE_CLIENT_ID}",
-        "EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID": "${EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID}",
-        "EXPO_PUBLIC_SENTRY_DSN": "${EXPO_PUBLIC_SENTRY_DSN}"
+        "EXPO_PUBLIC_API_URL": "https://storiesoflislam.afroclovers.com.ng",
+        "EXPO_PUBLIC_KEYCLOAK_ISSUER": "https://storiesoflislam.afroclovers.com.ng/auth/realms/stories-of-islam",
+        "EXPO_PUBLIC_KEYCLOAK_MOBILE_CLIENT_ID": "stories-mobile",
+        "EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID": "stories-web"
       }
     }
   },

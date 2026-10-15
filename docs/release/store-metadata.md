@@ -49,4 +49,7 @@ audio stories
 - 6.7-inch iPhone, 13-inch iPad, Android phone, and Android tablet screenshots.
 - Home, Explore, synchronized reader, The Names, Library sync, and Kids Mode.
 - English and Arabic screenshots/descriptions after Arabic copy review.
-- Privacy, terms, support, correction, and account-deletion HTTPS URLs.
+- Privacy, terms, support, correction, and account-deletion HTTPS URLs:
+  `https://afroclovers.com.ng/privacy.html`, `/terms.html`, `/support.html`,
+  `/account-deletion.html` (or the live production origin if HostAfrica is still
+  on the parking page).

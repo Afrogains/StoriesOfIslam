@@ -8,7 +8,7 @@ OUT_DIR="$ROOT/deploy"
 ZIP_NAME="storiesofislam-web-frontend.zip"
 
 API_URL="${EXPO_PUBLIC_API_URL:-https://storiesoflislam.afroclovers.com.ng}"
-ENVIRONMENT="${EXPO_PUBLIC_ENVIRONMENT:-preview}"
+ENVIRONMENT="${EXPO_PUBLIC_ENVIRONMENT:-production}"
 KEYCLOAK_ISSUER="${EXPO_PUBLIC_KEYCLOAK_ISSUER:-https://storiesoflislam.afroclovers.com.ng/auth/realms/stories-of-islam}"
 KEYCLOAK_WEB_CLIENT_ID="${EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID:-stories-web}"
 
