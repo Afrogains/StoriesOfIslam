@@ -24,3 +24,6 @@ export const appConfig = {
   environment: process.env.EXPO_PUBLIC_ENVIRONMENT ?? (__DEV__ ? 'development' : 'production'),
   sentryDsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
 } as const;
+
+/** Shown in Library so testers can confirm which build is installed. */
+export const APP_BUILD_LABEL = 'v1.3.0 · build 16';

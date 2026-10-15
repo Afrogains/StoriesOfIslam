@@ -14,6 +14,7 @@ import { metricsEndpoint, recordMetrics } from './metrics';
 import { catalogRouter } from '../routes/catalog';
 import { editorialRouter } from '../routes/editorial';
 import { jobsRouter } from '../routes/jobs';
+import { mediaRouter } from '../routes/media';
 import { meRouter } from '../routes/me';
 
 export interface AppDependencies {
@@ -56,7 +57,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
       credentials: false,
       maxAge: 86_400,
       origin(origin, callback) {
-        if (!origin || allowedOrigins.has(origin)) callback(null, true);
+        if (!origin || allowedOrigins.has('*') || allowedOrigins.has(origin)) callback(null, true);
         else callback(new HttpError(403, 'origin_forbidden', 'Origin is not allowed'));
       },
     }),
@@ -98,6 +99,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
 
   app.use(optionalAuth);
   app.use('/v1', catalogRouter);
+  app.use('/v1/media', mediaRouter);
   app.use('/v1/me', meRouter);
   app.use('/v1/generation-jobs', jobsRouter);
   // Compatibility alias for older clients.

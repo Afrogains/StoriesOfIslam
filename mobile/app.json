@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stories of Islam",
     "slug": "stories-of-islam",
-    "version": "1.0.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "scheme": "storiesofislam",
     "userInterfaceStyle": "automatic",
@@ -13,7 +13,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.storiesofislam.app",
-      "buildNumber": "1",
+      "buildNumber": "16",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "com.storiesofislam.app",
-      "versionCode": 1,
+      "versionCode": 16,
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

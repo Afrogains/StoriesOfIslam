@@ -35,9 +35,9 @@ function webDataSet(data: Record<string, string>) {
 
 /** Single entry point for theme state — every component below reads from this. */
 export function useTheme() {
-  const { isDark, isKids, mode } = useAppMode();
-  const colors = getColors(isDark, isKids);
-  return { colors, isDark, isKids, mode };
+  const { isDark } = useAppMode();
+  const colors = getColors(isDark);
+  return { colors, isDark };
 }
 
 /* ---------------------------------------------------------------- typography */
@@ -220,7 +220,7 @@ export function Pill({
   onPress: () => void;
   icon?: IconType;
   gradient: readonly [string, string, ...string[]];
-  /** Kids mode uses thicker borders and heavier weight. */
+  /** Emphasized chip styling for dense filter rows. */
   bold?: boolean;
 }) {
   const { colors } = useTheme();
@@ -247,7 +247,7 @@ export function Pill({
       onPress={onPress}
       accessibilityRole="tab"
       accessibilityState={{ selected }}
-      style={({ pressed }) => [pressed && styles.pressed]}
+      style={({ pressed }) => [styles.pillPressable, pressed && styles.pressed]}
     >
       {selected ? (
         <LinearGradient
@@ -297,10 +297,11 @@ export function GradientButton({
   disabled?: boolean;
 }) {
   const { isDark } = useTheme();
+  /** Fixed heights keep Read/Listen pairs level across platforms. */
   const metrics = {
-    sm: { paddingVertical: 7, paddingHorizontal: 14, fontSize: 11, iconSize: 12 },
-    md: { paddingVertical: 11, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
-    lg: { paddingVertical: 14, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
+    sm: { height: 40, paddingHorizontal: 14, fontSize: 12, iconSize: 13 },
+    md: { height: 44, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
+    lg: { height: 50, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
   }[size];
 
   return (
@@ -309,7 +310,12 @@ export function GradientButton({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      style={({ pressed }) => [pressed && styles.pressed, disabled && styles.disabled, style]}
+      style={({ pressed }) => [
+        styles.buttonPressable,
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+        style,
+      ]}
     >
       <LinearGradient
         colors={gradient}
@@ -318,13 +324,13 @@ export function GradientButton({
         style={[
           styles.gradientButton,
           {
-            paddingVertical: metrics.paddingVertical,
+            height: metrics.height,
             paddingHorizontal: metrics.paddingHorizontal,
           },
           shadow('sm', isDark),
         ]}
       >
-        {Icon ? <Icon size={metrics.iconSize} color={textColor} fill={textColor} /> : null}
+        {Icon ? <Icon size={metrics.iconSize} color={textColor} strokeWidth={2.25} /> : null}
         <Text
           style={{
             fontFamily: BODY_FONT_FAMILY,
@@ -337,6 +343,68 @@ export function GradientButton({
           {label}
         </Text>
       </LinearGradient>
+    </Pressable>
+  );
+}
+
+/** Outlined text/icon CTA used alongside GradientButton (e.g. Read Story). */
+export function OutlineButton({
+  label,
+  onPress,
+  icon: Icon,
+  accessibilityLabel,
+  disabled,
+  size = 'md',
+  style,
+}: {
+  label: string;
+  onPress?: () => void;
+  icon?: IconType;
+  accessibilityLabel?: string;
+  disabled?: boolean;
+  /** Match GradientButton heights when paired in a row. */
+  size?: 'sm' | 'md' | 'lg';
+  style?: StyleProp<ViewStyle>;
+}) {
+  const { colors, isDark } = useTheme();
+  const metrics = {
+    sm: { height: 40, paddingHorizontal: 14, fontSize: 12, iconSize: 13 },
+    md: { height: 44, paddingHorizontal: 18, fontSize: 13, iconSize: 15 },
+    lg: { height: 50, paddingHorizontal: 22, fontSize: 14, iconSize: 17 },
+  }[size];
+
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityState={{ disabled }}
+      style={({ pressed }) => [
+        styles.buttonPressable,
+        styles.outlineButton,
+        {
+          borderColor: colors.border,
+          backgroundColor: isDark ? colors.cardAlt : colors.card,
+          height: metrics.height,
+          paddingHorizontal: metrics.paddingHorizontal,
+        },
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+        style,
+      ]}
+    >
+      {Icon ? <Icon size={metrics.iconSize} color={colors.emerald} strokeWidth={2.25} /> : null}
+      <Text
+        style={{
+          fontFamily: BODY_FONT_FAMILY,
+          fontSize: metrics.fontSize,
+          fontWeight: '800',
+          color: colors.ink,
+        }}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -386,7 +454,7 @@ export function PlayButton({
           shadow('md', isDark),
         ]}
       >
-        <Icon size={size * 0.44} color="#FFFFFF" fill="#FFFFFF" />
+        <Icon size={size * 0.44} color="#FFFFFF" />
       </LinearGradient>
     </Pressable>
   );
@@ -528,7 +596,13 @@ export function EmptyState({
       <Heading style={{ marginTop: 14, textAlign: 'center' }}>{title}</Heading>
       <Small style={{ marginTop: 6, textAlign: 'center' }}>{description}</Small>
       {actionLabel && onAction ? (
-        <GradientButton label={actionLabel} onPress={onAction} gradient={gradient} size="sm" style={{ marginTop: 16 }} />
+        <GradientButton
+          label={actionLabel}
+          onPress={onAction}
+          gradient={gradient}
+          size="sm"
+          style={{ marginTop: 16, width: '100%', maxWidth: 280 }}
+        />
       ) : null}
     </Card>
   );
@@ -561,6 +635,12 @@ export type { IconType, ThemeColors };
 const styles = StyleSheet.create({
   pressed: { opacity: 0.72, transform: [{ scale: 0.98 }] },
   disabled: { opacity: 0.5 },
+  buttonPressable: {
+    alignSelf: 'stretch',
+  },
+  pillPressable: {
+    flexShrink: 0,
+  },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -574,23 +654,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: radius.pill,
     borderWidth: 1,
+    flexShrink: 0,
   },
-  pillBold: { borderWidth: 2, paddingVertical: 9 },
+  pillBold: { borderWidth: 1.5, paddingVertical: 8 },
   gradientButton: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
     borderRadius: radius.pill,
   },
+  outlineButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+  },
   sectionHeading: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 12,
     marginBottom: 10,
   },
   emptyState: { alignItems: 'center', marginVertical: 24 },

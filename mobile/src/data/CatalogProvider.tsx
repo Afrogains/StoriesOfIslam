@@ -13,10 +13,43 @@ import { apiRequest } from '../services/api';
 import type { StoryItem } from '../types/catalog';
 
 const CACHE_KEY = 'stories.catalog.v1';
-const previewStories: StoryItem[] = __DEV__
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Metro strips this development-only fixture branch.
-  ? (require('./mockHome').allStandardStories as StoryItem[])
-  : [];
+
+/**
+ * In-app catalog is the production source of truth until HostAfrica publishes a
+ * richer reviewed feed. Metro includes these chapters in every export.
+ */
+function loadBundledCatalog(): StoryItem[] {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const base = require('./mockHome').allStandardStories as StoryItem[];
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { mergeSahabahChaptersIntoCatalog } = require('./sahabahChapters') as {
+    mergeSahabahChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { mergeProphetChaptersIntoCatalog } = require('./prophetChapters') as {
+    mergeProphetChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { mergeSeerahTimelineIntoCatalog } = require('./seerahTimeline') as {
+    mergeSeerahTimelineIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { mergeQuranStoriesIntoCatalog } = require('./quranStories') as {
+    mergeQuranStoriesIntoCatalog: (stories: StoryItem[]) => StoryItem[];
+  };
+  return mergeQuranStoriesIntoCatalog(
+    mergeSeerahTimelineIntoCatalog(
+      mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base)),
+    ),
+  );
+}
+
+const bundledStories = loadBundledCatalog();
+
+function preferRicherCatalog(remote: StoryItem[]): StoryItem[] {
+  if (remote.length > bundledStories.length) return remote;
+  return bundledStories.length ? bundledStories : remote;
+}
 
 interface CatalogContextValue {
   stories: StoryItem[];
@@ -34,7 +67,7 @@ interface StoryResponse {
 }
 
 export function CatalogProvider({ children }: { children: ReactNode }) {
-  const [stories, setStories] = useState<StoryItem[]>([]);
+  const [stories, setStories] = useState<StoryItem[]>(bundledStories);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [offline, setOffline] = useState(false);
@@ -44,11 +77,13 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     setRefreshing(true);
     try {
       const response = await apiRequest<StoryResponse>('/v1/stories?pageSize=50');
-      setStories(response.data);
+      const next = preferRicherCatalog(response.data ?? []);
+      setStories(next);
       setError(null);
-      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(response.data));
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Unable to load stories');
+      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(next));
+    } catch {
+      setStories(bundledStories);
+      setError(null);
     } finally {
       setRefreshing(false);
       setLoading(false);
@@ -61,8 +96,11 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     });
     void AsyncStorage.getItem(CACHE_KEY)
       .then((cached) => {
+        if (bundledStories.length) {
+          setStories(bundledStories);
+          return;
+        }
         if (cached) setStories(JSON.parse(cached) as StoryItem[]);
-        else if (previewStories.length) setStories(previewStories);
       })
       .finally(() => void refresh());
     return unsubscribe;
