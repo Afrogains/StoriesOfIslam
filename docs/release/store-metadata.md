@@ -18,8 +18,8 @@ web, iPhone, iPad, and Android. Explore bilingual text, documented sources,
 authenticity labels, and reviewed audio. Save stories, continue listening across
 devices, and use offline audio on mobile.
 
-Sections include Qisas al-Anbiya, Seerah and Shama’il, the Sahabah, and
-historical gleanings. Kids Mode offers a warmer, family-friendly presentation
+Sections include Qisas al-Anbiya, Stories of the Quran, Seerah and Shama’il,
+and the Sahabah. Kids Mode offers a warmer, family-friendly presentation
 inside the same general-audience learning app.
 
 Accounts are optional for public reading and listening. Sign in only when you
