@@ -1,4 +1,4 @@
-import { BookOpen, Headphones, PlayCircle, Share2 } from 'lucide-react-native';
+import { BookOpen, ChevronDown, ChevronUp, Headphones, PlayCircle, Share2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { THE_NAMES_SERIES, type DivineName } from '../data/theNames';
@@ -23,13 +23,15 @@ import {
   useTheme,
 } from './ui';
 
-export type BottomStickyDeckMode = 'idle' | 'listen' | 'read';
+export type BottomStickyDeckMode = 'idle' | 'listen' | 'mini' | 'read';
 
 export type BottomStickyCardProps = {
   name: DivineName;
   mode: BottomStickyDeckMode;
   onListen: () => void;
   onReadNarrations: () => void;
+  onMinimizePlayer?: () => void;
+  onExpandPlayer?: () => void;
   /** Distance from the bottom of the screen content (above the tab bar). */
   bottomOffset?: number;
   /** Reviewer-approved lesson media for this Name, if any. */
@@ -43,6 +45,8 @@ export default function BottomStickyCard({
   mode,
   onListen,
   onReadNarrations,
+  onMinimizePlayer,
+  onExpandPlayer,
   bottomOffset = 10,
   approved,
   mediaStatus = 'unavailable',
@@ -50,6 +54,7 @@ export default function BottomStickyCard({
   const { isDark } = useTheme();
   const { openShare } = useShareSheet();
   const episode = episodeForName(approved, audioForName(name.number));
+  const listenOpen = mode === 'listen' || mode === 'mini';
   const watchClass = approved
     ? () => void Linking.openURL(approved.watchUrl).catch(() => undefined)
     : null;
@@ -94,21 +99,41 @@ export default function BottomStickyCard({
             <Share2 size={15} color="#E2E8F0" />
           </Pressable>
 
+          {listenOpen ? (
+            <Pressable
+              onPress={mode === 'listen' ? onMinimizePlayer : onExpandPlayer}
+              accessibilityRole="button"
+              accessibilityLabel={mode === 'listen' ? 'Minimize player' : 'Expand player'}
+              hitSlop={6}
+              style={({ pressed }) => [
+                styles.iconCta,
+                { backgroundColor: 'rgba(255,255,255,0.08)' },
+                pressed && styles.pressed,
+              ]}
+            >
+              {mode === 'listen' ? (
+                <ChevronDown size={16} color="#E2E8F0" />
+              ) : (
+                <ChevronUp size={16} color="#E2E8F0" />
+              )}
+            </Pressable>
+          ) : null}
+
           <Pressable
             onPress={onListen}
             accessibilityRole="button"
-            accessibilityState={{ selected: mode === 'listen' }}
+            accessibilityState={{ selected: listenOpen }}
             accessibilityLabel={`Listen to ${name.transliteration}`}
             hitSlop={6}
             style={({ pressed }) => [
               styles.iconCta,
               {
-                backgroundColor: mode === 'listen' ? '#FDE68A' : alpha('#FDE68A', 0.16),
+                backgroundColor: listenOpen ? '#FDE68A' : alpha('#FDE68A', 0.16),
               },
               pressed && styles.pressed,
             ]}
           >
-            <Headphones size={16} color={mode === 'listen' ? '#0F172A' : '#FDE68A'} />
+            <Headphones size={16} color={listenOpen ? '#0F172A' : '#FDE68A'} />
           </Pressable>
 
           <Pressable
@@ -132,18 +157,18 @@ export default function BottomStickyCard({
           </Pressable>
         </Row>
 
-        {mode === 'listen' ? (
-          <View style={styles.expand}>
+        {listenOpen ? (
+          <View style={mode === 'mini' ? styles.miniExpand : styles.expand}>
             {episode ? (
-              <NamesAudioPlayer name={name} episode={episode} />
+              <NamesAudioPlayer name={name} episode={episode} compact={mode === 'mini'} />
             ) : mediaStatus === 'loading' ? (
               <View style={styles.narrationPanel}>
                 <Caption color="#CBD5E1">Checking for reviewed audio…</Caption>
               </View>
             ) : (
-              <NamesAudioPlayer name={name} episode={null} />
+              <NamesAudioPlayer name={name} episode={null} compact={mode === 'mini'} />
             )}
-            {watchClass && !episode ? (
+            {watchClass && !episode && mode === 'listen' ? (
               <WatchClassLink onPress={watchClass} classNumber={approved?.classNumber ?? null} />
             ) : null}
           </View>
@@ -245,6 +270,7 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: 0.82 },
   expand: { marginTop: 8 },
+  miniExpand: { marginTop: 4 },
   narrationPanel: {
     marginTop: 8,
     borderWidth: 1,

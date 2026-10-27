@@ -40,8 +40,14 @@ function nameHasAudio(number: number, approved: Record<number, ApprovedNameMedia
 /** Dense 2-column Names grid with a compact bottom sticky deck. */
 export default function NamesScreen() {
   const { colors, isDark } = useTheme();
-  const { topPad, padX, stickyBottom, namesListPadBottom, namesListPadBottomIdle } =
-    useMobileLayout();
+  const {
+    topPad,
+    padX,
+    stickyBottom,
+    namesListPadBottom,
+    namesListPadBottomIdle,
+    namesListPadBottomMini,
+  } = useMobileLayout();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<DivineName>(divineNames[0]);
   const [deckMode, setDeckMode] = useState<BottomStickyDeckMode>('idle');
@@ -61,9 +67,22 @@ export default function NamesScreen() {
   );
 
   const selectName = (item: DivineName) => {
+    const hasAudio = hasAudioFor(item.number);
     setSelected(item);
-    setDeckMode('idle');
+    setDeckMode((prev) => {
+      if (prev === 'read') return 'read';
+      if (!hasAudio) return 'idle';
+      if (prev === 'mini') return 'mini';
+      return 'listen';
+    });
   };
+
+  const listPadBottom =
+    deckMode === 'idle'
+      ? namesListPadBottomIdle
+      : deckMode === 'mini'
+        ? namesListPadBottomMini
+        : namesListPadBottom;
 
   const badgeLabel =
     filtered.length === 99 ? `${audioCount} audio` : `${filtered.length} found`;
@@ -118,7 +137,7 @@ export default function NamesScreen() {
         // a footer spacer guarantees tiles can scroll clear of the sticky deck.
         ListHeaderComponent={<NamesDisclaimer />}
         ListFooterComponent={
-          <View style={{ height: deckMode === 'idle' ? namesListPadBottomIdle : namesListPadBottom }} />
+          <View style={{ height: listPadBottom }} />
         }
         renderItem={({ item }) => {
           if (!item) return <View style={styles.spacerTile} />;
@@ -186,7 +205,9 @@ export default function NamesScreen() {
         bottomOffset={stickyBottom}
         approved={namesMedia.byNumber[selected.number]}
         mediaStatus={namesMedia.status}
-        onListen={() => setDeckMode((prev) => (prev === 'listen' ? 'idle' : 'listen'))}
+        onListen={() => setDeckMode((prev) => (prev === 'listen' ? 'mini' : 'listen'))}
+        onMinimizePlayer={() => setDeckMode('mini')}
+        onExpandPlayer={() => setDeckMode('listen')}
         onReadNarrations={() =>
           setDeckMode((prev) => (prev === 'read' ? 'idle' : 'read'))
         }

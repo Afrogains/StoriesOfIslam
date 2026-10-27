@@ -42,9 +42,11 @@ import {
 type NamesAudioPlayerProps = {
   name: DivineName;
   episode: NameAudioEpisode | null;
+  /** Keep the same player instance mounted while the deck is collapsed. */
+  compact?: boolean;
 };
 
-export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProps) {
+export default function NamesAudioPlayer({ name, episode, compact = false }: NamesAudioPlayerProps) {
   const { colors, isDark } = useTheme();
   const goldGradient = brandGradients.gold[isDark ? 'dark' : 'light'];
   const barWidth = useRef(1);
@@ -139,7 +141,7 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
     return (
       <View
         style={[
-          styles.shell,
+          compact ? styles.shellCompact : styles.shell,
           {
             backgroundColor: isDark ? alpha(colors.gold, 0.1) : colors.goldSoft,
             borderColor: colors.border,
@@ -153,11 +155,73 @@ export default function NamesAudioPlayer({ name, episode }: NamesAudioPlayerProp
           </View>
           <View style={styles.copy}>
             <Overline color={colors.gold}>Podcast episode</Overline>
-            <Small color={colors.inkMuted} style={styles.comingSoon}>
+            <Small color={colors.inkMuted} style={styles.comingSoon} numberOfLines={compact ? 2 : undefined}>
               Audio for {name.transliteration} is not in the published series yet.
-              Episodes from {THE_NAMES_SERIES.credit} unlock as they are released.
+              {compact ? '' : ` Episodes from ${THE_NAMES_SERIES.credit} unlock as they are released.`}
             </Small>
           </View>
+        </Row>
+      </View>
+    );
+  }
+
+  if (compact) {
+    return (
+      <View
+        style={[
+          styles.shellCompact,
+          {
+            backgroundColor: colors.cardAlt,
+            borderColor: colors.border,
+          },
+        ]}
+        accessibilityLabel={`Minimized podcast player for ${name.transliteration}`}
+      >
+        <Row gap={10} align="center">
+          <PlayButton
+            playing={playing}
+            onPress={togglePlay}
+            gradient={goldGradient}
+            size={36}
+            icons={{ play: Play, pause: Pause }}
+            disabled={!ready}
+            accessibilityLabel={
+              !ready ? 'Loading episode' : playing ? 'Pause episode' : 'Play episode'
+            }
+          />
+          <View style={styles.copy}>
+            <Overline color={colors.gold} numberOfLines={1}>
+              {episode.episodeNumber != null ? `Episode ${episode.episodeNumber}` : 'Podcast'}
+              {episode.durationLabel ? ` · ${episode.durationLabel}` : ''}
+            </Overline>
+            <Body numberOfLines={1} style={styles.episodeTitleCompact}>
+              {name.transliteration} · {name.meaning}
+            </Body>
+            <Pressable
+              onLayout={(event) => {
+                barWidth.current = event.nativeEvent.layout.width || 1;
+              }}
+              onPress={onScrub}
+              style={[styles.scrubTrack, { backgroundColor: alpha(colors.ink, 0.12) }]}
+              accessibilityRole="adjustable"
+              accessibilityLabel="Playback progress"
+              accessibilityValue={{
+                now: Math.round(positionMs / 1000),
+                min: 0,
+                max: Math.round(durationMs / 1000),
+              }}
+            >
+              <LinearGradient
+                colors={goldGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[styles.scrubFill, { width: `${progress * 100}%` }]}
+              />
+            </Pressable>
+          </View>
+          <Mono color={colors.inkMuted} style={styles.miniClock}>
+            {formatClock(positionMs)}
+          </Mono>
         </Row>
       </View>
     );
@@ -312,6 +376,14 @@ const styles = StyleSheet.create({
     padding: 10,
     gap: 8,
   },
+  shellCompact: {
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+  },
+  episodeTitleCompact: { lineHeight: 18, fontSize: 13 },
+  miniClock: { fontSize: 11, lineHeight: 14 },
   iconWrap: {
     width: 34,
     height: 34,

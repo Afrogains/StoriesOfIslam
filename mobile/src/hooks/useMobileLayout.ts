@@ -33,11 +33,13 @@ export const LAYOUT = {
   stickyDeckGap: 20,
   /** Idle Names deck height plus breathing room. */
   namesIdleClearance: 148,
+  /** Minimized Names player (compact transport) plus breathing room. */
+  namesMiniClearance: 196,
   /**
    * Listen/read mode expands with the player or notes. Pad so the last name
    * tiles remain reachable above the overlay.
    */
-  namesDeckClearance: 304,
+  namesDeckClearance: 320,
   /** Extra trailing inset so horizontal pill rows can scroll fully into view. */
   pillEndPad: 28,
 } as const;
@@ -56,6 +58,7 @@ export function useMobileLayout() {
   const stickyBottom = LAYOUT.stickyDeckGap;
   const namesListPadBottom = LAYOUT.namesDeckClearance + stickyBottom;
   const namesListPadBottomIdle = LAYOUT.namesIdleClearance + stickyBottom;
+  const namesListPadBottomMini = LAYOUT.namesMiniClearance + stickyBottom;
 
   return {
     insets,
@@ -71,6 +74,7 @@ export function useMobileLayout() {
     stickyBottom,
     namesListPadBottom,
     namesListPadBottomIdle,
+    namesListPadBottomMini,
     pillEndPad: LAYOUT.pillEndPad,
     /** Shared ScrollView / FlatList content insets for standard tabs. */
     screenContent: {

@@ -26,6 +26,7 @@ import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
 import {
   ArabicInline,
+  Body,
   BodyStrong,
   Caption,
   Overline,
@@ -41,6 +42,11 @@ import { sectionsMeta } from '../data/catalogMeta';
 import { useLastActiveStory } from '../hooks/useLastActiveStory';
 import { useLibrary } from '../hooks/useLibrary';
 import { useMobileLayout } from '../hooks/useMobileLayout';
+import {
+  EMPTY_READING_BOOKMARK,
+  formatReadingPercent,
+  type ReadingBookmark,
+} from '../hooks/readingBookmark';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import { requestExplore } from '../navigation/exploreIntent';
 import {
@@ -92,7 +98,7 @@ export default function HomeScreen() {
 
   const storyId = continueStory?.id ?? '';
   const { load: loadReadBookmark } = useReadingBookmark(storyId || 'none');
-  const [readY, setReadY] = useState(0);
+  const [bookmark, setBookmark] = useState<ReadingBookmark>(EMPTY_READING_BOOKMARK);
 
   useEffect(() => {
     void refresh();
@@ -100,10 +106,10 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!continueStory) {
-      setReadY(0);
+      setBookmark(EMPTY_READING_BOOKMARK);
       return;
     }
-    void loadReadBookmark().then(setReadY);
+    void loadReadBookmark().then(setBookmark);
   }, [continueStory, loadReadBookmark]);
 
   const sectionCounts = useMemo(() => {
@@ -255,7 +261,7 @@ export default function HomeScreen() {
           <Pressable
             onPress={openResume}
             accessibilityRole="button"
-            accessibilityLabel={`Continue reading ${continueStory.title}`}
+            accessibilityLabel={`Continue reading ${continueStory.title}, ${formatReadingPercent(bookmark.percent)}${bookmark.heading ? `, last section ${bookmark.heading}` : ''}${bookmark.line ? `, last line ${bookmark.line}` : ''}`}
             style={({ pressed }) => [
               styles.continueCard,
               {
@@ -268,22 +274,53 @@ export default function HomeScreen() {
           >
             <Row justify="space-between" align="center">
               <Overline color={colors.emerald}>Continue reading</Overline>
-              <Caption color={colors.inkSubtle}>
-                {sectionsMeta[continueStory.sectionSlug]?.title}
+              <Caption color={colors.emerald} style={styles.continuePercent}>
+                {formatReadingPercent(bookmark.percent)}
               </Caption>
             </Row>
             <BodyStrong style={styles.continueTitle} numberOfLines={2}>
               {continueStory.title}
             </BodyStrong>
             <Small color={colors.inkMuted} numberOfLines={1}>
-              {continueStory.figureName}
-              {readY > 0 ? ' · bookmark saved' : ''}
+              {bookmark.heading
+                ? `Last section · ${bookmark.heading}`
+                : `${continueStory.figureName}${bookmark.y > 0 ? ' · in progress' : ''}`}
             </Small>
-            <ProgressBar
-              value={readY > 0 ? 0.3 : 0.1}
-              gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
-              height={4}
-            />
+            {bookmark.line ? (
+              <View
+                style={[
+                  styles.lastLineBox,
+                  {
+                    backgroundColor: isDark ? colors.cardAlt : colors.subtleBg,
+                    borderLeftColor: colors.gold,
+                  },
+                ]}
+                accessibilityLabel={`Last line read: ${bookmark.line}`}
+              >
+                <Caption color={colors.gold} style={styles.lastLineLabel}>
+                  Last line read
+                </Caption>
+                <Body numberOfLines={3} style={styles.lastLineText}>
+                  {bookmark.line}
+                </Body>
+              </View>
+            ) : (
+              <Caption color={colors.inkSubtle} numberOfLines={1}>
+                {sectionsMeta[continueStory.sectionSlug]?.title}
+              </Caption>
+            )}
+            <Row align="center" gap={10}>
+              <View style={styles.continueBar}>
+                <ProgressBar
+                  value={bookmark.percent}
+                  gradient={brandGradients.gold[isDark ? 'dark' : 'light']}
+                  height={5}
+                />
+              </View>
+              <Caption color={colors.inkMuted} style={styles.continuePercentTick}>
+                {formatReadingPercent(bookmark.percent)}
+              </Caption>
+            </Row>
             <Row gap={7} style={styles.continueAction} align="center">
               <BookOpen size={16} color={colors.emerald} strokeWidth={2.25} />
               <BodyStrong color={colors.emerald} style={styles.continueActionLabel}>
@@ -441,6 +478,18 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   continueTitle: { fontSize: 15, lineHeight: 21 },
+  continuePercent: { fontWeight: '800' },
+  continueBar: { flex: 1, minWidth: 0 },
+  continuePercentTick: { fontVariant: ['tabular-nums'], fontWeight: '700' },
+  lastLineBox: {
+    borderLeftWidth: 3,
+    borderRadius: radius.md,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    gap: 3,
+  },
+  lastLineLabel: { fontWeight: '800', letterSpacing: 0.3 },
+  lastLineText: { fontSize: 14, lineHeight: 20, fontStyle: 'italic' },
   continueAction: { marginTop: 6 },
   continueActionLabel: { fontSize: 13, lineHeight: 18 },
   sectionHead: { marginBottom: 10, marginTop: 8 },

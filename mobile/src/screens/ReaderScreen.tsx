@@ -15,6 +15,13 @@ import { getSeerahPart } from '../data/seerahParts';
 import { getShortStory } from '../data/shortStoriesFromTheLife';
 import { theProphets } from '../data/theProphets';
 import { theSahabah } from '../data/theSahabah';
+import {
+  EMPTY_READING_BOOKMARK,
+  bookmarkFromScroll,
+  formatReadingPercent,
+  type ReadingBlock,
+  type ReadingBookmark,
+} from '../hooks/readingBookmark';
 import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import HighlightableText from '../components/HighlightableText';
 import { useShareSheet } from '../components/ShareSheet';
@@ -136,7 +143,11 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const { openShare } = useShareSheet();
   const { load, save } = useReadingBookmark(story.id);
   const scrollRef = useRef<ScrollView>(null);
+  const sectionYRef = useRef<number[]>([]);
+  const blockMapRef = useRef(new Map<string, ReadingBlock & { localY: number }>());
+  const blocksRef = useRef<ReadingBlock[]>([]);
   const [restoredY, setRestoredY] = useState(0);
+  const [resume, setResume] = useState<ReadingBookmark>(EMPTY_READING_BOOKMARK);
   const [highlightMode, setHighlightMode] = useState(false);
   const saved = isSaved(story.id);
   const resolved = useMemo(() => resolveFullText(story), [story]);
@@ -175,8 +186,9 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const pdfSpan = ibnKathirSpan ?? shortStoryPdfSpan ?? sahabahPdfSpan ?? quranPdfSpan;
 
   useEffect(() => {
-    void load().then((y) => {
-      setRestoredY(y);
+    void load().then((bookmark) => {
+      setResume(bookmark);
+      setRestoredY(bookmark.y);
     });
   }, [load]);
 
@@ -189,7 +201,49 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   }, [restoredY, resolved.plain]);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    void save(event.nativeEvent.contentOffset.y);
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+    void save(
+      bookmarkFromScroll(
+        contentOffset.y,
+        contentSize.height,
+        layoutMeasurement.height,
+        layoutMeasurement.width,
+        blocksRef.current,
+      ),
+    );
+  };
+
+  const publishBlocks = () => {
+    blocksRef.current = [...blockMapRef.current.values()];
+  };
+
+  const onSectionLayout = (sectionIndex: number, y: number) => {
+    sectionYRef.current[sectionIndex] = y;
+    for (const [key, block] of blockMapRef.current) {
+      if (key.startsWith(`${sectionIndex}:`)) {
+        block.y = y + block.localY;
+      }
+    }
+    publishBlocks();
+  };
+
+  const onParagraphLayout = (
+    sectionIndex: number,
+    paragraphIndex: number,
+    localY: number,
+    height: number,
+    heading: string | undefined,
+    text: string,
+  ) => {
+    const sectionY = sectionYRef.current[sectionIndex] ?? 0;
+    blockMapRef.current.set(`${sectionIndex}:${paragraphIndex}`, {
+      y: sectionY + localY,
+      height,
+      heading: heading ?? null,
+      text,
+      localY,
+    });
+    publishBlocks();
   };
 
   return (
@@ -214,9 +268,12 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         </Pressable>
 
         <View style={styles.headerMeta}>
-          <Overline color={accent.primary}>Reading mode</Overline>
-          <Caption color={colors.inkMuted}>
-            {story.figureName}
+          <Overline color={accent.primary}>
+            Reading mode
+            {resume.percent > 0 ? ` · ${formatReadingPercent(resume.percent)}` : ''}
+          </Overline>
+          <Caption color={colors.inkMuted} numberOfLines={1}>
+            {resume.heading ?? story.figureName}
           </Caption>
         </View>
 
@@ -322,20 +379,57 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         )}
 
         {resolved.sections.map((section, index) => (
-          <View key={`${section.heading ?? 'p'}-${index}`} style={styles.section}>
+          <View
+            key={`${section.heading ?? 'p'}-${index}`}
+            style={styles.section}
+            onLayout={(event) => onSectionLayout(index, event.nativeEvent.layout.y)}
+          >
             {section.heading ? <Heading style={styles.sectionHeading}>{section.heading}</Heading> : null}
-            {toParagraphs(section.body).map((paragraph, pIndex) => (
-              <HighlightableText
-                key={`${pIndex}-${paragraph.slice(0, 24)}`}
-                text={paragraph}
-                kind="story"
-                sourceLabel={`${story.title} · ${story.figureName}`}
-                storyId={story.id}
-                storyTitle={story.title}
-                highlightMode={highlightMode}
-                style={styles.paragraph}
-              />
-            ))}
+            {toParagraphs(section.body).map((paragraph, pIndex) => {
+              const lastRead = Boolean(resume.line) && paragraph.includes(resume.line);
+              return (
+                <View
+                  key={`${pIndex}-${paragraph.slice(0, 24)}`}
+                  onLayout={(event) =>
+                    onParagraphLayout(
+                      index,
+                      pIndex,
+                      event.nativeEvent.layout.y,
+                      event.nativeEvent.layout.height,
+                      section.heading,
+                      paragraph,
+                    )
+                  }
+                  style={
+                    lastRead
+                      ? [
+                          styles.lastReadBlock,
+                          {
+                            borderLeftColor: accent.primary,
+                            backgroundColor: alpha(accent.primary, isDark ? 0.16 : 0.08),
+                          },
+                        ]
+                      : null
+                  }
+                >
+                  {lastRead ? (
+                    <Caption color={accent.primary} style={styles.lastReadLabel}>
+                      Last line read · {formatReadingPercent(resume.percent)}
+                      {resume.heading ? ` · ${resume.heading}` : ''}
+                    </Caption>
+                  ) : null}
+                  <HighlightableText
+                    text={paragraph}
+                    kind="story"
+                    sourceLabel={`${story.title} · ${story.figureName}`}
+                    storyId={story.id}
+                    storyTitle={story.title}
+                    highlightMode={highlightMode}
+                    style={styles.paragraph}
+                  />
+                </View>
+              );
+            })}
           </View>
         ))}
 
@@ -454,6 +548,14 @@ const styles = StyleSheet.create({
   section: { marginBottom: 22, gap: 10 },
   sectionHeading: { fontSize: 18 },
   paragraph: { fontSize: 16, lineHeight: 27 },
+  lastReadBlock: {
+    borderLeftWidth: 3,
+    borderRadius: radius.md,
+    paddingLeft: 10,
+    paddingVertical: 8,
+    gap: 6,
+  },
+  lastReadLabel: { fontWeight: '800' },
   citationCard: {
     marginTop: 8,
     borderWidth: 1,

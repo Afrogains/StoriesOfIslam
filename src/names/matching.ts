@@ -104,15 +104,71 @@ function splitNameTokens(segment: string): string[] {
 }
 
 /** Podcast titles mix "#09", "Class 30" and free text; extract every Name-like token. */
-function podcastNameTokens(title: string): string[] {
+export function podcastNameTokens(title: string): string[] {
   const plain = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const tokens = plain.match(/\b(?:Al|Ar|As|An|At|Ad|Ash|Az)\s*-\s*[A-Za-zʾ'’]+/g) ?? [];
   return tokens.map((token) => token.replace(/\s*-\s*/g, '-'));
 }
 
-function podcastClassNumber(title: string): number | null {
+export function podcastClassNumber(title: string): number | null {
   const match = /(?:#|Class\s*#?\s*)(\d{1,3})/i.exec(title);
   return match ? Number(match[1]) : null;
+}
+
+export function formatDurationLabel(seconds: number | null): string {
+  if (seconds == null || !Number.isFinite(seconds) || seconds < 0) return '';
+  const whole = Math.round(seconds);
+  const hours = Math.floor(whole / 3600);
+  const minutes = Math.floor((whole % 3600) / 60);
+  const secs = whole % 60;
+  if (hours > 0) return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  return `${minutes}:${String(secs).padStart(2, '0')}`;
+}
+
+export type NamedPodcastEpisode = {
+  episode: PodcastEpisode;
+  classNumber: number | null;
+};
+
+/**
+ * Map published podcast episodes onto the 99 Names using title tokens.
+ * Generic titles such as "The Names #42" are skipped until a titled release exists.
+ * When two titled episodes mention the same Name, the more specific title wins.
+ */
+export function mapPodcastEpisodesToNames(
+  episodes: PodcastEpisode[],
+  names: DivineNameRecord[],
+): { byNumber: Map<number, NamedPodcastEpisode>; unmatchedTokens: string[] } {
+  const index = buildNameIndex(names);
+  const scored = new Map<number, NamedPodcastEpisode & { score: number }>();
+  const unmatchedTokens = new Set<string>();
+
+  for (const episode of episodes) {
+    const tokens = podcastNameTokens(episode.title);
+    if (!tokens.length) continue;
+    const classNumber = podcastClassNumber(episode.title);
+    const numbers: number[] = [];
+    for (const token of tokens) {
+      const resolved = index.resolve(token);
+      if (resolved.ambiguous || !resolved.numbers.length) unmatchedTokens.add(token);
+      else numbers.push(...resolved.numbers);
+    }
+    const unique = [...new Set(numbers)];
+    if (!unique.length) continue;
+    const score = unique.length * 2 + tokens.length + episode.title.length / 80;
+    for (const nameNumber of unique) {
+      const previous = scored.get(nameNumber);
+      if (!previous || score > previous.score) {
+        scored.set(nameNumber, { episode, classNumber, score });
+      }
+    }
+  }
+
+  const byNumber = new Map<number, NamedPodcastEpisode>();
+  for (const [nameNumber, value] of scored) {
+    byNumber.set(nameNumber, { episode: value.episode, classNumber: value.classNumber });
+  }
+  return { byNumber, unmatchedTokens: [...unmatchedTokens] };
 }
 
 function hookWords(title: string): Set<string> {

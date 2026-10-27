@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { buildCoverageReport, parseOptions, selectMatches } from '../cli/importNamesPlaylist';
 import {
   buildNameIndex,
+  formatDurationLabel,
+  mapPodcastEpisodesToNames,
   matchPlaylist,
   nameSkeleton,
   parsePodcastFeed,
@@ -123,6 +125,31 @@ describe('The Names playlist matching', () => {
     expect(selectMatches(matches, { names: new Set([25]), classes: null, limit: null }))
       .toMatchObject([{ video: { videoId: 'cKX__dX2UjY' }, nameNumbers: [25] }]);
     expect(selectMatches(matches, { names: null, classes: new Set([3]), limit: null })).toHaveLength(1);
+  });
+
+  it('maps titled podcast episodes onto Name numbers, including latest releases', () => {
+    const xml = `<?xml version="1.0"?><rss><channel>
+<item><title>The Names #46 Al-Qahar – Your Greatest Victory Starts Within</title>
+<enclosure url="https://podcasts.muslimcentral.com/mikaeel-smith/qahar.mp3" type="audio/mpeg"/>
+<itunes:duration>47:26</itunes:duration></item>
+<item><title>The Names #45 Al-Warith</title>
+<enclosure url="https://podcasts.muslimcentral.com/mikaeel-smith/warith.mp3" type="audio/mpeg"/>
+<itunes:duration>53:25</itunes:duration></item>
+<item><title>The Names #44 Al-Barr - There is Good In Your Hardship</title>
+<enclosure url="https://podcasts.muslimcentral.com/mikaeel-smith/barr.mp3" type="audio/mpeg"/></item>
+<item><title>The Names #42</title>
+<enclosure url="https://podcasts.muslimcentral.com/mikaeel-smith/42-generic.mp3" type="audio/mpeg"/></item>
+<item><title>The Names #43 Al-Muqalib - Your Heart Can Still Change</title>
+<enclosure url="https://podcasts.muslimcentral.com/mikaeel-smith/muqalib.mp3" type="audio/mpeg"/></item>
+</channel></rss>`;
+    const episodes = parsePodcastFeed(xml);
+    const { byNumber, unmatchedTokens } = mapPodcastEpisodesToNames(episodes, names);
+    expect(byNumber.get(15)?.episode.audioUrl).toContain('qahar.mp3');
+    expect(byNumber.get(97)?.episode.audioUrl).toContain('warith.mp3');
+    expect(byNumber.get(79)?.episode.audioUrl).toContain('barr.mp3');
+    expect([...byNumber.values()].some((entry) => entry.episode.audioUrl.includes('42-generic'))).toBe(false);
+    expect(unmatchedTokens).toContain('Al-Muqalib');
+    expect(formatDurationLabel(episodes[0].durationSeconds)).toBe('47:26');
   });
 
   it('collapses rolling auto-caption cues into text', () => {
