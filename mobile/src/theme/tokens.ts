@@ -18,8 +18,7 @@ export type SectionSlug =
   | 'qisas-al-anbiya'
   | 'qisas-al-quran'
   | 'seerah-shamail'
-  | 'sahabah'
-  | 'gleanings';
+  | 'sahabah';
 
 /**
  * Typography scale. Arabic sizes are deliberately larger than their Latin
@@ -129,10 +128,6 @@ export const sectionGradients: Record<
     light: ['#0284C7', '#0369A1', '#0C4A6E'],
     dark: ['#38BDF8', '#0284C7', '#082F49'],
   },
-  gleanings: {
-    light: ['#EA580C', '#C2410C', '#7C2D12'],
-    dark: ['#FB923C', '#EA580C', '#431407'],
-  },
 };
 
 /** Two-stop gradients for compact surfaces: pills, buttons, avatars. */
@@ -141,7 +136,6 @@ export const accentGradients: Record<SectionSlug, { light: readonly [string, str
   'qisas-al-quran': { light: ['#6D28D9', '#5B21B6'], dark: ['#C4B5FD', '#7C3AED'] },
   'seerah-shamail': { light: ['#D97706', '#B45309'], dark: ['#FBBF24', '#D97706'] },
   sahabah: { light: ['#0284C7', '#0369A1'], dark: ['#38BDF8', '#0284C7'] },
-  gleanings: { light: ['#EA580C', '#C2410C'], dark: ['#FB923C', '#EA580C'] },
 };
 
 /** Shared app-level gradients keyed by intent rather than by section. */
@@ -342,20 +336,6 @@ export const palette = {
         darkPrimary: '#38BDF8',
         darkLight: '#082F49',
         darkText: '#BAE6FD',
-      },
-      gleanings: {
-        name: 'Narratives & Successors',
-        nameAr: 'آثار وتابعون',
-        primary: '#C2410C',
-        secondary: '#9A3412',
-        light: '#FFF7ED',
-        border: '#FFEDD5',
-        text: '#7C2D12',
-        badgeBg: '#FFEDD5',
-        badgeText: '#C2410C',
-        darkPrimary: '#FB923C',
-        darkLight: '#431407',
-        darkText: '#FFEDD5',
       },
     },
   },

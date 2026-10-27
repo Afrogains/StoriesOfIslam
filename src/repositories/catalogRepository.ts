@@ -86,7 +86,7 @@ export const catalogRepository = {
       sort_order: number;
     }>(
       `SELECT id,slug,name_en,name_ar,description_en,description_ar,sort_order
-       FROM categories ORDER BY sort_order, name_en`,
+       FROM categories WHERE slug <> 'gleanings' ORDER BY sort_order, name_en`,
     );
     return result.rows.map((row) => ({
       id: row.id,
@@ -99,7 +99,9 @@ export const catalogRepository = {
 
   async listFigures(category?: string) {
     const values: unknown[] = [];
-    const where = category ? 'WHERE c.slug = ?' : '';
+    const where = category
+      ? "WHERE c.slug = ? AND c.slug <> 'gleanings'"
+      : "WHERE c.slug <> 'gleanings'";
     if (category) values.push(category);
     const result = await query<RowDataPacket & {
       id: string;
@@ -133,7 +135,7 @@ export const catalogRepository = {
   },
 
   async listStories(filters: StoryQuery) {
-    const clauses = ["s.publication_status = 'published'"];
+    const clauses = ["s.publication_status = 'published'", "c.slug <> 'gleanings'"];
     const values: unknown[] = [];
     if (filters.category) {
       clauses.push('c.slug = ?');
@@ -200,7 +202,7 @@ export const catalogRepository = {
        FROM stories s
        JOIN categories c ON c.id=s.category_id
        LEFT JOIN figures f ON f.id=s.figure_id
-       WHERE s.publication_status='published' AND (s.id=? OR s.slug=?)
+       WHERE s.publication_status='published' AND c.slug <> 'gleanings' AND (s.id=? OR s.slug=?)
        LIMIT 1`,
       [idOrSlug, idOrSlug],
     );

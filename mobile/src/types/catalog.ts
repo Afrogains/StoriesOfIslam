@@ -2,8 +2,7 @@ export type SectionSlug =
   | 'qisas-al-anbiya'
   | 'qisas-al-quran'
   | 'seerah-shamail'
-  | 'sahabah'
-  | 'gleanings';
+  | 'sahabah';
 export type MediaFilter = 'all' | 'audio' | 'text';
 export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
 

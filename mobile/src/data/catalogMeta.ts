@@ -65,20 +65,4 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     conceptTagline: 'Valor, Loyalty & Pillar Foundations',
     iconName: 'User',
   },
-  gleanings: {
-    id: 'gleanings',
-    title: 'Narratives & Successors',
-    shortTitle: 'Successors',
-    titleAr: 'آثار وتابعون',
-    subtitle: 'Athar wa Tabi’un',
-    description:
-      'Documented narratives and righteous reports from the Successors (Tabi‘un) and those after them among the early predecessors.',
-    countLabel: 'Narratives',
-    accentColor: '#C2410C',
-    bgTint: '#FFF7ED',
-    badgeBg: '#FFEDD5',
-    badgeText: '#C2410C',
-    conceptTagline: 'Athar, Wisdom & Continuity of Guidance',
-    iconName: 'Library',
-  },
 };

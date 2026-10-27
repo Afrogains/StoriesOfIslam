@@ -5,7 +5,7 @@ export const SECTION_ORDER = Object.keys(sectionsMeta) as SectionSlug[];
 
 /**
  * Pick one story from each catalog section so Home suggestions span
- * Prophets, Stories of the Quran, Seerah, Sahabah, and Narratives rather than clustering one shelf.
+ * Prophets, Stories of the Quran, Seerah, and Sahabah rather than clustering one shelf.
  */
 export function pickCrossCategorySuggestions(
   stories: StoryItem[],

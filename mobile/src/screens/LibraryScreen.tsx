@@ -42,22 +42,27 @@ export default function LibraryScreen() {
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
 
+  const catalogSaved = useMemo(
+    () => savedStories.filter((story) => story.sectionSlug in sectionsMeta),
+    [savedStories],
+  );
+
   const visible = useMemo(
     () =>
       sectionFilter === 'all'
-        ? savedStories
-        : savedStories.filter((story) => story.sectionSlug === sectionFilter),
-    [savedStories, sectionFilter],
+        ? catalogSaved
+        : catalogSaved.filter((story) => story.sectionSlug === sectionFilter),
+    [catalogSaved, sectionFilter],
   );
 
   const perSection = useMemo(() => {
     return (Object.keys(sectionsMeta) as SectionSlug[])
       .map((slug) => ({
         slug,
-        count: savedStories.filter((story) => story.sectionSlug === slug).length,
+        count: catalogSaved.filter((story) => story.sectionSlug === slug).length,
       }))
       .filter((entry) => entry.count > 0);
-  }, [savedStories]);
+  }, [catalogSaved]);
 
   const deleteAccount = () => {
     Alert.alert(

@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import { apiRequest } from '../services/api';
+import { sectionsMeta } from './catalogMeta';
 import type { StoryItem } from '../types/catalog';
 
 const CACHE_KEY = 'stories.catalog.v1';
@@ -37,18 +38,25 @@ function loadBundledCatalog(): StoryItem[] {
   const { mergeQuranStoriesIntoCatalog } = require('./quranStories') as {
     mergeQuranStoriesIntoCatalog: (stories: StoryItem[]) => StoryItem[];
   };
-  return mergeQuranStoriesIntoCatalog(
-    mergeSeerahTimelineIntoCatalog(
-      mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base)),
+  return publishedCatalogStories(
+    mergeQuranStoriesIntoCatalog(
+      mergeSeerahTimelineIntoCatalog(
+        mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base)),
+      ),
     ),
   );
+}
+
+function publishedCatalogStories(stories: StoryItem[]): StoryItem[] {
+  return stories.filter((story) => story.sectionSlug in sectionsMeta);
 }
 
 const bundledStories = loadBundledCatalog();
 
 function preferRicherCatalog(remote: StoryItem[]): StoryItem[] {
-  if (remote.length > bundledStories.length) return remote;
-  return bundledStories.length ? bundledStories : remote;
+  const published = publishedCatalogStories(remote);
+  if (published.length > bundledStories.length) return published;
+  return bundledStories.length ? bundledStories : published;
 }
 
 interface CatalogContextValue {

@@ -44,21 +44,6 @@
       "sortOrder": 3,
       "createdAt": "2026-09-03T00:00:00.000Z",
       "updatedAt": "2026-09-03T00:00:00.000Z"
-    },
-    {
-      "id": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
-      "slug": "gleanings",
-      "name": {
-        "en": "Narratives & Successors",
-        "ar": "آثار وتابعون"
-      },
-      "description": {
-        "en": "Short authentic accounts of the Tabi'un, successors, and other righteous predecessors.",
-        "ar": "قبسات قصيرة موثقة من أخبار التابعين ومن بعدهم من السلف."
-      },
-      "sortOrder": 4,
-      "createdAt": "2026-09-03T00:00:00.000Z",
-      "updatedAt": "2026-09-03T00:00:00.000Z"
     }
   ],
   "figures": [
@@ -943,27 +928,6 @@
       },
       "createdAt": "2026-09-03T00:00:00.000Z",
       "updatedAt": "2026-09-03T00:00:00.000Z"
-    },
-    {
-      "id": "10a1b2c3-d4e5-4060-8071-111111111201",
-      "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
-      "slug": "uways-al-qarni",
-      "name": {
-        "en": "Uways al-Qarni",
-        "ar": "أويس القرني"
-      },
-      "honorific": {
-        "en": "may Allah have mercy on him",
-        "ar": "رحمه الله"
-      },
-      "isKeyFigure": false,
-      "sortOrder": 1,
-      "bio": {
-        "en": "A Tabi'i from Yemen, praised by the Prophet ﷺ for his devotion to his mother.",
-        "ar": "تابعي من اليمن، أثنى عليه النبي ﷺ لبرّه بوالدته."
-      },
-      "createdAt": "2026-09-03T00:00:00.000Z",
-      "updatedAt": "2026-09-03T00:00:00.000Z"
     }
   ],
   "stories": [
@@ -1154,68 +1118,6 @@
           "endMs": 74000,
           "textEn": "The Prophet ﷺ replied, \"What do you think of two, the third of whom is Allah?\"",
           "textAr": "فقال النبي ﷺ: «ما ظنك باثنين الله ثالثهما؟»"
-        }
-      ],
-      "createdAt": "2026-09-03T00:00:00.000Z",
-      "updatedAt": "2026-09-03T00:00:00.000Z"
-    },
-    {
-      "id": "20a1b2c3-d4e5-4060-8071-222222222004",
-      "categoryId": "3c9d5e1a-6f4b-402a-ae8c-4b1f2d7a9c35",
-      "figureId": "10a1b2c3-d4e5-4060-8071-111111111201",
-      "slug": "uways-al-qarni-of-yemen",
-      "title": {
-        "en": "Uways al-Qarni of Yemen",
-        "ar": "أويس القرني من أهل اليمن"
-      },
-      "content": {
-        "en": "The Prophet ﷺ told Umar and Ali of a man from Yemen named Uways. He would have a white mark from illness, and he was deeply devoted to his mother. The Prophet ﷺ instructed them: if they met him, to ask him to seek forgiveness for them.",
-        "ar": "أخبر النبي ﷺ عمر وعلياً برجل من اليمن اسمه أويس، به بياض من مرض، وكان بارّاً بوالدته. وأمرهما إن لقياه أن يستغفرا به."
-      },
-      "sourceCitation": "Sahih Muslim, Kitab Fada'il al-Sahabah, Hadith 2542",
-      "authenticityGrade": "sahih",
-      "audioUrl": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3",
-      "audio": {
-        "url": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3",
-        "mimeType": "audio/mpeg",
-        "durationSeconds": 80,
-        "fileSizeBytes": 1280000,
-        "bitrateKbps": 128,
-        "cdn": {
-          "provider": "cloudflare-r2",
-          "bucket": "stories-of-islam-audio",
-          "objectKey": "gleanings/uways-al-qarni-of-yemen.mp3",
-          "region": "wnam",
-          "publicUrl": "https://cdn.storiesofislam.example/audio/gleanings/uways-al-qarni-of-yemen.mp3"
-        },
-        "backgroundPlayer": {
-          "title": "Uways al-Qarni of Yemen",
-          "artist": "Stories of Islam",
-          "artworkUrl": "https://cdn.storiesofislam.example/artwork/gleanings/uways.jpg",
-          "continueInBackground": true,
-          "showLockScreenControls": true,
-          "skipForwardSeconds": 15,
-          "skipBackwardSeconds": 15
-        }
-      },
-      "timedCues": [
-        {
-          "startMs": 0,
-          "endMs": 28000,
-          "textEn": "The Prophet ﷺ told Umar and Ali of a man from Yemen named Uways.",
-          "textAr": "أخبر النبي ﷺ عمر وعلياً برجل من اليمن اسمه أويس."
-        },
-        {
-          "startMs": 28000,
-          "endMs": 54000,
-          "textEn": "He would have a white mark from illness, and he was deeply devoted to his mother.",
-          "textAr": "به بياض من مرض، وكان بارّاً بوالدته."
-        },
-        {
-          "startMs": 54000,
-          "endMs": 80000,
-          "textEn": "The Prophet ﷺ instructed them: if they met him, to ask him to seek forgiveness for them.",
-          "textAr": "وأمرهما إن لقياه أن يستغفرا به."
         }
       ],
       "createdAt": "2026-09-03T00:00:00.000Z",

@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Clock,
   Headphones,
-  Library,
   Share2,
   User,
   type LucideIcon,
@@ -39,7 +38,6 @@ export const sectionIcons: Record<SectionSlug, LucideIcon> = {
   'qisas-al-quran': BookMarked,
   'seerah-shamail': BookOpen,
   sahabah: User,
-  gleanings: Library,
 };
 
 export default function StoryCard({

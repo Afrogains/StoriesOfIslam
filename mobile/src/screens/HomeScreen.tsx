@@ -6,7 +6,6 @@ import {
   Flame,
   FolderOpen,
   Headphones,
-  Library as LibraryIcon,
   Search,
   Sparkles,
   Users,
@@ -69,7 +68,6 @@ const sectionIcons: Record<SectionSlug, LucideIcon> = {
   'qisas-al-quran': BookMarked,
   'seerah-shamail': Sparkles,
   sahabah: Users,
-  gleanings: LibraryIcon,
 };
 
 /**

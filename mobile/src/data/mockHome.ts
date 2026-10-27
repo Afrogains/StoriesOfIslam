@@ -1,4 +1,4 @@
-export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah' | 'gleanings';
+export type SectionSlug = 'qisas-al-anbiya' | 'seerah-shamail' | 'sahabah';
 export type MediaFilter = 'all' | 'audio' | 'text';
 export type AuthenticityGrade = 'sahih' | 'hasan' | 'athar' | 'historical';
 
@@ -93,20 +93,6 @@ export const sectionsMeta: Record<SectionSlug, SectionMeta> = {
     conceptTagline: 'Valor, Loyalty & Pillar Foundations',
     iconName: 'Users',
 
-  },
-  gleanings: {
-    id: 'gleanings',
-    title: 'Narratives & Successors',
-    titleAr: 'آثار وتابعون',
-    subtitle: 'Athar wa Tabi’un',
-    description: 'Documented narratives and righteous reports from the Successors (Tabi‘un) and those after them.',
-    countLabel: 'Narratives',
-    accentColor: '#C2410C',
-    bgTint: '#FFF7ED',
-    badgeBg: '#FFEDD5',
-    badgeText: '#C2410C',
-    conceptTagline: 'Athar, Wisdom & Continuity of Guidance',
-    iconName: 'Library',
   },
 };
 
@@ -862,45 +848,6 @@ export const allStandardStories: StoryItem[] = [
     isFavorite: false,
     keyTakeaway: 'Sincere responsibility means serving others in secret.',
   },
-
-  {
-    id: 'uways-al-qarni-devotion',
-    sectionSlug: 'gleanings',
-    title: 'Uways al-Qarni: Devotion to His Mother',
-    titleAr: 'أويس القرني وإحسانه لوالدته',
-    figureName: 'Uways al-Qarni',
-    figureNameAr: 'أويس القرني',
-    honorific: 'may Allah have mercy on him',
-    honorificAr: 'رحمه الله',
-    summary: 'Though he never met the Prophet ﷺ in person, Uways was praised by the Messenger of Allah for his extraordinary devotion to his elderly mother.',
-    durationLabel: '3:55',
-    durationMs: 235000,
-    authenticityGrade: 'sahih',
-    sourceCitation: 'Sahih Muslim 2542',
-    hasAudio: true,
-    isFavorite: true,
-    keyTakeaway: 'Devotion to parents can elevate a person to the highest ranks with Allah.',
-  },
-
-  {
-    id: 'hasan-al-basri-reflection',
-    sectionSlug: 'gleanings',
-    title: 'Hasan al-Basri on the Passage of Time',
-    titleAr: 'موعظة الحسن البصري في حقيقة العمر',
-    figureName: 'Hasan al-Basri',
-    figureNameAr: 'الحسن البصري',
-    honorific: 'may Allah have mercy on him',
-    honorificAr: 'رحمه الله',
-    summary: 'The great successor reflected: "O child of Adam, you are but a sum of days; whenever a day passes, a portion of you departs."',
-    durationLabel: '3:20',
-    durationMs: 200000,
-    authenticityGrade: 'hasan',
-    sourceCitation: 'Hilyat al-Awliya (Abu Nu’aym)',
-    hasAudio: true,
-    isFavorite: false,
-    keyTakeaway: 'Valuing every passing moment for good deeds.',
-  }
-
 ];
 
 
