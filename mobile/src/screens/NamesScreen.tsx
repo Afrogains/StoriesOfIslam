@@ -72,7 +72,8 @@ export default function NamesScreen() {
     setDeckMode((prev) => {
       if (prev === 'read') return 'read';
       if (!hasAudio) return 'idle';
-      if (prev === 'mini') return 'mini';
+      // Keep a compact player when switching names so the grid stays tappable.
+      if (prev === 'listen' || prev === 'mini') return 'mini';
       return 'listen';
     });
   };
