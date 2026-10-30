@@ -10,46 +10,10 @@ import {
   type ReactNode,
 } from 'react';
 import { apiRequest } from '../services/api';
-import { sectionsMeta } from './catalogMeta';
+import { loadBundledCatalog, publishedCatalogStories } from './bundledCatalog';
 import type { StoryItem } from '../types/catalog';
 
 const CACHE_KEY = 'stories.catalog.v1';
-
-/**
- * In-app catalog is the production source of truth until HostAfrica publishes a
- * richer reviewed feed. Metro includes these chapters in every export.
- */
-function loadBundledCatalog(): StoryItem[] {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const base = require('./mockHome').allStandardStories as StoryItem[];
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { mergeSahabahChaptersIntoCatalog } = require('./sahabahChapters') as {
-    mergeSahabahChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
-  };
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { mergeProphetChaptersIntoCatalog } = require('./prophetChapters') as {
-    mergeProphetChaptersIntoCatalog: (stories: StoryItem[]) => StoryItem[];
-  };
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { mergeSeerahTimelineIntoCatalog } = require('./seerahTimeline') as {
-    mergeSeerahTimelineIntoCatalog: (stories: StoryItem[]) => StoryItem[];
-  };
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { mergeQuranStoriesIntoCatalog } = require('./quranStories') as {
-    mergeQuranStoriesIntoCatalog: (stories: StoryItem[]) => StoryItem[];
-  };
-  return publishedCatalogStories(
-    mergeQuranStoriesIntoCatalog(
-      mergeSeerahTimelineIntoCatalog(
-        mergeProphetChaptersIntoCatalog(mergeSahabahChaptersIntoCatalog(base)),
-      ),
-    ),
-  );
-}
-
-function publishedCatalogStories(stories: StoryItem[]): StoryItem[] {
-  return stories.filter((story) => story.sectionSlug in sectionsMeta);
-}
 
 const bundledStories = loadBundledCatalog();
 

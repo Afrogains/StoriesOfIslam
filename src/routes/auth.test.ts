@@ -2,7 +2,9 @@ import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashPassword, verifyPassword } from '../auth/localAuth';
 import { createApp } from '../http/app';
+import type * as AccountRepositoryModule from '../repositories/accountRepository';
 import type { AccountProfile } from '../repositories/accountRepository';
+import type * as UserRepositoryModule from '../repositories/userRepository';
 
 type Account = AccountProfile & { passwordHash: string };
 
@@ -14,7 +16,7 @@ const store = vi.hoisted(() => ({
 }));
 
 vi.mock('../repositories/userRepository', async (importOriginal) => {
-  const original = await importOriginal<typeof import('../repositories/userRepository')>();
+  const original = await importOriginal<typeof UserRepositoryModule>();
   return {
     ...original,
     ensureProfile: vi.fn(async (user: { subject: string }) => {
@@ -30,7 +32,7 @@ vi.mock('../repositories/userRepository', async (importOriginal) => {
 });
 
 vi.mock('../repositories/accountRepository', async (importOriginal) => {
-  const original = await importOriginal<typeof import('../repositories/accountRepository')>();
+  const original = await importOriginal<typeof AccountRepositoryModule>();
   const byId = (id: string) => [...store.accounts.values()].find((account) => account.id === id) ?? null;
   return {
     ...original,
