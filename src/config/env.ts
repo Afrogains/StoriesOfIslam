@@ -34,6 +34,11 @@ const EnvSchema = z
     KEYCLOAK_ADMIN_CLIENT_ID: z.string().optional(),
     KEYCLOAK_ADMIN_CLIENT_SECRET: z.string().optional(),
 
+    /** Signs first-party email/password access tokens (HS256). Required in production. */
+    AUTH_JWT_SECRET: z.string().min(32).optional().or(z.literal('')),
+    AUTH_ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().min(60).max(86_400).default(900),
+    AUTH_REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(60),
+
     S3_ENDPOINT: z.string().url().default('http://localhost:9000'),
     S3_REGION: z.string().default('us-east-1'),
     S3_ACCESS_KEY: z.string().min(1).default('stories-api'),
@@ -105,6 +110,7 @@ export function getEnv(): AppEnv {
       !parsed.data.KEYCLOAK_ISSUER.startsWith('https://'),
       !parsed.data.S3_ENDPOINT.startsWith('https://'),
       !parsed.data.METRICS_TOKEN,
+      !parsed.data.AUTH_JWT_SECRET,
     ];
     if (insecure.some(Boolean)) {
       throw new Error('Production environment contains placeholder credentials or non-TLS service URLs');

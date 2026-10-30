@@ -41,6 +41,7 @@ require S3_ACCESS_KEY
 require S3_SECRET_KEY
 require S3_PUBLIC_BASE_URL
 require METRICS_TOKEN
+require AUTH_JWT_SECRET
 
 if [[ "${KEYCLOAK_ISSUER}" != https://* ]]; then
   printf 'FAIL KEYCLOAK_ISSUER must be https in production/staging\n'

@@ -1,13 +1,19 @@
 import { randomUUID } from 'node:crypto';
 import type { RowDataPacket } from 'mysql2/promise';
 import type { AuthenticatedUser } from '../auth/keycloak';
+import { LOCAL_SUBJECT_PREFIX } from '../auth/localAuth';
 import { asBool, query, transaction } from '../db/pool';
+import { HttpError } from '../http/errors';
 
 export async function ensureProfile(user: AuthenticatedUser): Promise<string> {
-  const existing = await query<RowDataPacket & { id: string }>(
-    'SELECT id FROM profiles WHERE keycloak_subject=? LIMIT 1',
+  const existing = await query<RowDataPacket & { id: string; deleted_at: Date | null }>(
+    'SELECT id,deleted_at FROM profiles WHERE keycloak_subject=? LIMIT 1',
     [user.subject],
   );
+  const local = user.subject.startsWith(LOCAL_SUBJECT_PREFIX);
+  if (local && (!existing.rows[0] || existing.rows[0].deleted_at)) {
+    throw new HttpError(401, 'account_deleted', 'This account no longer exists');
+  }
   if (existing.rows[0]) {
     await query(
       `UPDATE profiles SET email=?,display_name=?,roles=?,deleted_at=NULL,updated_at=UTC_TIMESTAMP(3)
