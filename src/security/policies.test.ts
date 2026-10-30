@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 describe('publication security policies', () => {
   it('never grants anonymous access through the API MinIO policy', () => {
     const policy = JSON.parse(
-      readFileSync(resolve('infra/whogohost/minio/api-policy.json'), 'utf8'),
+      readFileSync(resolve('infra/hostafrica/minio/api-policy.json'), 'utf8'),
     ) as { Statement: { Effect: string; Action: string[]; Resource: string[] }[] };
     expect(policy.Statement.every((statement) => statement.Effect === 'Allow')).toBe(true);
     expect(JSON.stringify(policy)).not.toContain('"Principal"');

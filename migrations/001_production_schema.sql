@@ -1,223 +1,191 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
-CREATE TYPE authenticity_grade AS ENUM ('sahih', 'hasan', 'athar', 'historical');
-CREATE TYPE publication_status AS ENUM ('draft', 'in_review', 'approved', 'published', 'archived');
-CREATE TYPE generation_job_status AS ENUM ('queued', 'running', 'review_required', 'completed', 'failed', 'cancelled');
-CREATE TYPE generation_job_type AS ENUM ('podcast_script', 'voice_synthesis', 'full_episode');
+-- Stories of Islam — MySQL 8 / MariaDB 10.6+ schema for HostAfrica.
+-- UUIDs are CHAR(36). JSON replaces PostgreSQL JSONB / arrays.
+-- schema_migrations is owned by src/cli/migrate.ts.
 
 CREATE TABLE categories (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  slug TEXT NOT NULL UNIQUE,
-  name_en TEXT NOT NULL,
-  name_ar TEXT NOT NULL,
-  description_en TEXT NOT NULL DEFAULT '',
-  description_ar TEXT NOT NULL DEFAULT '',
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  id CHAR(36) PRIMARY KEY,
+  slug VARCHAR(64) NOT NULL,
+  name_en VARCHAR(255) NOT NULL,
+  name_ar VARCHAR(255) NOT NULL,
+  description_en TEXT NOT NULL,
+  description_ar TEXT NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_categories_slug (slug),
   CONSTRAINT categories_slug_core_check CHECK (
     slug IN ('qisas-al-anbiya', 'seerah-shamail', 'sahabah', 'gleanings')
   )
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE profiles (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  keycloak_subject TEXT NOT NULL UNIQUE,
-  email TEXT,
-  display_name TEXT,
-  locale TEXT NOT NULL DEFAULT 'en',
-  roles TEXT[] NOT NULL DEFAULT '{}',
-  deleted_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+  id CHAR(36) PRIMARY KEY,
+  keycloak_subject VARCHAR(255) NOT NULL,
+  email VARCHAR(320) NULL,
+  display_name VARCHAR(255) NULL,
+  locale VARCHAR(16) NOT NULL DEFAULT 'en',
+  roles JSON NOT NULL,
+  deleted_at DATETIME(3) NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_profiles_subject (keycloak_subject)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE figures (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
-  slug TEXT NOT NULL UNIQUE,
-  name_en TEXT NOT NULL,
-  name_ar TEXT NOT NULL,
-  honorific_en TEXT NOT NULL DEFAULT '',
-  honorific_ar TEXT NOT NULL DEFAULT '',
-  is_key_figure BOOLEAN NOT NULL DEFAULT false,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  bio_en TEXT NOT NULL DEFAULT '',
-  bio_ar TEXT NOT NULL DEFAULT '',
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+  id CHAR(36) PRIMARY KEY,
+  category_id CHAR(36) NOT NULL,
+  slug VARCHAR(128) NOT NULL,
+  name_en VARCHAR(255) NOT NULL,
+  name_ar VARCHAR(255) NOT NULL,
+  honorific_en VARCHAR(255) NOT NULL DEFAULT '',
+  honorific_ar VARCHAR(255) NOT NULL DEFAULT '',
+  is_key_figure TINYINT(1) NOT NULL DEFAULT 0,
+  sort_order INT NOT NULL DEFAULT 0,
+  bio_en TEXT NOT NULL,
+  bio_ar TEXT NOT NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_figures_slug (slug),
+  KEY idx_figures_category (category_id, sort_order),
+  CONSTRAINT fk_figures_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE stories (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
-  figure_id UUID REFERENCES figures(id) ON DELETE SET NULL,
-  slug TEXT NOT NULL UNIQUE,
-  title_en TEXT NOT NULL,
-  title_ar TEXT NOT NULL,
-  summary_en TEXT NOT NULL DEFAULT '',
-  content_en TEXT NOT NULL,
-  content_ar TEXT NOT NULL,
-  authenticity_grade authenticity_grade NOT NULL,
-  publication_status publication_status NOT NULL DEFAULT 'draft',
-  reviewer_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
-  reviewed_at TIMESTAMPTZ,
-  published_at TIMESTAMPTZ,
-  audio_url TEXT,
-  artwork_url TEXT,
-  audio JSONB,
-  timed_cues JSONB NOT NULL DEFAULT '[]'::jsonb,
-  revision INTEGER NOT NULL DEFAULT 1,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT stories_timed_cues_array_check CHECK (jsonb_typeof(timed_cues) = 'array'),
+  id CHAR(36) PRIMARY KEY,
+  category_id CHAR(36) NOT NULL,
+  figure_id CHAR(36) NULL,
+  slug VARCHAR(160) NOT NULL,
+  title_en VARCHAR(512) NOT NULL,
+  title_ar VARCHAR(512) NOT NULL,
+  summary_en TEXT NOT NULL,
+  content_en MEDIUMTEXT NOT NULL,
+  content_ar MEDIUMTEXT NOT NULL,
+  authenticity_grade ENUM('sahih', 'hasan', 'athar', 'historical') NOT NULL,
+  publication_status ENUM('draft', 'in_review', 'approved', 'published', 'archived') NOT NULL DEFAULT 'draft',
+  reviewer_id CHAR(36) NULL,
+  reviewed_at DATETIME(3) NULL,
+  published_at DATETIME(3) NULL,
+  audio_url TEXT NULL,
+  artwork_url TEXT NULL,
+  audio JSON NULL,
+  timed_cues JSON NOT NULL,
+  revision INT NOT NULL DEFAULT 1,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_stories_slug (slug),
+  KEY idx_stories_catalog (publication_status, category_id, published_at),
+  KEY idx_stories_figure (figure_id),
+  KEY idx_stories_authenticity (authenticity_grade),
   CONSTRAINT stories_publication_review_check CHECK (
     publication_status NOT IN ('approved', 'published')
     OR (reviewer_id IS NOT NULL AND reviewed_at IS NOT NULL)
   ),
-  CONSTRAINT stories_published_at_check CHECK (
-    publication_status <> 'published' OR published_at IS NOT NULL
-  ),
-  CONSTRAINT stories_audio_shape_check CHECK (
-    audio IS NULL OR (
-      audio ? 'url'
-      AND audio ? 'mimeType'
-      AND audio ? 'durationSeconds'
-      AND audio ? 'checksum'
-      AND audio ? 'objectKey'
-    )
-  )
-);
+  CONSTRAINT fk_stories_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_stories_figure FOREIGN KEY (figure_id) REFERENCES figures(id) ON DELETE SET NULL,
+  CONSTRAINT fk_stories_reviewer FOREIGN KEY (reviewer_id) REFERENCES profiles(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE story_citations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  story_id UUID NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
-  source_title TEXT NOT NULL,
-  source_author TEXT,
-  volume TEXT,
-  page TEXT,
-  reference_number TEXT,
-  source_url TEXT,
-  notes TEXT,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+  id CHAR(36) PRIMARY KEY,
+  story_id CHAR(36) NOT NULL,
+  source_title VARCHAR(512) NOT NULL,
+  source_author VARCHAR(255) NULL,
+  volume VARCHAR(64) NULL,
+  page VARCHAR(64) NULL,
+  reference_number VARCHAR(128) NULL,
+  source_url TEXT NULL,
+  notes TEXT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  KEY idx_citations_story (story_id, sort_order),
+  CONSTRAINT fk_citations_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE story_revisions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  story_id UUID NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
-  revision INTEGER NOT NULL,
-  snapshot JSONB NOT NULL,
+  id CHAR(36) PRIMARY KEY,
+  story_id CHAR(36) NOT NULL,
+  revision INT NOT NULL,
+  snapshot JSON NOT NULL,
   change_summary TEXT NOT NULL,
-  created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE(story_id, revision)
-);
+  created_by CHAR(36) NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_story_revision (story_id, revision),
+  CONSTRAINT fk_revisions_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
+  CONSTRAINT fk_revisions_created_by FOREIGN KEY (created_by) REFERENCES profiles(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE favorites (
-  profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  story_id UUID NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY(profile_id, story_id)
-);
+  profile_id CHAR(36) NOT NULL,
+  story_id CHAR(36) NOT NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (profile_id, story_id),
+  CONSTRAINT fk_favorites_profile FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
+  CONSTRAINT fk_favorites_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE playback_progress (
-  profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  story_id UUID NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
-  position_ms INTEGER NOT NULL DEFAULT 0 CHECK (position_ms >= 0),
-  completed BOOLEAN NOT NULL DEFAULT false,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY(profile_id, story_id)
-);
+  profile_id CHAR(36) NOT NULL,
+  story_id CHAR(36) NOT NULL,
+  position_ms INT NOT NULL DEFAULT 0,
+  completed TINYINT(1) NOT NULL DEFAULT 0,
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (profile_id, story_id),
+  CONSTRAINT playback_position_nonneg CHECK (position_ms >= 0),
+  CONSTRAINT fk_progress_profile FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
+  CONSTRAINT fk_progress_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE generation_jobs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  job_type generation_job_type NOT NULL,
-  status generation_job_status NOT NULL DEFAULT 'queued',
-  requested_by UUID NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
-  story_id UUID REFERENCES stories(id) ON DELETE CASCADE,
-  input JSONB NOT NULL,
-  output JSONB,
-  idempotency_key TEXT NOT NULL UNIQUE,
-  attempts INTEGER NOT NULL DEFAULT 0,
-  max_attempts INTEGER NOT NULL DEFAULT 3,
-  locked_at TIMESTAMPTZ,
-  locked_by TEXT,
-  available_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  error_code TEXT,
-  error_message TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  completed_at TIMESTAMPTZ
-);
+  id CHAR(36) PRIMARY KEY,
+  job_type ENUM('podcast_script', 'voice_synthesis', 'full_episode') NOT NULL,
+  status ENUM('queued', 'running', 'review_required', 'completed', 'failed', 'cancelled') NOT NULL DEFAULT 'queued',
+  requested_by CHAR(36) NOT NULL,
+  story_id CHAR(36) NULL,
+  input JSON NOT NULL,
+  output JSON NULL,
+  idempotency_key VARCHAR(255) NOT NULL,
+  attempts INT NOT NULL DEFAULT 0,
+  max_attempts INT NOT NULL DEFAULT 3,
+  locked_at DATETIME(3) NULL,
+  locked_by VARCHAR(128) NULL,
+  available_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  error_code VARCHAR(128) NULL,
+  error_message TEXT NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  completed_at DATETIME(3) NULL,
+  UNIQUE KEY uq_jobs_idempotency (idempotency_key),
+  KEY idx_jobs_poll (status, available_at, created_at),
+  KEY idx_jobs_requester (requested_by, created_at),
+  CONSTRAINT fk_jobs_requester FOREIGN KEY (requested_by) REFERENCES profiles(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_jobs_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE media_assets (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  story_id UUID REFERENCES stories(id) ON DELETE CASCADE,
-  generation_job_id UUID REFERENCES generation_jobs(id) ON DELETE SET NULL,
-  bucket TEXT NOT NULL,
-  object_key TEXT NOT NULL,
-  public_url TEXT,
-  mime_type TEXT NOT NULL,
-  size_bytes BIGINT NOT NULL CHECK (size_bytes > 0),
-  checksum_sha256 TEXT NOT NULL,
-  duration_ms INTEGER CHECK (duration_ms > 0),
-  timeline_object_key TEXT,
-  is_public BOOLEAN NOT NULL DEFAULT false,
-  approved_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
-  approved_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE(bucket, object_key),
+  id CHAR(36) PRIMARY KEY,
+  story_id CHAR(36) NULL,
+  generation_job_id CHAR(36) NULL,
+  bucket VARCHAR(255) NOT NULL,
+  object_key VARCHAR(512) NOT NULL,
+  public_url TEXT NULL,
+  mime_type VARCHAR(128) NOT NULL,
+  size_bytes BIGINT NOT NULL,
+  checksum_sha256 CHAR(64) NOT NULL,
+  duration_ms INT NULL,
+  timeline_object_key VARCHAR(512) NULL,
+  is_public TINYINT(1) NOT NULL DEFAULT 0,
+  approved_by CHAR(36) NULL,
+  approved_at DATETIME(3) NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  UNIQUE KEY uq_assets_bucket_key (bucket, object_key),
+  KEY idx_assets_story (story_id, created_at),
+  CONSTRAINT media_size_positive CHECK (size_bytes > 0),
   CONSTRAINT public_asset_approval_check CHECK (
-    NOT is_public OR (approved_by IS NOT NULL AND approved_at IS NOT NULL)
-  )
-);
+    is_public = 0 OR (approved_by IS NOT NULL AND approved_at IS NOT NULL)
+  ),
+  CONSTRAINT fk_assets_story FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
+  CONSTRAINT fk_assets_job FOREIGN KEY (generation_job_id) REFERENCES generation_jobs(id) ON DELETE SET NULL,
+  CONSTRAINT fk_assets_approved_by FOREIGN KEY (approved_by) REFERENCES profiles(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX idx_figures_category ON figures(category_id, sort_order);
-CREATE INDEX idx_stories_catalog ON stories(publication_status, category_id, published_at DESC);
-CREATE INDEX idx_stories_figure ON stories(figure_id);
-CREATE INDEX idx_stories_authenticity ON stories(authenticity_grade);
-CREATE INDEX idx_citations_story ON story_citations(story_id, sort_order);
-CREATE INDEX idx_jobs_poll ON generation_jobs(status, available_at, created_at)
-  WHERE status = 'queued';
-CREATE INDEX idx_jobs_requester ON generation_jobs(requested_by, created_at DESC);
-CREATE INDEX idx_assets_story ON media_assets(story_id, created_at DESC);
-
-CREATE OR REPLACE FUNCTION set_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = now();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER categories_set_updated_at BEFORE UPDATE ON categories
-  FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
-CREATE TRIGGER profiles_set_updated_at BEFORE UPDATE ON profiles
-  FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
-CREATE TRIGGER figures_set_updated_at BEFORE UPDATE ON figures
-  FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
-CREATE TRIGGER stories_set_updated_at BEFORE UPDATE ON stories
-  FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
-CREATE TRIGGER jobs_set_updated_at BEFORE UPDATE ON generation_jobs
-  FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
-
-CREATE OR REPLACE FUNCTION validate_story_figure_category()
-RETURNS TRIGGER AS $$
-DECLARE
-  figure_category UUID;
-BEGIN
-  IF NEW.figure_id IS NULL THEN
-    RETURN NEW;
-  END IF;
-  SELECT category_id INTO figure_category FROM figures WHERE id = NEW.figure_id;
-  IF figure_category IS NULL OR figure_category <> NEW.category_id THEN
-    RAISE EXCEPTION 'story category_id must match the linked figure category_id';
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER stories_validate_figure_category
-  BEFORE INSERT OR UPDATE OF category_id, figure_id ON stories
-  FOR EACH ROW EXECUTE PROCEDURE validate_story_figure_category();
+-- Figure/category consistency is enforced in application services (seed/editorial).

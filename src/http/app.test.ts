@@ -33,4 +33,37 @@ describe('HTTP application', () => {
     expect(response.body.error.code).toBe('not_found');
     expect(response.body.error.requestId).toBeTruthy();
   });
+
+  it('rejects disallowed hosts on the The Names audio proxy', async () => {
+    const response = await request(createApp()).get('/v1/media/the-names-audio').query({
+      url: 'https://example.com/episode.mp3',
+    });
+    expect(response.status).toBe(403);
+    expect(response.body.error.code).toBe('host_not_allowed');
+  });
+
+  it('rejects non-mp3 urls on the The Names audio proxy', async () => {
+    const response = await request(createApp()).get('/v1/media/the-names-audio').query({
+      url: 'https://podcasts.muslimcentral.com/mikaeel-smith/notes.html',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('invalid_url');
+  });
+
+  it('requires a reviewer session for The Names review queue', async () => {
+    const list = await request(createApp()).get('/v1/editor/names-media');
+    expect(list.status).toBe(401);
+    const approve = await request(createApp())
+      .post('/v1/editor/names-media/00000000-0000-4000-8000-000000000000/approve')
+      .send({ description: 'x'.repeat(50) });
+    expect(approve.status).toBe(401);
+  });
+
+  it('reports cloud TTS package status', async () => {
+    const response = await request(createApp()).get('/v1/media/tts-status');
+    expect(response.status).toBe(200);
+    expect(response.body.data.package).toBe('src/tts');
+    expect(response.body.data.clientPackage).toBe('mobile/src/tts');
+    expect(response.body.data.readyForBatchSynthesis).toBe(true);
+  });
 });
