@@ -324,7 +324,9 @@ export default function HomeScreen() {
             <View style={styles.sectionsList}>
               {filteredStories.slice(0, 6).map((story) => {
                 const accent = sectionAccent(story.sectionSlug, isDark);
-                const chapterCount = getStoryChapters(story).length;
+                const storyChapters = getStoryChapters(story);
+                const chapterCount = storyChapters.length;
+                const minutes = Math.max(1, Math.round(storyChapters.reduce((sum, item) => sum + item.words, 0) / 200));
                 return (
                   <Pressable
                     key={story.id}
@@ -341,7 +343,7 @@ export default function HomeScreen() {
                     <View style={styles.sectionCopy}>
                       <BodyStrong numberOfLines={1}>{story.title}</BodyStrong>
                       <Small color={colors.inkMuted} numberOfLines={1}>
-                        {chapterCount} {chapterCount === 1 ? 'chapter' : 'chapters'} · {story.durationLabel} read
+                        {chapterCount} {chapterCount === 1 ? 'chapter' : 'chapters'} · {minutes} min read
                       </Small>
                     </View>
                     <BookOpen size={16} color={accent.primary} />

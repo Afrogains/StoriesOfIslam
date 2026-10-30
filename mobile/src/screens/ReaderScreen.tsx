@@ -66,6 +66,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const blocksRef = useRef<ReadingBlock[]>([]);
   const [restoredY, setRestoredY] = useState(0);
   const [resume, setResume] = useState<ReadingBookmark>(EMPTY_READING_BOOKMARK);
+  const [livePercent, setLivePercent] = useState(0);
   const [highlightMode, setHighlightMode] = useState(false);
   const saved = isSaved(story.id);
   const chapters = useMemo(() => getStoryChapters(story), [story]);
@@ -90,6 +91,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   useEffect(() => {
     void load().then((bookmark) => {
       setResume(bookmark);
+      setLivePercent(bookmark.percent);
       if (bookmark.chapter !== undefined) {
         setChapterIndex(Math.min(bookmark.chapter, chapters.length - 1));
         setRestoredY(bookmark.y);
@@ -125,7 +127,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       chapterIndex,
       chapters.length,
     );
-    setResume((current) => (Math.abs(current.percent - next.percent) >= 0.01 || current.chapter !== next.chapter ? next : current));
+    setLivePercent((current) => (Math.abs(current - next.percent) >= 0.01 ? next.percent : current));
     void save(next);
   };
 
@@ -142,6 +144,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       chapters.length,
     );
     setResume(bookmark);
+    setLivePercent(bookmark.percent);
     void save(bookmark);
     requestAnimationFrame(() =>
       scrollRef.current?.scrollTo({ y: Math.max(0, chapterTopRef.current - 8), animated: false }),
@@ -205,10 +208,10 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         <View style={styles.headerMeta}>
           <Overline color={accent.primary}>
             {chapters.length > 1 ? `Chapter ${chapterIndex + 1} of ${chapters.length}` : 'Reading mode'}
-            {resume.percent > 0 ? ` · ${formatReadingPercent(resume.percent)}` : ''}
+            {livePercent > 0 ? ` · ${formatReadingPercent(livePercent)}` : ''}
           </Overline>
           <Caption color={colors.inkMuted} numberOfLines={1}>
-            {resume.heading ?? story.figureName}
+            {chapters.length > 1 ? chapter.title : (resume.heading ?? story.figureName)}
           </Caption>
         </View>
 

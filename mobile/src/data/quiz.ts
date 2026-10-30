@@ -46,7 +46,7 @@ const NOT_NAMES = new Set(
   jannah jahannam dua du'a adhan iqamah wudu sadaqah ummah deen din kafir kafirs mushrik mushrikin
   mr mrs sir banu bani allahu akbar ansar muhajirin muhajireen sahabah companions jews jewish
   christian christians arab arabs muslimin mumineen israelites allahumma quranic islamic khalifah caliph
-  amir ameer imam sheikh shaykh`
+  amir ameer imam sheikh shaykh qiblah qibla masjid mosque ka'bah kabah`
     .split(/\s+/)
     .filter(Boolean),
 );
