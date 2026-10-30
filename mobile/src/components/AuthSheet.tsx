@@ -1,7 +1,8 @@
 import { Eye, EyeOff, LogIn, ShieldCheck, UserPlus, WifiOff, X } from 'lucide-react-native';
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -10,6 +11,7 @@ import {
   StyleSheet,
   TextInput,
   View,
+  type KeyboardEvent,
 } from 'react-native';
 import { useAuth, type AuthMode } from '../auth/AuthProvider';
 import { passwordProblem } from '../auth/validation';
@@ -34,6 +36,7 @@ function Field({
   keyboardType,
   placeholder,
   onSubmitEditing,
+  onFocus,
   inputRef,
   hint,
   testID,
@@ -46,6 +49,7 @@ function Field({
   keyboardType?: 'email-address' | 'default';
   placeholder?: string;
   onSubmitEditing?: () => void;
+  onFocus?: () => void;
   inputRef?: React.RefObject<TextInput | null>;
   hint?: string | null;
   testID?: string;
@@ -77,6 +81,7 @@ function Field({
           placeholderTextColor={colors.inkSubtle}
           returnKeyType={onSubmitEditing ? 'go' : 'next'}
           onSubmitEditing={onSubmitEditing}
+          onFocus={onFocus}
           accessibilityLabel={label}
           style={[styles.input, { color: colors.ink, fontFamily: BODY_FONT_FAMILY }]}
         />
@@ -96,7 +101,15 @@ function Field({
   );
 }
 
-function AuthForm({ options, onClose }: { options: OpenOptions; onClose: () => void }) {
+function AuthForm({
+  options,
+  onClose,
+  onFieldFocus,
+}: {
+  options: OpenOptions;
+  onClose: () => void;
+  onFieldFocus: () => void;
+}) {
   const { colors, isDark } = useTheme();
   const { register, signIn } = useAuth();
   const [tab, setTab] = useState<AuthTab>(options.tab ?? 'signin');
@@ -117,6 +130,7 @@ function AuthForm({ options, onClose }: { options: OpenOptions; onClose: () => v
       const result =
         tab === 'register' ? await register({ name, email, password }) : await signIn({ email, password });
       setPassword('');
+      Keyboard.dismiss();
       if (result.mode === 'device') {
         setDone('device');
       } else {
@@ -196,6 +210,7 @@ function AuthForm({ options, onClose }: { options: OpenOptions; onClose: () => v
           autoComplete="name"
           placeholder="e.g. Aisha Bello"
           onSubmitEditing={() => emailRef.current?.focus()}
+          onFocus={onFieldFocus}
           testID="auth-name"
         />
       ) : null}
@@ -208,6 +223,7 @@ function AuthForm({ options, onClose }: { options: OpenOptions; onClose: () => v
         placeholder="you@example.com"
         inputRef={emailRef}
         onSubmitEditing={() => passwordRef.current?.focus()}
+        onFocus={onFieldFocus}
         testID="auth-email"
       />
       <Field
@@ -219,13 +235,17 @@ function AuthForm({ options, onClose }: { options: OpenOptions; onClose: () => v
         placeholder={registering ? 'At least 8 characters, with a number' : 'Your password'}
         inputRef={passwordRef}
         onSubmitEditing={() => void submit()}
+        onFocus={onFieldFocus}
         hint={passwordHint}
         testID="auth-password"
       />
 
       {error ? (
         <View
-          style={[styles.error, { backgroundColor: alpha('#DC2626', isDark ? 0.2 : 0.08), borderColor: alpha('#DC2626', 0.4) }]}
+          style={[
+            styles.error,
+            { backgroundColor: alpha('#DC2626', isDark ? 0.2 : 0.08), borderColor: alpha('#DC2626', 0.4) },
+          ]}
           accessibilityLiveRegion="polite"
         >
           <Small color={isDark ? '#FCA5A5' : '#B91C1C'}>{error}</Small>
@@ -263,17 +283,68 @@ export function AuthSheetProvider({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
   const { topInset, bottomInset } = useMobileLayout();
   const [options, setOptions] = useState<OpenOptions | null>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const scrollRef = useRef<ScrollView>(null);
   const openAuth = useCallback((next: OpenOptions = {}) => setOptions(next), []);
-  const close = useCallback(() => setOptions(null), []);
+  const close = useCallback(() => {
+    Keyboard.dismiss();
+    setOptions(null);
+  }, []);
   const value = useMemo(() => ({ openAuth }), [openAuth]);
+
+  useEffect(() => {
+    if (!options) {
+      setKeyboardHeight(0);
+      return;
+    }
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const onShow = (event: KeyboardEvent) => setKeyboardHeight(event.endCoordinates.height);
+    const onHide = () => setKeyboardHeight(0);
+    const showSub = Keyboard.addListener(showEvent, onShow);
+    const hideSub = Keyboard.addListener(hideEvent, onHide);
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, [options]);
+
+  const scrollFieldIntoView = useCallback(() => {
+    requestAnimationFrame(() => {
+      scrollRef.current?.scrollToEnd({ animated: true });
+    });
+  }, []);
+
+  const sheetBottomPad = Math.max(bottomInset, 12) + 20 + (Platform.OS === 'ios' ? 0 : keyboardHeight);
 
   return (
     <AuthSheetContext.Provider value={value}>
       {children}
-      <Modal visible={Boolean(options)} animationType="slide" transparent onRequestClose={close}>
-        <View style={[styles.scrim, { backgroundColor: colors.scrim, paddingTop: topInset + 24 }]}>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.sheetWrap}>
-            <View style={[styles.sheet, { backgroundColor: colors.paper, paddingBottom: bottomInset + 20 }]}>
+      <Modal
+        visible={Boolean(options)}
+        animationType="slide"
+        transparent
+        onRequestClose={close}
+        statusBarTranslucent
+      >
+        <View style={[styles.scrim, { backgroundColor: colors.scrim, paddingTop: topInset + 12 }]}>
+          <Pressable style={styles.scrimTap} onPress={close} accessibilityLabel="Dismiss sign in" />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 8 : 0}
+            style={styles.sheetWrap}
+          >
+            <View
+              style={[
+                styles.sheet,
+                {
+                  backgroundColor: colors.paper,
+                  paddingBottom: sheetBottomPad,
+                  maxHeight: keyboardHeight > 0 ? '92%' : '88%',
+                },
+              ]}
+            >
+              <View style={[styles.handle, { backgroundColor: colors.border }]} />
               <View style={styles.sheetHeader}>
                 <View style={styles.flex}>
                   <Overline color={colors.emerald}>Your account</Overline>
@@ -288,8 +359,21 @@ export function AuthSheetProvider({ children }: { children: ReactNode }) {
                   <X size={18} color={colors.ink} />
                 </Pressable>
               </View>
-              <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.sheetBody}>
-                {options ? <AuthForm key={options.tab ?? 'signin'} options={options} onClose={close} /> : null}
+              <ScrollView
+                ref={scrollRef}
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[styles.sheetBody, { paddingBottom: keyboardHeight > 0 ? 28 : 12 }]}
+              >
+                {options ? (
+                  <AuthForm
+                    key={options.tab ?? 'signin'}
+                    options={options}
+                    onClose={close}
+                    onFieldFocus={scrollFieldIntoView}
+                  />
+                ) : null}
               </ScrollView>
             </View>
           </KeyboardAvoidingView>
@@ -309,10 +393,23 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   center: { textAlign: 'center' },
   scrim: { flex: 1, justifyContent: 'flex-end' },
-  sheetWrap: { width: '100%', maxWidth: 560, alignSelf: 'center', maxHeight: '100%' },
-  sheet: { borderTopLeftRadius: radius['2xl'], borderTopRightRadius: radius['2xl'], paddingTop: 18 },
-  sheetHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 12 },
-  sheetBody: { paddingHorizontal: 20, paddingBottom: 8, gap: 14 },
+  scrimTap: { ...StyleSheet.absoluteFill },
+  sheetWrap: { width: '100%', maxWidth: 560, alignSelf: 'center' },
+  sheet: {
+    borderTopLeftRadius: radius['2xl'],
+    borderTopRightRadius: radius['2xl'],
+    paddingTop: 10,
+    overflow: 'hidden',
+  },
+  handle: {
+    alignSelf: 'center',
+    width: 42,
+    height: 4,
+    borderRadius: 2,
+    marginBottom: 10,
+  },
+  sheetHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 8 },
+  sheetBody: { paddingHorizontal: 20, gap: 14 },
   close: {
     width: 38,
     height: 38,

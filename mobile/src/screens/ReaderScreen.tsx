@@ -81,13 +81,20 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const chapter = chapters[Math.min(chapterIndex, chapters.length - 1)];
   const chapterTopRef = useRef(0);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const chapterCompleteRef = useRef(false);
 
   useEffect(() => {
     void load().then((bookmark) => {
       setResume(bookmark);
-      setLivePercent(bookmark.percent);
       if (bookmark.chapter !== undefined) {
-        setChapterIndex(Math.min(bookmark.chapter, chapters.length - 1));
+        const chapter = Math.min(bookmark.chapter, chapters.length - 1);
+        setChapterIndex(chapter);
+        const within =
+          chapters.length > 1
+            ? Math.min(1, Math.max(0, bookmark.percent * chapters.length - chapter))
+            : bookmark.percent;
+        chapterCompleteRef.current = within >= 0.995;
+        setLivePercent(within);
         setRestoredY(bookmark.y);
         return;
       }
@@ -96,6 +103,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             item.blocks.some((block) => block.paragraphs.some((paragraph) => paragraph.includes(bookmark.line))),
           )
         : -1;
+      setLivePercent(bookmark.percent);
       if (legacy > 0) setChapterIndex(legacy);
       else setRestoredY(bookmark.y);
     });
@@ -118,18 +126,18 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const next = chapterBookmark(
-      bookmarkFromScroll(
-        contentOffset.y,
-        contentSize.height,
-        layoutMeasurement.height,
-        layoutMeasurement.width,
-        blocksRef.current,
-      ),
-      chapterIndex,
-      chapters.length,
+    const measured = bookmarkFromScroll(
+      contentOffset.y,
+      contentSize.height,
+      layoutMeasurement.height,
+      layoutMeasurement.width,
+      blocksRef.current,
     );
-    setLivePercent((current) => (Math.abs(current - next.percent) >= 0.01 ? next.percent : current));
+    const withinPercent = chapterCompleteRef.current ? 1 : measured.percent;
+    const within = { ...measured, percent: withinPercent };
+    const next = chapterBookmark(within, chapterIndex, chapters.length);
+    setLivePercent((current) => (Math.abs(current - withinPercent) >= 0.01 ? withinPercent : current));
+    setResume(next);
     void save(next);
   };
 
@@ -142,17 +150,39 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
     setChapterIndex(target);
     setRestoredY(0);
     setSwipeHint(false);
+    chapterCompleteRef.current = false;
     const bookmark = chapterBookmark(
       { ...EMPTY_READING_BOOKMARK, heading: chapters[target]?.title ?? null },
       target,
       chapters.length,
     );
     setResume(bookmark);
-    setLivePercent(bookmark.percent);
+    setLivePercent(0);
     void save(bookmark);
     requestAnimationFrame(() =>
       scrollRef.current?.scrollTo({ y: Math.max(0, chapterTopRef.current - 8), animated: false }),
     );
+  };
+
+  /** Starting a chapter quiz means the chapter itself has been read through. */
+  const markChapterComplete = () => {
+    chapterCompleteRef.current = true;
+    const bookmark = chapterBookmark(
+      {
+        ...EMPTY_READING_BOOKMARK,
+        heading: chapter.title,
+        line: resume.line || chapter.title,
+        percent: 1,
+        y: restoredY,
+        contentHeight: resume.contentHeight,
+        viewportHeight: resume.viewportHeight,
+      },
+      chapterIndex,
+      chapters.length,
+    );
+    setResume(bookmark);
+    setLivePercent(1);
+    void save(bookmark);
   };
   const beginSwipe = (x: number, y: number) => {
     touchStartRef.current = { x, y };
@@ -250,7 +280,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         <View style={styles.headerMeta}>
           <Overline color={accent.primary}>
             {chapters.length > 1 ? `Chapter ${chapterIndex + 1} of ${chapters.length}` : 'Reading mode'}
-            {livePercent > 0 ? ` · ${formatReadingPercent(livePercent)}` : ''}
+            {storyProgress > 0 ? ` · ${formatReadingPercent(storyProgress)}` : ''}
           </Overline>
           <Caption color={colors.inkMuted} numberOfLines={1}>
             {chapters.length > 1 ? chapter.title : (resume.heading ?? story.figureName)}
@@ -522,6 +552,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           chapterIndex={chapterIndex}
           chapterCount={chapters.length}
           onNextChapter={chapterIndex < chapters.length - 1 ? () => goToChapter(chapterIndex + 1) : undefined}
+          onQuizStarted={markChapterComplete}
         />
 
         {chapters.length > 1 ? (

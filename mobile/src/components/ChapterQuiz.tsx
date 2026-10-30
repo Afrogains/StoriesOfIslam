@@ -106,11 +106,14 @@ export default function ChapterQuiz({
   chapterIndex,
   chapterCount,
   onNextChapter,
+  onQuizStarted,
 }: {
   story: StoryItem;
   chapterIndex: number;
   chapterCount: number;
   onNextChapter?: () => void;
+  /** Called when the reader begins the check — marks this chapter as fully read. */
+  onQuizStarted?: () => void;
 }) {
   const { colors, isDark } = useTheme();
   const { stories } = useCatalog();
@@ -130,6 +133,7 @@ export default function ChapterQuiz({
   if (!count) return null;
 
   const start = () => {
+    onQuizStarted?.();
     setAnswers([]);
     setPosition(0);
     setPhase('question');
