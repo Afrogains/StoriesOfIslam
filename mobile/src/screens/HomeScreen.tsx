@@ -5,7 +5,6 @@ import {
   BookOpen,
   ClipboardCheck,
   FolderOpen,
-  Quote,
   TrendingUp,
   Headphones,
   Search,
@@ -42,7 +41,6 @@ import { useCatalog } from '../data/CatalogProvider';
 import { SECTION_ORDER } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
 import { getStoryChapters } from '../data/chapters';
-import { todaysHadith } from '../data/nawawiForty';
 import { useLastActiveStory } from '../hooks/useLastActiveStory';
 import { useLibrary } from '../hooks/useLibrary';
 import { useMobileLayout } from '../hooks/useMobileLayout';
@@ -88,8 +86,6 @@ export default function HomeScreen() {
   const { savedCount } = useLibrary();
   const { lastActive, refresh, markActive } = useLastActiveStory();
   const { summary: quizSummary } = useQuizResults();
-  const [openedAt] = useState(() => Date.now());
-  const hadith = todaysHadith(openedAt);
 
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [query, setQuery] = useState('');
@@ -268,6 +264,8 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
+        <FeaturedHadithCard />
+
         {sectionFilter === 'all' ? (
           <>
             <Row justify="space-between" align="center" style={styles.sectionHead}>
@@ -437,15 +435,6 @@ export default function HomeScreen() {
           </Pressable>
         ) : null}
 
-        <CollapsiblePanel
-          storageKey="hadith"
-          title="Today's hadith"
-          summary={`Hadith ${hadith.n} · ${hadith.subject}`}
-          icon={Quote}
-          tint={colors.emerald}
-        >
-          <FeaturedHadithCard />
-        </CollapsiblePanel>
 
         <CollapsiblePanel
           storageKey="progress"

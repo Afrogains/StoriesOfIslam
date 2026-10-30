@@ -1,38 +1,26 @@
-import { Bookmark, ChevronLeft, ChevronRight, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
+import {
+  Bookmark,
+  ChevronLeft,
+  ChevronRight,
+  Headphones,
+  Highlighter,
+  Share2,
+  X,
+} from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  type GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import { getStoryChapters } from '../data/chapters';
-import { getSeerahPart } from '../data/seerahParts';
-import { prophetSlugForStory, sahabahSlugForStory } from '../data/storyText';
 import ChapterQuiz from '../components/ChapterQuiz';
-import {
-  EMPTY_READING_BOOKMARK,
-  bookmarkFromScroll,
-  chapterBookmark,
-  formatReadingPercent,
-  type ReadingBlock,
-  type ReadingBookmark,
-} from '../hooks/readingBookmark';
-import { useReadingBookmark } from '../hooks/useReadingBookmark';
 import HighlightableText from '../components/HighlightableText';
 import { useShareSheet } from '../components/ShareSheet';
-import { useLibrary } from '../hooks/useLibrary';
-import { formatStoryShare } from '../services/share';
-import { openIbnKathirPdf, pdfSpanForSlug } from '../services/ibnKathirPdf';
-import { openQuranStoriesPdf, quranStoryPdfSpanForSlug } from '../services/quranStoriesPdf';
-import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
-import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
-import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL } from '../data/listenIncoming';
-import type { StoryItem } from '../types/catalog';
-import { useMobileLayout } from '../hooks/useMobileLayout';
-import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
   ArabicTitle,
   Badge,
@@ -42,10 +30,28 @@ import {
   Heading,
   OutlineButton,
   Overline,
+  ProgressBar,
   Row,
+  Small,
   Title,
   useTheme,
 } from '../components/ui';
+import { getStoryChapters } from '../data/chapters';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL } from '../data/listenIncoming';
+import {
+  EMPTY_READING_BOOKMARK,
+  bookmarkFromScroll,
+  chapterBookmark,
+  formatReadingPercent,
+  type ReadingBlock,
+  type ReadingBookmark,
+} from '../hooks/readingBookmark';
+import { useLibrary } from '../hooks/useLibrary';
+import { useMobileLayout } from '../hooks/useMobileLayout';
+import { useReadingBookmark } from '../hooks/useReadingBookmark';
+import { formatStoryShare } from '../services/share';
+import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
+import type { StoryItem } from '../types/catalog';
 
 type ReaderScreenProps = {
   story: StoryItem;
@@ -68,25 +74,13 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const [resume, setResume] = useState<ReadingBookmark>(EMPTY_READING_BOOKMARK);
   const [livePercent, setLivePercent] = useState(0);
   const [highlightMode, setHighlightMode] = useState(false);
+  const [swipeHint, setSwipeHint] = useState(false);
   const saved = isSaved(story.id);
   const chapters = useMemo(() => getStoryChapters(story), [story]);
   const [chapterIndex, setChapterIndex] = useState(0);
   const chapter = chapters[Math.min(chapterIndex, chapters.length - 1)];
   const chapterTopRef = useRef(0);
-  const prophetSlug = useMemo(() => prophetSlugForStory(story), [story]);
-  const sahabahSlug = useMemo(() => sahabahSlugForStory(story), [story]);
-  const prophetPdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
-  const seerahPdfSpan =
-    story.sectionSlug === 'seerah-shamail' && getSeerahPart(story.id)
-      ? pdfSpanForSlug('muhammad')
-      : null;
-  const shortStoryPdfSpan =
-    story.sectionSlug === 'seerah-shamail' ? shortStoryPdfSpanForSlug(story.id) : null;
-  const sahabahPdfSpan = sahabahSlug ? sahabahPdfSpanForSlug(sahabahSlug) : null;
-  const quranPdfSpan =
-    story.sectionSlug === 'qisas-al-quran' ? quranStoryPdfSpanForSlug(story.id) : null;
-  const ibnKathirSpan = prophetPdfSpan ?? seerahPdfSpan;
-  const pdfSpan = ibnKathirSpan ?? shortStoryPdfSpan ?? sahabahPdfSpan ?? quranPdfSpan;
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     void load().then((bookmark) => {
@@ -97,9 +91,10 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         setRestoredY(bookmark.y);
         return;
       }
-      // Bookmarks from before chapters: reopen the chapter holding the last line read.
       const legacy = bookmark.line
-        ? chapters.findIndex((item) => item.blocks.some((block) => block.paragraphs.some((p) => p.includes(bookmark.line))))
+        ? chapters.findIndex((item) =>
+            item.blocks.some((block) => block.paragraphs.some((paragraph) => paragraph.includes(bookmark.line))),
+          )
         : -1;
       if (legacy > 0) setChapterIndex(legacy);
       else setRestoredY(bookmark.y);
@@ -113,6 +108,13 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
     }, 80);
     return () => clearTimeout(timer);
   }, [restoredY]);
+
+  useEffect(() => {
+    if (chapters.length < 2) return;
+    setSwipeHint(true);
+    const timer = setTimeout(() => setSwipeHint(false), 3200);
+    return () => clearTimeout(timer);
+  }, [story.id, chapters.length]);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
@@ -133,11 +135,13 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
 
   const goToChapter = (index: number) => {
     const target = Math.max(0, Math.min(chapters.length - 1, index));
+    if (target === chapterIndex) return;
     blockMapRef.current.clear();
     blocksRef.current = [];
     sectionYRef.current = [];
     setChapterIndex(target);
     setRestoredY(0);
+    setSwipeHint(false);
     const bookmark = chapterBookmark(
       { ...EMPTY_READING_BOOKMARK, heading: chapters[target]?.title ?? null },
       target,
@@ -150,6 +154,38 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       scrollRef.current?.scrollTo({ y: Math.max(0, chapterTopRef.current - 8), animated: false }),
     );
   };
+  const beginSwipe = (x: number, y: number) => {
+    touchStartRef.current = { x, y };
+  };
+
+  const finishSwipe = (x: number, y: number) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || chapters.length < 2) return;
+    const dx = x - start.x;
+    const dy = y - start.y;
+    if (Math.abs(dx) < 56 || Math.abs(dx) <= Math.abs(dy) * 1.5) return;
+    if (dx < 0 && chapterIndex < chapters.length - 1) goToChapter(chapterIndex + 1);
+    else if (dx > 0 && chapterIndex > 0) goToChapter(chapterIndex - 1);
+  };
+
+  const onTouchStart = (event: GestureResponderEvent) => {
+    const touch = event.nativeEvent.touches[0];
+    if (touch) beginSwipe(touch.pageX, touch.pageY);
+  };
+
+  const onTouchEnd = (event: GestureResponderEvent) => {
+    const touch = event.nativeEvent.changedTouches[0];
+    if (touch) finishSwipe(touch.pageX, touch.pageY);
+  };
+
+  const webSwipeProps =
+    Platform.OS === 'web'
+      ? ({
+          onMouseDown: (event: { clientX: number; clientY: number }) => beginSwipe(event.clientX, event.clientY),
+          onMouseUp: (event: { clientX: number; clientY: number }) => finishSwipe(event.clientX, event.clientY),
+        } as Record<string, unknown>)
+      : {};
 
   const publishBlocks = () => {
     blocksRef.current = [...blockMapRef.current.values()];
@@ -157,10 +193,9 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
 
   const onSectionLayout = (sectionIndex: number, y: number) => {
     sectionYRef.current[sectionIndex] = y;
-    for (const [key, block] of blockMapRef.current) {
-      if (key.startsWith(`${sectionIndex}:`)) {
-        block.y = y + block.localY;
-      }
+    for (const [key, block] of [...blockMapRef.current.entries()]) {
+      if (!key.startsWith(`${sectionIndex}:`)) continue;
+      blockMapRef.current.set(key, { ...block, y: y + block.localY });
     }
     publishBlocks();
   };
@@ -184,8 +219,15 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
     publishBlocks();
   };
 
+  const storyProgress = chapters.length > 1 ? (chapterIndex + livePercent) / chapters.length : livePercent;
+
   return (
-    <View style={[styles.screen, { backgroundColor: colors.paper }]}>
+    <View
+      style={[styles.screen, { backgroundColor: colors.paper }]}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      {...webSwipeProps}
+    >
       <View
         style={[
           styles.header,
@@ -214,6 +256,43 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             {chapters.length > 1 ? chapter.title : (resume.heading ?? story.figureName)}
           </Caption>
         </View>
+
+        {chapters.length > 1 ? (
+          <Row gap={6}>
+            <Pressable
+              onPress={() => goToChapter(chapterIndex - 1)}
+              disabled={chapterIndex === 0}
+              accessibilityRole="button"
+              accessibilityLabel="Previous chapter"
+              style={[
+                styles.iconBtn,
+                {
+                  borderColor: colors.border,
+                  backgroundColor: colors.card,
+                  opacity: chapterIndex === 0 ? 0.35 : 1,
+                },
+              ]}
+            >
+              <ChevronLeft size={18} color={colors.ink} />
+            </Pressable>
+            <Pressable
+              onPress={() => goToChapter(chapterIndex + 1)}
+              disabled={chapterIndex >= chapters.length - 1}
+              accessibilityRole="button"
+              accessibilityLabel="Next chapter"
+              style={[
+                styles.iconBtn,
+                {
+                  borderColor: colors.border,
+                  backgroundColor: colors.card,
+                  opacity: chapterIndex >= chapters.length - 1 ? 0.35 : 1,
+                },
+              ]}
+            >
+              <ChevronRight size={18} color={colors.ink} />
+            </Pressable>
+          </Row>
+        ) : null}
 
         <Pressable
           onPress={() => openShare(formatStoryShare(story))}
@@ -253,13 +332,15 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             },
           ]}
         >
-          <Bookmark
-            size={18}
-            color={saved ? colors.gold : colors.ink}
-            fill={saved ? colors.gold : 'transparent'}
-          />
+          <Bookmark size={18} color={saved ? colors.gold : colors.ink} fill={saved ? colors.gold : 'transparent'} />
         </Pressable>
       </View>
+
+      {chapters.length > 1 ? (
+        <View style={[styles.progressStrip, { backgroundColor: isDark ? colors.card : '#FCFBF7', borderBottomColor: colors.border }]}>
+          <ProgressBar value={storyProgress} color={accent.primary} height={3} />
+        </View>
+      ) : null}
 
       <ScrollView
         ref={scrollRef}
@@ -318,43 +399,63 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
 
         <View onLayout={(event) => (chapterTopRef.current = event.nativeEvent.layout.y)}>
           {chapters.length > 1 ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.chapterChips}
-              style={styles.chapterChipsWrap}
-            >
-              {chapters.map((item) => {
-                const selected = item.index === chapterIndex;
-                return (
-                  <Pressable
-                    key={item.index}
-                    onPress={() => goToChapter(item.index)}
-                    accessibilityRole="tab"
-                    accessibilityState={{ selected }}
-                    accessibilityLabel={`Chapter ${item.index + 1}: ${item.title}`}
-                    style={[
-                      styles.chapterChip,
-                      {
-                        borderColor: selected ? accent.primary : colors.border,
-                        backgroundColor: selected ? alpha(accent.primary, isDark ? 0.22 : 0.1) : colors.card,
-                      },
-                    ]}
-                  >
-                    <Caption color={selected ? accent.primary : colors.inkMuted} style={styles.chapterChipText}>
-                      {item.index + 1}
-                    </Caption>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
+            <>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.chapterChips}
+                style={styles.chapterChipsWrap}
+              >
+                {chapters.map((item) => {
+                  const selected = item.index === chapterIndex;
+                  return (
+                    <Pressable
+                      key={item.index}
+                      onPress={() => goToChapter(item.index)}
+                      accessibilityRole="tab"
+                      accessibilityState={{ selected }}
+                      accessibilityLabel={`Chapter ${item.index + 1}: ${item.title}`}
+                      style={[
+                        styles.chapterChip,
+                        {
+                          borderColor: selected ? accent.primary : colors.border,
+                          backgroundColor: selected
+                            ? alpha(accent.primary, isDark ? 0.22 : 0.1)
+                            : isDark
+                              ? colors.card
+                              : colors.cardAlt,
+                        },
+                      ]}
+                    >
+                      <Caption color={selected ? accent.primary : colors.inkMuted} style={styles.chapterChipNum}>
+                        {item.index + 1}
+                      </Caption>
+                      <Caption
+                        color={selected ? accent.primary : colors.inkMuted}
+                        numberOfLines={1}
+                        style={styles.chapterChipLabel}
+                      >
+                        {item.title}
+                      </Caption>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              {swipeHint ? (
+                <Small color={colors.inkSubtle} style={styles.swipeHint}>
+                  Swipe left for the next chapter · or tap a chapter above
+                </Small>
+              ) : null}
+            </>
           ) : null}
           <View style={[styles.chapterHeader, { borderBottomColor: colors.border }]}>
             <Overline color={accent.primary}>
               {chapters.length > 1 ? `Chapter ${chapterIndex + 1} of ${chapters.length}` : 'Full story'}
             </Overline>
             <Heading style={styles.chapterTitle}>{chapter.title}</Heading>
-            <Caption color={colors.inkSubtle}>About {Math.max(1, Math.round(chapter.words / 200))} min read</Caption>
+            <Caption color={colors.inkSubtle}>
+              About {Math.max(1, Math.round(chapter.words / 200))} min read
+            </Caption>
           </View>
         </View>
 
@@ -459,60 +560,15 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           <Body color={colors.inkMuted} style={styles.citationBody}>
             {story.sourceCitation}
           </Body>
-          {story.sourceVolume ? (
-            <Caption color={colors.inkSubtle}>Volume: {story.sourceVolume}</Caption>
-          ) : null}
+          {story.sourceVolume ? <Caption color={colors.inkSubtle}>Volume: {story.sourceVolume}</Caption> : null}
           {story.sourcePageOrHadith ? (
             <Caption color={colors.inkSubtle}>Ref: {story.sourcePageOrHadith}</Caption>
-          ) : null}
-          {pdfSpan ? (
-            <Pressable
-              onPress={() =>
-                void (ibnKathirSpan
-                  ? openIbnKathirPdf(pdfSpan.start)
-                  : quranPdfSpan
-                    ? openQuranStoriesPdf(pdfSpan.start)
-                    : shortStoryPdfSpan
-                      ? openShortStoriesPdf(pdfSpan.start)
-                      : openSahabahPdf(pdfSpan.start))
-              }
-              accessibilityRole="link"
-              accessibilityLabel={
-                ibnKathirSpan
-                  ? 'Open Ibn Kathir PDF at this chapter'
-                  : quranPdfSpan
-                    ? 'Open Stories of the Quran PDF at this chapter'
-                    : shortStoryPdfSpan
-                      ? 'Open short stories PDF at this chapter'
-                      : 'Open Sahaba biographies PDF at this chapter'
-              }
-              style={({ pressed }) => [
-                styles.pdfBtn,
-                {
-                  borderColor: accent.primary,
-                  backgroundColor: alpha(accent.primary, isDark ? 0.16 : 0.08),
-                  opacity: pressed ? 0.85 : 1,
-                },
-              ]}
-            >
-              <ExternalLink size={14} color={accent.primary} />
-              <Caption color={accent.primary} style={styles.pdfBtnLabel}>
-                {ibnKathirSpan
-                  ? `Open Ibn Kathir PDF (p. ${pdfSpan.start})`
-                  : quranPdfSpan
-                    ? `Open Stories of the Quran PDF (p. ${pdfSpan.start})`
-                    : shortStoryPdfSpan
-                      ? `Open short stories PDF (p. ${pdfSpan.start})`
-                      : `Open Sahaba PDF (p. ${pdfSpan.start})`}
-              </Caption>
-            </Pressable>
           ) : null}
           <Caption color={accent.primary} style={styles.grade}>
             Authenticity: {story.authenticityGrade}
           </Caption>
         </View>
       </ScrollView>
-
     </View>
   );
 }
@@ -537,6 +593,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  progressStrip: { paddingHorizontal: 0, borderBottomWidth: StyleSheet.hairlineWidth },
   scroll: { flex: 1 },
   content: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 128 },
   title: { marginBottom: 4 },
@@ -557,18 +614,21 @@ const styles = StyleSheet.create({
   listenChipLabel: { fontWeight: '800' },
   highlightHint: { marginBottom: 14 },
   section: { marginBottom: 22, gap: 10 },
-  chapterChipsWrap: { marginHorizontal: -20, marginBottom: 12 },
+  chapterChipsWrap: { marginHorizontal: -20, marginBottom: 8 },
   chapterChips: { gap: 8, paddingHorizontal: 20 },
   chapterChip: {
-    minWidth: 38,
-    height: 34,
+    maxWidth: 168,
+    minHeight: 40,
     paddingHorizontal: 12,
-    borderRadius: radius.pill,
+    paddingVertical: 8,
+    borderRadius: radius.lg,
     borderWidth: 1,
-    alignItems: 'center',
+    gap: 2,
     justifyContent: 'center',
   },
-  chapterChipText: { fontWeight: '800', fontSize: 13 },
+  chapterChipNum: { fontWeight: '800', fontSize: 11, letterSpacing: 0.4 },
+  chapterChipLabel: { fontWeight: '700', fontSize: 12, maxWidth: 140 },
+  swipeHint: { marginBottom: 10, fontStyle: 'italic' },
   chapterHeader: { gap: 4, paddingBottom: 12, marginBottom: 16, borderBottomWidth: 1 },
   chapterTitle: { fontSize: 20, lineHeight: 26 },
   chapterNav: { marginBottom: 20 },
@@ -592,17 +652,5 @@ const styles = StyleSheet.create({
   },
   citationTitle: { fontSize: 16 },
   citationBody: { lineHeight: 22 },
-  pdfBtn: {
-    marginTop: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    alignSelf: 'flex-start',
-  },
-  pdfBtnLabel: { fontWeight: '800' },
   grade: { marginTop: 4, fontWeight: '800' },
 });
