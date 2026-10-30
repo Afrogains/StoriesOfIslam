@@ -17,6 +17,10 @@ const LibraryContext = createContext<LibraryContextValue | null>(null);
 
 const STORAGE_KEY = 'stories.library.ids.v1';
 const RECORDS_KEY = 'stories.library.records.v1';
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Bundled stories use slug ids that the server's favorites table cannot reference. */
+const syncsToServer = (id: string) => UUID.test(id);
 
 function snapshotStory(story: StoryItem): StoryItem {
   const { timedCues: _cues, ...rest } = story;
@@ -25,7 +29,8 @@ function snapshotStory(story: StoryItem): StoryItem {
 
 export function LibraryProvider({ children }: { children: ReactNode }) {
   const { stories } = useCatalog();
-  const { authenticated, getAccessToken } = useAuth();
+  const { mode, getAccessToken } = useAuth();
+  const authenticated = mode === 'server';
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [records, setRecords] = useState<Record<string, StoryItem>>({});
 
@@ -53,7 +58,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
       const response = await apiRequest<{ data: string[] }>('/v1/me/favorites', {
         accessToken: token,
       });
-      setSavedIds(response.data);
+      setSavedIds((current) => [...current, ...response.data.filter((id) => !current.includes(id))]);
     }).catch(() => undefined);
   }, [authenticated, getAccessToken]);
 
@@ -70,15 +75,17 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
         if (!story) return prev;
         return { ...prev, [id]: snapshotStory(story) };
       });
-      if (authenticated) {
-        void getAccessToken().then((token) =>
-          token
-            ? apiRequest<void>(`/v1/me/favorites/${id}`, {
-                method: removing ? 'DELETE' : 'PUT',
-                accessToken: token,
-              })
-            : undefined,
-        ).catch(() => setSavedIds(current));
+      if (authenticated && syncsToServer(id)) {
+        void getAccessToken()
+          .then((token) =>
+            token
+              ? apiRequest<void>(`/v1/me/favorites/${id}`, {
+                  method: removing ? 'DELETE' : 'PUT',
+                  accessToken: token,
+                })
+              : undefined,
+          )
+          .catch(() => undefined);
       }
       return next;
     });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   bookmarkFromScroll,
+  chapterBookmark,
   formatReadingPercent,
   lastVisibleLine,
   parseReadingBookmark,
@@ -50,5 +51,17 @@ describe('reading bookmark progress', () => {
     expect(fromScroll.percent).toBe(0.5);
     expect(fromScroll.heading).toBe('The cave');
     expect(fromScroll.line.length).toBeGreaterThan(8);
+  });
+});
+
+describe('chapter bookmarks', () => {
+  it('stores the chapter and reports whole-story progress', () => {
+    const base = bookmarkFromScroll(400, 1000, 200, 320, []);
+    const bookmark = chapterBookmark(base, 2, 4);
+    expect(bookmark.chapter).toBe(2);
+    expect(bookmark.percent).toBeCloseTo(0.625);
+    const restored = parseReadingBookmark(serializeReadingBookmark(bookmark));
+    expect(restored.chapter).toBe(2);
+    expect(parseReadingBookmark(serializeReadingBookmark(base)).chapter).toBeUndefined();
   });
 });

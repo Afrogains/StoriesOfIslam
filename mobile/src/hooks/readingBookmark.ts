@@ -5,6 +5,8 @@ export type ReadingBookmark = {
   heading: string | null;
   line: string;
   percent: number;
+  /** Chapter the scroll position belongs to; absent in bookmarks saved before chapters existed. */
+  chapter?: number;
 };
 
 export type ReadingBlock = {
@@ -90,7 +92,8 @@ export function parseReadingBookmark(raw: string | null): ReadingBookmark {
     const heading =
       typeof parsed.heading === 'string' && parsed.heading.trim() ? parsed.heading.trim() : null;
     const line = typeof parsed.line === 'string' ? parsed.line.trim() : '';
-    return { y, contentHeight, viewportHeight, heading, line, percent };
+    const chapter = Number.isInteger(parsed.chapter) && Number(parsed.chapter) >= 0 ? Number(parsed.chapter) : undefined;
+    return { y, contentHeight, viewportHeight, heading, line, percent, ...(chapter !== undefined ? { chapter } : {}) };
   } catch {
     return EMPTY_READING_BOOKMARK;
   }
@@ -104,6 +107,7 @@ export function serializeReadingBookmark(bookmark: ReadingBookmark): string {
     heading: bookmark.heading,
     line: bookmark.line.slice(0, 240),
     percent: Math.round(bookmark.percent * 1000) / 1000,
+    ...(bookmark.chapter !== undefined ? { chapter: bookmark.chapter } : {}),
   });
 }
 
@@ -127,4 +131,15 @@ export function bookmarkFromScroll(
     line,
     percent: readingPercent(y, contentHeight, viewportHeight),
   };
+}
+
+/** Whole-story progress when the reader shows one chapter at a time. */
+export function chapterBookmark(
+  bookmark: ReadingBookmark,
+  chapterIndex: number,
+  chapterCount: number,
+): ReadingBookmark {
+  const count = Math.max(1, chapterCount);
+  const percent = Math.min(1, (chapterIndex + bookmark.percent) / count);
+  return { ...bookmark, chapter: chapterIndex, percent };
 }

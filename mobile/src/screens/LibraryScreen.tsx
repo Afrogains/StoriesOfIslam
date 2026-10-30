@@ -1,7 +1,8 @@
 import { BookmarkX, Highlighter, LogIn, LogOut, Quote, Share2, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useAuth } from '../auth/AuthProvider';
+import { useAuthSheet } from '../components/AuthSheet';
 import ScreenHeader from '../components/ScreenHeader';
 import StoryCard, { sectionIcons } from '../components/StoryCard';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
@@ -25,7 +26,6 @@ import { useLibrary } from '../hooks/useLibrary';
 import { formatHighlightShare } from '../services/share';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
-import { apiRequest } from '../services/api';
 import { APP_BUILD_LABEL } from '../config';
 
 /** Lean library: slim account strip, filters, compact saved list. */
@@ -37,7 +37,8 @@ export default function LibraryScreen() {
   const { highlights, highlightCount, removeHighlight } = useHighlights();
   const { openShare } = useShareSheet();
   const [shelf, setShelf] = useState<'stories' | 'highlights'>('stories');
-  const { authenticated, signIn, signOut, getAccessToken } = useAuth();
+  const { authenticated, user, mode, signOut, deleteAccount: removeAccount } = useAuth();
+  const { openAuth } = useAuthSheet();
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [sessionMode, setSessionMode] = useState<StorySessionMode>(null);
@@ -65,24 +66,24 @@ export default function LibraryScreen() {
   }, [catalogSaved]);
 
   const deleteAccount = () => {
-    Alert.alert(
-      'Delete account and synced data?',
-      'This permanently removes your account, bookmarks, and listening progress. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete account',
-          style: 'destructive',
-          onPress: () => {
-            void getAccessToken().then(async (token) => {
-              if (!token) return;
-              await apiRequest<void>('/v1/me', { method: 'DELETE', accessToken: token });
-              await signOut();
-            });
-          },
-        },
-      ],
-    );
+    const title = 'Delete account and synced data?';
+    const message =
+      'This permanently removes your account, quiz results, game scores, bookmarks and listening progress. This cannot be undone.';
+    const run = () =>
+      void removeAccount().catch((error: unknown) => {
+        const detail = error instanceof Error ? error.message : 'Try again later.';
+        if (Platform.OS === 'web') window.alert(detail);
+        else Alert.alert('Could not delete account', detail);
+      });
+    // react-native-web's Alert is a no-op, so the browser dialog is used there.
+    if (Platform.OS === 'web') {
+      if (window.confirm(`${title}\n\n${message}`)) run();
+      return;
+    }
+    Alert.alert(title, message, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete account', style: 'destructive', onPress: run },
+    ]);
   };
 
   return (
@@ -97,8 +98,13 @@ export default function LibraryScreen() {
         <View style={styles.accountRow}>
           <View style={styles.accountCopy}>
             <BodyStrong numberOfLines={1}>
-              {authenticated ? 'Synced across devices' : 'Sign in to sync'}
+              {user ? `Signed in as ${user.name}` : 'Sign in to save quiz scores and play'}
             </BodyStrong>
+            {user ? (
+              <Caption color={colors.inkMuted} numberOfLines={1}>
+                {user.email} · {mode === 'server' ? 'Synced to your account' : 'Saved on this device'}
+              </Caption>
+            ) : null}
             <Caption color={colors.inkMuted}>
               {savedCount} {savedCount === 1 ? 'story' : 'stories'} · {highlightCount}{' '}
               {highlightCount === 1 ? 'highlight' : 'highlights'}
@@ -133,7 +139,7 @@ export default function LibraryScreen() {
                   icon={LogIn}
                   size="sm"
                   gradient={brandGradients.emerald[isDark ? 'dark' : 'light']}
-                  onPress={() => void signIn()}
+                  onPress={() => openAuth()}
                 />
               </View>
             )}

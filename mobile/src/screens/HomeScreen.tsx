@@ -3,8 +3,10 @@ import {
   ArrowRight,
   BookMarked,
   BookOpen,
-  Flame,
+  ClipboardCheck,
   FolderOpen,
+  Quote,
+  TrendingUp,
   Headphones,
   Search,
   Sparkles,
@@ -20,6 +22,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import CollapsiblePanel from '../components/CollapsiblePanel';
 import FeaturedHadithCard from '../components/FeaturedHadithCard';
 import ModeToggle from '../components/ModeToggle';
 import StorySessionModal, { type StorySessionMode } from '../components/StorySessionModal';
@@ -38,9 +41,12 @@ import {
 import { useCatalog } from '../data/CatalogProvider';
 import { SECTION_ORDER } from '../data/catalogBrowse';
 import { sectionsMeta } from '../data/catalogMeta';
+import { getStoryChapters } from '../data/chapters';
+import { todaysHadith } from '../data/nawawiForty';
 import { useLastActiveStory } from '../hooks/useLastActiveStory';
 import { useLibrary } from '../hooks/useLibrary';
 import { useMobileLayout } from '../hooks/useMobileLayout';
+import { useQuizResults } from '../hooks/useQuizResults';
 import {
   EMPTY_READING_BOOKMARK,
   formatReadingPercent,
@@ -81,6 +87,9 @@ export default function HomeScreen() {
   const { stories } = useCatalog();
   const { savedCount } = useLibrary();
   const { lastActive, refresh, markActive } = useLastActiveStory();
+  const { summary: quizSummary } = useQuizResults();
+  const [openedAt] = useState(() => Date.now());
+  const hadith = todaysHadith(openedAt);
 
   const [sectionFilter, setSectionFilter] = useState<SectionSlug | 'all'>('all');
   const [query, setQuery] = useState('');
@@ -156,18 +165,24 @@ export default function HomeScreen() {
       tint: colors.gold,
     },
     {
-      key: 'streak',
-      label: 'Day streak',
-      value: lastActive.at ? '4' : '0',
-      icon: Flame,
+      key: 'checks',
+      label: 'Chapter checks',
+      value: String(quizSummary.chapters),
+      icon: ClipboardCheck,
       tint: '#EA580C',
     },
   ] as const;
 
-  const browseSections =
-    sectionFilter === 'all'
-      ? SECTION_ORDER
-      : SECTION_ORDER.filter((slug) => slug === sectionFilter);
+  const filteredStories = useMemo(
+    () => (sectionFilter === 'all' ? [] : stories.filter((story) => story.sectionSlug === sectionFilter)),
+    [stories, sectionFilter],
+  );
+
+  const openStory = (story: StoryItem) => {
+    void markActive(story.id, 'read');
+    setActiveStory(story);
+    setSessionMode('read');
+  };
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
@@ -253,7 +268,99 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        <FeaturedHadithCard />
+        {sectionFilter === 'all' ? (
+          <>
+            <Row justify="space-between" align="center" style={styles.sectionHead}>
+              <Overline>Browse sections</Overline>
+              <Caption color={colors.inkSubtle}>{SECTION_ORDER.length} collections</Caption>
+            </Row>
+            <View style={styles.sectionsList}>
+              {SECTION_ORDER.map((slug) => {
+                const meta = sectionsMeta[slug];
+                const accent = sectionAccent(slug, isDark);
+                const Icon = sectionIcons[slug];
+                const count = sectionCounts[slug];
+                return (
+                  <Pressable
+                    key={slug}
+                    onPress={() => setSectionFilter(slug)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Show ${meta.title}`}
+                    style={({ pressed }) => [
+                      styles.sectionRow,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: colors.border,
+                        opacity: pressed ? 0.9 : 1,
+                      },
+                      shadow('sm', isDark),
+                    ]}
+                  >
+                    <View style={[styles.sectionIcon, { backgroundColor: accent.surface }]}>
+                      <Icon size={20} color={accent.primary} strokeWidth={2.25} />
+                    </View>
+                    <View style={styles.sectionCopy}>
+                      <BodyStrong numberOfLines={1}>{meta.title}</BodyStrong>
+                      <Small color={colors.inkMuted} numberOfLines={1}>
+                        {meta.subtitle} · {count} {count === 1 ? 'story' : 'stories'}
+                      </Small>
+                    </View>
+                    <ArrowRight size={18} color={accent.primary} />
+                  </Pressable>
+                );
+              })}
+            </View>
+          </>
+        ) : (
+          <View testID="home-section-results">
+            <Row justify="space-between" align="center" style={styles.sectionHead}>
+              <Overline color={sectionAccent(sectionFilter, isDark).primary}>
+                {sectionsMeta[sectionFilter].title}
+              </Overline>
+              <Caption color={colors.inkSubtle}>
+                {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
+              </Caption>
+            </Row>
+            <View style={styles.sectionsList}>
+              {filteredStories.slice(0, 6).map((story) => {
+                const accent = sectionAccent(story.sectionSlug, isDark);
+                const chapterCount = getStoryChapters(story).length;
+                return (
+                  <Pressable
+                    key={story.id}
+                    onPress={() => openStory(story)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Read ${story.title}`}
+                    style={({ pressed }) => [
+                      styles.storyRow,
+                      { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.9 : 1 },
+                      shadow('sm', isDark),
+                    ]}
+                  >
+                    <View style={[styles.storyDot, { backgroundColor: accent.primary }]} />
+                    <View style={styles.sectionCopy}>
+                      <BodyStrong numberOfLines={1}>{story.title}</BodyStrong>
+                      <Small color={colors.inkMuted} numberOfLines={1}>
+                        {chapterCount} {chapterCount === 1 ? 'chapter' : 'chapters'} · {story.durationLabel} read
+                      </Small>
+                    </View>
+                    <BookOpen size={16} color={accent.primary} />
+                  </Pressable>
+                );
+              })}
+            </View>
+            <Pressable
+              onPress={() => goExplore(sectionFilter)}
+              accessibilityRole="button"
+              style={styles.viewAll}
+            >
+              <BodyStrong color={sectionAccent(sectionFilter, isDark).primary}>
+                View all {filteredStories.length} in Explore
+              </BodyStrong>
+              <ArrowRight size={16} color={sectionAccent(sectionFilter, isDark).primary} />
+            </Pressable>
+          </View>
+        )}
 
         {continueStory ? (
           <Pressable
@@ -328,86 +435,59 @@ export default function HomeScreen() {
           </Pressable>
         ) : null}
 
-        <Row justify="space-between" align="center" style={styles.sectionHead}>
-          <Overline>Your progress</Overline>
-          <Caption color={colors.inkSubtle}>This month</Caption>
-        </Row>
-        <View style={styles.metricsGrid}>
-          {metrics.map((metric) => {
-            const Icon = metric.icon;
-            return (
-              <View
-                key={metric.key}
-                style={[
-                  styles.metricCard,
-                  {
-                    backgroundColor: colors.card,
-                    borderColor: colors.border,
-                  },
-                  shadow('sm', isDark),
-                ]}
-              >
+        <CollapsiblePanel
+          storageKey="hadith"
+          title="Today's hadith"
+          summary={`Hadith ${hadith.n} · ${hadith.subject}`}
+          icon={Quote}
+          tint={colors.emerald}
+        >
+          <FeaturedHadithCard />
+        </CollapsiblePanel>
+
+        <CollapsiblePanel
+          storageKey="progress"
+          title="Your progress"
+          summary={`${savedCount} saved · ${quizSummary.chapters} chapter ${quizSummary.chapters === 1 ? 'check' : 'checks'}${quizSummary.chapters ? ` · ${Math.round(quizSummary.accuracy * 100)}% correct` : ''}`}
+          icon={TrendingUp}
+          tint={colors.gold}
+        >
+          <View style={styles.metricsGrid}>
+            {metrics.map((metric) => {
+              const Icon = metric.icon;
+              return (
                 <View
+                  key={metric.key}
                   style={[
-                    styles.metricIcon,
-                    { backgroundColor: alpha(metric.tint, isDark ? 0.2 : 0.12) },
+                    styles.metricCard,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                    shadow('sm', isDark),
                   ]}
                 >
-                  <Icon size={16} color={metric.tint} strokeWidth={2.25} />
+                  <View
+                    style={[
+                      styles.metricIcon,
+                      { backgroundColor: alpha(metric.tint, isDark ? 0.2 : 0.12) },
+                    ]}
+                  >
+                    <Icon size={16} color={metric.tint} strokeWidth={2.25} />
+                  </View>
+                  <View style={styles.metricCopy}>
+                    <Text style={[styles.metricValue, { color: colors.ink }]} numberOfLines={1}>
+                      {metric.value}
+                    </Text>
+                    <Small color={colors.inkMuted} numberOfLines={1}>
+                      {metric.label}
+                    </Small>
+                  </View>
                 </View>
-                <View style={styles.metricCopy}>
-                  <Text style={[styles.metricValue, { color: colors.ink }]} numberOfLines={1}>
-                    {metric.value}
-                  </Text>
-                  <Small color={colors.inkMuted} numberOfLines={1}>
-                    {metric.label}
-                  </Small>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-
-        <Row justify="space-between" align="center" style={styles.sectionHead}>
-          <Overline>Browse sections</Overline>
-          <Caption color={colors.inkSubtle}>{browseSections.length} collections</Caption>
-        </Row>
-        <View style={styles.sectionsList}>
-          {browseSections.map((slug) => {
-            const meta = sectionsMeta[slug];
-            const accent = sectionAccent(slug, isDark);
-            const Icon = sectionIcons[slug];
-            const count = sectionCounts[slug];
-            return (
-              <Pressable
-                key={slug}
-                onPress={() => goExplore(slug)}
-                accessibilityRole="button"
-                accessibilityLabel={`Open ${meta.title}`}
-                style={({ pressed }) => [
-                  styles.sectionRow,
-                  {
-                    backgroundColor: colors.card,
-                    borderColor: colors.border,
-                    opacity: pressed ? 0.9 : 1,
-                  },
-                  shadow('sm', isDark),
-                ]}
-              >
-                <View style={[styles.sectionIcon, { backgroundColor: accent.surface }]}>
-                  <Icon size={20} color={accent.primary} strokeWidth={2.25} />
-                </View>
-                <View style={styles.sectionCopy}>
-                  <BodyStrong numberOfLines={1}>{meta.title}</BodyStrong>
-                  <Small color={colors.inkMuted} numberOfLines={1}>
-                    {meta.subtitle} · {count} {count === 1 ? 'story' : 'stories'}
-                  </Small>
-                </View>
-                <ArrowRight size={18} color={accent.primary} />
-              </Pressable>
-            );
-          })}
-        </View>
+              );
+            })}
+          </View>
+        </CollapsiblePanel>
       </ScrollView>
 
       <StorySessionModal
@@ -495,7 +575,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 16,
   },
   metricCard: {
     flexGrow: 1,
@@ -543,5 +622,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sectionCopy: { flex: 1, minWidth: 0, gap: 2 },
+  storyRow: {
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  storyDot: { width: 8, height: 8, borderRadius: 4 },
+  viewAll: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingVertical: 10, marginBottom: 6 },
   pressed: { opacity: 0.92 },
 });

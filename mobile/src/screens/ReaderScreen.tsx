@@ -1,4 +1,4 @@
-import { Bookmark, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
+import { Bookmark, ChevronLeft, ChevronRight, ExternalLink, Headphones, Highlighter, Share2, X } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
@@ -8,16 +8,14 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { getProphetChapter } from '../data/prophetChapters';
-import { getQuranStory } from '../data/quranStories';
-import { getSahabahChapter } from '../data/sahabahChapters';
+import { getStoryChapters } from '../data/chapters';
 import { getSeerahPart } from '../data/seerahParts';
-import { getShortStory } from '../data/shortStoriesFromTheLife';
-import { theProphets } from '../data/theProphets';
-import { theSahabah } from '../data/theSahabah';
+import { prophetSlugForStory, sahabahSlugForStory } from '../data/storyText';
+import ChapterQuiz from '../components/ChapterQuiz';
 import {
   EMPTY_READING_BOOKMARK,
   bookmarkFromScroll,
+  chapterBookmark,
   formatReadingPercent,
   type ReadingBlock,
   type ReadingBookmark,
@@ -33,7 +31,6 @@ import { openSahabahPdf, sahabahPdfSpanForSlug } from '../services/sahabahPdf';
 import { openShortStoriesPdf, shortStoryPdfSpanForSlug } from '../services/shortStoriesPdf';
 import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL } from '../data/listenIncoming';
 import type { StoryItem } from '../types/catalog';
-import { toParagraphs } from '../data/text';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
 import {
@@ -56,85 +53,6 @@ type ReaderScreenProps = {
   onSwitchToListening: () => void;
 };
 
-function resolveFullText(story: StoryItem): { sections: { heading?: string; body: string }[]; plain: string } {
-  if (story.sectionSlug === 'qisas-al-anbiya') {
-    const prophet = theProphets.find(
-      (item) =>
-        item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
-        story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
-    );
-    const chapter = prophet ? getProphetChapter(prophet.slug) : undefined;
-    if (chapter?.sections?.length) {
-      return {
-        sections: chapter.sections.map((section) => ({
-          heading: section.heading,
-          body: section.body,
-        })),
-        plain: chapter.contentEn,
-      };
-    }
-  }
-
-  if (story.sectionSlug === 'qisas-al-quran') {
-    const chapter = getQuranStory(story.id);
-    if (chapter?.sections?.length) {
-      return {
-        sections: chapter.sections.map((section) => ({
-          heading: section.heading,
-          body: section.body,
-        })),
-        plain: chapter.contentEn,
-      };
-    }
-  }
-
-  if (story.sectionSlug === 'seerah-shamail') {
-    const part = getSeerahPart(story.id);
-    if (part?.sections?.length) {
-      return {
-        sections: part.sections.map((section) => ({
-          heading: section.heading,
-          body: section.body,
-        })),
-        plain: part.contentEn,
-      };
-    }
-    const shortStory = getShortStory(story.id);
-    if (shortStory?.sections?.length) {
-      return {
-        sections: shortStory.sections.map((section) => ({
-          heading: section.heading,
-          body: section.body,
-        })),
-        plain: shortStory.contentEn,
-      };
-    }
-  }
-
-  if (story.sectionSlug === 'sahabah') {
-    const companion = theSahabah.find(
-      (item) =>
-        item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
-        story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
-        story.id.includes(item.slug),
-    );
-    const chapter = companion ? getSahabahChapter(companion.slug) : undefined;
-    if (chapter?.sections?.length) {
-      return {
-        sections: chapter.sections.map((section) => ({
-          heading: section.heading,
-          body: section.body,
-        })),
-        plain: chapter.contentEn,
-      };
-    }
-  }
-
-  const content = (story.content ?? story.summary ?? '').trim();
-  const paragraphs = toParagraphs(content).map((body) => ({ body }));
-  return { sections: paragraphs.length ? paragraphs : [{ body: content }], plain: content };
-}
-
 export default function ReaderScreen({ story, onClose, onSwitchToListening }: ReaderScreenProps) {
   const { colors, isDark } = useTheme();
   const { topInset, bottomInset } = useMobileLayout();
@@ -150,28 +68,12 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   const [resume, setResume] = useState<ReadingBookmark>(EMPTY_READING_BOOKMARK);
   const [highlightMode, setHighlightMode] = useState(false);
   const saved = isSaved(story.id);
-  const resolved = useMemo(() => resolveFullText(story), [story]);
-  const prophetSlug = useMemo(() => {
-    if (story.sectionSlug !== 'qisas-al-anbiya') return null;
-    return (
-      theProphets.find(
-        (item) =>
-          item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
-          story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()),
-      )?.slug ?? null
-    );
-  }, [story.figureName, story.sectionSlug]);
-  const sahabahSlug = useMemo(() => {
-    if (story.sectionSlug !== 'sahabah') return null;
-    return (
-      theSahabah.find(
-        (item) =>
-          item.nameEn.toLowerCase() === story.figureName.toLowerCase() ||
-          story.figureName.toLowerCase().includes(item.nameEn.toLowerCase()) ||
-          story.id.includes(item.slug),
-      )?.slug ?? null
-    );
-  }, [story.figureName, story.id, story.sectionSlug]);
+  const chapters = useMemo(() => getStoryChapters(story), [story]);
+  const [chapterIndex, setChapterIndex] = useState(0);
+  const chapter = chapters[Math.min(chapterIndex, chapters.length - 1)];
+  const chapterTopRef = useRef(0);
+  const prophetSlug = useMemo(() => prophetSlugForStory(story), [story]);
+  const sahabahSlug = useMemo(() => sahabahSlugForStory(story), [story]);
   const prophetPdfSpan = prophetSlug ? pdfSpanForSlug(prophetSlug) : null;
   const seerahPdfSpan =
     story.sectionSlug === 'seerah-shamail' && getSeerahPart(story.id)
@@ -188,9 +90,19 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
   useEffect(() => {
     void load().then((bookmark) => {
       setResume(bookmark);
-      setRestoredY(bookmark.y);
+      if (bookmark.chapter !== undefined) {
+        setChapterIndex(Math.min(bookmark.chapter, chapters.length - 1));
+        setRestoredY(bookmark.y);
+        return;
+      }
+      // Bookmarks from before chapters: reopen the chapter holding the last line read.
+      const legacy = bookmark.line
+        ? chapters.findIndex((item) => item.blocks.some((block) => block.paragraphs.some((p) => p.includes(bookmark.line))))
+        : -1;
+      if (legacy > 0) setChapterIndex(legacy);
+      else setRestoredY(bookmark.y);
     });
-  }, [load]);
+  }, [load, chapters]);
 
   useEffect(() => {
     if (restoredY <= 0) return;
@@ -198,11 +110,11 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
       scrollRef.current?.scrollTo({ y: restoredY, animated: false });
     }, 80);
     return () => clearTimeout(timer);
-  }, [restoredY, resolved.plain]);
+  }, [restoredY]);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    void save(
+    const next = chapterBookmark(
       bookmarkFromScroll(
         contentOffset.y,
         contentSize.height,
@@ -210,6 +122,29 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
         layoutMeasurement.width,
         blocksRef.current,
       ),
+      chapterIndex,
+      chapters.length,
+    );
+    setResume((current) => (Math.abs(current.percent - next.percent) >= 0.01 || current.chapter !== next.chapter ? next : current));
+    void save(next);
+  };
+
+  const goToChapter = (index: number) => {
+    const target = Math.max(0, Math.min(chapters.length - 1, index));
+    blockMapRef.current.clear();
+    blocksRef.current = [];
+    sectionYRef.current = [];
+    setChapterIndex(target);
+    setRestoredY(0);
+    const bookmark = chapterBookmark(
+      { ...EMPTY_READING_BOOKMARK, heading: chapters[target]?.title ?? null },
+      target,
+      chapters.length,
+    );
+    setResume(bookmark);
+    void save(bookmark);
+    requestAnimationFrame(() =>
+      scrollRef.current?.scrollTo({ y: Math.max(0, chapterTopRef.current - 8), animated: false }),
     );
   };
 
@@ -269,7 +204,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
 
         <View style={styles.headerMeta}>
           <Overline color={accent.primary}>
-            Reading mode
+            {chapters.length > 1 ? `Chapter ${chapterIndex + 1} of ${chapters.length}` : 'Reading mode'}
             {resume.percent > 0 ? ` · ${formatReadingPercent(resume.percent)}` : ''}
           </Overline>
           <Caption color={colors.inkMuted} numberOfLines={1}>
@@ -378,14 +313,58 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
           </Caption>
         )}
 
-        {resolved.sections.map((section, index) => (
+        <View onLayout={(event) => (chapterTopRef.current = event.nativeEvent.layout.y)}>
+          {chapters.length > 1 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.chapterChips}
+              style={styles.chapterChipsWrap}
+            >
+              {chapters.map((item) => {
+                const selected = item.index === chapterIndex;
+                return (
+                  <Pressable
+                    key={item.index}
+                    onPress={() => goToChapter(item.index)}
+                    accessibilityRole="tab"
+                    accessibilityState={{ selected }}
+                    accessibilityLabel={`Chapter ${item.index + 1}: ${item.title}`}
+                    style={[
+                      styles.chapterChip,
+                      {
+                        borderColor: selected ? accent.primary : colors.border,
+                        backgroundColor: selected ? alpha(accent.primary, isDark ? 0.22 : 0.1) : colors.card,
+                      },
+                    ]}
+                  >
+                    <Caption color={selected ? accent.primary : colors.inkMuted} style={styles.chapterChipText}>
+                      {item.index + 1}
+                    </Caption>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          ) : null}
+          <View style={[styles.chapterHeader, { borderBottomColor: colors.border }]}>
+            <Overline color={accent.primary}>
+              {chapters.length > 1 ? `Chapter ${chapterIndex + 1} of ${chapters.length}` : 'Full story'}
+            </Overline>
+            <Heading style={styles.chapterTitle}>{chapter.title}</Heading>
+            <Caption color={colors.inkSubtle}>About {Math.max(1, Math.round(chapter.words / 200))} min read</Caption>
+          </View>
+        </View>
+
+        {chapter.blocks.map((block, index) => (
           <View
-            key={`${section.heading ?? 'p'}-${index}`}
+            key={`${chapterIndex}-${block.heading ?? 'p'}-${index}`}
             style={styles.section}
             onLayout={(event) => onSectionLayout(index, event.nativeEvent.layout.y)}
           >
-            {section.heading ? <Heading style={styles.sectionHeading}>{section.heading}</Heading> : null}
-            {toParagraphs(section.body).map((paragraph, pIndex) => {
+            {block.heading && block.heading !== chapter.title ? (
+              <Heading style={styles.sectionHeading}>{block.heading}</Heading>
+            ) : null}
+            {block.paragraphs.map((paragraph, pIndex) => {
               const lastRead = Boolean(resume.line) && paragraph.includes(resume.line);
               return (
                 <View
@@ -396,7 +375,7 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
                       pIndex,
                       event.nativeEvent.layout.y,
                       event.nativeEvent.layout.height,
-                      section.heading,
+                      block.heading ?? chapter.title,
                       paragraph,
                     )
                   }
@@ -432,6 +411,35 @@ export default function ReaderScreen({ story, onClose, onSwitchToListening }: Re
             })}
           </View>
         ))}
+
+        <ChapterQuiz
+          key={`${story.id}-${chapterIndex}`}
+          story={story}
+          chapterIndex={chapterIndex}
+          chapterCount={chapters.length}
+          onNextChapter={chapterIndex < chapters.length - 1 ? () => goToChapter(chapterIndex + 1) : undefined}
+        />
+
+        {chapters.length > 1 ? (
+          <Row gap={10} style={styles.chapterNav}>
+            <OutlineButton
+              label="Previous"
+              icon={ChevronLeft}
+              size="sm"
+              disabled={chapterIndex === 0}
+              onPress={() => goToChapter(chapterIndex - 1)}
+              style={styles.chapterNavBtn}
+            />
+            <OutlineButton
+              label={chapterIndex < chapters.length - 1 ? 'Next chapter' : 'Last chapter'}
+              icon={ChevronRight}
+              size="sm"
+              disabled={chapterIndex >= chapters.length - 1}
+              onPress={() => goToChapter(chapterIndex + 1)}
+              style={styles.chapterNavBtn}
+            />
+          </Row>
+        ) : null}
 
         <View
           style={[
@@ -546,6 +554,22 @@ const styles = StyleSheet.create({
   listenChipLabel: { fontWeight: '800' },
   highlightHint: { marginBottom: 14 },
   section: { marginBottom: 22, gap: 10 },
+  chapterChipsWrap: { marginHorizontal: -20, marginBottom: 12 },
+  chapterChips: { gap: 8, paddingHorizontal: 20 },
+  chapterChip: {
+    minWidth: 38,
+    height: 34,
+    paddingHorizontal: 12,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chapterChipText: { fontWeight: '800', fontSize: 13 },
+  chapterHeader: { gap: 4, paddingBottom: 12, marginBottom: 16, borderBottomWidth: 1 },
+  chapterTitle: { fontSize: 20, lineHeight: 26 },
+  chapterNav: { marginBottom: 20 },
+  chapterNavBtn: { flex: 1 },
   sectionHeading: { fontSize: 18 },
   paragraph: { fontSize: 16, lineHeight: 27 },
   lastReadBlock: {

@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
+import { Bookmark, Compass, Gamepad2, Home, Sparkles } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import {
@@ -20,11 +20,14 @@ import {
 import { AuthProvider } from './src/auth/AuthProvider';
 import { CatalogProvider } from './src/data/CatalogProvider';
 import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
+import { AuthSheetProvider } from './src/components/AuthSheet';
 import { ShareHostProvider } from './src/components/ShareSheet';
 import { HighlightsProvider, useHighlights } from './src/hooks/useHighlights';
 import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
+import { QuizResultsProvider } from './src/hooks/useQuizResults';
 import { useMobileLayout } from './src/hooks/useMobileLayout';
 import ExploreScreen from './src/screens/ExploreScreen';
+import GameScreen from './src/screens/GameScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
 import NamesScreen from './src/screens/NamesScreen';
@@ -43,6 +46,7 @@ export type RootTabParamList = {
   Home: undefined;
   Explore: undefined;
   Names: undefined;
+  Play: undefined;
   Library: undefined;
 };
 
@@ -57,6 +61,7 @@ const tabs = {
   Home: { label: 'Home', icon: Home, accent: 'emerald' },
   Explore: { label: 'Explore', icon: Compass, accent: 'emerald' },
   Names: { label: 'Names', icon: Sparkles, accent: 'gold' },
+  Play: { label: 'Play', icon: Gamepad2, accent: 'gold' },
   Library: { label: 'Library', icon: Bookmark, accent: 'emerald' },
 } as const;
 
@@ -159,6 +164,7 @@ function AppNavigator() {
         Home: '',
         Explore: 'explore',
         Names: 'names',
+        Play: 'play',
         Library: 'library',
       },
     },
@@ -181,6 +187,7 @@ function AppNavigator() {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Explore" component={ExploreScreen} />
             <Tab.Screen name="Names" component={NamesScreen} options={{ title: 'The Names' }} />
+            <Tab.Screen name="Play" component={GameScreen} options={{ title: 'Knowledge Quest' }} />
             <Tab.Screen name="Library" component={LibraryScreen} />
           </Tab.Navigator>
         </NavigationContainer>
@@ -211,11 +218,15 @@ export default function App() {
           <CatalogProvider>
             <AppModeProvider>
               <LibraryProvider>
-                <HighlightsProvider>
-                  <ShareHostProvider>
-                    <AppNavigator />
-                  </ShareHostProvider>
-                </HighlightsProvider>
+                <QuizResultsProvider>
+                  <HighlightsProvider>
+                    <ShareHostProvider>
+                      <AuthSheetProvider>
+                        <AppNavigator />
+                      </AuthSheetProvider>
+                    </ShareHostProvider>
+                  </HighlightsProvider>
+                </QuizResultsProvider>
               </LibraryProvider>
             </AppModeProvider>
           </CatalogProvider>
