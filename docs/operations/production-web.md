@@ -4,9 +4,10 @@
 
 | Surface | URL | Status |
 | --- | --- | --- |
-| Website | https://afroclovers.com.ng | DNS live; HostAfrica parking page until cPanel extract |
-| Legal | https://afroclovers.com.ng/privacy.html (and `/terms.html`, `/support.html`, `/account-deletion.html`) | In the zip |
-| API | https://storiesoflislam.afroclovers.com.ng | Does not resolve yet; app uses bundled catalog |
+| Website (canonical) | https://storiesoflislam.afroclovers.com.ng | Subdomain must be created in HostAfrica; SPA zip ready |
+| Apex | https://afroclovers.com.ng | DNS live; HostAfrica parking until redirect zip is extracted |
+| Legal | https://storiesoflislam.afroclovers.com.ng/privacy.html (and `/terms.html`, `/support.html`, `/account-deletion.html`) | In the SPA zip |
+| API | https://storiesoflislam.afroclovers.com.ng | Same host once the Node.js App / reverse proxy is attached |
 
 ## Package
 
@@ -16,19 +17,31 @@ Rebuild:
 bash scripts/package-web-frontend.sh
 ```
 
-Artifact: `deploy/storiesofislam-web-frontend.zip` (`EXPO_PUBLIC_ENVIRONMENT=production`, bundled catalog).
+Artifacts:
+
+- `deploy/storiesofislam-web-frontend.zip` (`EXPO_PUBLIC_ENVIRONMENT=production`, bundled catalog, API URL = canonical host)
+- `deploy/afroclovers-apex-redirect.zip` (apex → canonical)
 
 ## Go live on HostAfrica
 
-SSH/cPanel is not reachable from this agent (port 22 timed out). On the HostAfrica account:
+FTP from this agent (preferred when secrets are present):
+
+```bash
+HOSTAFRICA_FTP_REMOTE_DIR=/public_html/storiesoflislam \
+  bash scripts/hostafrica-ftp-deploy-frontend.sh
+ZIP=deploy/afroclovers-apex-redirect.zip HOSTAFRICA_FTP_REMOTE_DIR=/public_html \
+  bash scripts/hostafrica-ftp-deploy-frontend.sh
+```
+
+Or on the HostAfrica account (cPanel Terminal / SSH):
 
 ```bash
 cd ~/StoriesOfIslam
 git pull origin cursor/cloud-agent-1789504843135-ly7pe
-bash scripts/hostafrica-deploy-frontend-on-server.sh
+PUBLIC_HTML="$HOME/public_html/storiesoflislam" bash scripts/hostafrica-deploy-frontend-on-server.sh
 ```
 
-Or File Manager: extract the zip into `public_html` so `index.html` sits at the docroot (see [hostafrica-frontend-deploy.md](hostafrica-frontend-deploy.md)).
+See [hostafrica-frontend-deploy.md](hostafrica-frontend-deploy.md).
 
 ## Alternate durable host
 

@@ -40,5 +40,19 @@ rm -f "$OUT_DIR/$ZIP_NAME"
 
 cp -f "$OUT_DIR/$ZIP_NAME" /opt/cursor/artifacts/"$ZIP_NAME" 2>/dev/null || true
 
+# Apex redirect package: afroclovers.com.ng → storiesoflislam.afroclovers.com.ng
+REDIRECT_DIR="$OUT_DIR/afroclovers-apex-redirect"
+REDIRECT_ZIP="afroclovers-apex-redirect.zip"
+if [[ -d "$REDIRECT_DIR" ]]; then
+  rm -f "$OUT_DIR/$REDIRECT_ZIP"
+  (
+    cd "$REDIRECT_DIR"
+    zip -qr "$OUT_DIR/$REDIRECT_ZIP" .
+  )
+  cp -f "$OUT_DIR/$REDIRECT_ZIP" /opt/cursor/artifacts/"$REDIRECT_ZIP" 2>/dev/null || true
+  echo "Packed $OUT_DIR/$REDIRECT_ZIP (apex → https://storiesoflislam.afroclovers.com.ng)"
+fi
+
 echo "Packed $OUT_DIR/$ZIP_NAME ($(wc -c < "$OUT_DIR/$ZIP_NAME") bytes)"
+echo "Web origin: https://storiesoflislam.afroclovers.com.ng"
 echo "API: $API_URL  environment: $ENVIRONMENT"

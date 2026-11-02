@@ -48,4 +48,5 @@ fi
 
 echo "Deployed frontend to $PUBLIC_HTML"
 echo "Previous index backed up under $BACKUP (if any)"
-echo "Open https://afroclovers.com.ng"
+echo "Canonical web URL: https://storiesoflislam.afroclovers.com.ng"
+echo "If this was the subdomain docroot, also extract deploy/afroclovers-apex-redirect.zip into ~/public_html"
