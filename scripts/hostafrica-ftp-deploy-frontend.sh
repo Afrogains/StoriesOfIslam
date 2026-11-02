@@ -4,18 +4,16 @@
 #   HOSTAFRICA_FTP_USER
 #   HOSTAFRICA_FTP_PASSWORD
 # Optional:
-#   HOSTAFRICA_FTP_HOST   (default: afroclovers.com.ng)
+#   HOSTAFRICA_FTP_HOST   (default: storiesofislam.app)
 #   HOSTAFRICA_FTP_PORT   (default: 21)
 #   HOSTAFRICA_FTP_REMOTE_DIR  (default: /public_html)
-#     Use /public_html for the apex, or the subdomain docroot
-#     (often /public_html/storiesoflislam or /storiesoflislam.afroclovers.com.ng)
 #   HOSTAFRICA_FTP_SECURE  (true|false, default true → FTPS)
 #   ZIP                  path to storiesofislam-web-frontend.zip
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ZIP="${ZIP:-$ROOT/deploy/storiesofislam-web-frontend.zip}"
-HOST="${HOSTAFRICA_FTP_HOST:-afroclovers.com.ng}"
+HOST="${HOSTAFRICA_FTP_HOST:-storiesofislam.app}"
 PORT="${HOSTAFRICA_FTP_PORT:-21}"
 REMOTE_DIR="${HOSTAFRICA_FTP_REMOTE_DIR:-/public_html}"
 SECURE="${HOSTAFRICA_FTP_SECURE:-true}"
@@ -77,4 +75,4 @@ remove_parking() {
 echo "Deploying $ZIP → ftp://${HOST}${REMOTE_DIR} (secure=$SECURE)"
 remove_parking
 upload_tree "$TMP/site"
-echo "Done. Open https://storiesoflislam.afroclovers.com.ng (or the apex if REMOTE_DIR is /public_html)."
+echo "Done. Open https://storiesofislam.app"

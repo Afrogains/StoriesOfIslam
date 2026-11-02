@@ -13,7 +13,7 @@ Use [store-metadata.md](store-metadata.md).
 - Category: Education
 - Tags / keywords: Islamic stories, Seerah, Prophets, Sahabah, hadith, Arabic, Muslim learning, audio stories
 - Content rating: general audience. Do **not** select a child-directed / Designed for Families category.
-- Privacy policy URL: `https://afroclovers.com.ng/privacy.html` (or the live production origin + `/privacy.html`)
+- Privacy policy URL: `https://storiesofislam.app/privacy.html`
 - Terms: `/terms.html`
 - Support: `/support.html`
 - Account deletion: `/account-deletion.html` and in-app Library → Delete account

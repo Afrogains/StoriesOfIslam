@@ -10,8 +10,14 @@ function publicValue(name: string, value: string | undefined, fallback: string):
   throw new Error(`Missing required public configuration: ${name}`);
 }
 
+/** Canonical public site — standalone Stories of Islam host (never an Afroclovers subdomain). */
+export const PUBLIC_WEB_ORIGIN = (
+  process.env.EXPO_PUBLIC_WEB_ORIGIN ?? 'https://storiesofislam.app'
+).replace(/\/$/, '');
+
 export const appConfig = {
   apiUrl: publicValue('EXPO_PUBLIC_API_URL', process.env.EXPO_PUBLIC_API_URL, 'http://localhost:3000'),
+  webOrigin: PUBLIC_WEB_ORIGIN,
   keycloakIssuer: publicValue(
     'EXPO_PUBLIC_KEYCLOAK_ISSUER',
     process.env.EXPO_PUBLIC_KEYCLOAK_ISSUER,

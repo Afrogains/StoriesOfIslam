@@ -50,6 +50,5 @@ audio stories
 - Home, Explore, synchronized reader, The Names, Library sync, and Kids Mode.
 - English and Arabic screenshots/descriptions after Arabic copy review.
 - Privacy, terms, support, correction, and account-deletion HTTPS URLs:
-  `https://afroclovers.com.ng/privacy.html`, `/terms.html`, `/support.html`,
-  `/account-deletion.html` (or the live production origin if HostAfrica is still
-  on the parking page).
+  `https://storiesofislam.app/privacy.html`, `/terms.html`, `/support.html`,
+  `/account-deletion.html`.

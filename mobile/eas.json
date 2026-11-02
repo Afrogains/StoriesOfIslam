@@ -39,8 +39,8 @@
       },
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_API_URL": "https://storiesoflislam.afroclovers.com.ng",
-        "EXPO_PUBLIC_KEYCLOAK_ISSUER": "https://storiesoflislam.afroclovers.com.ng/auth/realms/stories-of-islam",
+        "EXPO_PUBLIC_API_URL": "https://storiesofislam.app",
+        "EXPO_PUBLIC_KEYCLOAK_ISSUER": "https://storiesofislam.app/auth/realms/stories-of-islam",
         "EXPO_PUBLIC_KEYCLOAK_MOBILE_CLIENT_ID": "stories-mobile",
         "EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID": "stories-web"
       }

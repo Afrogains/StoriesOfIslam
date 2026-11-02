@@ -1,4 +1,5 @@
 import { Linking, Platform } from 'react-native';
+import { PUBLIC_WEB_ORIGIN } from '../config';
 import {
   IBN_KATHIR_PDF,
   ibnKathirPdfPages,
@@ -17,7 +18,7 @@ export async function openIbnKathirPdf(page?: number): Promise<void> {
   const absolute =
     path.startsWith('http') || path.startsWith('file:')
       ? path
-      : `https://afroclovers.com.ng${path}`;
+      : `${PUBLIC_WEB_ORIGIN}${path}`;
   await Linking.openURL(absolute);
 }
 

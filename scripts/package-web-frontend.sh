@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build Expo web for HostAfrica public_html and zip for cPanel upload.
+# Build Expo web for HostAfrica / storiesofislam.app and zip for upload.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -7,15 +7,18 @@ MOBILE="$ROOT/mobile"
 OUT_DIR="$ROOT/deploy"
 ZIP_NAME="storiesofislam-web-frontend.zip"
 
-API_URL="${EXPO_PUBLIC_API_URL:-https://storiesoflislam.afroclovers.com.ng}"
+# Standalone Stories of Islam origin — never an Afroclovers subdomain.
+WEB_ORIGIN="${EXPO_PUBLIC_WEB_ORIGIN:-https://storiesofislam.app}"
+API_URL="${EXPO_PUBLIC_API_URL:-$WEB_ORIGIN}"
 ENVIRONMENT="${EXPO_PUBLIC_ENVIRONMENT:-production}"
-KEYCLOAK_ISSUER="${EXPO_PUBLIC_KEYCLOAK_ISSUER:-https://storiesoflislam.afroclovers.com.ng/auth/realms/stories-of-islam}"
+KEYCLOAK_ISSUER="${EXPO_PUBLIC_KEYCLOAK_ISSUER:-${WEB_ORIGIN}/auth/realms/stories-of-islam}"
 KEYCLOAK_WEB_CLIENT_ID="${EXPO_PUBLIC_KEYCLOAK_WEB_CLIENT_ID:-stories-web}"
 
 cd "$MOBILE"
 
 # Expo 57 loads EXPO_PUBLIC_* from .env (shell-only vars are not always inlined).
 cat > .env <<EOF
+EXPO_PUBLIC_WEB_ORIGIN=${WEB_ORIGIN}
 EXPO_PUBLIC_API_URL=${API_URL}
 EXPO_PUBLIC_ENVIRONMENT=${ENVIRONMENT}
 EXPO_PUBLIC_KEYCLOAK_ISSUER=${KEYCLOAK_ISSUER}
@@ -25,9 +28,13 @@ EOF
 rm -rf dist
 npx expo export --platform web --output-dir dist --clear
 
-# Sanity: API host must appear in the bundle
-if ! grep -Rql 'storiesoflislam.afroclovers.com.ng' dist/_expo/static/js/web/*.js; then
-  echo "ERROR: API URL was not inlined into the web bundle" >&2
+# Sanity: standalone host must appear; Afroclovers must not.
+if ! grep -Rql 'storiesofislam\.app' dist/_expo/static/js/web/*.js; then
+  echo "ERROR: storiesofislam.app was not inlined into the web bundle" >&2
+  exit 1
+fi
+if grep -Rql 'afroclovers\.com\.ng' dist/_expo/static/js/web/*.js; then
+  echo "ERROR: afroclovers.com.ng leaked into the web bundle" >&2
   exit 1
 fi
 
@@ -40,7 +47,7 @@ rm -f "$OUT_DIR/$ZIP_NAME"
 
 cp -f "$OUT_DIR/$ZIP_NAME" /opt/cursor/artifacts/"$ZIP_NAME" 2>/dev/null || true
 
-# Apex redirect package: afroclovers.com.ng → storiesoflislam.afroclovers.com.ng
+# Optional legacy apex redirect: afroclovers.com.ng → storiesofislam.app
 REDIRECT_DIR="$OUT_DIR/afroclovers-apex-redirect"
 REDIRECT_ZIP="afroclovers-apex-redirect.zip"
 if [[ -d "$REDIRECT_DIR" ]]; then
@@ -50,9 +57,9 @@ if [[ -d "$REDIRECT_DIR" ]]; then
     zip -qr "$OUT_DIR/$REDIRECT_ZIP" .
   )
   cp -f "$OUT_DIR/$REDIRECT_ZIP" /opt/cursor/artifacts/"$REDIRECT_ZIP" 2>/dev/null || true
-  echo "Packed $OUT_DIR/$REDIRECT_ZIP (apex → https://storiesoflislam.afroclovers.com.ng)"
+  echo "Packed $OUT_DIR/$REDIRECT_ZIP (legacy afroclovers → ${WEB_ORIGIN})"
 fi
 
 echo "Packed $OUT_DIR/$ZIP_NAME ($(wc -c < "$OUT_DIR/$ZIP_NAME") bytes)"
-echo "Web origin: https://storiesoflislam.afroclovers.com.ng"
+echo "Web origin: ${WEB_ORIGIN}"
 echo "API: $API_URL  environment: $ENVIRONMENT"

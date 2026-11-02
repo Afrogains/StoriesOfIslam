@@ -1,4 +1,5 @@
 import { Linking, Platform } from 'react-native';
+import { PUBLIC_WEB_ORIGIN } from '../config';
 import {
   QURAN_STORIES_PDF,
   quranStoriesPdfUrl,
@@ -17,6 +18,6 @@ export async function openQuranStoriesPdf(page?: number): Promise<void> {
   const absolute =
     path.startsWith('http') || path.startsWith('file:')
       ? path
-      : `https://afroclovers.com.ng${path}`;
+      : `${PUBLIC_WEB_ORIGIN}${path}`;
   await Linking.openURL(absolute);
 }

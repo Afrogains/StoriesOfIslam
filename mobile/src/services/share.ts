@@ -1,3 +1,4 @@
+import { PUBLIC_WEB_ORIGIN } from '../config';
 import * as Clipboard from 'expo-clipboard';
 import { Linking, Platform, Share } from 'react-native';
 import type { NawawiHadith } from '../data/nawawiForty';
@@ -6,7 +7,7 @@ import type { DivineName } from '../data/theNames';
 import type { Highlight } from '../types/highlight';
 import type { StoryItem } from '../types/catalog';
 
-export const APP_SHARE_URL = 'https://afroclovers.com.ng';
+export const APP_SHARE_URL = PUBLIC_WEB_ORIGIN;
 
 export type SharePayload = {
   title: string;

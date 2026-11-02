@@ -1,4 +1,5 @@
 import { Linking, Platform } from 'react-native';
+import { PUBLIC_WEB_ORIGIN } from '../config';
 import { NAWAWI_PDF, nawawiPdfUrl } from '../data/nawawiPdfIndex';
 
 export { NAWAWI_PDF, nawawiPdfUrl };
@@ -13,6 +14,6 @@ export async function openNawawiPdf(page?: number): Promise<void> {
   const absolute =
     path.startsWith('http') || path.startsWith('file:')
       ? path
-      : `https://afroclovers.com.ng${path}`;
+      : `${PUBLIC_WEB_ORIGIN}${path}`;
   await Linking.openURL(absolute);
 }
