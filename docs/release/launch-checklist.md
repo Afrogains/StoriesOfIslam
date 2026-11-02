@@ -9,11 +9,12 @@ require authorized humans.
 
 Automation helpers:
 
-- `npm run platform:local` — local WhoGoHost Compose drill
-- `npm run platform:validate` — OIDC, Postgres, MinIO policy probes
+- `npm run platform:local` — local HostAfrica Compose drill
+- `npm run platform:validate` — OIDC, Keycloak Postgres, MinIO policy probes
 - `npm run acceptance:staging` — deployed staging HTTP probes
 - `bash scripts/beta-matrix.sh` — legal/page probes + manual device matrix
-- `infra/whogohost/scripts/backup-postgres-age.sh` + `restore-drill.sh`
+- HostAfrica MySQL dump/restore + `infra/hostafrica/scripts/backup-postgres-age.sh`
+  (Keycloak) + `restore-drill.sh`
 
 - [ ] Fresh staging migration and deterministic seed complete.
 - [ ] Keycloak sign-up, verification, PKCE login, refresh rotation, logout, and
@@ -25,7 +26,8 @@ Automation helpers:
 - [ ] Empty/estimated audio fails; valid FFmpeg audio checksum, duration, MIME,
       and timeline are recorded.
 - [ ] Two-person scholarly approval/publication flow passes.
-- [ ] Encrypted PostgreSQL and MinIO restore drill evidence is attached.
+- [ ] Encrypted HostAfrica MySQL, Keycloak PostgreSQL, and MinIO restore drill
+      evidence is attached.
 
 ## Beta matrix
 
@@ -59,8 +61,8 @@ Firefox, and Edge. Include phone, tablet, small viewport, and large-text modes.
 
 ## Production readiness
 
-- [ ] Staging and production use isolated WhoGoHost VPSs, Keycloak realms,
-      PostgreSQL databases, MinIO buckets, API services, and secrets.
+- [ ] Staging and production use isolated HostAfrica MySQL databases, HostAfrica
+      VPSs, Keycloak realms, MinIO buckets, API services, and secrets.
 - [ ] DNS, TLS renewal, firewall, SSH, OS updates, least privilege, and console
       allowlist are verified.
 - [ ] Uptime, error, crash, disk/capacity, backup, certificate, provider cost,

@@ -1,7 +1,7 @@
 /**
  * Asma’ul Husna — the 99 beautiful names of Allah with concise English meanings.
- * Learning companion series credit: “The Names” by Shaykh Mikaeel Smith
- * (delivery reference only — not an endorsement or voice impersonation).
+ * Any mention of Shaykh Mikaeel Smith’s series is a learning-companion reference
+ * only — not affiliation, endorsement, or voice impersonation.
  */
 
 export interface DivineName {
@@ -17,7 +17,15 @@ export const THE_NAMES_SERIES = {
   scholar: 'Shaykh Mikaeel Smith',
   credit: 'The Names — Shaykh Mikaeel Smith',
   description:
-    'Explore Allah’s beautiful names with clear meanings. This section is inspired by the learning series The Names by Shaykh Mikaeel Smith.',
+    'An in-app study aid for Asma’ul Husna. Brief English meanings only — not a scholarly tafsir, and not affiliated with any external course.',
+  disclaimerTitle: 'Disclaimer',
+  disclaimerLead:
+    'Please read this before using The Names. This section is a study aid, not an authority on Allah’s Names.',
+  disclaimerParagraphs: [
+    'This “The Names” tab is an educational study aid for Asma’ul Husna (the 99 Names of Allah). It is not a complete scholarly explanation of the Names of Allah, and it is not a substitute for the Quran, the Sunnah, or learning from qualified teachers.',
+    'Stories of Islam is not affiliated with, approved by, endorsed by, or a replacement for Shaykh Mikaeel Smith’s series The Names, or for any other scholar’s course, book, lecture, or recording. Mention of that series is a learning-companion reference only.',
+    'The English meanings and short reflections here are brief personal-study notes. They are not tafsir, not a fatwa, not an official list, and not an exhaustive or verified treatment of Allah’s Names. Do not treat this screen as a scholarly or legal source.',
+  ],
 } as const;
 
 export const divineNames: DivineName[] = [

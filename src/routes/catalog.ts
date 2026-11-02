@@ -2,8 +2,18 @@ import { Router } from 'express';
 import { CategorySlugSchema, StoryQuerySchema } from '../contracts/api';
 import { HttpError, asyncHandler } from '../http/errors';
 import { catalogRepository } from '../repositories/catalogRepository';
+import { namesMediaRepository } from '../repositories/namesMediaRepository';
 
 export const catalogRouter = Router();
+
+/** Only reviewer-approved lesson notes and audio are exposed; drafts and transcripts never are. */
+catalogRouter.get(
+  '/names/media',
+  asyncHandler(async (_request, response) => {
+    response.setHeader('Cache-Control', 'public,max-age=300,stale-while-revalidate=3600');
+    response.json({ data: await namesMediaRepository.listApproved() });
+  }),
+);
 
 catalogRouter.get(
   '/categories',

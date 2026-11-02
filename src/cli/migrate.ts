@@ -2,54 +2,58 @@ import 'dotenv/config';
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { Client } from 'pg';
-import { getEnv } from '../config/env';
+import mysql from 'mysql2/promise';
+import { mysqlConnectionOptions } from '../db/mysqlConfig';
+
+function createMigrationConnection() {
+  return mysql.createConnection(
+    mysqlConnectionOptions({
+      multipleStatements: true,
+    }),
+  );
+}
 
 export async function runMigrations(): Promise<void> {
-  const env = getEnv();
-  const client = new Client({
-    connectionString: env.DATABASE_URL,
-    ssl: env.DATABASE_SSL ? { rejectUnauthorized: true } : undefined,
-  });
-  await client.connect();
+  const connection = await createMigrationConnection();
   try {
-    await client.query(`
+    await connection.query(`
       CREATE TABLE IF NOT EXISTS schema_migrations (
-        filename TEXT PRIMARY KEY,
-        checksum_sha256 TEXT NOT NULL,
-        applied_at TIMESTAMPTZ NOT NULL DEFAULT now()
-      )
+        filename VARCHAR(255) PRIMARY KEY,
+        checksum_sha256 CHAR(64) NOT NULL,
+        applied_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
     const directory = resolve(process.cwd(), 'migrations');
     const files = (await readdir(directory)).filter((name) => name.endsWith('.sql')).sort();
     for (const filename of files) {
       const sql = await readFile(resolve(directory, filename), 'utf8');
       const checksum = createHash('sha256').update(sql).digest('hex');
-      const existing = await client.query<{ checksum_sha256: string }>(
-        'SELECT checksum_sha256 FROM schema_migrations WHERE filename = $1',
+      const [existingRows] = await connection.execute<mysql.RowDataPacket[]>(
+        'SELECT checksum_sha256 FROM schema_migrations WHERE filename = ?',
         [filename],
       );
-      if (existing.rowCount) {
-        if (existing.rows[0]?.checksum_sha256 !== checksum) {
+      const existing = existingRows[0] as { checksum_sha256?: string } | undefined;
+      if (existing) {
+        if (existing.checksum_sha256 !== checksum) {
           throw new Error(`Applied migration ${filename} was modified`);
         }
         continue;
       }
-      await client.query('BEGIN');
+      await connection.beginTransaction();
       try {
-        await client.query(sql);
-        await client.query(
-          'INSERT INTO schema_migrations(filename, checksum_sha256) VALUES ($1, $2)',
+        await connection.query(sql);
+        await connection.execute(
+          'INSERT INTO schema_migrations(filename, checksum_sha256) VALUES (?, ?)',
           [filename, checksum],
         );
-        await client.query('COMMIT');
+        await connection.commit();
       } catch (error) {
-        await client.query('ROLLBACK');
+        await connection.rollback();
         throw error;
       }
     }
   } finally {
-    await client.end();
+    await connection.end();
   }
 }
 

@@ -8,7 +8,7 @@ import { apiRequest } from '../services/api';
 type LibraryContextValue = {
   savedIds: string[];
   isSaved: (id: string) => boolean;
-  toggleSaved: (id: string) => void;
+  toggleSaved: (id: string, story?: StoryItem) => void;
   savedStories: StoryItem[];
   savedCount: number;
 };
@@ -16,15 +16,30 @@ type LibraryContextValue = {
 const LibraryContext = createContext<LibraryContextValue | null>(null);
 
 const STORAGE_KEY = 'stories.library.ids.v1';
+const RECORDS_KEY = 'stories.library.records.v1';
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Bundled stories use slug ids that the server's favorites table cannot reference. */
+const syncsToServer = (id: string) => UUID.test(id);
+
+function snapshotStory(story: StoryItem): StoryItem {
+  const { timedCues: _cues, ...rest } = story;
+  return rest;
+}
 
 export function LibraryProvider({ children }: { children: ReactNode }) {
   const { stories } = useCatalog();
-  const { authenticated, getAccessToken } = useAuth();
+  const { mode, getAccessToken } = useAuth();
+  const authenticated = mode === 'server';
   const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [records, setRecords] = useState<Record<string, StoryItem>>({});
 
   useEffect(() => {
     void AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
       if (raw) setSavedIds(JSON.parse(raw) as string[]);
+    });
+    void AsyncStorage.getItem(RECORDS_KEY).then((raw) => {
+      if (raw) setRecords(JSON.parse(raw) as Record<string, StoryItem>);
     });
   }, []);
 
@@ -33,29 +48,44 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
   }, [savedIds]);
 
   useEffect(() => {
+    void AsyncStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+  }, [records]);
+
+  useEffect(() => {
     if (!authenticated) return;
     void getAccessToken().then(async (token) => {
       if (!token) return;
       const response = await apiRequest<{ data: string[] }>('/v1/me/favorites', {
         accessToken: token,
       });
-      setSavedIds(response.data);
+      setSavedIds((current) => [...current, ...response.data.filter((id) => !current.includes(id))]);
     }).catch(() => undefined);
   }, [authenticated, getAccessToken]);
 
-  const toggleSaved = useCallback((id: string) => {
+  const toggleSaved = useCallback((id: string, story?: StoryItem) => {
     setSavedIds((current) => {
       const removing = current.includes(id);
       const next = removing ? current.filter((saved) => saved !== id) : [id, ...current];
-      if (authenticated) {
-        void getAccessToken().then((token) =>
-          token
-            ? apiRequest<void>(`/v1/me/favorites/${id}`, {
-                method: removing ? 'DELETE' : 'PUT',
-                accessToken: token,
-              })
-            : undefined,
-        ).catch(() => setSavedIds(current));
+      setRecords((prev) => {
+        if (removing) {
+          if (!(id in prev)) return prev;
+          const { [id]: _dropped, ...rest } = prev;
+          return rest;
+        }
+        if (!story) return prev;
+        return { ...prev, [id]: snapshotStory(story) };
+      });
+      if (authenticated && syncsToServer(id)) {
+        void getAccessToken()
+          .then((token) =>
+            token
+              ? apiRequest<void>(`/v1/me/favorites/${id}`, {
+                  method: removing ? 'DELETE' : 'PUT',
+                  accessToken: token,
+                })
+              : undefined,
+          )
+          .catch(() => undefined);
       }
       return next;
     });
@@ -63,17 +93,17 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<LibraryContextValue>(() => {
     const savedSet = new Set(savedIds);
+    const catalogById = new Map(stories.map((story) => [story.id, story]));
     return {
       savedIds,
       isSaved: (id: string) => savedSet.has(id),
       toggleSaved,
-      // Ordered by when each story was saved, most recent first.
       savedStories: savedIds
-        .map((id) => stories.find((story) => story.id === id))
+        .map((id) => catalogById.get(id) ?? records[id])
         .filter((story): story is StoryItem => Boolean(story)),
       savedCount: savedIds.length,
     };
-  }, [savedIds, stories, toggleSaved]);
+  }, [savedIds, stories, records, toggleSaved]);
 
   return <LibraryContext.Provider value={value}>{children}</LibraryContext.Provider>;
 }

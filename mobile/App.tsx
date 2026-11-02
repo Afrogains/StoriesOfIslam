@@ -10,19 +10,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { Baby, Bookmark, Compass, Home, Sparkles } from 'lucide-react-native';
+import { Bookmark, Compass, Gamepad2, Home, Sparkles } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
 import { AuthProvider } from './src/auth/AuthProvider';
 import { CatalogProvider } from './src/data/CatalogProvider';
 import { AppModeProvider, useAppMode } from './src/hooks/useAppMode';
+import { AuthSheetProvider } from './src/components/AuthSheet';
+import { ShareHostProvider } from './src/components/ShareSheet';
+import { HighlightsProvider, useHighlights } from './src/hooks/useHighlights';
 import { LibraryProvider, useLibrary } from './src/hooks/useLibrary';
+import { QuizResultsProvider } from './src/hooks/useQuizResults';
+import { useMobileLayout } from './src/hooks/useMobileLayout';
 import ExploreScreen from './src/screens/ExploreScreen';
+import GameScreen from './src/screens/GameScreen';
 import HomeScreen from './src/screens/HomeScreen';
-import KidsModeScreen from './src/screens/KidsModeScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
-import TheNamesScreen from './src/screens/TheNamesScreen';
+import NamesScreen from './src/screens/NamesScreen';
 import {
   BODY_FONT_FAMILY,
   alpha,
@@ -38,8 +46,8 @@ export type RootTabParamList = {
   Home: undefined;
   Explore: undefined;
   Names: undefined;
+  Play: undefined;
   Library: undefined;
-  Kids: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -52,22 +60,30 @@ const queryClient = new QueryClient({
 const tabs = {
   Home: { label: 'Home', icon: Home, accent: 'emerald' },
   Explore: { label: 'Explore', icon: Compass, accent: 'emerald' },
-  Names: { label: 'The Names', icon: Sparkles, accent: 'gold' },
+  Names: { label: 'Names', icon: Sparkles, accent: 'gold' },
+  Play: { label: 'Play', icon: Gamepad2, accent: 'gold' },
   Library: { label: 'Library', icon: Bookmark, accent: 'emerald' },
-  Kids: { label: 'Kids', icon: Baby, accent: 'sunset' },
 } as const;
 
 function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
-  const { isDark, isKids, setMode } = useAppMode();
+  const { isDark } = useAppMode();
   const { savedCount } = useLibrary();
-  const colors = getColors(isDark, isKids);
-  const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.8) : colors.inkSubtle;
+  const { highlightCount } = useHighlights();
+  const libraryBadge = savedCount + highlightCount;
+  const { tabBarPadTop, tabBarPadBottom } = useMobileLayout();
+  const colors = getColors(isDark);
+  const inactiveColor = isDark ? alpha(colors.inkSubtle, 0.85) : colors.inkSubtle;
 
   return (
     <View
       style={[
         styles.navBar,
-        { backgroundColor: colors.navBg, borderTopColor: colors.navBorder },
+        {
+          backgroundColor: colors.navBg,
+          borderTopColor: colors.navBorder,
+          paddingTop: tabBarPadTop,
+          paddingBottom: tabBarPadBottom,
+        },
         shadow('lg', isDark),
       ]}
       accessibilityRole="tablist"
@@ -76,11 +92,13 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const config = tabs[route.name as keyof typeof tabs];
         const active = state.index === index;
         const accent =
-          config.accent === 'sunset'
-            ? isDark ? '#FB923C' : '#EA580C'
-            : config.accent === 'gold'
-              ? isDark ? '#FBBF24' : '#B45309'
-              : isDark ? '#2DD4BF' : '#0F766E';
+          config.accent === 'gold'
+            ? isDark
+              ? '#FBBF24'
+              : '#B45309'
+            : isDark
+              ? '#34D399'
+              : '#064E3B';
         const Icon = config.icon;
         return (
           <Pressable
@@ -92,7 +110,6 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                 canPreventDefault: true,
               });
               if (!event.defaultPrevented) {
-                setMode(route.name === 'Kids' ? 'kids' : 'standard');
                 navigation.navigate(route.name, route.params);
               }
             }}
@@ -106,26 +123,29 @@ function PrimaryTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
               {active ? (
                 <LinearGradient
                   colors={
-                    config.accent === 'sunset'
-                      ? brandGradients.kidsSunset
-                      : config.accent === 'gold'
-                        ? brandGradients.gold[isDark ? 'dark' : 'light']
-                        : brandGradients.emerald[isDark ? 'dark' : 'light']
+                    config.accent === 'gold'
+                      ? brandGradients.gold[isDark ? 'dark' : 'light']
+                      : brandGradients.emerald[isDark ? 'dark' : 'light']
                   }
                   style={styles.activePill}
                 >
-                  <Icon size={18} color="#FFFFFF" />
+                  <Icon size={18} color="#FFFFFF" strokeWidth={2.25} />
                 </LinearGradient>
               ) : (
-                <Icon size={19} color={inactiveColor} />
+                <View style={styles.inactiveIcon}>
+                  <Icon size={20} color={inactiveColor} strokeWidth={2} />
+                </View>
               )}
-              {route.name === 'Library' && savedCount > 0 ? (
+              {route.name === 'Library' && libraryBadge > 0 ? (
                 <View style={[styles.badge, { backgroundColor: colors.gold, borderColor: colors.navBg }]}>
-                  <Text style={styles.badgeText}>{savedCount > 9 ? '9+' : savedCount}</Text>
+                  <Text style={styles.badgeText}>{libraryBadge > 9 ? '9+' : libraryBadge}</Text>
                 </View>
               ) : null}
             </View>
-            <Text style={[styles.navLabel, { color: active ? accent : inactiveColor }]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.navLabel, { color: active ? accent : inactiveColor }]}
+            >
               {config.label}
             </Text>
           </Pressable>
@@ -144,14 +164,14 @@ function AppNavigator() {
         Home: '',
         Explore: 'explore',
         Names: 'names',
+        Play: 'play',
         Library: 'library',
-        Kids: 'kids',
       },
     },
   };
 
   return (
-    <View style={[styles.page, { backgroundColor: isDark ? '#02060C' : '#E9E3D6' }]}>
+    <View style={[styles.page, { backgroundColor: isDark ? '#0F172A' : '#FCFBF7' }]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <View style={styles.appSurface}>
         <NavigationContainer
@@ -166,9 +186,9 @@ function AppNavigator() {
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Explore" component={ExploreScreen} />
-            <Tab.Screen name="Names" component={TheNamesScreen} options={{ title: 'The Names' }} />
+            <Tab.Screen name="Names" component={NamesScreen} options={{ title: 'The Names' }} />
+            <Tab.Screen name="Play" component={GameScreen} options={{ title: 'Knowledge Quest' }} />
             <Tab.Screen name="Library" component={LibraryScreen} />
-            <Tab.Screen name="Kids" component={KidsModeScreen} />
           </Tab.Navigator>
         </NavigationContainer>
       </View>
@@ -192,13 +212,21 @@ export default function App() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <CatalogProvider>
             <AppModeProvider>
               <LibraryProvider>
-                <AppNavigator />
+                <QuizResultsProvider>
+                  <HighlightsProvider>
+                    <ShareHostProvider>
+                      <AuthSheetProvider>
+                        <AppNavigator />
+                      </AuthSheetProvider>
+                    </ShareHostProvider>
+                  </HighlightsProvider>
+                </QuizResultsProvider>
               </LibraryProvider>
             </AppModeProvider>
           </CatalogProvider>
@@ -223,21 +251,32 @@ const styles = StyleSheet.create({
   navBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 9,
     paddingHorizontal: 8,
-    borderTopWidth: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 2,
-    gap: 3,
+    minHeight: 52,
+    gap: 4,
+    paddingHorizontal: 2,
   },
   navItemPressed: { opacity: 0.65 },
-  iconSlot: { height: 30, justifyContent: 'center', alignItems: 'center' },
+  iconSlot: {
+    width: 44,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inactiveIcon: {
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   activePill: {
-    width: 42,
+    width: 44,
     height: 28,
     borderRadius: radius.pill,
     alignItems: 'center',
@@ -245,10 +284,10 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    top: -1,
-    right: -6,
-    minWidth: 15,
-    height: 15,
+    top: -3,
+    right: 0,
+    minWidth: 16,
+    height: 16,
     paddingHorizontal: 3,
     borderRadius: radius.pill,
     borderWidth: 1.5,
@@ -263,8 +302,9 @@ const styles = StyleSheet.create({
   },
   navLabel: {
     fontFamily: BODY_FONT_FAMILY,
-    fontSize: 10,
+    fontSize: 11,
+    lineHeight: 14,
     fontWeight: '700',
-    letterSpacing: 0.2,
+    letterSpacing: 0.1,
   },
 });

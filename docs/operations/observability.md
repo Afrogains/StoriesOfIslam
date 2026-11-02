@@ -3,11 +3,11 @@
 ## Signals
 
 - API: `/health/live`, `/health/ready`, token-gated `/metrics`
-- WhoGoHost: systemd `stories-health-check.timer`, Keycloak discovery, MinIO
+- HostAfrica: systemd `stories-health-check.timer`, Keycloak discovery, MinIO
   live, disk usage, container health
-- Prometheus rules: `infra/whogohost/monitoring/alerts.yml`,
+- Prometheus rules: `infra/hostafrica/monitoring/alerts.yml`,
   `infra/monitoring/api-alerts.yml`
-- Blackbox modules: `infra/whogohost/monitoring/blackbox.yml`
+- Blackbox modules: `infra/hostafrica/monitoring/blackbox.yml`
 
 ## Required alerts
 

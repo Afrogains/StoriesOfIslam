@@ -1,0 +1,6 @@
+-- Legacy HostAfrica PostgreSQL app roles.
+-- Application data now lives on HostAfrica MySQL (`afroclov_StoriesOfIslam`).
+-- HostAfrica PostgreSQL is retained for Keycloak only; do not grant API
+-- application table privileges here.
+--
+-- For MySQL grants see: infra/hostafrica/mysql/hostafrica-grants.sql

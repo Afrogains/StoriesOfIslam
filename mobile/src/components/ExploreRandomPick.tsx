@@ -1,0 +1,198 @@
+import { BookOpen, Bookmark, Headphones, Shuffle } from 'lucide-react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { sectionsMeta } from '../data/catalogMeta';
+import { LISTEN_CTA_A11Y, LISTEN_CTA_LABEL, LISTEN_META_LABEL } from '../data/listenIncoming';
+import type { StoryItem } from '../types/catalog';
+import { useLibrary } from '../hooks/useLibrary';
+import { alpha, radius, sectionAccent, shadow } from '../theme/tokens';
+import {
+  Badge,
+  Body,
+  Caption,
+  GradientButton,
+  OutlineBadge,
+  OutlineButton,
+  Overline,
+  Row,
+  Small,
+  Title,
+  useTheme,
+} from './ui';
+
+function pickRandom(pool: StoryItem[], avoidId?: string | null): StoryItem | null {
+  if (!pool.length) return null;
+  if (pool.length === 1) return pool[0];
+  const candidates = avoidId ? pool.filter((story) => story.id !== avoidId) : pool;
+  const source = candidates.length ? candidates : pool;
+  return source[Math.floor(Math.random() * source.length)] ?? null;
+}
+
+type ExploreRandomPickProps = {
+  pool: StoryItem[];
+  onRead: (story: StoryItem) => void;
+  onListen: (story: StoryItem) => void;
+};
+
+/**
+ * Brief random story overview for Explore — Read now; Listen is incoming.
+ */
+export default function ExploreRandomPick({ pool, onRead, onListen }: ExploreRandomPickProps) {
+  const { colors, isDark } = useTheme();
+  const { isSaved, toggleSaved } = useLibrary();
+  const [pick, setPick] = useState<StoryItem | null>(() => pickRandom(pool));
+  const lastPoolKey = useRef('');
+
+  useEffect(() => {
+    const key = pool.map((story) => story.id).join('|');
+    if (key === lastPoolKey.current) return;
+    lastPoolKey.current = key;
+    setPick((current) => {
+      if (current && pool.some((story) => story.id === current.id)) return current;
+      return pickRandom(pool);
+    });
+  }, [pool]);
+
+  if (!pick || !pool.length) return null;
+
+  const meta = sectionsMeta[pick.sectionSlug];
+  const accent = sectionAccent(pick.sectionSlug, isDark);
+  const reshuffle = () => {
+    setPick((current) => pickRandom(pool, current?.id));
+  };
+
+  return (
+    <View
+      style={[
+        styles.wrap,
+        {
+          backgroundColor: isDark ? alpha(colors.emerald, 0.1) : colors.cardAlt,
+          borderColor: colors.border,
+        },
+        shadow('sm', isDark),
+      ]}
+      accessibilityLabel={`Discover: ${pick.title}. ${pick.summary}`}
+    >
+      <Row justify="space-between" align="center" style={styles.head}>
+        <View style={styles.headCopy}>
+          <Overline color={colors.emerald}>Discover</Overline>
+          <Small color={colors.inkMuted} style={styles.headHint} numberOfLines={2}>
+            Tap Another for a new story, then Read. Listening is incoming.
+          </Small>
+        </View>
+        <Pressable
+          onPress={reshuffle}
+          accessibilityRole="button"
+          accessibilityLabel="Show another random story"
+          style={({ pressed }) => [
+            styles.shuffleBtn,
+            {
+              backgroundColor: isDark ? alpha(colors.emerald, 0.22) : accent.surface,
+              borderColor: accent.primary,
+              opacity: pressed ? 0.85 : 1,
+            },
+          ]}
+        >
+          <Shuffle size={16} color={accent.primary} strokeWidth={2.25} />
+          <Caption color={accent.primary} style={styles.shuffleLabel}>
+            Another
+          </Caption>
+        </Pressable>
+      </Row>
+
+      <Row gap={6} style={styles.badges}>
+        <Badge label={meta.title} color={accent.badgeText} background={accent.badgeBg} />
+        <OutlineBadge label={pick.authenticityGrade} color={accent.primary} />
+      </Row>
+
+      <Row justify="space-between" align="flex-start" gap={8}>
+        <Title numberOfLines={2} style={[styles.title, styles.titleFlex]}>
+          {pick.title}
+        </Title>
+        <Pressable
+          onPress={() => toggleSaved(pick.id, pick)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isSaved(pick.id) }}
+          accessibilityLabel={
+            isSaved(pick.id) ? `Remove ${pick.title} from library` : `Save ${pick.title} to library`
+          }
+          style={styles.saveBtn}
+        >
+          <Bookmark
+            size={20}
+            color={isSaved(pick.id) ? colors.gold : colors.inkSubtle}
+            fill={isSaved(pick.id) ? colors.gold : 'transparent'}
+          />
+        </Pressable>
+      </Row>
+      <Caption color={colors.inkMuted}>
+        {pick.figureName} · {pick.honorific}
+      </Caption>
+      <Body color={colors.ink} numberOfLines={3} style={styles.summary}>
+        {pick.summary}
+      </Body>
+      <Caption color={colors.inkSubtle} style={styles.meta}>
+        {pick.durationLabel}
+        {` · ${LISTEN_META_LABEL.toLowerCase()}`}
+      </Caption>
+
+      <Row gap={8} style={styles.ctaRow} align="center">
+        <View style={styles.ctaFlex}>
+          <OutlineButton
+            label="Read"
+            icon={BookOpen}
+            size="sm"
+            onPress={() => onRead(pick)}
+            accessibilityLabel={`Read story: ${pick.title}`}
+            style={styles.ctaFill}
+          />
+        </View>
+        <View style={styles.ctaFlex}>
+          <GradientButton
+            label={LISTEN_CTA_LABEL}
+            icon={Headphones}
+            gradient={accent.accentGradient}
+            size="sm"
+            onPress={() => onListen(pick)}
+            accessibilityLabel={LISTEN_CTA_A11Y}
+            style={styles.ctaFill}
+          />
+        </View>
+      </Row>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: {
+    borderWidth: 1,
+    borderRadius: radius.xl,
+    padding: 16,
+    marginBottom: 16,
+    gap: 6,
+  },
+  head: { marginBottom: 8, alignItems: 'flex-start', gap: 10 },
+  headCopy: { flex: 1, minWidth: 0, paddingRight: 8, gap: 2 },
+  headHint: { lineHeight: 17 },
+  shuffleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexShrink: 0,
+  },
+  shuffleLabel: { fontWeight: '700' },
+  badges: { marginBottom: 6, flexWrap: 'wrap' },
+  title: { marginTop: 2, fontSize: 18, lineHeight: 24 },
+  titleFlex: { flex: 1, minWidth: 0 },
+  saveBtn: { padding: 4, marginTop: 2 },
+  summary: { marginTop: 6, lineHeight: 20 },
+  meta: { marginTop: 4 },
+  ctaRow: { marginTop: 12, alignItems: 'stretch' },
+  ctaFlex: { flex: 1, minWidth: 0 },
+  ctaFill: { width: '100%' },
+});
