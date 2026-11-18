@@ -33,13 +33,15 @@ Once `HOSTAFRICA_FTP_USER` / `HOSTAFRICA_FTP_PASSWORD` are available:
 ```bash
 # SPA → storiesofislam.app document root
 HOSTAFRICA_FTP_HOST=storiesofislam.app \
-HOSTAFRICA_FTP_REMOTE_DIR=/public_html \
+HOSTAFRICA_FTP_HOST=102.68.98.148 \
+HOSTAFRICA_FTP_REMOTE_DIR=/domains/storiesofislam.app/public_html \
   bash scripts/hostafrica-ftp-deploy-frontend.sh
 
 # Optional: legacy Afroclovers apex redirect
 ZIP=deploy/afroclovers-apex-redirect.zip \
 HOSTAFRICA_FTP_HOST=afroclovers.com.ng \
-HOSTAFRICA_FTP_REMOTE_DIR=/public_html \
+HOSTAFRICA_FTP_HOST=102.68.98.148 \
+HOSTAFRICA_FTP_REMOTE_DIR=/domains/storiesofislam.app/public_html \
   bash scripts/hostafrica-ftp-deploy-frontend.sh
 ```
 
@@ -50,8 +52,7 @@ Adjust `HOSTAFRICA_FTP_REMOTE_DIR` to match the addon-domain folder shown in cPa
 ```bash
 cd ~/StoriesOfIslam
 git pull origin cursor/cloud-agent-1789504843135-ly7pe
-PUBLIC_HTML="$HOME/storiesofislam.app" bash scripts/hostafrica-deploy-frontend-on-server.sh
-# path may be $HOME/public_html depending on how the addon domain was created
+PUBLIC_HTML="$HOME/domains/storiesofislam.app/public_html" bash scripts/hostafrica-deploy-frontend-on-server.sh
 ```
 
 ## Upload via cPanel File Manager

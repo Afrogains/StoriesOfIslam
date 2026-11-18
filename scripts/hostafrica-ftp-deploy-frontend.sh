@@ -13,9 +13,9 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ZIP="${ZIP:-$ROOT/deploy/storiesofislam-web-frontend.zip}"
-HOST="${HOSTAFRICA_FTP_HOST:-storiesofislam.app}"
+HOST="${HOSTAFRICA_FTP_HOST:-102.68.98.148}"
 PORT="${HOSTAFRICA_FTP_PORT:-21}"
-REMOTE_DIR="${HOSTAFRICA_FTP_REMOTE_DIR:-/public_html}"
+REMOTE_DIR="${HOSTAFRICA_FTP_REMOTE_DIR:-/domains/storiesofislam.app/public_html}"
 SECURE="${HOSTAFRICA_FTP_SECURE:-true}"
 USER="${HOSTAFRICA_FTP_USER:-}"
 PASS="${HOSTAFRICA_FTP_PASSWORD:-}"
