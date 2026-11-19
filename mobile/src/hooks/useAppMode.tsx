@@ -1,12 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { AppMode, ColorScheme } from '../theme/tokens';
+import type { ColorScheme } from '../theme/tokens';
 
 type AppModeContextValue = {
-  mode: AppMode;
-  isKids: boolean;
-  setMode: (mode: AppMode) => void;
-  toggleMode: () => void;
   colorScheme: ColorScheme;
   isDark: boolean;
   setColorScheme: (scheme: ColorScheme) => void;
@@ -15,39 +11,33 @@ type AppModeContextValue = {
 
 const AppModeContext = createContext<AppModeContextValue | null>(null);
 
+const STORAGE_KEY = 'stories.colorScheme';
+
 export function AppModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<AppMode>('standard');
-  const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
+  // Default: Dark Mode (Deep Emerald / Midnight)
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    void AsyncStorage.multiGet(['stories.mode', 'stories.colorScheme']).then(
-      ([[, storedMode], [, storedScheme]]) => {
-        if (storedMode === 'standard' || storedMode === 'kids') setMode(storedMode);
-        if (storedScheme === 'light' || storedScheme === 'dark') setColorScheme(storedScheme);
-      },
-    );
+    void AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
+      if (stored === 'light' || stored === 'dark') setColorScheme(stored);
+      setHydrated(true);
+    });
   }, []);
 
   useEffect(() => {
-    void AsyncStorage.setItem('stories.mode', mode);
-  }, [mode]);
-
-  useEffect(() => {
-    void AsyncStorage.setItem('stories.colorScheme', colorScheme);
-  }, [colorScheme]);
+    if (!hydrated) return;
+    void AsyncStorage.setItem(STORAGE_KEY, colorScheme);
+  }, [colorScheme, hydrated]);
 
   const value = useMemo<AppModeContextValue>(
     () => ({
-      mode,
-      isKids: mode === 'kids',
-      setMode,
-      toggleMode: () => setMode((current) => (current === 'kids' ? 'standard' : 'kids')),
       colorScheme,
       isDark: colorScheme === 'dark',
       setColorScheme,
       toggleColorScheme: () => setColorScheme((curr) => (curr === 'dark' ? 'light' : 'dark')),
     }),
-    [mode, colorScheme],
+    [colorScheme],
   );
 
   return <AppModeContext.Provider value={value}>{children}</AppModeContext.Provider>;

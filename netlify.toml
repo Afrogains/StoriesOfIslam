@@ -1,0 +1,11 @@
+# Connect this GitHub repo in Netlify to publish the production Expo web export.
+# Existing files (legal HTML, /sources, /_expo, /assets) are served as-is;
+# remaining paths fall through to the SPA.
+[build]
+  command = "bash scripts/package-web-frontend.sh"
+  publish = "mobile/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

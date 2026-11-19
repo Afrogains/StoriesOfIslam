@@ -4,7 +4,6 @@ export const CategorySlugSchema = z.enum([
   'qisas-al-anbiya',
   'seerah-shamail',
   'sahabah',
-  'gleanings',
 ]);
 
 export const AuthenticityGradeSchema = z.enum(['sahih', 'hasan', 'athar', 'historical']);

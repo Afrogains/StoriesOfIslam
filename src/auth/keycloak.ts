@@ -3,6 +3,7 @@ import jwt, { type JwtHeader, type JwtPayload, type SigningKeyCallback } from 'j
 import jwksClient from 'jwks-rsa';
 import { getEnv } from '../config/env';
 import { HttpError } from '../http/errors';
+import { isLocalToken, verifyAccessToken } from './localAuth';
 
 export interface AuthenticatedUser {
   subject: string;
@@ -72,6 +73,18 @@ export const optionalAuth: RequestHandler = async (
     return;
   }
   try {
+    if (isLocalToken(token)) {
+      const claims = verifyAccessToken(token);
+      request.user = {
+        subject: String(claims.sub),
+        email: typeof claims.email === 'string' ? claims.email : undefined,
+        displayName: typeof claims.name === 'string' ? claims.name : undefined,
+        roles: [],
+        token,
+      };
+      next();
+      return;
+    }
     const claims = await verifyToken(token);
     const realmAccess = claims.realm_access as { roles?: string[] } | undefined;
     request.user = {

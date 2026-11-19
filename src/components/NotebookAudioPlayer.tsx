@@ -1,2 +1,5 @@
-export { default } from '../../mobile/src/components/NotebookAudioPlayer';
-export * from '../../mobile/src/components/NotebookAudioPlayer';
+/**
+ * @deprecated Podcast/NotebookLM player removed.
+ * Use `NamesAudioPlayer` or `SynchronizedAudioReader` with `mobile/src/tts`.
+ */
+export {};

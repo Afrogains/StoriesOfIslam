@@ -1,169 +1,273 @@
-import * as AuthSession from 'expo-auth-session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
-import * as WebBrowser from 'expo-web-browser';
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
 import { Platform } from 'react-native';
-import { appConfig } from '../config';
+import { ApiError, apiRequest } from '../services/api';
+import {
+  createDeviceAccount,
+  findDeviceAccount,
+  removeDeviceAccount,
+  verifyDeviceAccount,
+} from './deviceAccounts';
+import { normalizeEmail, validateRegistration, validateSignIn } from './validation';
 
-WebBrowser.maybeCompleteAuthSession();
+const SESSION_KEY = 'stories.auth.session.v2';
 
-const TOKEN_KEY = 'stories.keycloak.tokens.v1';
+export type AuthMode = 'server' | 'device';
 
-interface StoredTokens {
-  accessToken: string;
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type Session = {
+  user: AuthUser;
+  mode: AuthMode;
+  accessToken?: string;
   refreshToken?: string;
-  expiresAt: number;
-}
+  expiresAt?: number;
+};
+
+type ServerSession = {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+};
+
+export type AuthResult = { mode: AuthMode };
 
 interface AuthContextValue {
+  user: AuthUser | null;
+  mode: AuthMode | null;
+  /** Stable key for per-account local data (quiz results, game scores). */
+  accountKey: string | null;
   accessToken: string | null;
   authenticated: boolean;
   loading: boolean;
-  signIn: () => Promise<void>;
+  register: (input: { name: string; email: string; password: string }) => Promise<AuthResult>;
+  signIn: (input: { email: string; password: string }) => Promise<AuthResult>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
   getAccessToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const discovery = useMemo<AuthSession.DiscoveryDocument>(() => {
-    const issuer = appConfig.keycloakIssuer;
-    const protocol = `${issuer}/protocol/openid-connect`;
-    return {
-      authorizationEndpoint: `${protocol}/auth`,
-      tokenEndpoint: `${protocol}/token`,
-      revocationEndpoint: `${protocol}/revoke`,
-      endSessionEndpoint: `${protocol}/logout`,
-      userInfoEndpoint: `${protocol}/userinfo`,
-    };
-  }, []);
-  const redirectUri = AuthSession.makeRedirectUri({
-    scheme: 'storiesofislam',
-    path: 'oauth/callback',
-  });
-  const [tokens, setTokens] = useState<StoredTokens | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [request, result, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId: appConfig.keycloakClientId,
-      redirectUri,
-      scopes: ['openid', 'profile', 'email', 'offline_access'],
-      usePKCE: true,
-    },
-    discovery,
-  );
+/** The server is "unavailable" when the request never got a usable answer. */
+function serverUnavailable(error: unknown): boolean {
+  if (!(error instanceof ApiError)) return true;
+  return error.status === 404 || error.status === 408 || error.status >= 500;
+}
 
-  const persist = useCallback(async (value: StoredTokens | null) => {
-    setTokens(value);
-    // Browser sessions intentionally remain memory-only to avoid exposing a
-    // refresh token to localStorage. Native tokens use encrypted keychain storage.
-    if (Platform.OS === 'web') return;
-    if (value) {
-      await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(value), {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-      });
-    } else {
-      await SecureStore.deleteItemAsync(TOKEN_KEY);
-    }
+function friendlyServerError(error: unknown): Error {
+  if (error instanceof ApiError) {
+    if (error.code === 'validation_error') return new Error('Please check your details and try again.');
+    return new Error(error.message);
+  }
+  return new Error('Something went wrong. Please try again.');
+}
+
+// Web keeps server tokens in memory only so refresh tokens never land in localStorage.
+async function readStoredSession(): Promise<Session | null> {
+  const raw =
+    Platform.OS === 'web' ? await AsyncStorage.getItem(SESSION_KEY) : await SecureStore.getItemAsync(SESSION_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as Session;
+  } catch {
+    return null;
+  }
+}
+
+async function writeStoredSession(session: Session | null): Promise<void> {
+  if (Platform.OS === 'web') {
+    if (session?.mode === 'device') await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    else await AsyncStorage.removeItem(SESSION_KEY);
+    return;
+  }
+  if (session) {
+    await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(session), {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
+  } else {
+    await SecureStore.deleteItemAsync(SESSION_KEY);
+  }
+}
+
+function fromServer(data: ServerSession): Session {
+  return {
+    user: data.user,
+    mode: 'server',
+    accessToken: data.accessToken,
+    refreshToken: data.refreshToken,
+    expiresAt: Date.now() + data.expiresIn * 1000,
+  };
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const sessionRef = useRef<Session | null>(null);
+  const refreshing = useRef<Promise<string | null> | null>(null);
+
+  const persist = useCallback(async (next: Session | null) => {
+    sessionRef.current = next;
+    setSession(next);
+    await writeStoredSession(next).catch(() => undefined);
   }, []);
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      setLoading(false);
-      return;
-    }
-    void SecureStore.getItemAsync(TOKEN_KEY)
-      .then((raw) => {
-        if (!raw) return;
-        const restored = JSON.parse(raw) as StoredTokens;
-        setTokens(restored);
+    void readStoredSession()
+      .then((stored) => {
+        sessionRef.current = stored;
+        setSession(stored);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    if (result?.type !== 'success' || !discovery || !request?.codeVerifier) return;
-    void AuthSession.exchangeCodeAsync(
-      {
-        clientId: appConfig.keycloakClientId,
-        code: result.params.code,
-        redirectUri,
-        extraParams: { code_verifier: request.codeVerifier },
-      },
-      discovery,
-    ).then((response) =>
-      persist({
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        expiresAt: Date.now() + (response.expiresIn ?? 600) * 1000,
-      }),
-    );
-  }, [result, discovery, request?.codeVerifier, redirectUri, persist]);
+  const register = useCallback<AuthContextValue['register']>(
+    async (input) => {
+      const details = validateRegistration(input);
+      try {
+        const response = await apiRequest<{ data: ServerSession }>('/v1/auth/register', {
+          method: 'POST',
+          body: JSON.stringify(details),
+        });
+        await persist(fromServer(response.data));
+        return { mode: 'server' };
+      } catch (error) {
+        if (!serverUnavailable(error)) throw friendlyServerError(error);
+      }
+      const account = await createDeviceAccount(details);
+      await persist({ user: { id: account.id, name: account.name, email: account.email }, mode: 'device' });
+      return { mode: 'device' };
+    },
+    [persist],
+  );
 
-  const refresh = useCallback(async (): Promise<string | null> => {
-    if (!tokens?.refreshToken || !discovery) return null;
-    try {
-      const response = await AuthSession.refreshAsync(
-        {
-          clientId: appConfig.keycloakClientId,
-          refreshToken: tokens.refreshToken,
-        },
-        discovery,
+  const signIn = useCallback<AuthContextValue['signIn']>(
+    async (input) => {
+      const { email, password } = validateSignIn(input);
+      let serverError: unknown;
+      try {
+        const response = await apiRequest<{ data: ServerSession }>('/v1/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+        });
+        await persist(fromServer(response.data));
+        await removeDeviceAccount(email).catch(() => undefined);
+        return { mode: 'server' };
+      } catch (error) {
+        serverError = error;
+      }
+
+      const local = await verifyDeviceAccount(email, password);
+      if (local && !serverUnavailable(serverError)) {
+        // Created offline earlier and the server is now reachable: move it to the server.
+        try {
+          const response = await apiRequest<{ data: ServerSession }>('/v1/auth/register', {
+            method: 'POST',
+            body: JSON.stringify({ name: local.name, email, password }),
+          });
+          await persist(fromServer(response.data));
+          await removeDeviceAccount(email).catch(() => undefined);
+          return { mode: 'server' };
+        } catch {
+          // Fall through to a device session; the user still gets in.
+        }
+      }
+      if (local) {
+        await persist({ user: { id: local.id, name: local.name, email: local.email }, mode: 'device' });
+        return { mode: 'device' };
+      }
+      if (!serverUnavailable(serverError)) throw friendlyServerError(serverError);
+      const known = await findDeviceAccount(email);
+      throw new Error(
+        known
+          ? 'Email or password is incorrect.'
+          : 'Can’t reach the server right now, and this email has no account on this device yet. Create an account to continue offline.',
       );
-      const next = {
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken ?? tokens.refreshToken,
-        expiresAt: Date.now() + (response.expiresIn ?? 600) * 1000,
-      };
+    },
+    [persist],
+  );
+
+  const refreshAccess = useCallback(async (): Promise<string | null> => {
+    const current = sessionRef.current;
+    if (!current?.refreshToken) return null;
+    try {
+      const response = await apiRequest<{ data: ServerSession }>('/v1/auth/refresh', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken: current.refreshToken }),
+      });
+      const next = fromServer(response.data);
       await persist(next);
-      return next.accessToken;
-    } catch {
-      await persist(null);
+      return next.accessToken ?? null;
+    } catch (error) {
+      if (!serverUnavailable(error)) await persist(null);
       return null;
     }
-  }, [tokens, discovery, persist]);
+  }, [persist]);
 
   const getAccessToken = useCallback(async (): Promise<string | null> => {
-    if (!tokens) return null;
-    if (tokens.expiresAt - Date.now() > 60_000) return tokens.accessToken;
-    return refresh();
-  }, [tokens, refresh]);
-
-  const signIn = useCallback(async () => {
-    if (!request) throw new Error('Authentication discovery is not ready');
-    await promptAsync();
-  }, [request, promptAsync]);
+    const current = sessionRef.current;
+    if (current?.mode !== 'server' || !current.accessToken) return null;
+    if ((current.expiresAt ?? 0) - Date.now() > 60_000) return current.accessToken;
+    refreshing.current ??= refreshAccess().finally(() => {
+      refreshing.current = null;
+    });
+    return refreshing.current;
+  }, [refreshAccess]);
 
   const signOut = useCallback(async () => {
-    const token = tokens?.accessToken;
+    const current = sessionRef.current;
     await persist(null);
-    if (token && discovery) {
-      await AuthSession.revokeAsync(
-        { token, clientId: appConfig.keycloakClientId },
-        discovery,
-      ).catch(() => undefined);
+    if (current?.mode === 'server' && current.refreshToken) {
+      await apiRequest<void>('/v1/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken: current.refreshToken }),
+      }).catch(() => undefined);
     }
-  }, [tokens?.accessToken, discovery, persist]);
+  }, [persist]);
+
+  const deleteAccount = useCallback(async () => {
+    const current = sessionRef.current;
+    if (!current) return;
+    if (current.mode === 'server') {
+      const token = await getAccessToken();
+      if (!token) throw new Error('Sign in again to delete your account.');
+      await apiRequest<void>('/v1/me', { method: 'DELETE', accessToken: token });
+    } else {
+      await removeDeviceAccount(current.user.email);
+    }
+    await persist(null);
+  }, [getAccessToken, persist]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      accessToken: tokens?.accessToken ?? null,
-      authenticated: Boolean(tokens?.accessToken),
+      user: session?.user ?? null,
+      mode: session?.mode ?? null,
+      accountKey: session ? normalizeEmail(session.user.email) : null,
+      accessToken: session?.mode === 'server' ? session.accessToken ?? null : null,
+      authenticated: Boolean(session),
       loading,
+      register,
       signIn,
       signOut,
+      deleteAccount,
       getAccessToken,
     }),
-    [tokens?.accessToken, loading, signIn, signOut, getAccessToken],
+    [session, loading, register, signIn, signOut, deleteAccount, getAccessToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

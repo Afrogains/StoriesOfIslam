@@ -4,8 +4,7 @@ export type PublicationStatus = 'draft' | 'in_review' | 'approved' | 'published'
 export type CategorySlug =
   | 'qisas-al-anbiya'
   | 'seerah-shamail'
-  | 'sahabah'
-  | 'gleanings';
+  | 'sahabah';
 
 export interface LocalizedText {
   en: string;

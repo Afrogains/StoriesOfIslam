@@ -73,10 +73,11 @@ async function processJob(job: GenerationJob): Promise<void> {
 
     await query(
       `INSERT INTO media_assets(
-        story_id,generation_job_id,bucket,object_key,mime_type,size_bytes,
+        id,story_id,generation_job_id,bucket,object_key,mime_type,size_bytes,
         checksum_sha256,duration_ms,timeline_object_key,is_public
-      ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,false)`,
+      ) VALUES(?,?,?,?,?,?,?,?,?,?,0)`,
       [
+        randomUUID(),
         job.storyId,
         job.id,
         audioObject.bucket,

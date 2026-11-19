@@ -1,5 +1,7 @@
+import { randomUUID } from 'node:crypto';
+import type { RowDataPacket } from 'mysql2/promise';
 import type { AuthenticatedUser } from '../auth/keycloak';
-import { query, transaction } from '../db/pool';
+import { asJson, query, transaction } from '../db/pool';
 import { HttpError } from '../http/errors';
 import { ensureProfile } from './userRepository';
 
@@ -7,20 +9,28 @@ export const editorialRepository = {
   async approveStory(user: AuthenticatedUser, storyId: string, changeSummary: string): Promise<void> {
     const reviewerId = await ensureProfile(user);
     await transaction(async (client) => {
-      const story = await client.query<{ snapshot: Record<string, unknown>; revision: number }>(
-        `SELECT to_jsonb(s.*) AS snapshot,revision FROM stories s WHERE id=$1 FOR UPDATE`,
+      const story = await client.query<RowDataPacket & { revision: number } & Record<string, unknown>>(
+        `SELECT * FROM stories WHERE id=? FOR UPDATE`,
         [storyId],
       );
       if (!story.rows[0]) throw new HttpError(404, 'story_not_found', 'Story was not found');
+      const row = story.rows[0];
       await client.query(
-        `INSERT INTO story_revisions(story_id,revision,snapshot,change_summary,created_by)
-         VALUES($1,$2,$3,$4,$5) ON CONFLICT(story_id,revision) DO NOTHING`,
-        [storyId, story.rows[0].revision, story.rows[0].snapshot, changeSummary, reviewerId],
+        `INSERT IGNORE INTO story_revisions(id,story_id,revision,snapshot,change_summary,created_by)
+         VALUES(?,?,?,?,?,?)`,
+        [
+          randomUUID(),
+          storyId,
+          row.revision,
+          JSON.stringify(row),
+          changeSummary,
+          reviewerId,
+        ],
       );
       await client.query(
-        `UPDATE stories SET publication_status='approved',reviewer_id=$2,
-          reviewed_at=now() WHERE id=$1`,
-        [storyId, reviewerId],
+        `UPDATE stories SET publication_status='approved',reviewer_id=?,
+          reviewed_at=UTC_TIMESTAMP(3) WHERE id=?`,
+        [reviewerId, storyId],
       );
     });
   },
@@ -28,9 +38,9 @@ export const editorialRepository = {
   async publishStory(user: AuthenticatedUser, storyId: string): Promise<void> {
     const reviewerId = await ensureProfile(user);
     const result = await query(
-      `UPDATE stories SET publication_status='published',published_at=now()
-       WHERE id=$1 AND publication_status='approved' AND reviewer_id IS NOT NULL
-         AND reviewed_at IS NOT NULL AND reviewer_id<>$2`,
+      `UPDATE stories SET publication_status='published',published_at=UTC_TIMESTAMP(3)
+       WHERE id=? AND publication_status='approved' AND reviewer_id IS NOT NULL
+         AND reviewed_at IS NOT NULL AND reviewer_id<>?`,
       [storyId, reviewerId],
     );
     if (!result.rowCount) {
@@ -50,19 +60,26 @@ export const editorialRepository = {
     bucket: string,
   ): Promise<{ storyId: string | null; timelineObjectKey: string | null }> {
     const reviewerId = await ensureProfile(user);
-    const result = await query<{ story_id: string | null; timeline_object_key: string | null }>(
-      `UPDATE media_assets SET bucket=$3,object_key=$4,public_url=$5,is_public=true,
-        approved_by=$2,approved_at=now()
-       WHERE id=$1 AND is_public=false
-       RETURNING story_id,timeline_object_key`,
-      [assetId, reviewerId, bucket, publicObjectKey, publicUrl],
+    const result = await query(
+      `UPDATE media_assets SET bucket=?,object_key=?,public_url=?,is_public=1,
+        approved_by=?,approved_at=UTC_TIMESTAMP(3)
+       WHERE id=? AND is_public=0`,
+      [bucket, publicObjectKey, publicUrl, reviewerId, assetId],
     );
-    if (!result.rows[0]) {
+    if (!result.rowCount) {
       throw new HttpError(404, 'asset_not_found', 'Draft media asset was not found');
     }
+    const row = await query<RowDataPacket & {
+      story_id: string | null;
+      timeline_object_key: string | null;
+    }>('SELECT story_id,timeline_object_key FROM media_assets WHERE id=? LIMIT 1', [assetId]);
     return {
-      storyId: result.rows[0].story_id,
-      timelineObjectKey: result.rows[0].timeline_object_key,
+      storyId: row.rows[0]?.story_id ?? null,
+      timelineObjectKey: row.rows[0]?.timeline_object_key ?? null,
     };
   },
 };
+
+export function parseStorySnapshot(value: unknown): Record<string, unknown> {
+  return asJson<Record<string, unknown>>(value, {});
+}

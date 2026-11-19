@@ -1,3 +1,2 @@
--- Compatibility entry point for local psql users.
--- The canonical, ordered production schema lives under ../migrations.
-\ir ../migrations/001_production_schema.sql
+-- Compatibility entry point. Canonical schema: ../migrations/001_production_schema.sql
+-- Apply with: npm run db:migrate

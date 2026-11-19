@@ -13,16 +13,17 @@ Environment: staging | production
 Operator:
 Date (UTC):
 
-## WhoGoHost
+## HostAfrica
 - [ ] Fresh migrations + deterministic seed evidence attached
 - [ ] Keycloak login/refresh/logout/account-deletion evidence attached
 - [ ] MinIO public/private policy probe output attached
-- [ ] Encrypted PostgreSQL dump restore drill duration + row counts
+- [ ] Encrypted HostAfrica MySQL dump restore drill duration + row counts
+- [ ] Encrypted Keycloak PostgreSQL dump restore drill duration + row counts
 - [ ] MinIO object checksum verification
 - [ ] Firewall/SSH hardening checklist signed
 
 ## API / worker
-- [ ] /health/ready green for PostgreSQL, Keycloak, MinIO, FFmpeg, providers
+- [ ] /health/ready green for MySQL, Keycloak, MinIO, FFmpeg, providers
 - [ ] Job restart durability evidence
 - [ ] Idempotent generation replay evidence
 - [ ] Rollback to previous image rehearsed
