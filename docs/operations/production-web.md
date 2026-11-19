@@ -4,10 +4,20 @@
 
 | Surface | URL | Status |
 | --- | --- | --- |
-| Website (canonical) | https://storiesofislam.app | Standalone domain; SPA zip ready |
-| Legal | https://storiesofislam.app/privacy.html (and `/terms.html`, `/support.html`, `/account-deletion.html`) | In the SPA zip |
+| Website (canonical) | https://storiesofislam.app | Hosted on HostAfrica (`/domains/storiesofislam.app/public_html`); **domain must be registered** at a registrar (currently NXDOMAIN) |
+| Interim public site | https://afroclovers.com.ng | Live SPA for everyone until `.app` DNS delegates |
+| Legal | `/privacy.html`, `/terms.html`, `/support.html`, `/account-deletion.html` on either host | Deployed |
 | API | https://storiesofislam.app | Same host once the Node.js App / reverse proxy is attached |
-| Legacy | https://afroclovers.com.ng | Optional redirect package → storiesofislam.app |
+
+### DNS (HostAfrica zone already correct)
+
+DirectAdmin zone for `storiesofislam.app` already has:
+
+- `NS` → `dan1.host-ww.net`, `dan2.host-ww.net`
+- `A` `@` → `102.68.98.148`
+- `A` `www` → `102.68.98.148`
+
+Adding the domain in DirectAdmin does **not** register it. Until `storiesofislam.app` is purchased and those nameservers (or A records) are set at the registrar, public resolvers return NXDOMAIN.
 
 ## Package
 
