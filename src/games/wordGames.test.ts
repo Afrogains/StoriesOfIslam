@@ -24,7 +24,7 @@ import {
 } from '../../mobile/src/games/shared/progress';
 import { canSpell, letterUnion, minimalLetterCover, normalizeWord, seededRandom } from '../../mobile/src/games/shared/wordUtils';
 import { generateCrosswordGrid, renderGrid } from '../../mobile/src/games/wordscapes/gridGenerator';
-import { extendPath, hitNode, wheelNodes } from '../../mobile/src/games/wordscapes/wheelGeometry';
+import { extendPath, extendPathAlong, hitNode, wheelNodes } from '../../mobile/src/games/wordscapes/wheelGeometry';
 import {
   buildCells,
   cellKey,
@@ -291,6 +291,17 @@ describe('letter wheel geometry', () => {
     expect(path).toEqual([0, 3]);
     expect(extendPath(path, 0)).toEqual([0]);
     expect(extendPath([0, 3, 4], 0)).toEqual([0, 3, 4]);
+  });
+
+  it('picks up letters between sparse pointer samples', () => {
+    const nodes = wheelNodes(6, 300, 30);
+    // One jump from node 0 to node 2 passes over node 1 on the rim.
+    const midway = { x: (nodes[0].x + nodes[1].x) / 2, y: (nodes[0].y + nodes[1].y) / 2 };
+    let path = extendPathAlong([], null, nodes[0], nodes, 30);
+    path = extendPathAlong(path, nodes[0], midway, nodes, 30);
+    path = extendPathAlong(path, midway, nodes[1], nodes, 30);
+    path = extendPathAlong(path, nodes[1], nodes[2], nodes, 30);
+    expect(path).toEqual([0, 1, 2]);
   });
 });
 

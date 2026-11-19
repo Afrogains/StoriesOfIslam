@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, type GestureResponderEvent } from 'react-native';
+import { Platform, StyleSheet, View, type GestureResponderEvent, type ViewStyle } from 'react-native';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 import { Title, useTheme } from '../../components/ui';
 import { alpha } from '../../theme/tokens';
-import { extendPath, hitNode, wheelNodes, type Point } from './wheelGeometry';
+import { extendPathAlong, wheelNodes, type Point } from './wheelGeometry';
 
 /**
  * Swipe across letters to build a word; a line follows the finger between them.
@@ -28,13 +28,15 @@ export default function LetterWheel({
   const [path, setPath] = useState<number[]>([]);
   const [finger, setFinger] = useState<Point | null>(null);
   const pathRef = useRef<number[]>([]);
+  const lastPointRef = useRef<Point | null>(null);
 
   const wordFor = (indexes: number[]) => indexes.map((index) => letters[index]).join('');
 
   const track = (event: GestureResponderEvent) => {
     const point = { x: event.nativeEvent.locationX, y: event.nativeEvent.locationY };
     setFinger(point);
-    const next = extendPath(pathRef.current, hitNode(point, nodes, nodeRadius * 1.05));
+    const next = extendPathAlong(pathRef.current, lastPointRef.current, point, nodes, nodeRadius * 1.05);
+    lastPointRef.current = point;
     if (next.length !== pathRef.current.length || next.some((node, index) => node !== pathRef.current[index])) {
       if (next.length > pathRef.current.length) onLetter?.();
       pathRef.current = next;
@@ -46,6 +48,7 @@ export default function LetterWheel({
   const finish = () => {
     const word = wordFor(pathRef.current);
     pathRef.current = [];
+    lastPointRef.current = null;
     setPath([]);
     setFinger(null);
     onPathChange('');
@@ -58,7 +61,7 @@ export default function LetterWheel({
 
   return (
     <View
-      style={[styles.wheel, { width: size, height: size, borderRadius: size / 2, backgroundColor: isDark ? colors.card : '#FFFFFF', borderColor: colors.border }]}
+      style={[styles.wheel, webNoSelect, { width: size, height: size, borderRadius: size / 2, backgroundColor: isDark ? colors.card : '#FFFFFF', borderColor: colors.border }]}
       onStartShouldSetResponder={() => true}
       onMoveShouldSetResponder={() => true}
       onResponderTerminationRequest={() => false}
@@ -102,6 +105,10 @@ export default function LetterWheel({
     </View>
   );
 }
+
+// A text selection starting mid-drag makes react-native-web cancel the responder, and
+// touch scrolling would steal the swipe in mobile browsers.
+const webNoSelect = Platform.OS === 'web' ? ({ userSelect: 'none', touchAction: 'none', cursor: 'pointer' } as ViewStyle) : null;
 
 const styles = StyleSheet.create({
   wheel: { borderWidth: 1, alignSelf: 'center' },

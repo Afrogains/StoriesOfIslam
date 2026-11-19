@@ -24,6 +24,27 @@ export function hitNode(point: Point, nodes: readonly Point[], hitRadius: number
 }
 
 /**
+ * Walks the segment between two pointer samples so a fast swipe still picks up every
+ * letter it crosses, even when the platform reports only sparse move events.
+ */
+export function extendPathAlong(
+  path: readonly number[],
+  from: Point | null,
+  to: Point,
+  nodes: readonly Point[],
+  hitRadius: number,
+): number[] {
+  if (!from) return extendPath(path, hitNode(to, nodes, hitRadius));
+  const steps = Math.max(1, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y) / (hitRadius / 2)));
+  let next = [...path];
+  for (let step = 1; step <= steps; step += 1) {
+    const t = step / steps;
+    next = extendPath(next, hitNode({ x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t }, nodes, hitRadius));
+  }
+  return next;
+}
+
+/**
  * Extends or rewinds a swipe path. Entering a new letter appends it; sliding back onto
  * the previous letter removes the last one, which is how players fix a wrong turn.
  */
