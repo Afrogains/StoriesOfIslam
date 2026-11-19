@@ -37,6 +37,9 @@ import { drawGameQuestions, type GameQuestion } from '../data/quiz';
 import { scoreAnswer, useGameStats, type GameSection } from '../hooks/useGameStats';
 import { useMobileLayout } from '../hooks/useMobileLayout';
 import { useQuizResults } from '../hooks/useQuizResults';
+import WordBubblesGame from '../games/bubbles/WordBubblesGame';
+import WordGamesPicker, { type WordGameKey } from '../games/WordGamesPicker';
+import WordscapesGame from '../games/wordscapes/WordscapesGame';
 import { alpha, brandGradients, radius, sectionAccent, shadow } from '../theme/tokens';
 import type { SectionSlug } from '../types/catalog';
 
@@ -90,6 +93,7 @@ export default function GameScreen() {
   const [fiftyUsed, setFiftyUsed] = useState(false);
   const [hidden, setHidden] = useState<number[]>([]);
   const [newBest, setNewBest] = useState(false);
+  const [wordGame, setWordGame] = useState<WordGameKey | null>(null);
 
   const question = questions[position];
   const answered = picked !== null || timedOut;
@@ -190,10 +194,10 @@ export default function GameScreen() {
             <View style={[styles.heroIcon, { backgroundColor: alpha(colors.gold, 0.14) }]}>
               <Gamepad2 size={28} color={colors.gold} />
             </View>
-            <Title style={styles.center}>A quiz game for registered readers</Title>
+            <Title style={styles.center}>Games for registered readers</Title>
             <Body style={styles.center}>
-              Ten timed questions drawn from the Prophets, the Quran’s stories, the Seerah and the Companions. Answer
-              fast for bonus points, build streaks, and beat your best score.
+              Ten timed questions drawn from the Prophets, the Quran’s stories, the Seerah and the Companions, plus two
+              word puzzles, Prophetic Word Bubbles and Prophetic Wordscapes, built from the stories of the Prophets.
             </Body>
             <GradientButton
               label="Create a free account"
@@ -213,6 +217,15 @@ export default function GameScreen() {
     );
   }
 
+  if (wordGame) {
+    const WordGame = wordGame === 'bubbles' ? WordBubblesGame : WordscapesGame;
+    return (
+      <View style={[styles.screen, { backgroundColor: colors.paper }]}>
+        <WordGame onExit={() => setWordGame(null)} contentStyle={screenContent} />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.paper }]}>
       <ScrollView ref={scrollRef} contentContainerStyle={[styles.content, screenContent]} showsVerticalScrollIndicator={false}>
@@ -224,6 +237,11 @@ export default function GameScreen() {
               <StatTile label="Rounds played" value={String(stats.games)} icon={Gamepad2} color={colors.emerald} />
               <StatTile label="Chapters checked" value={String(summary.chapters)} icon={Sparkles} color={colors.azure} />
             </Row>
+
+            <Overline style={styles.label}>Word puzzles from the Prophets’ stories</Overline>
+            <WordGamesPicker onSelect={setWordGame} />
+
+            <Overline style={styles.label}>Knowledge Quest</Overline>
 
             <Overline style={styles.label}>Choose a topic</Overline>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pills}>

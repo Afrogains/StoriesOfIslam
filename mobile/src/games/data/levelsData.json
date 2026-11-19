@@ -1,0 +1,874 @@
+{
+  "schemaVersion": 1,
+  "wordBubbles": {
+    "levels": [
+      {
+        "levelId": "bb-adam",
+        "prophetTheme": "Prophet Adam",
+        "storyClue": "Shaped from clay, taught the names of all things, and tested by a single tree in the Garden.",
+        "availableLetters": [
+          "A",
+          "A",
+          "A",
+          "B",
+          "C",
+          "E",
+          "E",
+          "E",
+          "E",
+          "E",
+          "I",
+          "I",
+          "L",
+          "L",
+          "L",
+          "M",
+          "N",
+          "R",
+          "S",
+          "S",
+          "S",
+          "T",
+          "V",
+          "Y"
+        ],
+        "targetWords": [
+          {
+            "word": "CLAY",
+            "clue": "What Allah created Adam from, like pottery (55:14)"
+          },
+          {
+            "word": "NAMES",
+            "clue": "Allah taught Adam all of these, then showed the angels (2:31)"
+          },
+          {
+            "word": "IBLIS",
+            "clue": "He refused to bow out of arrogance (2:34)"
+          },
+          {
+            "word": "TREE",
+            "clue": "'Do not approach this...' (2:35)"
+          },
+          {
+            "word": "LEAVES",
+            "clue": "Adam and Hawwa covered themselves with these of the Garden (7:22)"
+          }
+        ],
+        "postLevelTakeaway": "Iblis argued; Adam and Hawwa repented at once: 'Our Lord, we have wronged ourselves' (7:23). The door of repentance is never locked to the one who turns back.",
+        "source": "Quran 2:30–37, 7:11–25, 15:26–33"
+      },
+      {
+        "levelId": "bb-nuh",
+        "prophetTheme": "Prophet Nuh",
+        "storyClue": "For 950 years he called his people to Allah. Then came the command: build the ship under Our eyes.",
+        "availableLetters": [
+          "A",
+          "A",
+          "D",
+          "D",
+          "E",
+          "F",
+          "I",
+          "I",
+          "J",
+          "K",
+          "L",
+          "N",
+          "O",
+          "O",
+          "O",
+          "P",
+          "R",
+          "R",
+          "S",
+          "U",
+          "V"
+        ],
+        "targetWords": [
+          {
+            "word": "ARK",
+            "clue": "The vessel Nuh built by revelation (11:37)"
+          },
+          {
+            "word": "FLOOD",
+            "clue": "It seized the people while they were wrongdoers (29:14)"
+          },
+          {
+            "word": "OVEN",
+            "clue": "When it gushed forth, the time had come (11:40)"
+          },
+          {
+            "word": "PAIRS",
+            "clue": "Of every kind, two were carried aboard (11:40)"
+          },
+          {
+            "word": "JUDI",
+            "clue": "The mountain where the ark came to rest (11:44)"
+          }
+        ],
+        "postLevelTakeaway": "Nuh's own son refused to board and was drowned (11:42–43). Salvation comes through faith and obedience, never through family name alone.",
+        "source": "Quran 11:25–49, 29:14, 54:9–15"
+      },
+      {
+        "levelId": "bb-ibrahim",
+        "prophetTheme": "Prophet Ibrahim",
+        "storyClue": "A young man broke his people's idols, left the biggest standing, and was thrown into a blazing fire.",
+        "availableLetters": [
+          "A",
+          "A",
+          "C",
+          "D",
+          "E",
+          "E",
+          "F",
+          "I",
+          "I",
+          "L",
+          "L",
+          "M",
+          "O",
+          "O",
+          "O",
+          "R",
+          "R",
+          "S",
+          "X"
+        ],
+        "targetWords": [
+          {
+            "word": "IDOLS",
+            "clue": "He broke them to pieces, all but the largest (21:58)"
+          },
+          {
+            "word": "AXE",
+            "clue": "Left hanging on the largest idol, as Ibn Kathir narrates"
+          },
+          {
+            "word": "FIRE",
+            "clue": "His people built a great blaze to burn him (21:68)"
+          },
+          {
+            "word": "COOL",
+            "clue": "What Allah commanded the fire to become (21:69)"
+          },
+          {
+            "word": "RAM",
+            "clue": "The great sacrifice that ransomed his son (37:107)"
+          }
+        ],
+        "postLevelTakeaway": "'O fire, be coolness and safety upon Ibrahim' (21:69). Whoever stands for Tawhid and relies on Allah is never abandoned by Him.",
+        "source": "Quran 21:51–70, 37:99–111; Ibn Kathir, Stories of the Prophets"
+      },
+      {
+        "levelId": "bb-yusuf",
+        "prophetTheme": "Prophet Yusuf",
+        "storyClue": "Eleven stars, the sun and the moon bowed to him in a dream, and his brothers grew jealous.",
+        "availableLetters": [
+          "A",
+          "D",
+          "E",
+          "E",
+          "F",
+          "H",
+          "I",
+          "I",
+          "L",
+          "L",
+          "L",
+          "M",
+          "N",
+          "O",
+          "O",
+          "P",
+          "R",
+          "R",
+          "R",
+          "S",
+          "S",
+          "T",
+          "W",
+          "W"
+        ],
+        "targetWords": [
+          {
+            "word": "DREAM",
+            "clue": "He told his father of stars, sun and moon bowing (12:4)"
+          },
+          {
+            "word": "WELL",
+            "clue": "His brothers threw him into its depths (12:15)"
+          },
+          {
+            "word": "WOLF",
+            "clue": "The brothers claimed it had eaten him (12:17)"
+          },
+          {
+            "word": "SHIRT",
+            "clue": "Stained with false blood, later restored his father's sight (12:18, 12:96)"
+          },
+          {
+            "word": "PRISON",
+            "clue": "'My Lord, it is dearer to me than what they invite me to' (12:33)"
+          }
+        ],
+        "postLevelTakeaway": "Through the well, slavery and prison Yusuf kept patience and chastity. At the height of power he forgave: 'No blame upon you today' (12:92).",
+        "source": "Quran, Surah Yusuf (12)"
+      },
+      {
+        "levelId": "bb-musa",
+        "prophetTheme": "Prophet Musa",
+        "storyClue": "A baby set afloat on the river grew up to stand before a tyrant with nothing but a staff.",
+        "availableLetters": [
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "E",
+          "E",
+          "F",
+          "F",
+          "H",
+          "H",
+          "K",
+          "M",
+          "N",
+          "N",
+          "N",
+          "O",
+          "P",
+          "R",
+          "S",
+          "S",
+          "S",
+          "T"
+        ],
+        "targetWords": [
+          {
+            "word": "STAFF",
+            "clue": "'It is my staff; I lean upon it' (20:18)"
+          },
+          {
+            "word": "SNAKE",
+            "clue": "What the staff became when he threw it down (20:20)"
+          },
+          {
+            "word": "PHARAOH",
+            "clue": "He claimed, 'I am your lord, most high' (79:24)"
+          },
+          {
+            "word": "SEA",
+            "clue": "Struck with the staff, it parted like great mountains (26:63)"
+          },
+          {
+            "word": "MANNA",
+            "clue": "Sent down with quails to feed Bani Isra'il (2:57)"
+          }
+        ],
+        "postLevelTakeaway": "With the sea ahead and Pharaoh behind, Musa said: 'No! My Lord is with me; He will guide me' (26:62). Certainty in Allah opens ways where none appear.",
+        "source": "Quran 20:9–79, 26:52–68, 2:57"
+      },
+      {
+        "levelId": "bb-yunus",
+        "prophetTheme": "Prophet Yunus",
+        "storyClue": "He left his people in anger and boarded a laden ship. The lots were cast, and they fell against him.",
+        "availableLetters": [
+          "A",
+          "D",
+          "E",
+          "E",
+          "E",
+          "E",
+          "G",
+          "H",
+          "H",
+          "H",
+          "H",
+          "I",
+          "I",
+          "L",
+          "N",
+          "N",
+          "O",
+          "O",
+          "P",
+          "R",
+          "R",
+          "S",
+          "S",
+          "U",
+          "V",
+          "W"
+        ],
+        "targetWords": [
+          {
+            "word": "SHIP",
+            "clue": "Fully laden, he fled to it (37:140)"
+          },
+          {
+            "word": "WHALE",
+            "clue": "It swallowed him while he was blameworthy (37:142)"
+          },
+          {
+            "word": "SHORE",
+            "clue": "He was cast onto it, ill, on open land (37:145)"
+          },
+          {
+            "word": "GOURD",
+            "clue": "A plant Allah caused to grow over him (37:146)"
+          },
+          {
+            "word": "NINEVEH",
+            "clue": "His city, whose people believed and were spared (10:98), as Ibn Kathir names it"
+          }
+        ],
+        "postLevelTakeaway": "From three darknesses Yunus called: 'There is no god but You, glory be to You; I was among the wrongdoers' (21:87). No one is too far gone to call upon Allah.",
+        "source": "Quran 37:139–148, 21:87–88, 10:98"
+      },
+      {
+        "levelId": "bb-isa",
+        "prophetTheme": "Prophet Isa",
+        "storyClue": "Born without a father to a chaste mother, he spoke as an infant to defend her honour.",
+        "availableLetters": [
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "C",
+          "D",
+          "D",
+          "E",
+          "E",
+          "I",
+          "L",
+          "L",
+          "L",
+          "M",
+          "M",
+          "M",
+          "P",
+          "R",
+          "R",
+          "R",
+          "S",
+          "T",
+          "Y"
+        ],
+        "targetWords": [
+          {
+            "word": "MARYAM",
+            "clue": "His mother, chosen above the women of the worlds (3:42)"
+          },
+          {
+            "word": "PALM",
+            "clue": "She shook its trunk and fresh dates fell (19:25)"
+          },
+          {
+            "word": "CRADLE",
+            "clue": "He spoke to the people from it (19:29)"
+          },
+          {
+            "word": "BIRDS",
+            "clue": "Shapes of clay he breathed into, by Allah's permission (3:49)"
+          },
+          {
+            "word": "TABLE",
+            "clue": "Spread with food from heaven at the disciples' request (5:114)"
+          }
+        ],
+        "postLevelTakeaway": "Isa's first words from the cradle were 'Indeed, I am the servant of Allah' (19:30). Even the greatest miracles point back to worshipping Allah alone.",
+        "source": "Quran 19:16–34, 3:42–49, 5:110–115"
+      },
+      {
+        "levelId": "bb-muhammad",
+        "prophetTheme": "Prophet Muhammad ﷺ",
+        "storyClue": "Alone in a mountain cave outside Makkah, he was embraced by an angel and given a single command.",
+        "availableLetters": [
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "B",
+          "D",
+          "H",
+          "H",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "J",
+          "L",
+          "M",
+          "N",
+          "N",
+          "Q",
+          "Q",
+          "R",
+          "R",
+          "R",
+          "R",
+          "U"
+        ],
+        "targetWords": [
+          {
+            "word": "HIRA",
+            "clue": "The cave where the first revelation came (Sahih al-Bukhari 3)"
+          },
+          {
+            "word": "IQRA",
+            "clue": "The first word revealed: 'Read!' (96:1)"
+          },
+          {
+            "word": "JIBRIL",
+            "clue": "The angel who brought the revelation (2:97)"
+          },
+          {
+            "word": "QURAN",
+            "clue": "Sent down in the month of Ramadan (2:185)"
+          },
+          {
+            "word": "MADINAH",
+            "clue": "The city that welcomed him after the Hijrah"
+          }
+        ],
+        "postLevelTakeaway": "The final message began with 'Read, in the name of your Lord who created' (96:1). Seeking knowledge for Allah's sake is where faith begins.",
+        "source": "Quran 96:1–5, 2:185, 9:40; Sahih al-Bukhari 3"
+      }
+    ]
+  },
+  "wordscapes": {
+    "chapters": [
+      {
+        "chapterId": "ch-nuh",
+        "chapterNumber": 1,
+        "prophet": "Prophet Nuh",
+        "title": "The Ark and the Flood",
+        "summary": "Nuh called his people night and day for 950 years. Few believed, yet he never stopped. When the ark sailed through waves like mountains, only faith kept anyone afloat. Patience in calling to Allah is measured by sincerity, not by numbers.",
+        "levels": [
+          {
+            "levelId": "ws-nuh-1",
+            "prophetTheme": "Prophet Nuh",
+            "storyClue": "Under Allah's eyes, Nuh built a vessel of planks and nails while his people mocked him (11:38).",
+            "availableLetters": [
+              "A",
+              "I",
+              "K",
+              "L",
+              "N",
+              "R",
+              "S"
+            ],
+            "grid": {
+              "width": 6,
+              "height": 4
+            },
+            "targetWords": [
+              {
+                "word": "NAILS",
+                "clue": "Held the ark's planks together (54:13)",
+                "x": 1,
+                "y": 3,
+                "direction": "across"
+              },
+              {
+                "word": "RAIN",
+                "clue": "Poured from the opened gates of the sky (54:11)",
+                "x": 1,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "SAIL",
+                "clue": "The ark did this through waves like mountains (11:42)",
+                "x": 4,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "ARK",
+                "clue": "The vessel built by revelation (11:37)",
+                "x": 0,
+                "y": 0,
+                "direction": "across"
+              }
+            ],
+            "bonusWords": [
+              "SIN"
+            ],
+            "postLevelTakeaway": "Nuh kept building while they laughed (11:38). Obeying Allah can look foolish to people, until the rain comes.",
+            "source": "Quran 11:36–44, 54:11–13, 71:25"
+          }
+        ]
+      },
+      {
+        "chapterId": "ch-ibrahim",
+        "chapterNumber": 2,
+        "prophet": "Prophet Ibrahim",
+        "title": "The Friend of Allah",
+        "summary": "Ibrahim reasoned past the stars, the moon and the sun to their Creator, broke the idols, walked out of the fire unharmed, and was ready to give up what he loved most. Allah took him as a khalil, an intimate friend (4:125). Tawhid is a conviction you live, not just a word you say.",
+        "levels": [
+          {
+            "levelId": "ws-ibrahim-1",
+            "prophetTheme": "Prophet Ibrahim",
+            "storyClue": "He broke the idols, survived the fire, and later saw a dream that tested him with his own son.",
+            "availableLetters": [
+              "A",
+              "D",
+              "E",
+              "F",
+              "I",
+              "M",
+              "R",
+              "X"
+            ],
+            "grid": {
+              "width": 5,
+              "height": 5
+            },
+            "targetWords": [
+              {
+                "word": "DREAM",
+                "clue": "'I have seen in a dream that I sacrifice you' (37:102)",
+                "x": 0,
+                "y": 2,
+                "direction": "across"
+              },
+              {
+                "word": "FIRE",
+                "clue": "Allah made it cool and safe for him (21:69)",
+                "x": 1,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "AXE",
+                "clue": "Left on the largest idol, as Ibn Kathir narrates",
+                "x": 3,
+                "y": 2,
+                "direction": "down"
+              },
+              {
+                "word": "RAM",
+                "clue": "The great sacrifice sent in place of his son (37:107)",
+                "x": 4,
+                "y": 0,
+                "direction": "down"
+              }
+            ],
+            "bonusWords": [
+              "READ"
+            ],
+            "postLevelTakeaway": "Father and son both submitted (37:103), and Allah ransomed Ismail with a great sacrifice. Real surrender to Allah is never wasted.",
+            "source": "Quran 21:57–70, 37:99–111"
+          },
+          {
+            "levelId": "ws-ibrahim-2",
+            "prophetTheme": "Prophet Ibrahim",
+            "storyClue": "He watched a star, the moon and the sun each set, then declared: 'I have turned my face to the One who created the heavens and the earth' (6:79).",
+            "availableLetters": [
+              "C",
+              "L",
+              "M",
+              "N",
+              "O",
+              "O",
+              "S",
+              "U"
+            ],
+            "grid": {
+              "width": 4,
+              "height": 6
+            },
+            "targetWords": [
+              {
+                "word": "COOL",
+                "clue": "What the fire became by Allah's command (21:69)",
+                "x": 0,
+                "y": 1,
+                "direction": "across"
+              },
+              {
+                "word": "MOON",
+                "clue": "It rose shining, then set (6:77)",
+                "x": 2,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "SON",
+                "clue": "Ismail, who said 'Do as you are commanded' (37:102)",
+                "x": 0,
+                "y": 3,
+                "direction": "across"
+              },
+              {
+                "word": "SUN",
+                "clue": "'This is greater!', until it too set (6:78)",
+                "x": 0,
+                "y": 3,
+                "direction": "down"
+              }
+            ],
+            "bonusWords": [],
+            "postLevelTakeaway": "'I do not love things that set' (6:76). Only Allah never fades, so only He deserves our worship.",
+            "source": "Quran 6:74–79, 21:69, 37:102"
+          }
+        ]
+      },
+      {
+        "chapterId": "ch-musa",
+        "chapterNumber": 3,
+        "prophet": "Prophet Musa",
+        "title": "The Staff and the Sea",
+        "summary": "Musa was rescued from the river as a baby, raised in Pharaoh's palace, and spoken to by Allah at the valley of Tuwa. Pharaoh had armies; Musa had a staff and certainty. Even after the sea split, his people turned to a golden calf. Gratitude has to be renewed every day.",
+        "levels": [
+          {
+            "levelId": "ws-musa-1",
+            "prophetTheme": "Prophet Musa",
+            "storyClue": "From a river chest to a sacred mountain: Allah prepared Musa for a mission against the greatest tyrant of his age.",
+            "availableLetters": [
+              "A",
+              "E",
+              "I",
+              "I",
+              "K",
+              "L",
+              "N",
+              "S"
+            ],
+            "grid": {
+              "width": 5,
+              "height": 5
+            },
+            "targetWords": [
+              {
+                "word": "SINAI",
+                "clue": "Mount where Allah spoke to Musa (95:2, 19:52)",
+                "x": 0,
+                "y": 1,
+                "direction": "across"
+              },
+              {
+                "word": "SNAKE",
+                "clue": "His staff became one, moving swiftly (20:20)",
+                "x": 2,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "NILE",
+                "clue": "River that carried baby Musa in a chest (20:39)",
+                "x": 4,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "SEA",
+                "clue": "Struck with the staff, it split (26:63)",
+                "x": 0,
+                "y": 1,
+                "direction": "down"
+              }
+            ],
+            "bonusWords": [
+              "SIN",
+              "ISA"
+            ],
+            "postLevelTakeaway": "'Do not fear. Indeed, I am with you both; I hear and I see' (20:46). Allah does not send anyone on a mission without being with them.",
+            "source": "Quran 20:9–46, 26:61–66, 28:7"
+          },
+          {
+            "levelId": "ws-musa-2",
+            "prophetTheme": "Prophet Musa",
+            "storyClue": "He saw a fire in the night and found revelation. Later his people, freshly saved, worshipped a calf.",
+            "availableLetters": [
+              "A",
+              "C",
+              "E",
+              "F",
+              "I",
+              "L",
+              "R",
+              "S"
+            ],
+            "grid": {
+              "width": 4,
+              "height": 6
+            },
+            "targetWords": [
+              {
+                "word": "CALF",
+                "clue": "The golden idol that as-Samiri made (20:88)",
+                "x": 0,
+                "y": 2,
+                "direction": "across"
+              },
+              {
+                "word": "FIRE",
+                "clue": "Seen at night, it led him to the sacred valley (20:10)",
+                "x": 3,
+                "y": 2,
+                "direction": "down"
+              },
+              {
+                "word": "LICE",
+                "clue": "One of the signs sent upon Pharaoh's people (7:133)",
+                "x": 0,
+                "y": 5,
+                "direction": "across"
+              },
+              {
+                "word": "SEA",
+                "clue": "Pharaoh's army was drowned in it (2:50)",
+                "x": 1,
+                "y": 0,
+                "direction": "down"
+              }
+            ],
+            "bonusWords": [
+              "EARS",
+              "ISA"
+            ],
+            "postLevelTakeaway": "Miracles alone did not keep Bani Isra'il firm; they turned to the calf within days (20:85–88). Faith must be guarded, not just witnessed.",
+            "source": "Quran 20:9–14, 20:83–97, 7:133, 2:50"
+          }
+        ]
+      },
+      {
+        "chapterId": "ch-yunus",
+        "chapterNumber": 4,
+        "prophet": "Prophet Yunus",
+        "title": "Out of the Darkness",
+        "summary": "Yunus left his people before Allah permitted him, and found himself in the darkness of the night, the sea and the whale. He did not despair; he glorified Allah and admitted his wrong. Allah saved him and his whole city believed. Sincere dhikr rescues believers in every age (21:88).",
+        "levels": [
+          {
+            "levelId": "ws-yunus-1",
+            "prophetTheme": "Prophet Yunus",
+            "storyClue": "Cast from a laden ship into the sea, swallowed by a whale, and returned to the shore by his Lord's mercy.",
+            "availableLetters": [
+              "A",
+              "E",
+              "H",
+              "I",
+              "O",
+              "P",
+              "R",
+              "S"
+            ],
+            "grid": {
+              "width": 6,
+              "height": 5
+            },
+            "targetWords": [
+              {
+                "word": "PRAISE",
+                "clue": "Had he not glorified Allah, he would have stayed in the belly (37:143)",
+                "x": 0,
+                "y": 3,
+                "direction": "across"
+              },
+              {
+                "word": "SHORE",
+                "clue": "He was thrown onto it, ill (37:145)",
+                "x": 1,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "SHIP",
+                "clue": "Fully laden, he fled to it (37:140)",
+                "x": 3,
+                "y": 1,
+                "direction": "down"
+              },
+              {
+                "word": "SEA",
+                "clue": "Where he was cast after the lots (37:141)",
+                "x": 5,
+                "y": 2,
+                "direction": "down"
+              }
+            ],
+            "bonusWords": [
+              "HIRA",
+              "EARS",
+              "ISA"
+            ],
+            "postLevelTakeaway": "His glorification of Allah is what saved him (37:143–144). Remember Allah in ease, and He remembers you in hardship.",
+            "source": "Quran 37:139–148, 21:87–88"
+          }
+        ]
+      },
+      {
+        "chapterId": "ch-muhammad",
+        "chapterNumber": 5,
+        "prophet": "Prophet Muhammad ﷺ",
+        "title": "The Final Message",
+        "summary": "From the quiet of Hira to the Hijrah to Madinah, the Prophet ﷺ carried the final revelation with truthfulness, mercy and patience. The Quran he brought confirms every prophet before him. To follow him is to follow the path all of them walked.",
+        "levels": [
+          {
+            "levelId": "ws-muhammad-1",
+            "prophetTheme": "Prophet Muhammad ﷺ",
+            "storyClue": "A night in a mountain cave, a command to read, and years later a migration that changed history.",
+            "availableLetters": [
+              "A",
+              "H",
+              "I",
+              "J",
+              "N",
+              "Q",
+              "R",
+              "U"
+            ],
+            "grid": {
+              "width": 6,
+              "height": 5
+            },
+            "targetWords": [
+              {
+                "word": "HIJRA",
+                "clue": "The migration from Makkah to Madinah (9:40)",
+                "x": 0,
+                "y": 2,
+                "direction": "across"
+              },
+              {
+                "word": "QURAN",
+                "clue": "Sent down in Ramadan as guidance for mankind (2:185)",
+                "x": 3,
+                "y": 0,
+                "direction": "down"
+              },
+              {
+                "word": "HIRA",
+                "clue": "Cave of the first revelation (Sahih al-Bukhari 3)",
+                "x": 1,
+                "y": 1,
+                "direction": "down"
+              },
+              {
+                "word": "IQRA",
+                "clue": "'Read!', the first word revealed (96:1)",
+                "x": 2,
+                "y": 0,
+                "direction": "across"
+              }
+            ],
+            "bonusWords": [
+              "HARUN"
+            ],
+            "postLevelTakeaway": "In the cave of Thawr he told Abu Bakr: 'Do not grieve; indeed Allah is with us' (9:40). The same reassurance holds for every believer who strives.",
+            "source": "Quran 96:1–5, 2:185, 9:40; Sahih al-Bukhari 3"
+          }
+        ]
+      }
+    ]
+  }
+}
